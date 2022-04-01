@@ -36,7 +36,7 @@ class EverPsSeo extends Module
     {
         $this->name = 'everpsseo';
         $this->tab = 'seo';
-        $this->version = '7.11.8';
+        $this->version = '7.12.2';
         $this->author = 'Team Ever';
         $this->need_instance = 0;
         $this->module_key = '5ddabba8ec414cd5bd646fad24368472';
@@ -199,7 +199,7 @@ class EverPsSeo extends Module
             && $this->registerHook('footer')
             && $this->registerHook('displayLeftColumn')
             && $this->registerHook('displayRightColumn')
-            && $this->registerHook('displayTop')
+            && $this->registerHook('displayAfterBodyOpeningTag')
             && $this->registerHook('backOfficeHeader')
             && $this->registerHook('orderConfirmation')
             && $this->registerHook('actionObjectLanguageAddAfter')
@@ -228,6 +228,7 @@ class EverPsSeo extends Module
             && $this->registerHook('actionFrontControllerAfterInit')
             && $this->registerHook('actionOutputHTMLBefore')
             && $this->registerHook('displayReassurance')
+            && $this->registerHook('displayOrderConfirmation')
             && $this->registerHook('displayContentWrapperBottom');
     }
 
@@ -8001,17 +8002,16 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 $obj = false;
                 break;
         }
-        $cacheId = $this->getCacheId($this->name.'-bottom_content-'.$controller_name.'-'.$obj->id.'-'.date('Ymd'));
-        if (!$this->isCached('bottom_content.tpl', $cacheId)) {
-            if (Validate::isLoadedObject($obj) && !empty($obj->bottom_content)) {
-                $this->context->smarty->assign(array(
-                    'everseo_controller' => Tools::getValue('controller'),
-                    'bottom_content_id' => $obj->id,
-                    'bottom_content' => $obj->bottom_content,
-                ));
-            }
+        if (Validate::isLoadedObject($obj)
+            && !empty($obj->bottom_content)
+        ) {
+            $this->context->smarty->assign(array(
+                'everseo_controller' => Tools::getValue('controller'),
+                'bottom_content_id' => $obj->id,
+                'bottom_content' => $obj->bottom_content,
+            ));
         }
-        return $this->display(__FILE__, 'views/templates/hook/bottom_content.tpl', $cacheId);
+        return $this->display(__FILE__, 'views/templates/hook/bottom_content.tpl');
     }
 
     public function hookDisplayReassurance()
@@ -8344,7 +8344,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     (int)$id_lang
                 );
                 $currentUrl = $link->getProductLink(
-                    (int)$product->id,
+                    (int)$product,
                     null,
                     null,
                     null,
@@ -8842,6 +8842,11 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             }
             return $this->display(__FILE__, 'views/templates/hook/gtranslate.tpl', $cacheId);
         }
+    }
+
+    public function hookDisplayAfterBodyOpeningTag()
+    {
+        return $this->hookDisplayTop();
     }
 
     public function hookDisplayTopColumn()
@@ -9633,7 +9638,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                             $this->imageType
                         );
                         $currentUrl = $link->getProductLink(
-                            (int)$product->id,
+                            (int)$product,
                             null,
                             null,
                             null,
@@ -9848,7 +9853,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     (int)$id_shop
                 );
                 $productUrl = $link->getProductLink(
-                    (int)$product->id,
+                    (int)$product,
                     null,
                     null,
                     null,

@@ -7,10 +7,10 @@
 *}
 {if isset($gtag_manager) && !empty($gtag_manager)}
 {literal}
-<!-- Google Tag Manager (noscript) -->
+<!-- Ever SEO Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={/literal}{$gtag_manager|escape:'htmlall':'UTF-8'}{literal}"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
+<!-- Ever SEO End Google Tag Manager (noscript) -->
 {/literal}
 {/if}
 {if isset($translate_top) && !empty($translate_top)}

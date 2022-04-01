@@ -152,11 +152,6 @@
     <meta name="twitter:image" content="{$defaultImage|escape:'htmlall':'UTF-8'}" />
     {/if}
 {/if}
-{if isset($awin_code) && $awin_code}
-{literal}
-<script defer="defer" src="https://www.dwin1.com/{/literal}{$awin_code|escape:'htmlall':'UTF-8'}{literal}.js" type="text/javascript"></script>
-{/literal}
-{/if}
 {if isset($ever_ps_captcha_site_key) && $ever_ps_captcha_site_key}
 <script>
     var googlecaptchasitekey = "{$ever_ps_captcha_site_key|escape:'htmlall':'UTF-8'}";
@@ -174,7 +169,6 @@
       gtag('config', '{/literal}{$adwords|escape:'htmlall':'UTF-8'}{literal}');
     </script>
     {/literal}
-
     {literal}
     <script>
       gtag('event', 'page_view', {
