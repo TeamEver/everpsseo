@@ -36,7 +36,7 @@ class EverPsSeo extends Module
     {
         $this->name = 'everpsseo';
         $this->tab = 'seo';
-        $this->version = '7.12.2';
+        $this->version = '7.12.3';
         $this->author = 'Team Ever';
         $this->need_instance = 0;
         $this->module_key = '5ddabba8ec414cd5bd646fad24368472';
@@ -8679,7 +8679,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 if (isset($canonical_url)
                     && !empty($canonical_url)
                 ) {
-                    $this->context->smarty->assign($canonical_url, true);
+                    $this->context->smarty->assign('canonical_url', $canonical_url);
                 }
             } else {
                 $page = $this->context->controller->getTemplateVarPage();
