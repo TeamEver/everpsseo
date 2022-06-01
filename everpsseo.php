@@ -36,7 +36,7 @@ class EverPsSeo extends Module
     {
         $this->name = 'everpsseo';
         $this->tab = 'seo';
-        $this->version = '7.12.3';
+        $this->version = '7.12.4';
         $this->author = 'Team Ever';
         $this->need_instance = 0;
         $this->module_key = '5ddabba8ec414cd5bd646fad24368472';
@@ -8601,14 +8601,14 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
             if (isset($seo[0]['meta_title'])) {
                 $meta_title = $seo[0]['meta_title'];
-                $meta_title = Tools::substr($meta_title, 0, 60);
+                // $meta_title = Tools::substr($meta_title, 0, 60);
             } else {
                 $meta_title = null;
             }
 
             if (isset($seo[0]['meta_description'])) {
                 $meta_description = $seo[0]['meta_description'];
-                $meta_description = Tools::substr($meta_description, 0, 160);
+                // $meta_description = Tools::substr($meta_description, 0, 160);
             } else {
                 $meta_description = null;
             }
