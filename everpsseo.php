@@ -1310,7 +1310,7 @@ class EverPsSeo extends Module
             'form' => array(
                 'legend' => array(
                     'title' => $this->l('Global SEO settings'),
-                    'icon' => 'icon-cogs',
+                    'icon' => 'icon-smile',
                 ),
                 'input' => array(
                     array(
@@ -7144,6 +7144,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
     public function hookActionObjectCategoryUpdateAfter($params)
     {
+        // If fucking Elementor is rewriting object from FO
         if ((bool)EverPsSeoTools::isAdminController() === false) {
             return;
         }
