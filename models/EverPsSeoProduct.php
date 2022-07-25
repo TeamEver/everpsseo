@@ -120,7 +120,7 @@ class EverPsSeoProduct extends ObjectModel
         )
     );
 
-    public static function getAllSeoProductsIds($id_shop)
+    public static function getAllSeoProductsIds($id_shop, $allowedLangs = false)
     {
         $cache_id = 'EverPsSeoProduct::getAllSeoProductsIds_'
         .(int)$id_shop;
@@ -128,7 +128,11 @@ class EverPsSeoProduct extends ObjectModel
             $sql = new DbQuery();
             $sql->select('*');
             $sql->from('ever_seo_product');
-            $sql->where('id_shop = '.(int)$id_shop);
+            if ($allowedLangs) {
+                $sql->where('id_shop = '.(int)$id_shop.' AND id_seo_lang IN ('.implode(',', $allowedLangs).')');
+            } else {
+                $sql->where('id_shop = '.(int)$id_shop);
+            }
             $return = Db::getInstance()->executeS($sql);
             Cache::store($cache_id, $return);
             return $return;
@@ -635,7 +639,7 @@ class EverPsSeoProduct extends ObjectModel
             Db::getInstance()->Execute($s);
         }
     }
-    
+
     /**
      * @return bool
      */

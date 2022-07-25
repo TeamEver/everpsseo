@@ -36,7 +36,7 @@ class EverPsSeo extends Module
     {
         $this->name = 'everpsseo';
         $this->tab = 'seo';
-        $this->version = '7.13.2';
+        $this->version = '7.13.3';
         $this->author = 'Team Ever';
         $this->need_instance = 0;
         $this->module_key = '5ddabba8ec414cd5bd646fad24368472';
@@ -530,27 +530,27 @@ class EverPsSeo extends Module
         if (Tools::isSubmit('submitGenerateProductsContent')) {
             $this->postValidation();
             if (!count($this->postErrors)) {
-                $seoArray = EverPsSeoProduct::getAllSeoProductsIds(
-                    (int)$this->context->shop->id
-                );
                 $allowedLangs = $this->getAllowedShortcodesLangs(
-                    'EVERSEO_AUTO_PRODUCT_LANGS'
+                    'EVERSEO_PGENERATOR_LANGS'
                 );
+                $seoArray = EverPsSeoProduct::getAllSeoProductsIds(
+                    (int)$this->context->shop->id,
+                    $allowedLangs
+                );
+
                 foreach ($seoArray as $seo) {
-                    if (in_array((int)$seo['id_seo_lang'], $allowedLangs)) {
-                        $this->autoSetContentShortDesc(
-                            'id_seo_product',
-                            (int)$seo['id_seo_product'],
-                            (int)$this->context->shop->id,
-                            (int)$seo['id_seo_lang']
-                        );
-                        $this->autoSetContentDesc(
-                            'id_seo_product',
-                            (int)$seo['id_seo_product'],
-                            (int)$this->context->shop->id,
-                            (int)$seo['id_seo_lang']
-                        );
-                    }
+                    $this->autoSetContentShortDesc(
+                        'id_seo_product',
+                        (int)$seo['id_seo_product'],
+                        (int)$this->context->shop->id,
+                        (int)$seo['id_seo_lang']
+                    );
+                    $this->autoSetContentDesc(
+                        'id_seo_product',
+                        (int)$seo['id_seo_product'],
+                        (int)$this->context->shop->id,
+                        (int)$seo['id_seo_lang']
+                    );
                 }
             }
         }
@@ -628,27 +628,27 @@ class EverPsSeo extends Module
         if (Tools::isSubmit('submitAutoProduct')) {
             $this->postValidation();
             if (!count($this->postErrors)) {
-                $seoArray = EverPsSeoProduct::getAllSeoProductsIds(
-                    (int)$this->context->shop->id
-                );
                 $allowedLangs = $this->getAllowedShortcodesLangs(
                     'EVERSEO_AUTO_PRODUCT_LANGS'
                 );
+                $seoArray = EverPsSeoProduct::getAllSeoProductsIds(
+                    (int)$this->context->shop->id,
+                    $allowedLangs
+                );
+
                 foreach ($seoArray as $seo) {
-                    if (in_array((int)$seo['id_seo_lang'], $allowedLangs)) {
-                        $this->autoSetTitle(
-                            'id_seo_product',
-                            (int)$seo['id_seo_product'],
-                            (int)$this->context->shop->id,
-                            (int)$seo['id_seo_lang']
-                        );
-                        $this->autoSetDescription(
-                            'id_seo_product',
-                            (int)$seo['id_seo_product'],
-                            (int)$this->context->shop->id,
-                            (int)$seo['id_seo_lang']
-                        );
-                    }
+                    $this->autoSetTitle(
+                        'id_seo_product',
+                        (int)$seo['id_seo_product'],
+                        (int)$this->context->shop->id,
+                        (int)$seo['id_seo_lang']
+                    );
+                    $this->autoSetDescription(
+                        'id_seo_product',
+                        (int)$seo['id_seo_product'],
+                        (int)$this->context->shop->id,
+                        (int)$seo['id_seo_lang']
+                    );
                 }
             }
         }
@@ -6659,11 +6659,11 @@ class EverPsSeo extends Module
                     case 301:
                         $prepend_rules .= 'Redirect permanent '.$redirect->not_found.' '.$redirect->redirection."\n\n";
                         break;
-                    
+
                     case 302:
                         $prepend_rules .= 'Redirect '.$redirect->not_found.' '.$redirect->redirection."\n\n";
                         break;
-                    
+
                     case 303:
                         # code...
                         break;
@@ -7760,7 +7760,15 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     } else {
                         $product->description .= $description;
                     }
-                    if ($product->save()) {
+                    $meta_title = Tools::substr($meta_title, 0, 128);
+
+                    $sql_desc = 'UPDATE `'._DB_PREFIX_.'product_lang`
+                        SET description = "'.pSQL($product->description).'"
+                        WHERE id_lang = '.(int)$id_lang.'
+                        AND id_shop = '.(int)$id_shop.'
+                        AND id_product = '.(int)$id_element;
+
+                    if (Db::getInstance()->execute($sql_desc)) {
                         return true;
                     }
                 } else {
@@ -7774,7 +7782,16 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     } else {
                         $obj->bottom_content = $description;
                     }
-                    return $obj->save();
+                    $sql_ever_desc = 'UPDATE `'._DB_PREFIX_.'ever_seo_product`
+                        SET bottom_content = "'.pSQL($obj->bottom_content).'"
+                        WHERE id_seo_lang = '.(int)$id_lang.'
+                        AND id_shop = '.(int)$id_shop.'
+                        AND id_seo_product = '.(int)$id_element;
+
+                    if (Db::getInstance()->execute($sql_ever_desc)) {
+                        return true;
+                    }
+                    // return $obj->save();
                 }
                 break;
 
@@ -7916,7 +7933,14 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 } else {
                     $product->description_short .= $description_short;
                 }
-                if ($product->save()) {
+
+                $sql_desc_short = 'UPDATE `'._DB_PREFIX_.'product_lang`
+                    SET description_short = "'.pSQL($product->description_short).'"
+                    WHERE id_lang = '.(int)$id_lang.'
+                    AND id_shop = '.(int)$id_shop.'
+                    AND id_product = '.(int)$id_element;
+
+                if (Db::getInstance()->execute($sql_desc_short)) {
                     return true;
                 }
                 break;
@@ -7977,7 +8001,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     (int)Context::getContext()->language->id
                 );
                 break;
-            
+
             case 'supplier':
                 $obj = EverPsSeoSupplier::getSeoSupplier(
                     (int)Tools::getValue('id_supplier'),
@@ -7985,7 +8009,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     (int)Context::getContext()->language->id
                 );
                 break;
-            
+
             case 'category':
                 $obj = EverPsSeoCategory::getSeoCategory(
                     (int)Tools::getValue('id_category'),
@@ -7993,7 +8017,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     (int)Context::getContext()->language->id
                 );
                 break;
-            
+
             case 'product':
                 $obj = EverPsSeoProduct::getSeoProduct(
                     (int)Tools::getValue('id_product'),
