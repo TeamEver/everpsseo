@@ -36,7 +36,7 @@ class EverPsSeo extends Module
     {
         $this->name = 'everpsseo';
         $this->tab = 'seo';
-        $this->version = '7.13.3';
+        $this->version = '7.13.4';
         $this->author = 'Team Ever';
         $this->need_instance = 0;
         $this->module_key = '5ddabba8ec414cd5bd646fad24368472';
@@ -7763,7 +7763,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     $meta_title = Tools::substr($meta_title, 0, 128);
 
                     $sql_desc = 'UPDATE `'._DB_PREFIX_.'product_lang`
-                        SET description = "'.pSQL($product->description).'"
+                        SET description = "'.pSQL($product->description, true).'"
                         WHERE id_lang = '.(int)$id_lang.'
                         AND id_shop = '.(int)$id_shop.'
                         AND id_product = '.(int)$id_element;
@@ -7783,7 +7783,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                         $obj->bottom_content = $description;
                     }
                     $sql_ever_desc = 'UPDATE `'._DB_PREFIX_.'ever_seo_product`
-                        SET bottom_content = "'.pSQL($obj->bottom_content).'"
+                        SET bottom_content = "'.pSQL($obj->bottom_content, true).'"
                         WHERE id_seo_lang = '.(int)$id_lang.'
                         AND id_shop = '.(int)$id_shop.'
                         AND id_seo_product = '.(int)$id_element;
@@ -7935,7 +7935,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 }
 
                 $sql_desc_short = 'UPDATE `'._DB_PREFIX_.'product_lang`
-                    SET description_short = "'.pSQL($product->description_short).'"
+                    SET description_short = "'.pSQL($product->description_short, true).'"
                     WHERE id_lang = '.(int)$id_lang.'
                     AND id_shop = '.(int)$id_shop.'
                     AND id_product = '.(int)$id_element;
@@ -10398,15 +10398,15 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 SET content =
                 REPLACE(
                     content,
-                    "'.pSQL($searchedText).'",
-                    "'.pSQL($link).'")
+                    "'.pSQL($searchedText, true).'",
+                    "'.pSQL($link, true).'")
                 WHERE INSTR(
                     content,
-                    "'.pSQL($searchedText).'"
+                    "'.pSQL($searchedText, true).'"
                 ) > 0
                 AND INSTR(
                     content,
-                    "'.pSQL($searchedText).'"
+                    "'.pSQL($searchedText, true).'"
                 ) <= '.(int)$maxOccur.'
                 AND id_shop = '.(int)$id_shop.'
                 AND id_lang = '.(int)$id_lang.'
@@ -10426,12 +10426,12 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 SET description =
                 REPLACE(
                     description,
-                    "'.pSQL($searchedText).'",
+                    "'.pSQL($searchedText, true).'",
                     "'.$link.'"
                 )
                 WHERE INSTR(
                     description,
-                    "'.pSQL($searchedText).'"
+                    "'.pSQL($searchedText, true).'"
                 ) > 0
                 AND id_shop = '.(int)$id_shop.'
                 AND id_lang = '.(int)$id_lang.'
@@ -10450,12 +10450,12 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 SET description_short =
                 REPLACE(
                     description_short,
-                    "'.pSQL($searchedText).'",
+                    "'.pSQL($searchedText, true).'",
                     "'.$link.'"
                 )
                 WHERE INSTR(
                     description_short,
-                    "'.pSQL($searchedText).'"
+                    "'.pSQL($searchedText, true).'"
                 ) > 0
                 AND id_shop = '.(int)$id_shop.'
                 AND id_lang = '.(int)$id_lang.'
@@ -10475,12 +10475,12 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 SET description =
                 REPLACE(
                     description,
-                    "'.pSQL($searchedText).'",
+                    "'.pSQL($searchedText, true).'",
                     "'.$link.'"
                 )
                 WHERE INSTR(
                     description,
-                    "'.pSQL($searchedText).'"
+                    "'.pSQL($searchedText, true).'"
                 ) > 0
                 AND id_shop = '.(int)$id_shop.'
                 AND id_lang = '.(int)$id_lang.'
