@@ -8372,7 +8372,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     (int)$id_lang
                 );
                 $currentUrl = $link->getProductLink(
-                    (int)$product,
+                    (int)$product->id,
                     null,
                     null,
                     null,
