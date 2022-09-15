@@ -11,6 +11,7 @@ namespace Everpsseo\Seo\Command;
 
 use PrestaShop\PrestaShop\Adapter\LegacyContext as ContextAdapter;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -39,20 +40,41 @@ class GenerateSitemaps extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $dateStart = date('Y-m-d H:i:s');
-        $output->writeln(sprintf(
-            '<info>Start sitemap generation : datetime : '.$dateStart.'</info>'
-        ));
+        $action = $input->getArgument('idshop');
+        if (!in_array($action, $this->allowedActions)) {
+            $output->writeln('<comment>Unkown action</comment>');
+            return self::ABORTED;
+        }
+        if ($action === 'getrandomcomment') {
+            $output->writeln(
+                $this->getRandomFunnyComment($output)
+            );
+            return self::SUCCESS;
+        }
         $context = (new ContextAdapter())->getContext();
         $context->employee = new \Employee(1);
-        $shop = $context->shop;
-        if (!\Validate::isLoadedObject($shop)) {
-            $shop = new \Shop((int)\Configuration::get('PS_SHOP_DEFAULT'));
+        if ($action === 'idshop') {
+            $idShop = $action;
+            $shop = new \Shop(
+                (int)$idShop
+            );
+            if (!\Validate::isLoadedObject($shop)) {
+                $output->writeln('<comment>Shop not found</comment>');
+                return self::ABORTED;
+            }
+        } else {
+            $shop = $context->shop;
+            if (!\Validate::isLoadedObject($shop)) {
+                $shop = new \Shop((int)\Configuration::get('PS_SHOP_DEFAULT'));
+            }
         }
         //Important to setContext
         \Shop::setContext($shop::CONTEXT_SHOP, $shop->id);
         $context->shop = $shop;
         $context->cookie->id_shop = $shop->id;
+        $output->writeln(sprintf(
+            '<info>Start sitemap generation : datetime : '.date('Y-m-d H:i:s').'</info>'
+        ));
 
         $this->module->everGenerateSitemaps(
             (int)$shop->id

@@ -11,6 +11,7 @@ namespace Everpsseo\Seo\Command;
 
 use PrestaShop\PrestaShop\Adapter\LegacyContext as ContextAdapter;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -24,6 +25,11 @@ class GenerateObjectsContent extends Command
     public const INVALID = 2;
     public const ABORTED = 3;
 
+    private $allowedActions = [
+        'idshop',
+        'getrandomcomment'
+    ];
+
     public function __construct(KernelInterface $kernel)
     {
         parent::__construct();
@@ -33,6 +39,7 @@ class GenerateObjectsContent extends Command
     {
         $this->setName('everpsseo:seo:content');
         $this->setDescription('Generate objects content (description, etc) for each lang');
+        $this->addArgument('action', InputArgument::OPTIONAL, sprintf('Action to execute (Allowed actions: %s).', implode(' / ', $this->allowedActions)));
         $this->filename = dirname(__FILE__) . '/../../input/StockDisponible.txt';
         $this->logFile = dirname(__FILE__) . '/../../output/logs/log-content-'.date('j-n-Y').'.log';
         $this->module = \Module::getInstanceByName('everpsseo');
@@ -40,23 +47,45 @@ class GenerateObjectsContent extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $dateStart = date('Y-m-d H:i:s');
-        $output->writeln(sprintf(
-            '<info>Start content spinning : datetime : '.$dateStart.'</info>'
-        ));
+        $action = $input->getArgument('idshop');
+        if (!in_array($action, $this->allowedActions)) {
+            $output->writeln('<comment>Unkown action</comment>');
+            return self::ABORTED;
+        }
+        if ($action === 'getrandomcomment') {
+            $output->writeln(
+                $this->getRandomFunnyComment($output)
+            );
+            return self::SUCCESS;
+        }
         $context = (new ContextAdapter())->getContext();
         $context->employee = new \Employee(1);
-        $shop = $context->shop;
-        if (!\Validate::isLoadedObject($shop)) {
-            $shop = new \Shop((int)\Configuration::get('PS_SHOP_DEFAULT'));
+        if ($action === 'idshop') {
+            $idShop = $action;
+            $shop = new \Shop(
+                (int)$idShop
+            );
+            if (!\Validate::isLoadedObject($shop)) {
+                $output->writeln('<comment>Shop not found</comment>');
+                return self::ABORTED;
+            }
+        } else {
+            $shop = $context->shop;
+            if (!\Validate::isLoadedObject($shop)) {
+                $shop = new \Shop((int)\Configuration::get('PS_SHOP_DEFAULT'));
+            }
         }
         //Important to setContext
         \Shop::setContext($shop::CONTEXT_SHOP, $shop->id);
         $context->shop = $shop;
         $context->cookie->id_shop = $shop->id;
+        
+        $output->writeln(sprintf(
+            '<info>Start content spinning : datetime : '.date('Y-m-d H:i:s').'</info>'
+        ));
 
         $output->writeln(sprintf(
-            '<info>Start products content spinning : datetime : '.$dateStart.'</info>'
+            '<info>Start products content spinning : datetime : '.date('Y-m-d H:i:s').'</info>'
         ));
         $allowedLangs = $this->getAllowedShortcodesLangs(
             'EVERSEO_PGENERATOR_LANGS'
@@ -87,11 +116,11 @@ class GenerateObjectsContent extends Command
             ));
         }
         $output->writeln(sprintf(
-            '<info>End products content spinning : datetime : '.$dateStart.'</info>'
+            '<info>End products content spinning : datetime : '.date('Y-m-d H:i:s').'</info>'
         ));
 
         $output->writeln(sprintf(
-            '<info>Start categories content spinning : datetime : '.$dateStart.'</info>'
+            '<info>Start categories content spinning : datetime : '.date('Y-m-d H:i:s').'</info>'
         ));
         $seoArray = \EverPsSeoCategory::getAllSeoCategoriesIds(
             (int)$shop->id
@@ -113,11 +142,11 @@ class GenerateObjectsContent extends Command
             }
         }
         $output->writeln(sprintf(
-            '<info>End categories content spinning : datetime : '.$dateStart.'</info>'
+            '<info>End categories content spinning : datetime : '.date('Y-m-d H:i:s').'</info>'
         ));
 
         $output->writeln(sprintf(
-            '<info>Start manufacturers content spinning : datetime : '.$dateStart.'</info>'
+            '<info>Start manufacturers content spinning : datetime : '.date('Y-m-d H:i:s').'</info>'
         ));
         $seoArray = \EverPsSeoManufacturer::getAllSeoManufacturersIds(
             (int)$shop->id
@@ -136,11 +165,11 @@ class GenerateObjectsContent extends Command
             }
         }
         $output->writeln(sprintf(
-            '<info>End manufacturers content spinning : datetime : '.$dateStart.'</info>'
+            '<info>End manufacturers content spinning : datetime : '.date('Y-m-d H:i:s').'</info>'
         ));
 
         $output->writeln(sprintf(
-            '<info>Start suppliers content spinning : datetime : '.$dateStart.'</info>'
+            '<info>Start suppliers content spinning : datetime : '.date('Y-m-d H:i:s').'</info>'
         ));
         $seoArray = \EverPsSeoSupplier::getAllSeoSuppliersIds(
             (int)$shop->id
@@ -159,7 +188,7 @@ class GenerateObjectsContent extends Command
             }
         }
         $output->writeln(sprintf(
-            '<info>End suppliers content spinning : datetime : '.$dateStart.'</info>'
+            '<info>End suppliers content spinning : datetime : '.date('Y-m-d H:i:s').'</info>'
         ));
         
         $output->writeln(sprintf(

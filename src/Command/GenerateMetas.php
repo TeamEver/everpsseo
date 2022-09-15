@@ -11,6 +11,7 @@ namespace Everpsseo\Seo\Command;
 
 use PrestaShop\PrestaShop\Adapter\LegacyContext as ContextAdapter;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -24,6 +25,11 @@ class GenerateMetas extends Command
     public const INVALID = 2;
     public const ABORTED = 3;
 
+    private $allowedActions = [
+        'idshop',
+        'getrandomcomment'
+    ];
+
     public function __construct(KernelInterface $kernel)
     {
         parent::__construct();
@@ -33,25 +39,49 @@ class GenerateMetas extends Command
     {
         $this->setName('everpsseo:seo:metas');
         $this->setDescription('Generate SEO title and meta description for each lang');
+        $this->addArgument('action', InputArgument::OPTIONAL, sprintf('Action to execute (Allowed actions: %s).', implode(' / ', $this->allowedActions)));
         $this->logFile = dirname(__FILE__) . '/../../output/logs/log-metas-'.date('j-n-Y').'.log';
         $this->module = \Module::getInstanceByName('everpsseo');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln(sprintf(
-            '<info>Seo metas generation start : datetime : '.date('Y-m-d H:i:s').'</info>'
-        ));
+        $action = $input->getArgument('idshop');
+        if (!in_array($action, $this->allowedActions)) {
+            $output->writeln('<comment>Unkown action</comment>');
+            return self::ABORTED;
+        }
+        if ($action === 'getrandomcomment') {
+            $output->writeln(
+                $this->getRandomFunnyComment($output)
+            );
+            return self::SUCCESS;
+        }
         $context = (new ContextAdapter())->getContext();
         $context->employee = new \Employee(1);
-        $shop = $context->shop;
-        if (!\Validate::isLoadedObject($shop)) {
-            $shop = new \Shop((int)\Configuration::get('PS_SHOP_DEFAULT'));
+        if ($action === 'idshop') {
+            $idShop = $action;
+            $shop = new \Shop(
+                (int)$idShop
+            );
+            if (!\Validate::isLoadedObject($shop)) {
+                $output->writeln('<comment>Shop not found</comment>');
+                return self::ABORTED;
+            }
+        } else {
+            $shop = $context->shop;
+            if (!\Validate::isLoadedObject($shop)) {
+                $shop = new \Shop((int)\Configuration::get('PS_SHOP_DEFAULT'));
+            }
         }
         //Important to setContext
         \Shop::setContext($shop::CONTEXT_SHOP, $shop->id);
         $context->shop = $shop;
         $context->cookie->id_shop = $shop->id;
+
+        $output->writeln(sprintf(
+            '<info>Seo metas generation start : datetime : '.date('Y-m-d H:i:s').'</info>'
+        ));
 
         $output->writeln(sprintf(
             '<info>Start products metas : datetime : '.date('Y-m-d H:i:s').'</info>'
