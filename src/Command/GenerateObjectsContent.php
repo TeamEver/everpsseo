@@ -55,14 +55,13 @@ class GenerateObjectsContent extends Command
         $context->shop = $shop;
         $context->cookie->id_shop = $shop->id;
 
-        $allowedLangs = $this->getAllowedShortcodesLangs(
-            'EVERSEO_PGENERATOR_LANGS'
-        );
-
         $output->writeln(sprintf(
             '<info>Start products content spinning : datetime : '.$dateStart.'</info>'
         ));
-        $seoArray = EverPsSeoProduct::getAllSeoProductsIds(
+        $allowedLangs = $this->getAllowedShortcodesLangs(
+            'EVERSEO_PGENERATOR_LANGS'
+        );
+        $seoArray = \EverPsSeoProduct::getAllSeoProductsIds(
             (int)$shop->id,
             $allowedLangs
         );
@@ -162,10 +161,7 @@ class GenerateObjectsContent extends Command
         $output->writeln(sprintf(
             '<info>End suppliers content spinning : datetime : '.$dateStart.'</info>'
         ));
-
-
-
-
+        
         $output->writeln(sprintf(
             '<info>Content generation ended, start clearing cache</info>'
         ));
@@ -240,7 +236,7 @@ class GenerateObjectsContent extends Command
         switch ($object) {
             case 'id_seo_product':
                 if ((bool)\Configuration::get('EVERSEO_BOTTOM_PRODUCT_CONTENT') === false) {
-                    $description = EverPsSeoProduct::changeProductDescShortcodes(
+                    $description = \EverPsSeoProduct::changeProductDescShortcodes(
                         (int)$id_element,
                         (int)$id_lang,
                         (int)$id_shop

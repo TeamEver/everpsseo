@@ -39,32 +39,8 @@ class GenerateMetas extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $dateStart = date('Y-m-d H:i:s');
-        if (!file_exists($this->filename)) {
-            $this->logCommand('Missing SeoVersWebClient.txt file on date : '.$dateStart);
-            $output->writeln(sprintf(
-                '<error>Missing SeoVersWebClient.txt file on date : '.$dateStart.'</error>'
-            ));
-            \Logger::addLog(
-                $dateStart . ' - Missing SeoVersWebClient.txt file : ' . $this->filename
-            );
-            return self::ABORTED;
-        }
-        if (\Db::getInstance()->ExecuteS(
-            'SHOW COLUMNS FROM `'._DB_PREFIX_.'customer` LIKE \'id_magento\''
-        ) == false) {
-            $this->logCommand('Missing column id_magento on date : '.$dateStart);
-            $output->writeln(sprintf(
-                '<error>Missing column id_magento on date : '.$dateStart.'</error>'
-            ));
-            \Logger::addLog(
-                $dateStart . ' - Missing column id_magento'
-            );
-            return self::ABORTED;
-        }
-        $this->logCommand('SeoVersWebClient start import : datetime : '.$dateStart);
         $output->writeln(sprintf(
-            '<info>SeoVersWebClient start import : datetime : '.$dateStart.'</info>'
+            '<info>Seo metas generation start : datetime : '.date('Y-m-d H:i:s').'</info>'
         ));
         $context = (new ContextAdapter())->getContext();
         $context->employee = new \Employee(1);
@@ -77,61 +53,626 @@ class GenerateMetas extends Command
         $context->shop = $shop;
         $context->cookie->id_shop = $shop->id;
 
-        $csv = Reader::createFromPath($this->filename, 'r');
-        $csv->setHeaderOffset(0);
-        $csv->setDelimiter("\t");
-
-        $records = $csv->getRecords();
-
-        foreach ($records as $record) {
-            // Date de mise à jour
-            $dateUpd = $record['DateMiseAJour'];
-            // ID Magento
-            $idMagento = $record['IdMagento'];
-            // ID Seo
-            $idSeo = $record['IdClientSeo'];
-            // Customer name from Seo
-            $customerName = $record['ClientNom'];
-            // Customer en cours
-            $outstanding = $record['CT_Encours'];
-            // Account state from Seo
-            $state = $record['Statut Compte'];
-            // Account state label from Seo
-            $stateLabel = $record['Statut Libelle'];
-            // Get Customer ID
-            $idCustomer = \Db::getInstance()->getValue(
-                'SELECT `ic_customer` FROM `'._DB_PREFIX_.'customer`
-                WHERE id_magento = "'.pSQL($idMagento).'";'
-            );
-            if (!$idCustomer || !\Validate::isInt($idCustomer)) {
-                $this->logCommand('Customer not found on ID Seo : '.$idSeo);
+        $output->writeln(sprintf(
+            '<info>Start products metas : datetime : '.date('Y-m-d H:i:s').'</info>'
+        ));
+        $allowedLangs = $this->getAllowedShortcodesLangs(
+            'EVERSEO_AUTO_PRODUCT_LANGS'
+        );
+        $seoArray = \EverPsSeoProduct::getAllSeoProductsIds(
+            (int)$shop->id,
+            $allowedLangs
+        );
+        foreach ($seoArray as $seo) {
+            if (in_array((int)$seo['id_seo_lang'], $allowedLangs)) {
+                $this->autoSetTitle(
+                    'id_seo_product',
+                    (int)$seo['id_seo_product'],
+                    (int)$shop->id,
+                    (int)$seo['id_seo_lang']
+                );
                 $output->writeln(sprintf(
-                    '<error>Customer not found on ID Seo : '.$idSeo.'</error>'
+                    '<info>SEO title for id product '.(int)$seo['id_seo_product'].' has been set</info>'
                 ));
-                continue;
-            }
-            $customer = new \Customer(
-                (int)$idCustomer
-            );
-            $customer->outstanding_allow_amount = (float)$outstanding;
-            if ($customer->save()) {
-                $this->logCommand('Customer ID '.$idCustomer.' updated.');
+                $this->autoSetDescription(
+                    'id_seo_product',
+                    (int)$seo['id_seo_product'],
+                    (int)$shop->id,
+                    (int)$seo['id_seo_lang']
+                );
                 $output->writeln(sprintf(
-                    '<info>Customer ID '.$idCustomer.' updated. </info>'
+                    '<info>SEO meta description for id product '.(int)$seo['id_seo_product'].' has been set</info>'
                 ));
             }
         }
+        $output->writeln(sprintf(
+            '<info>End products metas : datetime : '.date('Y-m-d H:i:s').'</info>'
+        ));
+
+        $output->writeln(sprintf(
+            '<info>Start pages metas : datetime : '.date('Y-m-d H:i:s').'</info>'
+        ));
+        $seoArray = \EverPsSeoPageMeta::getAllSeoPagemetasIds(
+            (int)$shop->id
+        );
+        $allowedLangs = $this->getAllowedShortcodesLangs(
+            'EVERSEO_AUTO_PAGEMETA_LANGS'
+        );
+        foreach ($seoArray as $seo) {
+            if (in_array((int)$seo['id_seo_lang'], $allowedLangs)) {
+                $this->autoSetTitle(
+                    'id_seo_pagemeta',
+                    (int)$seo['id_seo_pagemeta'],
+                    (int)$shop->id,
+                    (int)$seo['id_seo_lang']
+                );
+                $output->writeln(sprintf(
+                    '<info>SEO title for id page '.(int)$seo['id_seo_pagemeta'].' has been set</info>'
+                ));
+                $this->autoSetDescription(
+                    'id_seo_pagemeta',
+                    (int)$seo['id_seo_pagemeta'],
+                    (int)$shop->id,
+                    (int)$seo['id_seo_lang']
+                );
+                $output->writeln(sprintf(
+                    '<info>SEO meta description for id page '.(int)$seo['id_seo_pagemeta'].' has been set</info>'
+                ));
+            }
+        }
+        $output->writeln(sprintf(
+            '<info>End pages metas : datetime : '.date('Y-m-d H:i:s').'</info>'
+        ));
+
+        $output->writeln(sprintf(
+            '<info>Start CMS metas : datetime : '.date('Y-m-d H:i:s').'</info>'
+        ));
+        $seoArray = \EverPsSeoCms::getAllSeoCmsIds(
+            (int)$shop->id
+        );
+        $allowedLangs = $this->getAllowedShortcodesLangs(
+            'EVERSEO_AUTO_CMS_LANGS'
+        );
+        foreach ($seoArray as $seo) {
+            if (in_array((int)$seo['id_seo_lang'], $allowedLangs)) {
+                $this->autoSetTitle(
+                    'id_seo_cms',
+                    (int)$seo['id_seo_cms'],
+                    (int)$shop->id,
+                    (int)$seo['id_seo_lang']
+                );
+                $output->writeln(sprintf(
+                    '<info>SEO title for id CMS '.(int)$seo['id_seo_cms'].' has been set</info>'
+                ));
+                $this->autoSetDescription(
+                    'id_seo_cms',
+                    (int)$seo['id_seo_cms'],
+                    (int)$shop->id,
+                    (int)$seo['id_seo_lang']
+                );
+                $output->writeln(sprintf(
+                    '<info>SEO meta description for id CMS '.(int)$seo['id_seo_cms'].' has been set</info>'
+                ));
+            }
+        }
+        $output->writeln(sprintf(
+            '<info>End CMS metas : datetime : '.date('Y-m-d H:i:s').'</info>'
+        ));
+
+        $output->writeln(sprintf(
+            '<info>Start suppliers metas : datetime : '.date('Y-m-d H:i:s').'</info>'
+        ));
+        $seoArray = \EverPsSeoCms::getAllSeoCmsIds(
+            (int)$shop->id
+        );
+        $allowedLangs = $this->getAllowedShortcodesLangs(
+            'EVERSEO_AUTO_SUPPLIER_LANGS'
+        );
+        foreach ($seoArray as $seo) {
+            if (in_array((int)$seo['id_seo_lang'], $allowedLangs)) {
+                $this->autoSetTitle(
+                    'id_seo_supplier',
+                    (int)$seo['id_seo_supplier'],
+                    (int)$shop->id,
+                    (int)$seo['id_seo_lang']
+                );
+                $output->writeln(sprintf(
+                    '<info>SEO title for id supplier '.(int)$seo['id_seo_supplier'].' has been set</info>'
+                ));
+                $this->autoSetDescription(
+                    'id_seo_supplier',
+                    (int)$seo['id_seo_supplier'],
+                    (int)$shop->id,
+                    (int)$seo['id_seo_lang']
+                );
+                $output->writeln(sprintf(
+                    '<info>SEO meta description for id supplier '.(int)$seo['id_seo_supplier'].' has been set</info>'
+                ));
+            }
+        }
+        $output->writeln(sprintf(
+            '<info>End suppliers metas : datetime : '.date('Y-m-d H:i:s').'</info>'
+        ));
+
+        $output->writeln(sprintf(
+            '<info>Start manufacturers metas : datetime : '.date('Y-m-d H:i:s').'</info>'
+        ));
+        $seoArray = \EverPsSeoCms::getAllSeoCmsIds(
+            (int)$shop->id
+        );
+        $allowedLangs = $this->getAllowedShortcodesLangs(
+            'EVERSEO_AUTO_MANUFACTURER_LANGS'
+        );
+        foreach ($seoArray as $seo) {
+            if (in_array((int)$seo['id_seo_lang'], $allowedLangs)) {
+                $this->autoSetTitle(
+                    'id_seo_manufacturer',
+                    (int)$seo['id_seo_manufacturer'],
+                    (int)$shop->id,
+                    (int)$seo['id_seo_lang']
+                );
+                $output->writeln(sprintf(
+                    '<info>SEO title for id manufacturer '.(int)$seo['id_seo_manufacturer'].' has been set</info>'
+                ));
+                $this->autoSetDescription(
+                    'id_seo_manufacturer',
+                    (int)$seo['id_seo_manufacturer'],
+                    (int)$shop->id,
+                    (int)$seo['id_seo_lang']
+                );
+                $output->writeln(sprintf(
+                    '<info>SEO meta description for id manufacturer '.(int)$seo['id_seo_manufacturer'].' has been set</info>'
+                ));
+            }
+        }
+        $output->writeln(sprintf(
+            '<info>End manufacturers metas : datetime : '.date('Y-m-d H:i:s').'</info>'
+        ));
+
+        $output->writeln(sprintf(
+            '<info>Start categories metas : datetime : '.date('Y-m-d H:i:s').'</info>'
+        ));
+        $seoArray = \EverPsSeoCms::getAllSeoCmsIds(
+            (int)$shop->id
+        );
+        $allowedLangs = $this->getAllowedShortcodesLangs(
+            'EVERSEO_AUTO_CATEGORY_LANGS'
+        );
+        foreach ($seoArray as $seo) {
+            if (in_array((int)$seo['id_seo_lang'], $allowedLangs)) {
+                $this->autoSetTitle(
+                    'id_seo_category',
+                    (int)$seo['id_seo_category'],
+                    (int)$shop->id,
+                    (int)$seo['id_seo_lang']
+                );
+                $output->writeln(sprintf(
+                    '<info>SEO title for id category '.(int)$seo['id_seo_category'].' has been set</info>'
+                ));
+                $this->autoSetDescription(
+                    'id_seo_category',
+                    (int)$seo['id_seo_category'],
+                    (int)$shop->id,
+                    (int)$seo['id_seo_lang']
+                );
+                $output->writeln(sprintf(
+                    '<info>SEO meta description for id category '.(int)$seo['id_seo_category'].' has been set</info>'
+                ));
+            }
+        }
+        $output->writeln(sprintf(
+            '<info>End categories metas : datetime : '.date('Y-m-d H:i:s').'</info>'
+        ));
+
+        $output->writeln(sprintf(
+            '<info>Start images alt : datetime : '.date('Y-m-d H:i:s').'</info>'
+        ));
+        $seoArray = \EverPsSeoCms::getAllSeoCmsIds(
+            (int)$shop->id
+        );
+        $allowedLangs = $this->getAllowedShortcodesLangs(
+            'EVERSEO_AUTO_IMAGE_LANGS'
+        );
+        foreach ($seoArray as $seo) {
+            if (in_array((int)$seo['id_seo_lang'], $allowedLangs)) {
+                $this->autoSetAlt(
+                    (int)$seo['id_seo_img'],
+                    (int)$shop->id,
+                    (int)$seo['id_seo_lang']
+                );
+                $this->autoSetAltSeoImage(
+                    (int)$seo['id_ever_seo_image'],
+                    (int)$seo['id_seo_img'],
+                    (int)$shop->id,
+                    (int)$seo['id_seo_lang']
+                );
+                $output->writeln(sprintf(
+                    '<info>Alt/legend for id image '.(int)$seo['id_seo_img'].' has been set</info>'
+                ));
+            }
+        }
+        $output->writeln(sprintf(
+            '<info>End categories metas : datetime : '.date('Y-m-d H:i:s').'</info>'
+        ));
+
+
         \Tools::clearAllCache();
         $output->writeln(sprintf(
             '<info>Cache emptied</info>'
-        ));
-        $output->writeln(sprintf(
-            '<comment>See logs at '.$this->logFile.'</comment>'
         ));
         $output->writeln(
             $this->getRandomFunnyComment($output)
         );
         return self::SUCCESS;
+    }
+
+    protected function autoSetTitle($object, $id_element, $id_shop, $id_lang)
+    {
+        switch ($object) {
+            case 'id_seo_product':
+                $meta_title = \EverPsSeoProduct::changeProductTitleShortcodes(
+                    (int)$id_element,
+                    (int)$id_lang,
+                    (int)$id_shop
+                );
+                $meta_title = \Tools::substr($meta_title, 0, 128);
+
+                $sql = 'UPDATE `'._DB_PREFIX_.'product_lang`
+                SET meta_title = "'.\Db::getInstance()->escape($meta_title).'"
+                WHERE id_lang = '.(int)$id_lang.'
+                AND id_shop = '.(int)$id_shop.'
+                AND id_product = '.(int)$id_element;
+
+                $sql2 = 'UPDATE `'._DB_PREFIX_.'ever_seo_product`
+                SET meta_title = "'.\Db::getInstance()->escape($meta_title).'"
+                WHERE id_seo_lang = '.(int)$id_lang.'
+                AND id_shop = '.(int)$id_shop.'
+                AND id_seo_product = '.(int)$id_element;
+                if (!\Db::getInstance()->execute($sql)) {
+                    $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
+                } else {
+                    return \Db::getInstance()->execute($sql2);
+                }
+                break;
+
+            case 'id_seo_category':
+                $meta_title = \EverPsSeoCategory::changeCategoryTitleShortcodes(
+                    (int)$id_element,
+                    (int)$id_lang,
+                    (int)$id_shop
+                );
+                $meta_title = \Tools::substr($meta_title, 0, 128);
+
+                $sql = 'UPDATE `'._DB_PREFIX_.'category_lang`
+                SET meta_title = "'.\Db::getInstance()->escape($meta_title).'"
+                WHERE id_lang = '.(int)$id_lang.'
+                AND id_shop = '.(int)$id_shop.'
+                AND id_category = '.(int)$id_element;
+
+                $sql2 = 'UPDATE `'._DB_PREFIX_.'ever_seo_category`
+                SET meta_title = "'.\Db::getInstance()->escape($meta_title).'"
+                WHERE id_seo_lang = '.(int)$id_lang.'
+                AND id_shop = '.(int)$id_shop.'
+                AND id_seo_category = '.(int)$id_element;
+                if (!\Db::getInstance()->execute($sql)) {
+                    $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
+                } else {
+                    return \Db::getInstance()->execute($sql2);
+                }
+                break;
+
+            case 'id_seo_cms':
+                $meta_title = \EverPsSeoCms::changeCmsTitleShortcodes(
+                    (int)$id_element,
+                    (int)$id_lang,
+                    (int)$id_shop
+                );
+                $meta_title = \Tools::substr(Db::getInstance()->escape($meta_title), 0, 128);
+
+                $sql = 'UPDATE `'._DB_PREFIX_.'cms_lang`
+                SET meta_title = "'.\Db::getInstance()->escape($meta_title).'"
+                WHERE id_lang = '.(int)$id_lang.'
+                AND id_shop = '.(int)$id_shop.'
+                AND id_cms = '.(int)$id_element;
+
+                $sql2 = 'UPDATE `'._DB_PREFIX_.'ever_seo_cms`
+                SET meta_title = "'.\Db::getInstance()->escape($meta_title).'"
+                WHERE id_seo_lang = '.(int)$id_lang.'
+                AND id_shop = '.(int)$id_shop.'
+                AND id_seo_cms = '.(int)$id_element;
+                if (!\Db::getInstance()->execute($sql)) {
+                    $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
+                } else {
+                    return \Db::getInstance()->execute($sql2);
+                }
+                break;
+
+            case 'id_seo_manufacturer':
+                $meta_title = \EverPsSeoManufacturer::changeManufacturerTitleShortcodes(
+                    (int)$id_element,
+                    (int)$id_lang,
+                    (int)$id_shop
+                );
+                $meta_title = \Tools::substr(Db::getInstance()->escape($meta_title), 0, 128);
+
+                $sql = 'UPDATE `'._DB_PREFIX_.'manufacturer_lang`
+                SET meta_title = "'.\Db::getInstance()->escape($meta_title).'"
+                WHERE id_lang = '.(int)$id_lang.'
+                AND id_shop = '.(int)$id_shop.'
+                AND id_manufacturer = '.(int)$id_element;
+
+                $sql2 = 'UPDATE `'._DB_PREFIX_.'ever_seo_manufacturer`
+                SET meta_title = "'.\Db::getInstance()->escape($meta_title).'"
+                WHERE id_seo_lang = '.(int)$id_lang.'
+                AND id_shop = '.(int)$id_shop.'
+                AND id_seo_manufacturer = '.(int)$id_element;
+                if (!\Db::getInstance()->execute($sql)) {
+                    $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
+                } else {
+                    return \Db::getInstance()->execute($sql2);
+                }
+                break;
+
+            case 'id_seo_supplier':
+                $meta_title = \EverPsSeoSupplier::changeSupplierTitleShortcodes(
+                    (int)$id_element,
+                    (int)$id_lang,
+                    (int)$id_shop
+                );
+                $meta_title = \Tools::substr($meta_title, 0, 128);
+
+                $sql = 'UPDATE `'._DB_PREFIX_.'supplier_lang`
+                SET meta_title = "'.\Db::getInstance()->escape($meta_title).'"
+                WHERE id_lang = '.(int)$id_lang.'
+                AND id_shop = '.(int)$id_shop.'
+                AND id_supplier = '.(int)$id_element;
+
+                $sql2 = 'UPDATE `'._DB_PREFIX_.'ever_seo_supplier`
+                SET meta_title = "'.\Db::getInstance()->escape($meta_title).'"
+                WHERE id_seo_lang = '.(int)$id_lang.'
+                AND id_shop = '.(int)$id_shop.'
+                AND id_seo_supplier = '.(int)$id_element;
+                if (!\Db::getInstance()->execute($sql)) {
+                    $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
+                } else {
+                    return \Db::getInstance()->execute($sql2);
+                }
+                break;
+
+            case 'id_seo_pagemeta':
+                $meta_title = \EverPsSeoPageMeta::changePagemetaTitleShortcodes(
+                    (int)$id_element,
+                    (int)$id_lang,
+                    (int)$id_shop
+                );
+                $pageMeta = new \Meta(
+                    (int)$id_element,
+                    (int)$id_lang,
+                    (int)$id_shop
+                );
+                $pageMeta->title = \Tools::substr(Db::getInstance()->escape($meta_title), 0, 128);
+                // TODO : use SQL query
+                // if ($pageMeta->save()) {
+                //     return true;
+                // }
+                break;
+        }
+    }
+
+    protected function autoSetDescription($object, $id_element, $id_shop, $id_lang)
+    {
+        switch ($object) {
+            case 'id_seo_product':
+                $meta_description = \EverPsSeoProduct::changeProductMetadescShortcodes(
+                    (int)$id_element,
+                    (int)$id_lang,
+                    (int)$id_shop
+                );
+                $meta_description = \Tools::substr($meta_description, 0, 250);
+
+                $sql = 'UPDATE `'._DB_PREFIX_.'product_lang`
+                SET meta_description = "'.\Db::getInstance()->escape($meta_description).'"
+                WHERE id_lang = '.(int)$id_lang.'
+                AND id_shop = '.(int)$id_shop.'
+                AND id_product = '.(int)$id_element;
+
+                $sql2 = 'UPDATE `'._DB_PREFIX_.'ever_seo_product`
+                SET meta_description = "'.\Db::getInstance()->escape($meta_description).'"
+                WHERE id_seo_lang = '.(int)$id_lang.'
+                AND id_shop = '.(int)$id_shop.'
+                AND id_seo_product = '.(int)$id_element;
+                if (!\Db::getInstance()->execute($sql)) {
+                    $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
+                } else {
+                    return \Db::getInstance()->execute($sql2);
+                }
+                break;
+
+            case 'id_seo_category':
+                $meta_description = \EverPsSeoCategory::changeCategoryMetadescShortcodes(
+                    (int)$id_element,
+                    (int)$id_lang,
+                    (int)$id_shop
+                );
+                $meta_description = \Tools::substr($meta_description, 0, 250);
+
+                $sql = 'UPDATE `'._DB_PREFIX_.'category_lang`
+                SET meta_description = "'.\Db::getInstance()->escape($meta_description).'"
+                WHERE id_lang = '.(int)$id_lang.'
+                AND id_shop = '.(int)$id_shop.'
+                AND id_category = '.(int)$id_element;
+
+                $sql2 = 'UPDATE `'._DB_PREFIX_.'ever_seo_category`
+                SET meta_description = "'.\Db::getInstance()->escape($meta_description).'"
+                WHERE id_seo_lang = '.(int)$id_lang.'
+                AND id_shop = '.(int)$id_shop.'
+                AND id_seo_category = '.(int)$id_element;
+                if (!\Db::getInstance()->execute($sql)) {
+                    $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
+                } else {
+                    return \Db::getInstance()->execute($sql2);
+                }
+                break;
+
+            case 'id_seo_cms':
+                $meta_description = \EverPsSeoCms::changeCmsMetadescShortcodes(
+                    (int)$id_element,
+                    (int)$id_lang,
+                    (int)$id_shop
+                );
+                $meta_description = \Tools::substr($meta_description, 0, 250);
+
+                $sql = 'UPDATE `'._DB_PREFIX_.'cms_lang`
+                SET meta_description = "'.\Db::getInstance()->escape($meta_description).'"
+                WHERE id_lang = '.(int)$id_lang.'
+                AND id_shop = '.(int)$id_shop.'
+                AND id_cms = '.(int)$id_element;
+
+                $sql2 = 'UPDATE `'._DB_PREFIX_.'ever_seo_cms`
+                SET meta_description = "'.\Db::getInstance()->escape($meta_description).'"
+                WHERE id_seo_lang = '.(int)$id_lang.'
+                AND id_shop = '.(int)$id_shop.'
+                AND id_seo_cms = '.(int)$id_element;
+                if (!\Db::getInstance()->execute($sql)) {
+                    $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
+                } else {
+                    return \Db::getInstance()->execute($sql2);
+                }
+                break;
+
+            case 'id_seo_manufacturer':
+                $meta_description = \EverPsSeoManufacturer::changeManufacturerMetadescShortcodes(
+                    (int)$id_element,
+                    (int)$id_lang,
+                    (int)$id_shop
+                );
+                $meta_description = \Tools::substr($meta_description, 0, 250);
+
+                $sql = 'UPDATE `'._DB_PREFIX_.'manufacturer_lang`
+                SET meta_description = "'.\Db::getInstance()->escape($meta_description).'"
+                WHERE id_lang = '.(int)$id_lang.'
+                AND id_shop = '.(int)$id_shop.'
+                AND id_manufacturer = '.(int)$id_element;
+
+                $sql2 = 'UPDATE `'._DB_PREFIX_.'ever_seo_manufacturer`
+                SET meta_description = "'.\Db::getInstance()->escape($meta_description).'"
+                WHERE id_seo_lang = '.(int)$id_lang.'
+                AND id_shop = '.(int)$id_shop.'
+                AND id_seo_manufacturer = '.(int)$id_element;
+                if (!\Db::getInstance()->execute($sql)) {
+                    $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
+                } else {
+                    return \Db::getInstance()->execute($sql2);
+                }
+                break;
+
+            case 'id_seo_supplier':
+                $meta_description = \EverPsSeoSupplier::changeSupplierMetadescShortcodes(
+                    (int)$id_element,
+                    (int)$id_lang,
+                    (int)$id_shop
+                );
+                $meta_description = \Tools::substr(Db::getInstance()->escape($meta_description), 0, 250);
+
+                $sql = 'UPDATE `'._DB_PREFIX_.'supplier_lang`
+                SET meta_description = "'.\Db::getInstance()->escape($meta_description).'"
+                WHERE id_lang = '.(int)$id_lang.'
+                AND id_shop = '.(int)$id_shop.'
+                AND id_supplier = '.(int)$id_element;
+
+                $sql2 = 'UPDATE `'._DB_PREFIX_.'ever_seo_supplier`
+                SET meta_description = "'.\Db::getInstance()->escape($meta_description).'"
+                WHERE id_seo_lang = '.(int)$id_lang.'
+                AND id_shop = '.(int)$id_shop.'
+                AND id_seo_supplier = '.(int)$id_element;
+                if (!\Db::getInstance()->execute($sql)) {
+                    $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
+                } else {
+                    return \Db::getInstance()->execute($sql2);
+                }
+                break;
+
+            case 'id_seo_pagemeta':
+                $meta_description = \EverPsSeoPageMeta::changePagemetaMetadescShortcodes(
+                    (int)$id_element,
+                    (int)$id_lang,
+                    (int)$id_shop
+                );
+                $pageMeta = new Meta(
+                    (int)$id_element,
+                    (int)$id_lang,
+                    (int)$id_shop
+                );
+                $pageMeta->meta_description = \Tools::substr(Db::getInstance()->escape($meta_description), 0, 250);
+                // TODO : use SQL query
+                // if ($pageMeta->save()) {
+                //     return true;
+                // }
+                break;
+        }
+    }
+
+    private function autoSetAlt($id_element, $id_shop, $id_lang)
+    {
+        $alt = \EverPsSeoImage::changeImageAltShortcodes(
+            $id_element,
+            $id_lang,
+            $id_shop
+        );
+        $image = new \Image(
+            (int)$id_element,
+            (int)$id_lang,
+            (int)$id_shop
+        );
+        $legend = \Tools::substr(
+            strip_tags($alt),
+            0,
+            128
+        );
+        if (\Validate::isGenericName($legend)) {
+            $image->legend = $legend;
+            // Hooked
+            if ($image->id_product && $image->save()) {
+                return true;
+            }
+        }
+    }
+
+    private function autoSetAltSeoImage($id_ever_seo_image, $id_element, $id_shop, $id_lang)
+    {
+        $alt = \EverPsSeoImage::changeImageAltShortcodes(
+            $id_element,
+            $id_lang,
+            $id_shop
+        );
+        $everImg = new \EverPsSeoImage(
+            (int)$id_ever_seo_image
+        );
+        $legend = \Tools::substr(
+            strip_tags($alt),
+            0,
+            128
+        );
+        if (\Validate::isGenericName($legend)) {
+            $everImg->legend = $legend;
+            // Hooked
+            if ($everImg->id_seo_product && $everImg->save()) {
+                return true;
+            }
+        }
+    }
+
+    protected function getAllowedShortcodesLangs($getter)
+    {
+        $allowedLangs = json_decode(
+            \Configuration::get(
+                (string)$getter
+            )
+        );
+        if (!$allowedLangs) {
+            $allowedLangs = array((int)\Configuration::get('PS_LANG_DEFAULT'));
+        }
+        return $allowedLangs;
     }
 
     protected function logCommand($msg)

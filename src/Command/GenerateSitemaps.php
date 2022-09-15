@@ -33,7 +33,7 @@ class GenerateSitemaps extends Command
     {
         $this->setName('everpsseo:seo:sitemaps');
         $this->setDescription('Generate sitemaps for each lang');
-        $this->logFile = dirname(__FILE__) . '/../../output/logs/log-sitemaps-'.date('j-n-Y').'.log'
+        $this->logFile = dirname(__FILE__) . '/../../output/logs/log-sitemaps-'.date('j-n-Y').'.log';
         $this->module = \Module::getInstanceByName('everpsseo');;
     }
 

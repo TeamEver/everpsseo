@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<module>
+    <name>everpsseo</name>
+    <displayName><![CDATA[Ever SEO]]></displayName>
+    <version><![CDATA[7.13.4]]></version>
+    <description><![CDATA[🙂 Optimisez de mani&egrave;re globale l&#039;int&eacute;gralit&eacute; du SEO de votre boutique 🙂]]></description>
+    <author><![CDATA[Team Ever]]></author>
+    <tab><![CDATA[seo]]></tab>
+	<confirmUninstall><![CDATA[Êtes-vous certain de vouloir retirer tout votre SEO ?]]></confirmUninstall>
+    <is_configurable>1</is_configurable>
+    <need_instance>0</need_instance>
+	<limited_countries></limited_countries>
+</module>
