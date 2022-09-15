@@ -36,7 +36,7 @@ class EverPsSeo extends Module
     {
         $this->name = 'everpsseo';
         $this->tab = 'seo';
-        $this->version = '8.1.2';
+        $this->version = '8.1.3';
         $this->author = 'Team Ever';
         $this->need_instance = 0;
         $this->module_key = '5ddabba8ec414cd5bd646fad24368472';
@@ -116,6 +116,10 @@ class EverPsSeo extends Module
     {
         if (extension_loaded('curl') == false) {
             $this->_errors[] = $this->l('You have to enable the cURL extension on your server to install this module');
+            return false;
+        }
+        if (version_compare(PHP_VERSION, '7.4.0') < 0) {
+            $this->_errors[] = $this->l('You must have at least PHP 7.4 to use this module version');
             return false;
         }
         if (Module::isInstalled('everpsimagealt')) {
