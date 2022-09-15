@@ -23,7 +23,6 @@ class GenerateObjectsContent extends Command
     public const FAILURE = 1;
     public const INVALID = 2;
     public const ABORTED = 3;
-    protected string $filename;
 
     public function __construct(KernelInterface $kernel)
     {
@@ -33,26 +32,17 @@ class GenerateObjectsContent extends Command
     protected function configure()
     {
         $this->setName('everpsseo:seo:content');
-        $this->setDescription('Import des stocks provenant du fichier de Seo');
+        $this->setDescription('Generate objects content (description, etc) for each lang');
         $this->filename = dirname(__FILE__) . '/../../input/StockDisponible.txt';
         $this->logFile = dirname(__FILE__) . '/../../output/logs/log-content-'.date('j-n-Y').'.log';
+        $this->module = \Module::getInstanceByName('everpsseo');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $dateStart = date('Y-m-d H:i:s');
-        if (!file_exists($this->filename)) {
         $output->writeln(sprintf(
-                '<error>Missing StockDisponible.txt file on date : '.$dateStart.'</error>'
-            ));
-            \Logger::addLog(
-                $dateStart . ' - Missing StockDisponible.txt file : ' . $this->filename
-            );
-            return self::ABORTED;
-        }
-        $this->logCommand('Stock start import : datetime : '.$dateStart);
-        $output->writeln(sprintf(
-            '<info>Stock start import : datetime : '.$dateStart.'</info>'
+            '<info>Start content spinning : datetime : '.$dateStart.'</info>'
         ));
         $context = (new ContextAdapter())->getContext();
         $context->employee = new \Employee(1);
@@ -65,33 +55,119 @@ class GenerateObjectsContent extends Command
         $context->shop = $shop;
         $context->cookie->id_shop = $shop->id;
 
-        $csv = Reader::createFromPath($this->filename, 'r');
-        $csv->setHeaderOffset(0);
-        $csv->setDelimiter("\t");
+        $allowedLangs = $this->getAllowedShortcodesLangs(
+            'EVERSEO_PGENERATOR_LANGS'
+        );
 
-        $records = $csv->getRecords();
+        $output->writeln(sprintf(
+            '<info>Start products content spinning : datetime : '.$dateStart.'</info>'
+        ));
+        $seoArray = EverPsSeoProduct::getAllSeoProductsIds(
+            (int)$shop->id,
+            $allowedLangs
+        );
 
-        foreach ($records as $record) {
-            $ref = $record['Ref'];
-            $stock = $record['StockDispo'];
-            $combinations = \Db::getInstance()->executeS('SELECT id_product, id_product_attribute FROM '._DB_PREFIX_.'product_attribute WHERE reference = "'.pSQL($ref).'"');
-            if ($combinations) {
-                foreach ($combinations as $combination) {
-                    $this->logCommand('Updating Stock. ID Product : '.(int)$combination['id_product'].' - ID Product Attribute : '.(int)$combination['id_product_attribute'].' - Stock : '.(int)$stock);
-                    $output->writeln(sprintf(
-                        '<info>Updating Stock. ID Product : '.(int)$combination['id_product'].' - ID Product Attribute : '.(int)$combination['id_product_attribute'].' - Stock : '.(int)$stock.'</info>'
-                    ));
-                    \StockAvailable::setQuantity(
-                        $combination['id_product'],
-                        $combination['id_product_attribute'],
-                        $stock,
-                        $shop->id
-                    );
-                }
+        foreach ($seoArray as $seo) {
+            $this->autoSetContentShortDesc(
+                'id_seo_product',
+                (int)$seo['id_seo_product'],
+                (int)$shop->id,
+                (int)$seo['id_seo_lang']
+            );
+            $output->writeln(sprintf(
+                '<info>Short description for id product '.(int)$seo['id_seo_product'].' has been set</info>'
+            ));
+            $this->autoSetContentDesc(
+                'id_seo_product',
+                (int)$seo['id_seo_product'],
+                (int)$shop->id,
+                (int)$seo['id_seo_lang']
+            );
+            $output->writeln(sprintf(
+                '<info>Description for id product '.(int)$seo['id_seo_product'].' has been set</info>'
+            ));
+        }
+        $output->writeln(sprintf(
+            '<info>End products content spinning : datetime : '.$dateStart.'</info>'
+        ));
+
+        $output->writeln(sprintf(
+            '<info>Start categories content spinning : datetime : '.$dateStart.'</info>'
+        ));
+        $seoArray = \EverPsSeoCategory::getAllSeoCategoriesIds(
+            (int)$shop->id
+        );
+        $allowedLangs = $this->getAllowedShortcodesLangs(
+            'EVERSEO_AUTO_CATEGORY_LANGS'
+        );
+        foreach ($seoArray as $seo) {
+            if (in_array((int)$seo['id_seo_lang'], $allowedLangs)) {
+                $this->autoSetContentDesc(
+                    'id_seo_category',
+                    (int)$seo['id_seo_category'],
+                    (int)$shop->id,
+                    (int)$seo['id_seo_lang']
+                );
+                $output->writeln(sprintf(
+                    '<info>Description for id category '.(int)$seo['id_seo_category'].' has been set</info>'
+                ));
             }
         }
         $output->writeln(sprintf(
-            '<info>Import ended, start clearing cache</info>'
+            '<info>End categories content spinning : datetime : '.$dateStart.'</info>'
+        ));
+
+        $output->writeln(sprintf(
+            '<info>Start manufacturers content spinning : datetime : '.$dateStart.'</info>'
+        ));
+        $seoArray = \EverPsSeoManufacturer::getAllSeoManufacturersIds(
+            (int)$shop->id
+        );
+        $allowedLangs = $this->getAllowedShortcodesLangs(
+            'EVERSEO_AUTO_MANUFACTURER_LANGS'
+        );
+        foreach ($seoArray as $seo) {
+            if (in_array((int)$seo['id_seo_lang'], $allowedLangs)) {
+                $this->autoSetContentDesc(
+                    'id_seo_manufacturer',
+                    (int)$seo['id_seo_manufacturer'],
+                    (int)$shop->id,
+                    (int)$seo['id_seo_lang']
+                );
+            }
+        }
+        $output->writeln(sprintf(
+            '<info>End manufacturers content spinning : datetime : '.$dateStart.'</info>'
+        ));
+
+        $output->writeln(sprintf(
+            '<info>Start suppliers content spinning : datetime : '.$dateStart.'</info>'
+        ));
+        $seoArray = \EverPsSeoSupplier::getAllSeoSuppliersIds(
+            (int)$shop->id
+        );
+        $allowedLangs = $this->getAllowedShortcodesLangs(
+            'EVERSEO_AUTO_SUPPLIER_LANGS'
+        );
+        foreach ($seoArray as $seo) {
+            if (in_array((int)$seo['id_seo_lang'], $allowedLangs)) {
+                $this->autoSetContentDesc(
+                    'id_seo_supplier',
+                    (int)$seo['id_seo_supplier'],
+                    (int)$shop->id,
+                    (int)$seo['id_seo_lang']
+                );
+            }
+        }
+        $output->writeln(sprintf(
+            '<info>End suppliers content spinning : datetime : '.$dateStart.'</info>'
+        ));
+
+
+
+
+        $output->writeln(sprintf(
+            '<info>Content generation ended, start clearing cache</info>'
         ));
         \Tools::clearAllCache();
         $output->writeln(sprintf(
@@ -104,6 +180,262 @@ class GenerateObjectsContent extends Command
             '<comment>See logs at '.$this->logFile.'</comment>'
         ));
         return self::SUCCESS;
+    }
+
+    protected function getAllowedShortcodesLangs($getter)
+    {
+        $allowedLangs = json_decode(
+            \Configuration::get(
+                (string)$getter
+            )
+        );
+        if (!$allowedLangs) {
+            $allowedLangs = array((int)\Configuration::get('PS_LANG_DEFAULT'));
+        }
+        return $allowedLangs;
+    }
+
+    protected function autoSetContentShortDesc($object, $id_element, $id_shop, $id_lang)
+    {
+        switch ($object) {
+            case 'id_seo_product':
+                $description_short = \EverPsSeoProduct::changeProductShortDescShortcodes(
+                    (int)$id_element,
+                    (int)$id_lang,
+                    (int)$id_shop
+                );
+                if (empty($description_short)) {
+                    return;
+                }
+                $product = new Product(
+                    (int)$id_element,
+                    false,
+                    (int)$id_lang,
+                    (int)$id_shop
+                );
+                if (!in_array($product->id_category_default, $this->getAllowedGeneratorCategories(true))) {
+                    return;
+                }
+                if ((bool)Configuration::get('EVERSEO_DELETE_PRODUCT_CONTENT')) {
+                    $product->description_short = $description_short;
+                } else {
+                    $product->description_short .= $description_short;
+                }
+
+                $sql_desc_short = 'UPDATE `'._DB_PREFIX_.'product_lang`
+                    SET description_short = "'.pSQL($product->description_short, true).'"
+                    WHERE id_lang = '.(int)$id_lang.'
+                    AND id_shop = '.(int)$id_shop.'
+                    AND id_product = '.(int)$id_element;
+
+                if (\Db::getInstance()->execute($sql_desc_short)) {
+                    return true;
+                }
+                break;
+        }
+    }
+
+    protected function autoSetContentDesc($object, $id_element, $id_shop, $id_lang)
+    {
+        switch ($object) {
+            case 'id_seo_product':
+                if ((bool)\Configuration::get('EVERSEO_BOTTOM_PRODUCT_CONTENT') === false) {
+                    $description = EverPsSeoProduct::changeProductDescShortcodes(
+                        (int)$id_element,
+                        (int)$id_lang,
+                        (int)$id_shop
+                    );
+                } else {
+                    $description = \EverPsSeoProduct::changeProductBottomShortcodes(
+                        (int)$id_element,
+                        (int)$id_lang,
+                        (int)$id_shop
+                    );
+                }
+                if (empty($description)) {
+                    return;
+                }
+                $product = new \Product(
+                    (int)$id_element,
+                    false,
+                    (int)$id_lang,
+                    (int)$id_shop
+                );
+                if (!in_array($product->id_category_default, $this->getAllowedGeneratorCategories(true))) {
+                    return;
+                }
+                if ((bool)\Configuration::get('EVERSEO_BOTTOM_PRODUCT_CONTENT') === false) {
+                    if ((bool)\Configuration::get('EVERSEO_DELETE_PRODUCT_CONTENT') === true) {
+                        $product->description = $description;
+                    } else {
+                        $product->description .= $description;
+                    }
+                    $meta_title = \Tools::substr($meta_title, 0, 128);
+
+                    $sql_desc = 'UPDATE `'._DB_PREFIX_.'product_lang`
+                        SET description = "'.pSQL($product->description, true).'"
+                        WHERE id_lang = '.(int)$id_lang.'
+                        AND id_shop = '.(int)$id_shop.'
+                        AND id_product = '.(int)$id_element;
+
+                    if (\Db::getInstance()->execute($sql_desc)) {
+                        return true;
+                    }
+                } else {
+                    $obj = \EverPsSeoProduct::getSeoProduct(
+                        (int)$id_element,
+                        (int)$id_lang,
+                        (int)$id_shop
+                    );
+                    if ((bool)\Configuration::get('EVERSEO_DELETE_PRODUCT_CONTENT') === false) {
+                        $obj->bottom_content = $obj->bottom_content.' '.$description;
+                    } else {
+                        $obj->bottom_content = $description;
+                    }
+                    $sql_ever_desc = 'UPDATE `'._DB_PREFIX_.'ever_seo_product`
+                        SET bottom_content = "'.pSQL($obj->bottom_content, true).'"
+                        WHERE id_seo_lang = '.(int)$id_lang.'
+                        AND id_shop = '.(int)$id_shop.'
+                        AND id_seo_product = '.(int)$id_element;
+
+                    if (\Db::getInstance()->execute($sql_ever_desc)) {
+                        return true;
+                    }
+                    // return $obj->save();
+                }
+                break;
+
+            case 'id_seo_category':
+                $description = \EverPsSeoCategory::changeCategoryDescShortcodes(
+                    (int)$id_element,
+                    (int)$id_lang,
+                    (int)$id_shop
+                );
+                if (empty($description)) {
+                    return;
+                }
+                $category = new \Category(
+                    (int)$id_element,
+                    (int)$id_lang,
+                    (int)$id_shop
+                );
+                if (!in_array($category->id, $this->getAllowedGeneratorCategories())) {
+                    return;
+                }
+                if ((bool)\Configuration::get('EVERSEO_BOTTOM_CATEGORY_CONTENT') === false) {
+                    if ((bool)\Configuration::get('EVERSEO_DELETE_CATEGORY_CONTENT')) {
+                        $category->description = $description;
+                    } else {
+                        $category->description = $category->description.' '.$description;
+                    }
+                    if (!$category->isParentCategoryAvailable()) {
+                        $category->id_parent = 2;
+                    }
+                    if ($category->save()) {
+                        return true;
+                    }
+                } else {
+                    $obj = \EverPsSeoCategory::getSeoCategory(
+                        (int)$id_element,
+                        (int)$id_lang,
+                        (int)$id_shop
+                    );
+                    if ((bool)\Configuration::get('EVERSEO_DELETE_CATEGORY_CONTENT') === false) {
+                        $obj->bottom_content = $obj->bottom_content.' '.$description;
+                    } else {
+                        $obj->bottom_content = $description;
+                    }
+                    return $obj->save();
+                }
+                break;
+
+            case 'id_seo_manufacturer':
+                $description = \EverPsSeoManufacturer::changeManufacturerDescShortcodes(
+                    (int)$id_element,
+                    (int)$id_lang,
+                    (int)$id_shop
+                );
+                if (empty($description)) {
+                    return;
+                }
+                $manufacturer = new \Manufacturer(
+                    (int)$id_element,
+                    (int)$id_lang
+                );
+                if ((bool)\Configuration::get('EVERSEO_BOTTOM_MANUFACTURER_CONTENT') === false) {
+                    $manufacturer->description = Tools::substr(pSQL($description), 0, 250);
+                    if ($manufacturer->save()) {
+                        return true;
+                    }
+                } else {
+                    $obj = \EverPsSeoManufacturer::getSeoManufacturer(
+                        (int)$id_element,
+                        (int)$id_lang,
+                        (int)$id_shop
+                    );
+                    if ((bool)\Configuration::get('EVERSEO_DELETE_MANUFACTURER_CONTENT') === false) {
+                        $obj->bottom_content = $obj->bottom_content.' '.$description;
+                    } else {
+                        $obj->bottom_content = $description;
+                    }
+                    return $obj->save();
+                }
+                break;
+
+            case 'id_seo_supplier':
+                $description = \EverPsSeoSupplier::changeSupplierDescShortcodes(
+                    (int)$id_element,
+                    (int)$id_lang,
+                    (int)$id_shop
+                );
+                if (empty($description)) {
+                    return;
+                }
+                $supplier = new \Supplier(
+                    (int)$id_element,
+                    (int)$id_lang
+                );
+                if ((bool)\Configuration::get('EVERSEO_BOTTOM_SUPPLIER_CONTENT') === false) {
+                    $supplier->description = Tools::substr(pSQL($description), 0, 250);
+                    if ($supplier->save()) {
+                        return true;
+                    }
+                } else {
+                    $obj = \EverPsSeoSupplier::getSeoSupplier(
+                        (int)$id_element,
+                        (int)$id_lang,
+                        (int)$id_shop
+                    );
+                    if ((bool)\Configuration::get('EVERSEO_DELETE_SUPPLIER_CONTENT') === false) {
+                        $obj->bottom_content = $obj->bottom_content.' '.$description;
+                    } else {
+                        $obj->bottom_content = $description;
+                    }
+                    return $obj->save();
+                }
+                break;
+        }
+    }
+
+    protected function getAllowedGeneratorCategories($is_product = false)
+    {
+        if ((bool)$is_product) {
+            $categories = json_decode(
+                \Configuration::get(
+                    'EVERSEO_PGENERATOR_CATEGORIES'
+                )
+            );
+        } else {
+            $categories = json_decode(
+                \Configuration::get(
+                    'EVERSEO_CGENERATOR_CATEGORIES'
+                )
+            );
+        }
+        if (!is_array($categories)) {
+            $categories = array($categories);
+        }
+        return $categories;
     }
 
     protected function logCommand($msg)

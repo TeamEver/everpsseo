@@ -9,7 +9,6 @@
 
 namespace Everpsseo\Seo\Command;
 
-use League\Csv\Reader;
 use PrestaShop\PrestaShop\Adapter\LegacyContext as ContextAdapter;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Command\Command;
@@ -24,7 +23,6 @@ class GenerateMetas extends Command
     public const FAILURE = 1;
     public const INVALID = 2;
     public const ABORTED = 3;
-    protected string $filename;
 
     public function __construct(KernelInterface $kernel)
     {
@@ -34,9 +32,9 @@ class GenerateMetas extends Command
     protected function configure()
     {
         $this->setName('everpsseo:seo:metas');
-        $this->setDescription('Import des stocks provenant du fichier de Seo');
-        $this->filename = dirname(__FILE__) . '/../../input/SeoVersWebClient.txt';
+        $this->setDescription('Generate SEO title and meta description for each lang');
         $this->logFile = dirname(__FILE__) . '/../../output/logs/log-metas-'.date('j-n-Y').'.log';
+        $this->module = \Module::getInstanceByName('everpsseo');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

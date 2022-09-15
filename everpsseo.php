@@ -7724,7 +7724,6 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         }
     }
 
-
     private function autoSetContentDesc($object, $id_element, $id_shop, $id_lang)
     {
         switch ($object) {

@@ -9,7 +9,6 @@
 
 namespace Everpsseo\Seo\Command;
 
-use League\Csv\Reader;
 use PrestaShop\PrestaShop\Adapter\LegacyContext as ContextAdapter;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Command\Command;
@@ -24,7 +23,6 @@ class GenerateSitemaps extends Command
     public const FAILURE = 1;
     public const INVALID = 2;
     public const ABORTED = 3;
-    protected string $filename;
 
     public function __construct(KernelInterface $kernel)
     {
@@ -34,26 +32,16 @@ class GenerateSitemaps extends Command
     protected function configure()
     {
         $this->setName('everpsseo:seo:sitemaps');
-        $this->setDescription('Import des stocks provenant du fichier de Seo');
-        $this->filename = dirname(__FILE__) . '/../../input/Arrivage.txt';
-        $this->logFile = dirname(__FILE__) . '/../../output/logs/log-sitemaps-'.date('j-n-Y').'.log';
+        $this->setDescription('Generate sitemaps for each lang');
+        $this->logFile = dirname(__FILE__) . '/../../output/logs/log-sitemaps-'.date('j-n-Y').'.log'
+        $this->module = \Module::getInstanceByName('everpsseo');;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $dateStart = date('Y-m-d H:i:s');
-        if (!file_exists($this->filename)) {
         $output->writeln(sprintf(
-                '<error>Missing Arrivage.txt file on date : '.$dateStart.'</error>'
-            ));
-            \Logger::addLog(
-                $dateStart . ' - Missing Arrivage.txt file : ' . $this->filename
-            );
-            return self::ABORTED;
-        }
-        $this->logCommand('Arrivage start import : datetime : '.$dateStart);
-        $output->writeln(sprintf(
-            '<info>Arrivage start import : datetime : '.$dateStart.'</info>'
+            '<info>Start sitemap generation : datetime : '.$dateStart.'</info>'
         ));
         $context = (new ContextAdapter())->getContext();
         $context->employee = new \Employee(1);
@@ -66,80 +54,12 @@ class GenerateSitemaps extends Command
         $context->shop = $shop;
         $context->cookie->id_shop = $shop->id;
 
-        $csv = Reader::createFromPath($this->filename, 'r');
-        $csv->setHeaderOffset(0);
-        $csv->setDelimiter("\t");
+        $this->module->everGenerateSitemaps(
+            (int)$shop->id
+        );
 
-        $records = $csv->getRecords();
-
-        foreach ($records as $record) {
-            // Ref product w attribute
-            $ref = $record['Ref'];
-            // Qty arrivage
-            $stock = $record['QteArrivage'];
-            // Date de réception
-            $dateReception = str_replace('/', '-', $record['DateReception']);
-            $dateReception = strtotime($dateReception);
-            $dateReception = date('Y-m-d H:i:s', $dateReception);
-            // Date de mise à jour
-            $dateUpd = str_replace('/', '-', $record['DateMiseAJour']);
-            $dateUpd = strtotime($dateUpd);
-            $dateUpd = date('Y-m-d H:i:s', $dateUpd);
-            // Get combinations
-            $combinations = \Db::getInstance()->executeS('SELECT id_product, id_product_attribute FROM '._DB_PREFIX_.'product_attribute WHERE reference = "'.pSQL($ref).'"');
-            if ($combinations) {
-                foreach ($combinations as $combination) {
-                    $exists = \Db::getInstance()->getValue(
-                        'SELECT id_ub_sage_arrivage FROM `'._DB_PREFIX_.'ub_sage_arrivage`
-                        WHERE id_product = '.(int)$combination['id_product'].'
-                        AND id_product_attribute = '.(int)$combination['id_product_attribute'].'
-                        AND date_reception = "'.\Db::getInstance()->escape($dateReception).'"'
-                    );
-                    if ($exists && \Validate::isInt($exists)) {
-                        $output->writeln(sprintf(
-                            '<info>Updating Arrivage. ID Product : '.(int)$combination['id_product'].' - ID Product Attribute : '.(int)$combination['id_product_attribute'].' - QteArrivage : '.(int)$stock.' - DateReception : '.$dateReception.' - DateMiseAJour : '.$dateUpd.'</info>'
-                        ));
-                        $this->logCommand('Updating Arrivage. ID Product : '.(int)$combination['id_product'].' - ID Product Attribute : '.(int)$combination['id_product_attribute'].' - QteArrivage : '.(int)$stock.' - DateReception : '.$dateReception.' - DateMiseAJour : '.$dateUpd);
-                        \Db::getInstance()->update(
-                            'ub_sage_arrivage',
-                            array(
-                                'stock' => (int)$stock,
-                                'date_reception' => $dateReception,
-                                'date_upd' => $dateUpd
-                            ),
-                            'id_ub_sage_arrivage = '.(int)$exists
-                        );
-                    } else {
-                        $output->writeln(sprintf(
-                            '<info>Creating Arrivage. ID Product : '.(int)$combination['id_product'].' - ID Product Attribute : '.(int)$combination['id_product_attribute'].' - QteArrivage : '.(int)$stock.' - DateReception : '.$dateReception.' - DateMiseAJour : '.$dateUpd.'</info>'
-                        ));
-                        $this->logCommand('Creating Arrivage. ID Product : '.(int)$combination['id_product'].' - ID Product Attribute : '.(int)$combination['id_product_attribute'].' - QteArrivage : '.(int)$stock.' - DateReception : '.$dateReception.' - DateMiseAJour : '.$dateUpd);
-                        \Db::getInstance()->insert(
-                            'ub_sage_arrivage',
-                            array(
-                                'id_product' => (int)$combination['id_product'],
-                                'id_product_attribute' => (int)$combination['id_product_attribute'],
-                                'stock' => (int)$stock,
-                                'date_reception' => $dateReception,
-                                'date_upd' => $dateUpd
-                            ),
-                            false,
-                            true,
-                            \Db::REPLACE
-                        );
-                    }
-                }
-            }
-        }
         $output->writeln(sprintf(
-            '<info>Import ended, start clearing cache</info>'
-        ));
-        \Tools::clearAllCache();
-        $output->writeln(sprintf(
-            '<info>Cache emptied</info>'
-        ));
-        $output->writeln(sprintf(
-            '<comment>See logs at '.$this->logFile.'</comment>'
+            '<info>Generation ended</info>'
         ));
         $output->writeln(
             $this->getRandomFunnyComment($output)
