@@ -1,0 +1,24 @@
+{
+  "name": "team-ever/everpsseo",
+  "description": "Sage",
+  "type": "prestashop-module",
+  "authors": [
+    {
+      "name": "Team Ever",
+      "email": "info@team-ever.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Everpsseo\\Seo\\": "src/"
+    },
+    "exclude-from-classmap": []
+  },
+  "config": {
+    "preferred-install": "dist",
+    "prepend-autoloader": false
+  },
+  "require": {
+    "league/csv": "^9.8"
+  }
+}
