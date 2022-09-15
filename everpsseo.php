@@ -47,7 +47,7 @@ class EverPsSeo extends Module
         $this->displayName = $this->l('Ever SEO');
         $this->description = $this->l('🙂 Global optimize and work on your shop SEO 🙂');
         $this->confirmUninstall = $this->l('Are you really sure to remove all seo settings ?');
-        $this->ps_versions_compliancy = array('min' => '1.6', 'max' => _PS_VERSION_);
+        $this->ps_versions_compliancy = array('min' => '1.7', 'max' => _PS_VERSION_);
         $this->siteUrl = Tools::getHttpHost(true).__PS_BASE_URI__;
         if ($this->isSeven) {
             $this->imageType = ImageType::getFormattedName('large');
@@ -114,12 +114,12 @@ class EverPsSeo extends Module
 
     public function install()
     {
-        if (extension_loaded('curl') == false) {
-            $this->_errors[] = $this->l('You have to enable the cURL extension on your server to install this module');
-            return false;
-        }
         if (version_compare(PHP_VERSION, '7.4.0') < 0) {
             $this->_errors[] = $this->l('You must have at least PHP 7.4 to use this module version');
+            return false;
+        }
+        if (extension_loaded('curl') == false) {
+            $this->_errors[] = $this->l('You have to enable the cURL extension on your server to install this module');
             return false;
         }
         if (Module::isInstalled('everpsimagealt')) {

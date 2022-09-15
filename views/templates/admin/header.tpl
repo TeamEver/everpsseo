@@ -92,6 +92,13 @@
         <h4>{l s='If you are using Store Commander, please set this cron to enable detecting new elements' mod='everpsseo'}</h4>
         <p>{$everpsseo_objects|escape:'htmlall':'UTF-8'}</p>
         <a href="{$everpsseo_objects|escape:'htmlall':'UTF-8'}" target="_blank" class="btn btn-default">{l s='Check and update elements now !' mod='everpsseo'}</a>
+        <p></p>
+        <h4>{l s='PHP console commands' mod='everpsseo'}</h4>
+        <ul>
+            <li><pre>php bin/console everpsseo:seo:metas idshop 1</pre> {l s='generate all metas for id shop 1, depending on module settings' mod='everpsseo'}</li>
+            <li><pre>php bin/console everpsseo:seo:content idshop 1</pre> {l s='generate all content (products, categories, suppliers, manufacturers) for id shop 1, depending on module settings' mod='everpsseo'}</li>
+            <li><pre>php bin/console everpsseo:seo:sitemaps idshop 1</pre> {l s='generate all sitemaps and ping search engines for id shop 1, depending on module settings' mod='everpsseo'}</li>
+        </ul>
         </div>
     </div>
 </div>
