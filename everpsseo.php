@@ -36,7 +36,7 @@ class EverPsSeo extends Module
     {
         $this->name = 'everpsseo';
         $this->tab = 'seo';
-        $this->version = '8.1.2';
+        $this->version = '7.13.4';
         $this->author = 'Team Ever';
         $this->need_instance = 0;
         $this->module_key = '5ddabba8ec414cd5bd646fad24368472';
@@ -7724,6 +7724,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         }
     }
 
+
     private function autoSetContentDesc($object, $id_element, $id_shop, $id_lang)
     {
         switch ($object) {
@@ -10082,7 +10083,6 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     || $pageMeta->page == 'module-ph_simpleblog-author'
                     || $pageMeta->page == 'module-pm_advancedsearch4-searchresults'
                     || $pageMeta->page == 'module-colissimo-tracking'
-                    || $pageMeta->page == 'module-ph_simpleblog-authorpage'
                 ) {
                     continue;
                 }

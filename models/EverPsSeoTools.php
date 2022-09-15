@@ -337,9 +337,6 @@ class EverPsSeoTools extends ObjectModel
 
     public static function isAdminController()
     {
-        if (php_sapi_name() == 'cli') {
-            return true;
-        }
         $controllerTypes = array('admin', 'moduleadmin');
         if (!in_array(Context::getContext()->controller->controller_type, $controllerTypes)) {
             return false;
