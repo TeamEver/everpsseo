@@ -10083,6 +10083,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     || $pageMeta->page == 'module-ph_simpleblog-author'
                     || $pageMeta->page == 'module-pm_advancedsearch4-searchresults'
                     || $pageMeta->page == 'module-colissimo-tracking'
+                    || $pageMeta->page == 'module-ph_simpleblog-authorpage'
                 ) {
                     continue;
                 }
