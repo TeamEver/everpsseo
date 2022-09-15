@@ -40,14 +40,14 @@ class GenerateObjectsContent extends Command
         $this->setName('everpsseo:seo:content');
         $this->setDescription('Generate objects content (description, etc) for each lang');
         $this->addArgument('action', InputArgument::OPTIONAL, sprintf('Action to execute (Allowed actions: %s).', implode(' / ', $this->allowedActions)));
-        $this->filename = dirname(__FILE__) . '/../../input/StockDisponible.txt';
-        $this->logFile = dirname(__FILE__) . '/../../output/logs/log-content-'.date('j-n-Y').'.log';
+        $this->addArgument('idshop id', InputArgument::OPTIONAL, 'Shop ID');
         $this->module = \Module::getInstanceByName('everpsseo');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $action = $input->getArgument('idshop');
+        $action = $input->getArgument('action');
+        $idShop = $input->getArgument('idshop id');
         if (!in_array($action, $this->allowedActions)) {
             $output->writeln('<comment>Unkown action</comment>');
             return self::ABORTED;
@@ -61,7 +61,6 @@ class GenerateObjectsContent extends Command
         $context = (new ContextAdapter())->getContext();
         $context->employee = new \Employee(1);
         if ($action === 'idshop') {
-            $idShop = $action;
             $shop = new \Shop(
                 (int)$idShop
             );

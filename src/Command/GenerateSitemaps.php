@@ -25,6 +25,11 @@ class GenerateSitemaps extends Command
     public const INVALID = 2;
     public const ABORTED = 3;
 
+    private $allowedActions = [
+        'idshop',
+        'getrandomcomment'
+    ];
+
     public function __construct(KernelInterface $kernel)
     {
         parent::__construct();
@@ -34,13 +39,15 @@ class GenerateSitemaps extends Command
     {
         $this->setName('everpsseo:seo:sitemaps');
         $this->setDescription('Generate sitemaps for each lang');
-        $this->logFile = dirname(__FILE__) . '/../../output/logs/log-sitemaps-'.date('j-n-Y').'.log';
+        $this->addArgument('action', InputArgument::OPTIONAL, sprintf('Action to execute (Allowed actions: %s).', implode(' / ', $this->allowedActions)));
+        $this->addArgument('idshop id', InputArgument::OPTIONAL, 'Shop ID');
         $this->module = \Module::getInstanceByName('everpsseo');;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $action = $input->getArgument('idshop');
+        $action = $input->getArgument('action');
+        $idShop = $input->getArgument('idshop id');
         if (!in_array($action, $this->allowedActions)) {
             $output->writeln('<comment>Unkown action</comment>');
             return self::ABORTED;
@@ -54,7 +61,6 @@ class GenerateSitemaps extends Command
         $context = (new ContextAdapter())->getContext();
         $context->employee = new \Employee(1);
         if ($action === 'idshop') {
-            $idShop = $action;
             $shop = new \Shop(
                 (int)$idShop
             );
