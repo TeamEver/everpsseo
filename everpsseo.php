@@ -36,7 +36,7 @@ class EverPsSeo extends Module
     {
         $this->name = 'everpsseo';
         $this->tab = 'seo';
-        $this->version = '8.1.3';
+        $this->version = '8.1.4';
         $this->author = 'Team Ever';
         $this->need_instance = 0;
         $this->module_key = '5ddabba8ec414cd5bd646fad24368472';
@@ -47,7 +47,7 @@ class EverPsSeo extends Module
         $this->displayName = $this->l('Ever SEO');
         $this->description = $this->l('🙂 Global optimize and work on your shop SEO 🙂');
         $this->confirmUninstall = $this->l('Are you really sure to remove all seo settings ?');
-        $this->ps_versions_compliancy = array('min' => '1.7', 'max' => _PS_VERSION_);
+        $this->ps_versions_compliancy = array('min' => '1.6', 'max' => _PS_VERSION_);
         $this->siteUrl = Tools::getHttpHost(true).__PS_BASE_URI__;
         if ($this->isSeven) {
             $this->imageType = ImageType::getFormattedName('large');
@@ -3055,26 +3055,6 @@ class EverPsSeo extends Module
                     ),
                     array(
                         'type' => 'switch',
-                        'label' => $this->l('Add content to product bottom ?'),
-                        'desc' => $this->l('Will set content to bottom of each product'),
-                        'hint' => $this->l('Set "No" to add default product content'),
-                        'name' => 'EVERSEO_BOTTOM_PRODUCT_CONTENT',
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
-                    ),
-                    array(
-                        'type' => 'switch',
                         'label' => $this->l('Delete content before updating ?'),
                         'desc' => $this->l('Will delete content already set'),
                         'hint' => $this->l('Set "No" to add content after'),
@@ -3136,6 +3116,26 @@ class EverPsSeo extends Module
                         'name' => 'PRODUCT_SHORT_DESC_GENERATE',
                         'lang' => true,
                         'autoload_rte' => true
+                    ),
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('Activate product bottom generation ?'),
+                        'desc' => $this->l('Will set content to bottom of each product'),
+                        'hint' => $this->l('Set "yes" for add this in generation content'),
+                        'name' => 'EVERSEO_BOTTOM_PRODUCT_CONTENT',
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
                     ),
                     array(
                         'type' => 'textarea',
@@ -7728,23 +7728,17 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         }
     }
 
+
     private function autoSetContentDesc($object, $id_element, $id_shop, $id_lang)
     {
         switch ($object) {
             case 'id_seo_product':
-                if ((bool)Configuration::get('EVERSEO_BOTTOM_PRODUCT_CONTENT') === false) {
-                    $description = EverPsSeoProduct::changeProductDescShortcodes(
-                        (int)$id_element,
-                        (int)$id_lang,
-                        (int)$id_shop
-                    );
-                } else {
-                    $description = EverPsSeoProduct::changeProductBottomShortcodes(
-                        (int)$id_element,
-                        (int)$id_lang,
-                        (int)$id_shop
-                    );
-                }
+                $description = EverPsSeoProduct::changeProductDescShortcodes(
+                    (int)$id_element,
+                    (int)$id_lang,
+                    (int)$id_shop
+                );
+
                 if (empty($description)) {
                     return;
                 }
@@ -7757,33 +7751,43 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 if (!in_array($product->id_category_default, $this->getAllowedGeneratorCategories(true))) {
                     return;
                 }
-                if ((bool)Configuration::get('EVERSEO_BOTTOM_PRODUCT_CONTENT') === false) {
-                    if ((bool)Configuration::get('EVERSEO_DELETE_PRODUCT_CONTENT') === true) {
-                        $product->description = $description;
-                    } else {
-                        $product->description .= $description;
-                    }
-                    $meta_title = Tools::substr($meta_title, 0, 128);
 
-                    $sql_desc = 'UPDATE `'._DB_PREFIX_.'product_lang`
-                        SET description = "'.pSQL($product->description, true).'"
-                        WHERE id_lang = '.(int)$id_lang.'
-                        AND id_shop = '.(int)$id_shop.'
-                        AND id_product = '.(int)$id_element;
-
-                    if (Db::getInstance()->execute($sql_desc)) {
-                        return true;
-                    }
+                if ((bool)Configuration::get('EVERSEO_DELETE_PRODUCT_CONTENT') === true) {
+                    $product->description = $description;
                 } else {
+                    $product->description .= $description;
+                }
+                $meta_title = Tools::substr($meta_title, 0, 128);
+
+                $sql_desc = 'UPDATE `'._DB_PREFIX_.'product_lang`
+                    SET description = "'.pSQL($product->description, true).'"
+                    WHERE id_lang = '.(int)$id_lang.'
+                    AND id_shop = '.(int)$id_shop.'
+                    AND id_product = '.(int)$id_element;
+
+                if (!Db::getInstance()->execute($sql_desc)) {
+                    return false;
+                }
+
+                if ((bool)Configuration::get('EVERSEO_BOTTOM_PRODUCT_CONTENT') === true) {
                     $obj = EverPsSeoProduct::getSeoProduct(
                         (int)$id_element,
                         (int)$id_lang,
                         (int)$id_shop
                     );
+
+                    $descriptionBottom = EverPsSeoProduct::changeProductBottomShortcodes(
+                        (int)$id_element,
+                        (int)$id_lang,
+                        (int)$id_shop
+                    );
+                    if (empty($descriptionBottom)) {
+                        return;
+                    }
                     if ((bool)Configuration::get('EVERSEO_DELETE_PRODUCT_CONTENT') === false) {
-                        $obj->bottom_content = $obj->bottom_content.' '.$description;
+                        $obj->bottom_content = $obj->bottom_content.' '.$descriptionBottom;
                     } else {
-                        $obj->bottom_content = $description;
+                        $obj->bottom_content = $descriptionBottom;
                     }
                     $sql_ever_desc = 'UPDATE `'._DB_PREFIX_.'ever_seo_product`
                         SET bottom_content = "'.pSQL($obj->bottom_content, true).'"
@@ -7791,11 +7795,11 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                         AND id_shop = '.(int)$id_shop.'
                         AND id_seo_product = '.(int)$id_element;
 
-                    if (Db::getInstance()->execute($sql_ever_desc)) {
-                        return true;
+                    if (!Db::getInstance()->execute($sql_ever_desc)) {
+                        return false;
                     }
-                    // return $obj->save();
                 }
+                return true;
                 break;
 
             case 'id_seo_category':
@@ -8526,7 +8530,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     $pageMetaId = Db::getInstance()->getValue(
                         'SELECT id_meta
                         FROM '._DB_PREFIX_.'meta
-                        WHERE page = "'.(string)$controller_name.'"'
+                        WHERE page = "'.pSQL($controller_name).'"'
                     );
                     $seo = EverPsSeoTools::getSeoIndexFollow(
                         false,
@@ -8577,7 +8581,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     $pageMetaId = Db::getInstance()->getValue(
                         'SELECT id_meta
                         FROM '._DB_PREFIX_.'meta
-                        WHERE page = "'.(string)$controller_name.'"'
+                        WHERE page = "'.pSQL($controller_name).'"'
                     );
                     $seo = EverPsSeoTools::getSeoIndexFollow(
                         false,
@@ -8592,7 +8596,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 $pageMetaId = Db::getInstance()->getValue(
                     'SELECT id_meta
                     FROM '._DB_PREFIX_.'meta
-                    WHERE page = "'.(string)$controller_name.'"'
+                    WHERE page = "'.pSQL($controller_name).'"'
                 );
                 if ((bool)Configuration::get('EVERSEO_CANONICAL') === true) {
                     $canonical_url = $link->getPageLink((string)$controller_name);
@@ -10086,7 +10090,6 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     || $pageMeta->page == 'module-ph_simpleblog-author'
                     || $pageMeta->page == 'module-pm_advancedsearch4-searchresults'
                     || $pageMeta->page == 'module-colissimo-tracking'
-                    || $pageMeta->page == 'module-ph_simpleblog-authorpage'
                 ) {
                     continue;
                 }
