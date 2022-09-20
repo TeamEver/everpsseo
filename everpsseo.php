@@ -8405,7 +8405,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     'everproduct' => $product,
                 ));
                 $seo = EverPsSeoTools::getSeoIndexFollow(
-                    (string)$controller_name,
+                    pSQL($controller_name),
                     (int)$id_shop,
                     (int)Tools::getValue('id_product'),
                     (int)$id_lang
@@ -8444,7 +8444,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     }
                 }
                 $seo = EverPsSeoTools::getSeoIndexFollow(
-                    (string)$controller_name,
+                    pSQL($controller_name),
                     (int)$id_shop,
                     (int)Tools::getValue('id_category'),
                     (int)$id_lang
@@ -8483,7 +8483,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     }
                 }
                 $seo = EverPsSeoTools::getSeoIndexFollow(
-                    (string)$controller_name,
+                    pSQL($controller_name),
                     (int)$id_shop,
                     (int)Tools::getValue('id_cms'),
                     (int)$id_lang
@@ -8521,7 +8521,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 }
                 if (Tools::getValue('id_manufacturer')) {
                     $seo = EverPsSeoTools::getSeoIndexFollow(
-                        (string)$controller_name,
+                        pSQL($controller_name),
                         (int)$id_shop,
                         (int)Tools::getValue('id_manufacturer'),
                         (int)$id_lang
@@ -8572,7 +8572,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 }
                 if (Tools::getValue('id_supplier')) {
                     $seo = EverPsSeoTools::getSeoIndexFollow(
-                        (string)$controller_name,
+                        pSQL($controller_name),
                         (int)$id_shop,
                         (int)Tools::getValue('id_supplier'),
                         (int)$id_lang
@@ -8599,10 +8599,10 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     WHERE page = "'.pSQL($controller_name).'"'
                 );
                 if ((bool)Configuration::get('EVERSEO_CANONICAL') === true) {
-                    $canonical_url = $link->getPageLink((string)$controller_name);
+                    $canonical_url = $link->getPageLink(pSQL($controller_name));
                 }
                 $seo = EverPsSeoTools::getSeoIndexFollow(
-                    (string)$controller_name,
+                    pSQL($controller_name),
                     (int)$id_shop,
                     (int)$pageMetaId,
                     (int)$id_lang
@@ -8768,7 +8768,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         $yearEnd = date('Y-m-d', strtotime('Dec 31'));
         $this->context->smarty->assign(array(
             'ever_customer' => $customer,
-            'controller_name' => (string)$controller_name,
+            'controller_name' => pSQL($controller_name),
             'sitename' => (string)Configuration::get('PS_SHOP_NAME'),
             'site_url' => $this->siteUrl,
             'shop_logo' => $this->siteUrl._PS_IMG_.Configuration::get('PS_LOGO'),
@@ -9682,7 +9682,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                         );
                         $yearEnd = date('Y-m-d', strtotime('Dec 31'));
                         $this->context->smarty->assign(array(
-                            'controller' => (string)$controller_name,
+                            'controller' => pSQL($controller_name),
                             'shop_name' => (string)$shop_name,
                             'shop_logo' => $shop_logo,
                             'homepage' => $homepage,
@@ -9733,7 +9733,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                             (int)$id_shop
                         );
                         $this->context->smarty->assign(array(
-                            'controller' => (string)$controller_name,
+                            'controller' => pSQL($controller_name),
                             'shop_name' => (string)$shop_name,
                             'shop_logo' => (string)$shop_logo,
                             'homepage' => (string)$homepage,
@@ -9762,7 +9762,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                             (int)$id_shop
                         );
                         $this->context->smarty->assign(array(
-                            'controller' => (string)$controller_name,
+                            'controller' => pSQL($controller_name),
                             'shop_name' => (string)$shop_name,
                             'shop_logo' => (string)$shop_logo,
                             'homepage' => (string)$homepage,
@@ -9789,7 +9789,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                             (int)$id_shop
                         );
                         $this->context->smarty->assign(array(
-                            'controller' => (string)$controller_name,
+                            'controller' => pSQL($controller_name),
                             'shop_name' => (string)$shop_name,
                             'shop_logo' => (string)$shop_logo,
                             'homepage' => (string)$homepage,
@@ -9816,7 +9816,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                             (int)$id_shop
                         );
                         $this->context->smarty->assign(array(
-                            'controller' => (string)$controller_name,
+                            'controller' => pSQL($controller_name),
                             'shop_name' => (string)$shop_name,
                             'shop_logo' => (string)$shop_logo,
                             'homepage' => (string)$homepage,
@@ -9831,9 +9831,9 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
                     default:
                         $link = new Link();
-                        $currentUrl = $link->getPageLink((string)$controller_name);
+                        $currentUrl = $link->getPageLink(pSQL($controller_name));
                         $this->context->smarty->assign(array(
-                            'controller' => (string)$controller_name,
+                            'controller' => pSQL($controller_name),
                             'shop_name' => (string)$shop_name,
                             'shop_logo' => (string)$shop_logo,
                             'homepage' => $homepage,
