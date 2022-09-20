@@ -8526,7 +8526,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     $pageMetaId = Db::getInstance()->getValue(
                         'SELECT id_meta
                         FROM '._DB_PREFIX_.'meta
-                        WHERE page = "'.(string)$controller_name.'"'
+                        WHERE page = "'.pSQL($controller_name).'"'
                     );
                     $seo = EverPsSeoTools::getSeoIndexFollow(
                         false,
@@ -8577,7 +8577,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     $pageMetaId = Db::getInstance()->getValue(
                         'SELECT id_meta
                         FROM '._DB_PREFIX_.'meta
-                        WHERE page = "'.(string)$controller_name.'"'
+                        WHERE page = "'.pSQL($controller_name).'"'
                     );
                     $seo = EverPsSeoTools::getSeoIndexFollow(
                         false,
@@ -8592,7 +8592,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 $pageMetaId = Db::getInstance()->getValue(
                     'SELECT id_meta
                     FROM '._DB_PREFIX_.'meta
-                    WHERE page = "'.(string)$controller_name.'"'
+                    WHERE page = "'.pSQL($controller_name).'"'
                 );
                 if ((bool)Configuration::get('EVERSEO_CANONICAL') === true) {
                     $canonical_url = $link->getPageLink((string)$controller_name);
