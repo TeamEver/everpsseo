@@ -36,7 +36,7 @@ class EverPsSeo extends Module
     {
         $this->name = 'everpsseo';
         $this->tab = 'seo';
-        $this->version = '7.13.5';
+        $this->version = '7.13.6';
         $this->author = 'Team Ever';
         $this->need_instance = 0;
         $this->module_key = '5ddabba8ec414cd5bd646fad24368472';
@@ -6648,8 +6648,10 @@ class EverPsSeo extends Module
     public function hookActionHtaccessCreate()
     {
         $baseDomain = str_replace('www.', '', Tools::getHttpHost());
-        $rules = Configuration::get('EVERHTACCESS')."\n\n";
-        $prepend_rules = Configuration::get('EVERHTACCESS_PREPEND')."\n\n";
+        $rules = "";
+        $prepend_rules = "";
+        $rules .= Configuration::get('EVERHTACCESS')."\n\n";
+        $prepend_rules .= Configuration::get('EVERHTACCESS_PREPEND')."\n\n";
         if ((bool)Configuration::get('EVERHTACCESS_404') === true) {
             $everseo_redirects = EverPsSeoRedirect::getRedirects(
                 (int)Context::getContext()->shop->id
@@ -6748,32 +6750,43 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             $content = Tools::file_get_contents($path);
             if (preg_match('#^(.*)\# ~~everstart~~.*\# ~~everend~~[^\n]*(.*)$#s', $content, $m)) {
                 $specific_before = $m[1];
-                $specific_after = $m[2];
-            } else {
-                $specific_before = $content;
+                $content = $m[2];
+            }
+            if (preg_match('#^(.*)\# ~~everprependstart~~.*\# ~~everprependend~~[^\n]*(.*)$#s', $content, $n)) {
+                $content = $n[1];
+                $specific_after = $n[2];
             }
         }
-        if (preg_match('#^(.*)\# ~~everprependstart~~.*\# ~~everprependend~~[^\n]*(.*)$#s', $specific_after, $m)) {
-            $specific_after = $m[1];
-        } else {
-            $specific_after = $content;
-        }
-        if (!$write_fd = @fopen($path, 'w')) {
+
+
+        if (!$write_fd = fopen($path, 'w+')) {
             return false;
         }
-        fwrite($write_fd, "# ~~everstart~~ Do not remove this comment, Ever SEO uses it\n");
-        fwrite($write_fd, trim($rules));
-        fwrite($write_fd, "\n# ~~everend~~ Do not remove this comment, Ever SEO uses it\n");
-        // prepend Ever SEO rules
+
         if ($specific_before) {
             fwrite($write_fd, trim($specific_before)."\n\n");
         }
+
+        fwrite($write_fd, "# ~~everstart~~ Do not remove this comment, Ever SEO uses it\n");
+        fwrite($write_fd, trim($rules));
+        fwrite($write_fd, "\n# ~~everend~~ Do not remove this comment, Ever SEO uses it\n\n");
+        // prepend Ever SEO rules
+
+        if ($content) {
+            fwrite($write_fd, trim($content)."\n\n");
+        }
+
         if ($specific_after) {
             fwrite($write_fd, trim($specific_after)."\n\n");
         }
+
         fwrite($write_fd, "# ~~everprependstart~~ Do not remove this comment, Ever SEO uses it\n");
         fwrite($write_fd, trim($prepend_rules));
-        fwrite($write_fd, "\n# ~~everprependend~~ Do not remove this comment, Ever SEO uses it\n");
+        fwrite($write_fd, "\n# ~~everprependend~~ Do not remove this comment, Ever SEO uses it\n\n");
+        // echo $write_fd;
+        // die(var_dump($write_fd));
+        // die(var_dump("here"));
+
         fclose($write_fd);
     }
 
