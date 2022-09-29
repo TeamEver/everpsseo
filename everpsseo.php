@@ -8707,6 +8707,12 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             if (!$this->isSeven) {
                 $this->context->smarty->assign($index, true);
                 $this->context->smarty->assign($follow, true);
+                if ($index == 'noindex') {
+                    $this->context->smarty->assign('nobots', true);
+                }
+                if ($index == 'nofollow') {
+                    $this->context->smarty->assign('nofollow', true);
+                }
                 if ($meta_title && $meta_description) {
                     $this->context->smarty->assign($meta_title, true);
                     $this->context->smarty->assign($meta_description, true);
