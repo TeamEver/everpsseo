@@ -291,7 +291,7 @@ class EverPsSeoTools extends ObjectModel
     public static function pageHasBannedArgs()
     {
         $result = false;
-        if ((bool)Configuration::get('EVERSEO_INDEX_ARGS') === false) {
+        if ((bool)Configuration::get('EVERSEO_INDEX_ARGS') === true) {
             return false;
         }
         if (Tools::getValue('page')) {
