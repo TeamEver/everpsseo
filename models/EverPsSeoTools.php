@@ -306,6 +306,9 @@ class EverPsSeoTools extends ObjectModel
         if (Tools::getValue('city')) {
             $result = true;
         }
+        if (Tools::getValue('controller') == 'search') {
+            $result = true;
+        }
         return $result;
     }
 
