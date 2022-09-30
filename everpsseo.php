@@ -97,6 +97,7 @@ class EverPsSeo extends Module
             }
             $this->context->smarty->assign(array(
                 'image_dir' => $this->_path.'views/img',
+                'input_dir' => $this->siteUrl.'modules/everpsseo/output/',
                 'everpsseo_cron' => $sitemaps_cron_url,
                 'everpsseo_objects' => $objects_cron_url,
                 'indexes' => EverPsSeoSitemap::getSitemapIndexes(),
@@ -1597,6 +1598,26 @@ class EverPsSeo extends Module
                             'name' => 'name',
                         ),
                     ),
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('Regenerate link rewrite ?'),
+                        'desc' => $this->l('Will regenerate link rewrite for products & categories for allowed languages'),
+                        'hint' => $this->l('Set "No" will leave actual link rewrites'),
+                        'name' => 'EVERSEO_REWRITE_LINKS',
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                    ),
                 ),
                 'submit' => array(
                     'title' => $this->l('Save'),
@@ -2671,26 +2692,6 @@ class EverPsSeo extends Module
                         'name' => 'EVERSEO_PRODUCT_METADESC_AUTO',
                         'lang' => true,
                     ),
-                    array(
-                        'type' => 'switch',
-                        'label' => $this->l('Regenerate link rewrite ?'),
-                        'desc' => $this->l('Will regenerate link rewrite for products & categories for allowed languages'),
-                        'hint' => $this->l('Set "No" will leave actual link rewrites'),
-                        'name' => 'EVERSEO_REWRITE_LINKS',
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
-                    ),                    
                     array(
                         'type' => 'select',
                         'label' => $this->l('Allowed languages for automation'),

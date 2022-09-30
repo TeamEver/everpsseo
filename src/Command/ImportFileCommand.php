@@ -58,6 +58,7 @@ class ImportFileCommand extends ContainerAwareCommand
             $output->writeln(sprintf(
                 '<comment>Seo categories files updated. Clearing cache</comment>'
             ));
+            unlink($this->filenameCategory);
             \Tools::clearAllCache();
             $output->writeln(sprintf(
                 '<comment>Cache cleared</comment>'
@@ -84,6 +85,7 @@ class ImportFileCommand extends ContainerAwareCommand
             $output->writeln(sprintf(
                 '<comment>Seo products files updated. Clearing cache</comment>'
             ));
+            unlink($this->filenameProduct);
             \Tools::clearAllCache();
             $output->writeln(sprintf(
                 '<comment>Cache cleared</comment>'
