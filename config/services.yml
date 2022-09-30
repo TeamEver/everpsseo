@@ -21,3 +21,9 @@ services:
         tags:
             - { name: 'console.command' }
 
+    everpsseo.seo.import:
+        class: Everpsseo\Seo\Command\ImportFileCommand
+        public: true
+        tags:
+            - { name: 'console.command' }
+
