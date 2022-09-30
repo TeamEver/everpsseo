@@ -119,6 +119,8 @@
         {foreach $languages as $lang}
             {if $lang_iso != $lang.iso_code}
             <link rel="alternate" hreflang="{$lang.language_code|escape:'htmlall':'UTF-8'}" href="{$link->getCategoryLink($smarty.get.id_category, null, $lang.id_lang,null,null )|escape:'htmlall':'UTF-8'}/" />
+            {else}
+            <link rel="alternate" href="{$link->getCategoryLink($smarty.get.id_category, null, $lang.id_lang,null,null )|escape:'htmlall':'UTF-8'}/" hreflang="x-default" />
             {/if}
         {/foreach}
     {/if}
@@ -126,6 +128,8 @@
         {foreach $languages as $lang}
             {if $lang_iso != $lang.iso_code}
             <link rel="alternate" hreflang="{$lang.language_code|escape:'htmlall':'UTF-8'}" href="{$link->getProductLink($smarty.get.id_product, null, null, null, $lang.id_lang, null, 0, false)|escape:'htmlall':'UTF-8'}/" />
+            {else}
+            <link rel="alternate" href="{$link->getProductLink($smarty.get.id_product, null, null, null, $lang.id_lang, null, 0, false)|escape:'htmlall':'UTF-8'}/" hreflang="x-default" />
             {/if}
         {/foreach}
     {/if}
@@ -133,6 +137,8 @@
         {foreach $languages as $lang}
             {if $lang_iso != $lang.iso_code}
             <link rel="alternate" hreflang="{$lang.language_code|escape:'htmlall':'UTF-8'}" href="{$link->getCMSLink($smarty.get.id_cms, null, false, $lang.id_lang)|escape:'htmlall':'UTF-8'}/" />
+            {else}
+            <link rel="alternate" href="{$link->getCMSLink($smarty.get.id_cms, null, false, $lang.id_lang)|escape:'htmlall':'UTF-8'}/" hreflang="x-default" />
             {/if}
         {/foreach}
     {/if}
@@ -140,6 +146,8 @@
         {foreach $languages as $lang}
             {if $lang_iso != $lang.iso_code}
             <link rel="alternate" hreflang="{$lang.language_code|escape:'htmlall':'UTF-8'}" href="{$link->getManufacturerLink($smarty.get.id_manufacturer, null, $lang.id_lang , null)|escape:'htmlall':'UTF-8'}/" />
+            {else}
+            <link rel="alternate" href="{$link->getManufacturerLink($smarty.get.id_manufacturer, null, $lang.id_lang , null)|escape:'htmlall':'UTF-8'}/" hreflang="x-default" />
             {/if}
         {/foreach}
     {/if}
@@ -147,6 +155,8 @@
         {foreach $languages as $lang}
             {if $lang_iso != $lang.iso_code}
             <link rel="alternate" hreflang="{$lang.language_code|escape:'htmlall':'UTF-8'}" href="/{$lang.iso_code|escape:'htmlall':'UTF-8'}/"/>
+            {else}
+            <link rel="alternate" href="/" hreflang="x-default" />
             {/if}
         {/foreach}
     {/if}
