@@ -33,8 +33,8 @@ class ImportFileCommand extends ContainerAwareCommand
     {
         $this->setName('everpsseo:seo:import');
         $this->setDescription('Update SEO datas for categories & products');
-        $this->filenameCategory = dirname(__FILE__) . '/../../input/majstock0.txt';
-        $this->filenameProduct = dirname(__FILE__) . '/../../input/majstock1.txt';
+        $this->filenameCategory = dirname(__FILE__) . '/../../input/categories.xlsx';
+        $this->filenameProduct = dirname(__FILE__) . '/../../input/products.xlsx';
         $this->logFile = dirname(__FILE__) . '/../../output/logs/log-seo-'.date('Y-m-d').'.log';
         $this->module = \Module::getInstanceByName('everpsseo');
     }
@@ -49,7 +49,7 @@ class ImportFileCommand extends ContainerAwareCommand
             $output->writeln(sprintf(
                 '<info>Start SEO categories update : datetime : '.date('Y-m-d H:i:s').'. Lines total : '.count($lines).'</info>'
             ));
-            foreach ($records as $line) {
+            foreach ($lines as $line) {
                 $this->updateSeoCategories($line, $output);
             }
             $output->writeln(
@@ -62,7 +62,6 @@ class ImportFileCommand extends ContainerAwareCommand
             $output->writeln(sprintf(
                 '<comment>Cache cleared</comment>'
             ));
-            return self::SUCCESS;
         } else {
             $output->writeln(sprintf(
                 '<error>Seo categories file does not exists</error>'
@@ -76,7 +75,7 @@ class ImportFileCommand extends ContainerAwareCommand
             $output->writeln(sprintf(
                 '<info>Start SEO products update : datetime : '.date('Y-m-d H:i:s').'. Lines total : '.count($lines).'</info>'
             ));
-            foreach ($records as $line) {
+            foreach ($lines as $line) {
                 $this->updateSeoProducts($line, $output);
             }
             $output->writeln(
@@ -89,12 +88,12 @@ class ImportFileCommand extends ContainerAwareCommand
             $output->writeln(sprintf(
                 '<comment>Cache cleared</comment>'
             ));
-            return self::SUCCESS;
         } else {
             $output->writeln(sprintf(
                 '<error>Seo products file does not exists</error>'
             ));
         }
+        return self::SUCCESS;
     }
 
     protected function updateSeoCategories($line, $output)
@@ -147,6 +146,15 @@ class ImportFileCommand extends ContainerAwareCommand
             WHERE id_lang = '.(int)$idLang.'
             AND id_shop = '.(int)$idShop.'
             AND id_category = '.(int)$category->id;
+            if ((bool)\Configuration::get('EVERSEO_REWRITE_LINKS') === true) {
+                $sql[] = 'UPDATE `'._DB_PREFIX_.'category_lang`
+                SET link_rewrite = "'.\Db::getInstance()->escape(
+                    \Tools::link_rewrite($line['name'])
+                ).'"
+                WHERE id_lang = '.(int)$idLang.'
+                AND id_shop = '.(int)$idShop.'
+                AND id_category = '.(int)$category->id;
+            }
         }
         if (isset($line['description'])
             && !empty($line['description'])
@@ -158,23 +166,23 @@ class ImportFileCommand extends ContainerAwareCommand
             AND id_category = '.(int)$category->id;
         }
         if (isset($line['bottom_description'])
-            && !empty($line['description'])
+            && !empty($line['bottom_content'])
         ) {
-            $seo_category->bottom_content = \Db::getInstance()->escape($line['bottom_description']);
-            $seo_category->save();
+            $sql[] = 'UPDATE `'._DB_PREFIX_.'ever_seo_category`
+            SET bottom_content = "'.\Db::getInstance()->escape($line['bottom_content']).'"
+            WHERE id_lang = '.(int)$idLang.'
+            AND id_shop = '.(int)$idShop.'
+            AND id_category = '.(int)$category->id;
+        }
+        if (count($sql) > 0) {
+            foreach ($sql as $q) {
+                \Db::getInstance()->execute($q);
+            }
         }
     }
 
     protected function updateSeoProducts($line, $output)
     {
-        if (!isset($line['id_product'])
-            || empty($line['id_product'])
-        ) {
-            $output->writeln(
-               '<error>Missing id_product column</error>'
-            );
-            return;
-        }
         if (!isset($line['id_lang'])
             || empty($line['id_lang'])
         ) {
@@ -193,17 +201,46 @@ class ImportFileCommand extends ContainerAwareCommand
         }
         $idLang = (int)$line['id_lang'];
         $idShop = (int)$line['id_shop'];
-        $product = new \Product(
-            (int)$line['id_product'],
-            false,
-            (int)$idLang,
-            (int)$idShop
-        );
+        if (!isset($line['id_product'])
+            || empty($line['id_product'])
+        ) {
+            $output->writeln(
+               '<info>Missing id_product column, trying to see if column reference exists</info>'
+            );
+            if (!isset($line['reference'])
+                || empty($line['reference'])
+            ) {
+                $output->writeln(
+                   '<error>Missing reference column</error>'
+                );
+                return;
+            } else {
+                $idProduct = \Product::getIdByReference(
+                    $line['reference']
+                );
+                $product = new \Product(
+                    (int)$idProduct,
+                    false,
+                    (int)$idLang,
+                    (int)$idShop
+                );
+            }
+        } else {
+            $product = new \Product(
+                (int)$line['id_product'],
+                false,
+                (int)$idLang,
+                (int)$idShop
+            );
+        }
         if (!\Validate::isLoadedObject($product)) {
+            $output->writeln(
+               '<error>Invalid product '.$line['id_product'].' object</error>'
+            );
             return;
         }
         $seo_product = \EverPsSeoProduct::getSeoProduct(
-            (int)$line['id_product'],
+            (int)$product->id,
             (int)$idShop,
             (int)$idLang
         );
@@ -216,6 +253,15 @@ class ImportFileCommand extends ContainerAwareCommand
             WHERE id_lang = '.(int)$idLang.'
             AND id_shop = '.(int)$idShop.'
             AND id_product = '.(int)$product->id;
+            if ((bool)\Configuration::get('EVERSEO_REWRITE_LINKS') === true) {
+                $sql[] = 'UPDATE `'._DB_PREFIX_.'product_lang`
+                SET link_rewrite = "'.\Db::getInstance()->escape(
+                    \Tools::link_rewrite($line['name'])
+                ).'"
+                WHERE id_lang = '.(int)$idLang.'
+                AND id_shop = '.(int)$idShop.'
+                AND id_product = '.(int)$product->id;
+            }
         }
         if (isset($line['description'])
             && !empty($line['description'])
