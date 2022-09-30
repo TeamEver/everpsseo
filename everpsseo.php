@@ -36,7 +36,7 @@ class EverPsSeo extends Module
     {
         $this->name = 'everpsseo';
         $this->tab = 'seo';
-        $this->version = '8.1.4';
+        $this->version = '8.1.5';
         $this->author = 'Team Ever';
         $this->need_instance = 0;
         $this->module_key = '5ddabba8ec414cd5bd646fad24368472';
@@ -2672,6 +2672,26 @@ class EverPsSeo extends Module
                         'lang' => true,
                     ),
                     array(
+                        'type' => 'switch',
+                        'label' => $this->l('Regenerate link rewrite ?'),
+                        'desc' => $this->l('Will regenerate link rewrite for products & categories for allowed languages'),
+                        'hint' => $this->l('Set "No" will leave actual link rewrites'),
+                        'name' => 'EVERSEO_REWRITE_LINKS',
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                    ),                    
+                    array(
                         'type' => 'select',
                         'label' => $this->l('Allowed languages for automation'),
                         'desc' =>  $this->l('Choose allowed languages for product meta automation'),
@@ -4862,6 +4882,7 @@ class EverPsSeo extends Module
                     )
                 )
             ),
+            'EVERSEO_REWRITE_LINKS' => Configuration::get('EVERSEO_REWRITE_LINKS'),
             'EVERSEO_AUTO_PAGEMETA_LANGS[]' => Tools::getValue(
                 'EVERSEO_AUTO_PAGEMETA_LANGS',
                 json_decode(

@@ -78,7 +78,7 @@ class GenerateMetas extends Command
         \Shop::setContext($shop::CONTEXT_SHOP, $shop->id);
         $context->shop = $shop;
         $context->cookie->id_shop = $shop->id;
-
+        $rewriteLinks = (bool)\Configuration::get('EVERSEO_REWRITE_LINKS');
         $output->writeln(sprintf(
             '<info>Seo metas generation start : datetime : '.date('Y-m-d H:i:s').'</info>'
         ));
@@ -110,6 +110,14 @@ class GenerateMetas extends Command
                     (int)$shop->id,
                     (int)$seo['id_seo_lang']
                 );
+                if ((bool)$rewriteLinks === true) {
+                    $this->autoSetLinkRewrite(
+                        'id_seo_product',
+                        (int)$seo['id_seo_product'],
+                        (int)$shop->id,
+                        (int)$seo['id_seo_lang']
+                    );
+                }
                 $output->writeln(sprintf(
                     '<info>SEO meta description for id product '.(int)$seo['id_seo_product'].' has been set</info>'
                 ));
@@ -638,6 +646,63 @@ class GenerateMetas extends Command
                 // if ($pageMeta->save()) {
                 //     return true;
                 // }
+                break;
+        }
+    }
+
+    protected function autoSetLinkRewrite($object, $id_element, $id_shop, $id_lang)
+    {
+        switch ($object) {
+            case 'id_seo_product':
+                $product = new \Product(
+                    (int)$id_seo_product,
+                    false,
+                    (int)$id_seo_lang,
+                    (int)$id_shop
+                );
+                $linkRewrite = \Tools::link_rewrite($product->name);
+
+                $sql = 'UPDATE `'._DB_PREFIX_.'product_lang`
+                SET link_rewrite = "'.\Db::getInstance()->escape($linkRewrite).'"
+                WHERE id_lang = '.(int)$id_lang.'
+                AND id_shop = '.(int)$id_shop.'
+                AND id_product = '.(int)$id_element;
+
+                $sql2 = 'UPDATE `'._DB_PREFIX_.'ever_seo_product`
+                SET link_rewrite = "'.\Db::getInstance()->escape($linkRewrite).'"
+                WHERE id_seo_lang = '.(int)$id_lang.'
+                AND id_shop = '.(int)$id_shop.'
+                AND id_seo_product = '.(int)$id_element;
+                if (!\Db::getInstance()->execute($sql)) {
+                    $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
+                } else {
+                    return \Db::getInstance()->execute($sql2);
+                }
+                break;
+
+            case 'id_seo_category':
+                $category = new \Category(
+                    (int)$id_seo_category,
+                    (int)$id_seo_lang,
+                    (int)$id_shop
+                );
+                $linkRewrite = \Tools::link_rewrite($category->name);
+
+                $sql = 'UPDATE `'._DB_PREFIX_.'category_lang`
+                SET link_rewrite = "'.\Db::getInstance()->escape($linkRewrite).'"
+                WHERE id_lang = '.(int)$id_lang.'
+                AND id_category = '.(int)$id_element;
+
+                $sql2 = 'UPDATE `'._DB_PREFIX_.'ever_seo_category`
+                SET link_rewrite = "'.\Db::getInstance()->escape($linkRewrite).'"
+                WHERE id_seo_lang = '.(int)$id_lang.'
+                AND id_shop = '.(int)$id_shop.'
+                AND id_seo_category = '.(int)$id_element;
+                if (!\Db::getInstance()->execute($sql)) {
+                    $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
+                } else {
+                    return \Db::getInstance()->execute($sql2);
+                }
                 break;
         }
     }

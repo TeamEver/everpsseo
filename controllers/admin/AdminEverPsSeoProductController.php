@@ -286,6 +286,10 @@ class AdminEverPsSeoProductController extends ModuleAdminController
                 'text' => $this->l('Use shortcodes for title'),
                 'confirm' => $this->l('Set title using shortcodes ?')
             ),
+            'linkrewrite' => array(
+                'text' => $this->l('Generate link rewrite'),
+                'confirm' => $this->l('Generate link rewrite ?')
+            ),
         );
 
         if (Tools::isSubmit('submitBulkindex'.$this->table)) {
@@ -326,6 +330,10 @@ class AdminEverPsSeoProductController extends ModuleAdminController
 
         if (Tools::isSubmit('submitBulktitleshortcodes'.$this->table)) {
             $this->processBulkTitleShortcodes();
+        }
+
+        if (Tools::isSubmit('submitBulklinkrewrite'.$this->table)) {
+            $this->processBulkLinkRewrite();
         }
 
         if (Tools::isSubmit('indexable'.$this->table)) {
@@ -1031,6 +1039,39 @@ class AdminEverPsSeoProductController extends ModuleAdminController
 
             $sql2 = 'UPDATE `'._DB_PREFIX_.'ever_seo_product`
             SET meta_title = "'.pSQL($product->meta_title).'"
+            WHERE id_seo_lang = '.(int)$everProduct->id_seo_lang.'
+            AND id_shop = '.(int)$this->context->shop->id.'
+            AND id_seo_product = '.(int)$product->id;
+            if (!Db::getInstance()->execute($sql)) {
+                $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
+            } else {
+                Db::getInstance()->execute($sql2);
+            }
+        }
+    }
+
+    protected function processBulkLinkRewrite()
+    {
+        foreach (Tools::getValue($this->table.'Box') as $idEverProduct) {
+            $everProduct = new EverPsSeoProduct(
+                (int)$idEverProduct
+            );
+            $product = new Product(
+                (int)$everProduct->id_seo_product,
+                false,
+                (int)$everProduct->id_seo_lang,
+                (int)$this->context->shop->id
+            );
+            $linkRewrite = \Tools::link_rewrite($product->name);
+
+            $sql = 'UPDATE `'._DB_PREFIX_.'product_lang`
+            SET link_rewrite = "'.pSQL($linkRewrite).'"
+            WHERE id_lang = '.(int)$everProduct->id_seo_lang.'
+            AND id_shop = '.(int)$this->context->shop->id.'
+            AND id_product = '.(int)$product->id;
+
+            $sql2 = 'UPDATE `'._DB_PREFIX_.'ever_seo_product`
+            SET link_rewrite = "'.pSQL($linkRewrite).'"
             WHERE id_seo_lang = '.(int)$everProduct->id_seo_lang.'
             AND id_shop = '.(int)$this->context->shop->id.'
             AND id_seo_product = '.(int)$product->id;
