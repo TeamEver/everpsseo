@@ -180,7 +180,7 @@ class GenerateSitemaps extends Command
             / 　 づ"
             </styled>';
         $funnyComments[] = "<styled>
-            Export (•_•)
+            Import (•_•)
             has been ( •_•)>⌐■-■
             ended (⌐■_■)
             </styled>";

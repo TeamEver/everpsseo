@@ -31,6 +31,7 @@ class EverPsSeo extends Module
     private $html;
     private $postErrors = array();
     private $postSuccess = array();
+    const INPUT_FOLDER  = _PS_MODULE_DIR_.'everpsseo/input/';
 
     public function __construct()
     {
@@ -521,6 +522,23 @@ class EverPsSeo extends Module
             $languages = EverPsSeoTools::getLanguagesIds(true);
         }
         $allowedLangs = $this->getAllowedSitemapLangs();
+
+        // XLSX files upload
+        if (Tools::isSubmit('submitUploadProductsFile')) {
+            $this->postValidation();
+
+            if (!count($this->postErrors)) {
+                $this->postProcess();
+                $this->uploadProductsFile();
+            }
+        }
+        if (Tools::isSubmit('submitUploadCategoriesFile')) {
+            $this->postValidation();
+
+            if (!count($this->postErrors)) {
+                $this->uploadCategoriesFile();
+            }
+        }
 
         // Main form submition
         if (Tools::isSubmit('submiteverpsseoModule')) {
@@ -1623,6 +1641,64 @@ class EverPsSeo extends Module
                     'title' => $this->l('Save'),
                 ),
             ),
+        );
+
+        // XLSX files import
+        $form_fields[] = array(
+            'form' => array(
+                'legend' => array(
+                    'title' => $this->trans('Upload products update file'),
+                    'icon' => 'icon-download',
+                ),
+                'input' => array(
+                    array(
+                        'type' => 'file',
+                        'label' => $this->trans('Upload products file'),
+                        'desc' => $this->trans('Will upload products file and wait until update cron is triggered'),
+                        'hint' => $this->trans('For SEO updates only'),
+                        'name' => 'products_file',
+                        'display_image' => false,
+                        'required' => false
+                    ),
+                ),
+                'buttons' => array(
+                    'import' => array(
+                        'name' => 'submitUploadProductsFile',
+                        'type' => 'submit',
+                        'class' => 'btn btn-default pull-right',
+                        'icon' => 'process-icon-download',
+                        'title' => $this->trans('Upload file')
+                    ),
+                ),
+            )
+        );
+        $form_fields[] = array(
+            'form' => array(
+                'legend' => array(
+                    'title' => $this->trans('Upload categories update file'),
+                    'icon' => 'icon-download',
+                ),
+                'input' => array(
+                    array(
+                        'type' => 'file',
+                        'label' => $this->trans('Upload categories file'),
+                        'desc' => $this->trans('Will upload categories file and wait until update cron is triggered'),
+                        'hint' => $this->trans('For SEO updates only'),
+                        'name' => 'categories_file',
+                        'display_image' => false,
+                        'required' => false
+                    ),
+                ),
+                'buttons' => array(
+                    'import' => array(
+                        'name' => 'submitUploadCategoriesFile',
+                        'type' => 'submit',
+                        'class' => 'btn btn-default pull-right',
+                        'icon' => 'process-icon-download',
+                        'title' => $this->trans('Upload file')
+                    ),
+                ),
+            )
         );
 
         if ((bool)$this->isSeven) {
@@ -11079,7 +11155,6 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 #################### END SETTERS ####################
 #################### START GETTERS ####################
 
-
     public function getCombinationsNames($id_product_attribute, $id_lang, $id_shop)
     {
         $return = array();
@@ -11275,6 +11350,54 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             $categories = array($categories);
         }
         return $categories;
+    }
+
+    protected function uploadProductsFile()
+    {
+        /* upload the file */
+        if (isset($_FILES['products_file'])
+            && isset($_FILES['products_file']['tmp_name'])
+            && !empty($_FILES['products_file']['tmp_name'])
+        ) {
+            $filename = $_FILES['products_file']['name'];
+            $exploded_filename = explode('.', $filename);
+            $ext = end($exploded_filename);
+            if (Tools::strtolower($ext) != 'xlsx') {
+                $this->postErrors[] = $this->l('Error : File is not valid.');
+                return false;
+            }
+            if (!($tmp_name = tempnam(_PS_TMP_IMG_DIR_, 'PS'))
+                || !move_uploaded_file($_FILES['products_file']['tmp_name'], $tmp_name)
+            ) {
+                return false;
+            }
+            copy($tmp_name, self::INPUT_FOLDER.'products.xlsx');
+            $this->html .= $this->displayConfirmation($this->l('File has been uploaded, please wait for cron task'));
+        }
+    }
+
+    protected function uploadCategoriesFile()
+    {
+        /* upload the file */
+        if (isset($_FILES['categories_file'])
+            && isset($_FILES['categories_file']['tmp_name'])
+            && !empty($_FILES['categories_file']['tmp_name'])
+        ) {
+            $filename = $_FILES['categories_file']['name'];
+            $exploded_filename = explode('.', $filename);
+            $ext = end($exploded_filename);
+            if (Tools::strtolower($ext) != 'xlsx') {
+                $this->postErrors[] = $this->l('Error : File is not valid.');
+                return false;
+            }
+            if (!($tmp_name = tempnam(_PS_TMP_IMG_DIR_, 'PS'))
+                || !move_uploaded_file($_FILES['categories_file']['tmp_name'], $tmp_name)
+            ) {
+                return false;
+            }
+            copy($tmp_name, self::INPUT_FOLDER.'categories.xlsx');
+            $this->html .= $this->displayConfirmation($this->l('File has been uploaded, please wait for cron task'));
+        }
     }
 
     private function deleteEverCache($obj = false)
