@@ -633,6 +633,8 @@ $_MODULE['<{everpsseo}prestashop>admineverpsseobacklinkcontroller_91bce37fb315a7
 $_MODULE['<{everpsseo}prestashop>admineverpsseobacklinkcontroller_b59ca6304e0db24d2623881e94d67254'] = 'Une erreur est survenue : impossible de mettre à jour l\'objet';
 $_MODULE['<{everpsseo}prestashop>admineverpsseobacklinkcontroller_f4d6af8e9c79159ef038bda60c47a437'] = 'Une erreur est survenue : impossible de supprimer l\'objet';
 $_MODULE['<{everpsseo}prestashop>admineverpsseobacklinkcontroller_b1367942aa02ea8c9d4aa07cdf5e473c'] = 'Vous devez au moins sélectionner un élément';
+$_MODULE['<{everpsseo}prestashop>admineverpsseobacklinkcontroller_8da79423d0f1580cc08990e708f30280'] = 'Erreurs sur la suppression d\'objet(s)';
+$_MODULE['<{everpsseo}prestashop>admineverpsseobacklinkcontroller_ddd4e7f16c2032d59cb4fb4b86576bc5'] = 'Vous devez au moins sélectionner un élément à supprimer';
 $_MODULE['<{everpsseo}prestashop>admineverpsseobacklinkcontroller_11a257a80f8c8d76132470b171de6795'] = 'Vous ne disposez pas de l\'autorisation pour supprimer cet élément';
 $_MODULE['<{everpsseo}prestashop>admineverpsseocategorycontroller_f6f5af3feead53fb9d3cfd7ed810c87d'] = 'ID SEO Category';
 $_MODULE['<{everpsseo}prestashop>admineverpsseocategorycontroller_cda12a722a2fbcd0e808ff9246fc1976'] = 'ID Catégorie';
