@@ -53,6 +53,24 @@
                 {l s='Auto redirect 404 is not enabled on your shop, please check module settings on 404 tab' mod='everpsseo'}
             </p>
             {/if}
+            <h4>{l s='PHP console commands' mod='everpsseo'}</h4>
+            <ul>
+                <li><pre>php bin/console everpsseo:seo:metas idshop 1</pre> {l s='generate all metas for id shop 1, depending on module settings' mod='everpsseo'}</li>
+                <li><pre>php bin/console everpsseo:seo:content idshop 1</pre> {l s='generate all content (products, categories, suppliers, manufacturers) for id shop 1, depending on module settings' mod='everpsseo'}</li>
+                <li><pre>php bin/console everpsseo:seo:sitemaps idshop 1</pre> {l s='generate all sitemaps and ping search engines for id shop 1, depending on module settings' mod='everpsseo'}</li>
+                <li><pre>php bin/console everpsseo:seo:import</pre> {l s='update objects depending on XLSX file' mod='everpsseo'}</li>
+                <li><pre>php bin/console everpsseo:seo:export categories</pre> {l s='export SEO categories on XLSX file' mod='everpsseo'}</li>
+                <li><pre>php bin/console everpsseo:seo:export products</pre> {l s='export SEO products on XLSX file' mod='everpsseo'}</li>
+            </ul>
+            <h4>{l s='XLSX files examples' mod='everpsseo'}</h4>
+            <ul>
+                <li>
+                    {l s='Categories update file example :' mod='everpsseo'} <a href="{$input_dir|escape:'htmlall':'UTF-8'}categories.xlsx" target="_blank">{l s='Download' mod='everpsseo'}</a>
+                </li>
+                <li>
+                    {l s='Products update file example :' mod='everpsseo'} <a href="{$input_dir|escape:'htmlall':'UTF-8'}products.xlsx" target="_blank">{l s='Download' mod='everpsseo'}</a>
+                </li>
+            </ul>
         </div>
         <div class="col-md-6 col-xs-12">
         {if $sitemaps}
@@ -93,22 +111,6 @@
         <p>{$everpsseo_objects|escape:'htmlall':'UTF-8'}</p>
         <a href="{$everpsseo_objects|escape:'htmlall':'UTF-8'}" target="_blank" class="btn btn-default">{l s='Check and update elements now !' mod='everpsseo'}</a>
         <p></p>
-        <h4>{l s='PHP console commands' mod='everpsseo'}</h4>
-        <ul>
-            <li><pre>php bin/console everpsseo:seo:metas idshop 1</pre> {l s='generate all metas for id shop 1, depending on module settings' mod='everpsseo'}</li>
-            <li><pre>php bin/console everpsseo:seo:content idshop 1</pre> {l s='generate all content (products, categories, suppliers, manufacturers) for id shop 1, depending on module settings' mod='everpsseo'}</li>
-            <li><pre>php bin/console everpsseo:seo:sitemaps idshop 1</pre> {l s='generate all sitemaps and ping search engines for id shop 1, depending on module settings' mod='everpsseo'}</li>
-            <li><pre>php bin/console everpsseo:seo:import</pre> {l s='update objects depending on XLSX file' mod='everpsseo'}</li>
-        </ul>
-        <h4>{l s='XLSX files examples' mod='everpsseo'}</h4>
-        <ul>
-            <li>
-                {l s='Categories update file example :' mod='everpsseo'} <a href="{$input_dir|escape:'htmlall':'UTF-8'}categories.xlsx" target="_blank">{l s='Download' mod='everpsseo'}</a>
-            </li>
-            <li>
-                {l s='Products update file example :' mod='everpsseo'} <a href="{$input_dir|escape:'htmlall':'UTF-8'}products.xlsx" target="_blank">{l s='Download' mod='everpsseo'}</a>
-            </li>
-        </ul>
         </div>
     </div>
 </div>
