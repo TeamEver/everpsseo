@@ -259,6 +259,10 @@ class AdminEverPsSeoCategoryController extends ModuleAdminController
                 'text' => $this->l('Use shortcodes for title'),
                 'confirm' => $this->l('Set title using shortcodes ?')
             ),
+            'linkrewrite' => array(
+                'text' => $this->l('Generate link rewrite'),
+                'confirm' => $this->l('Generate link rewrite ?')
+            ),
         );
 
         if (Tools::isSubmit('submitBulkindex'.$this->table)) {
@@ -295,6 +299,10 @@ class AdminEverPsSeoCategoryController extends ModuleAdminController
 
         if (Tools::isSubmit('submitBulktitleshortcodes'.$this->table)) {
             $this->processBulkTitleShortcodes();
+        }
+
+        if (Tools::isSubmit('submitBulklinkrewrite'.$this->table)) {
+            $this->processBulkLinkRewrite();
         }
 
         if (Tools::isSubmit('indexable'.$this->table)) {
@@ -911,6 +919,48 @@ class AdminEverPsSeoCategoryController extends ModuleAdminController
             WHERE id_seo_lang = '.(int)$everCategory->id_seo_lang.'
             AND id_shop = '.(int)$this->context->shop->id.'
             AND id_seo_category = '.(int)$category->id;
+            if (!Db::getInstance()->execute($sql)) {
+                $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
+            } else {
+                Db::getInstance()->execute($sql2);
+            }
+        }
+    }
+
+    protected function processBulkLinkRewrite()
+    {
+        foreach (Tools::getValue($this->table.'Box') as $idEverCategory) {
+            $everProduct = new EverPsSeoProduct(
+                (int)$idEverCategory
+            );
+            $everCategory = new EverPsSeoCategory(
+                (int)$idEverCategory
+            );
+            $category = new Category(
+                (int)$everCategory->id_seo_category,
+                (int)$everCategory->id_seo_lang,
+                (int)$this->context->shop->id
+            );
+            $linkRewrite = \Tools::link_rewrite($category->name);
+            $canonical = \Tools::link_rewrite($category->name);
+
+            $sql = 'UPDATE `'._DB_PREFIX_.'category_lang`
+            SET link_rewrite = "'.pSQL($linkRewrite).'"
+            WHERE id_lang = '.(int)$everCategory->id_seo_lang.'
+            AND id_shop = '.(int)$this->context->shop->id.'
+            AND id_category = '.(int)$product->id;
+
+            $sql2 = 'UPDATE `'._DB_PREFIX_.'ever_seo_category`
+            SET link_rewrite = "'.pSQL($linkRewrite).'"
+            WHERE id_seo_lang = '.(int)$everCategory->id_seo_lang.'
+            AND id_shop = '.(int)$this->context->shop->id.'
+            AND id_seo_category = '.(int)$product->id;
+
+            $sql2 = 'UPDATE `'._DB_PREFIX_.'ever_seo_category`
+            SET canonical = "'.pSQL($canonical).'"
+            WHERE id_seo_lang = '.(int)$everCategory->id_seo_lang.'
+            AND id_shop = '.(int)$this->context->shop->id.'
+            AND id_seo_category = '.(int)$product->id;
             if (!Db::getInstance()->execute($sql)) {
                 $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
             } else {

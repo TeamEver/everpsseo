@@ -1063,6 +1063,7 @@ class AdminEverPsSeoProductController extends ModuleAdminController
                 (int)$this->context->shop->id
             );
             $linkRewrite = \Tools::link_rewrite($product->name);
+            $canonical = \Tools::link_rewrite($product->name);
 
             $sql = 'UPDATE `'._DB_PREFIX_.'product_lang`
             SET link_rewrite = "'.pSQL($linkRewrite).'"
@@ -1072,6 +1073,12 @@ class AdminEverPsSeoProductController extends ModuleAdminController
 
             $sql2 = 'UPDATE `'._DB_PREFIX_.'ever_seo_product`
             SET link_rewrite = "'.pSQL($linkRewrite).'"
+            WHERE id_seo_lang = '.(int)$everProduct->id_seo_lang.'
+            AND id_shop = '.(int)$this->context->shop->id.'
+            AND id_seo_product = '.(int)$product->id;
+
+            $sql2 = 'UPDATE `'._DB_PREFIX_.'ever_seo_product`
+            SET canonical = "'.pSQL($canonical).'"
             WHERE id_seo_lang = '.(int)$everProduct->id_seo_lang.'
             AND id_shop = '.(int)$this->context->shop->id.'
             AND id_seo_product = '.(int)$product->id;
