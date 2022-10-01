@@ -27,3 +27,9 @@ services:
         tags:
             - { name: 'console.command' }
 
+    everpsseo.seo.export:
+        class: Everpsseo\Seo\Command\ExportFileCommand
+        public: true
+        tags:
+            - { name: 'console.command' }
+
