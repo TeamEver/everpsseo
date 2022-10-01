@@ -55,12 +55,12 @@
             {/if}
             <h4>{l s='PHP console commands' mod='everpsseo'}</h4>
             <ul>
-                <li><pre>php bin/console everpsseo:seo:metas idshop 1</pre> {l s='generate all metas for id shop 1, depending on module settings' mod='everpsseo'}</li>
-                <li><pre>php bin/console everpsseo:seo:content idshop 1</pre> {l s='generate all content (products, categories, suppliers, manufacturers) for id shop 1, depending on module settings' mod='everpsseo'}</li>
-                <li><pre>php bin/console everpsseo:seo:sitemaps idshop 1</pre> {l s='generate all sitemaps and ping search engines for id shop 1, depending on module settings' mod='everpsseo'}</li>
-                <li><pre>php bin/console everpsseo:seo:import</pre> {l s='update objects depending on XLSX file' mod='everpsseo'}</li>
-                <li><pre>php bin/console everpsseo:seo:export categories</pre> {l s='export SEO categories on XLSX file' mod='everpsseo'}</li>
-                <li><pre>php bin/console everpsseo:seo:export products</pre> {l s='export SEO products on XLSX file' mod='everpsseo'}</li>
+                <li><code>php bin/console everpsseo:seo:metas idshop 1</code> {l s='generate all metas for id shop 1, depending on module settings' mod='everpsseo'}</li>
+                <li><code>php bin/console everpsseo:seo:content idshop 1</code> {l s='generate all content (products, categories, suppliers, manufacturers) for id shop 1, depending on module settings' mod='everpsseo'}</li>
+                <li><code>php bin/console everpsseo:seo:sitemaps idshop 1</code> {l s='generate all sitemaps and ping search engines for id shop 1, depending on module settings' mod='everpsseo'}</li>
+                <li><code>php bin/console everpsseo:seo:import</code> {l s='update objects depending on XLSX file' mod='everpsseo'}</li>
+                <li><code>php bin/console everpsseo:seo:export categories</code> {l s='export SEO categories on XLSX file' mod='everpsseo'}</li>
+                <li><code>php bin/console everpsseo:seo:export products</code> {l s='export SEO products on XLSX file' mod='everpsseo'}</li>
             </ul>
         </div>
         <div class="col-md-6 col-xs-12">
