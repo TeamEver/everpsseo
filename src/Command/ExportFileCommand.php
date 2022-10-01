@@ -361,9 +361,9 @@ class ExportFileCommand extends Command
         $sql->select('*');
         $sql->from('product_lang', 'pl');
         $sql->leftJoin(
-            'product_shop',
+            'product',
             'ps',
-            'ps.id_product = pl.id_product AND ps.id_shop = '.(int)$idShop
+            'ps.id_product = pl.id_product AND ps.id_shop_default = '.(int)$idShop
         );
         $sql->leftJoin(
             'ever_seo_product',
