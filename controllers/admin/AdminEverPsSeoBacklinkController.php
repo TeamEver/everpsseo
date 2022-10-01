@@ -240,7 +240,7 @@ class AdminEverPsSeoBacklinkController extends ModuleAdminController
                                     );
                                 }
                             } else {
-                                $this->errors[] = $this->l('Errors on deleting object '.$id_ever_seo_backlink);
+                                $this->errors[] = $this->l('Errors on deleting object ').$id_ever_seo_backlink;
                             }
                         }
                     }

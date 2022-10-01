@@ -333,7 +333,7 @@ class AdminEverPsSeoRedirectController extends ModuleAdminController
                                     );
                                 }
                             } else {
-                                $this->errors[] = $this->l('Errors on deleting object '.$id_ever_seo_redirect);
+                                $this->errors[] = $this->l('Errors on deleting object ').$id_ever_seo_redirect;
                             }
                         }
                     }

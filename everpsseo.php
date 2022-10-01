@@ -1647,15 +1647,15 @@ class EverPsSeo extends Module
         $form_fields[] = array(
             'form' => array(
                 'legend' => array(
-                    'title' => $this->trans('Upload products update file'),
+                    'title' => $this->l('Upload products update file'),
                     'icon' => 'icon-download',
                 ),
                 'input' => array(
                     array(
                         'type' => 'file',
-                        'label' => $this->trans('Upload products file'),
-                        'desc' => $this->trans('Will upload products file and wait until update cron is triggered'),
-                        'hint' => $this->trans('For SEO updates only'),
+                        'label' => $this->l('Upload products file'),
+                        'desc' => $this->l('Will upload products file and wait until update cron is triggered'),
+                        'hint' => $this->l('For SEO updates only'),
                         'name' => 'products_file',
                         'display_image' => false,
                         'required' => false
@@ -1667,7 +1667,7 @@ class EverPsSeo extends Module
                         'type' => 'submit',
                         'class' => 'btn btn-default pull-right',
                         'icon' => 'process-icon-download',
-                        'title' => $this->trans('Upload file')
+                        'title' => $this->l('Upload file')
                     ),
                 ),
             )
@@ -1675,15 +1675,15 @@ class EverPsSeo extends Module
         $form_fields[] = array(
             'form' => array(
                 'legend' => array(
-                    'title' => $this->trans('Upload categories update file'),
+                    'title' => $this->l('Upload categories update file'),
                     'icon' => 'icon-download',
                 ),
                 'input' => array(
                     array(
                         'type' => 'file',
-                        'label' => $this->trans('Upload categories file'),
-                        'desc' => $this->trans('Will upload categories file and wait until update cron is triggered'),
-                        'hint' => $this->trans('For SEO updates only'),
+                        'label' => $this->l('Upload categories file'),
+                        'desc' => $this->l('Will upload categories file and wait until update cron is triggered'),
+                        'hint' => $this->l('For SEO updates only'),
                         'name' => 'categories_file',
                         'display_image' => false,
                         'required' => false
@@ -1695,7 +1695,7 @@ class EverPsSeo extends Module
                         'type' => 'submit',
                         'class' => 'btn btn-default pull-right',
                         'icon' => 'process-icon-download',
-                        'title' => $this->trans('Upload file')
+                        'title' => $this->l('Upload file')
                     ),
                 ),
             )
