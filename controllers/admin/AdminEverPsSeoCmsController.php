@@ -303,7 +303,7 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
                 'PS_LOGO'
             );
         }
-        $defaultImage = '<image src="'.(string)$defaultUrlImage.'"/>';
+        $defaultImage = '<image src="'.(string)$defaultUrlImage.'" style="max-width:80px;"/>';
 
         $this->fields_form = array(
             'submit' => array(
