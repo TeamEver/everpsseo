@@ -134,8 +134,9 @@ class ImportFileCommand extends ContainerAwareCommand
         if (!\Validate::isLoadedObject($category)) {
             return;
         }
+        $idCategory = preg_replace('/[^0-9]/', '', $line['id_category']);
         $seo_category = \EverPsSeoCategory::getSeoCategory(
-            (int)$line['id_category'],
+            (int)$idCategory,
             (int)$idShop,
             (int)$idLang
         );
@@ -228,8 +229,9 @@ class ImportFileCommand extends ContainerAwareCommand
                 );
             }
         } else {
+            $idProduct = preg_replace('/[^0-9]/', '', $line['id_product']);
             $product = new \Product(
-                (int)$line['id_product'],
+                (int)$idProduct,
                 false,
                 (int)$idLang,
                 (int)$idShop
