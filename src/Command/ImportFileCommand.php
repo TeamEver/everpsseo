@@ -168,6 +168,45 @@ class ImportFileCommand extends ContainerAwareCommand
             AND id_shop = '.(int)$idShop.'
             AND id_category = '.(int)$category->id;
         }
+        if (isset($line['meta_title'])
+            && !empty($line['meta_title'])
+        ) {
+            $sql[] = 'UPDATE `'._DB_PREFIX_.'category_lang`
+            SET meta_title = "'.\Db::getInstance()->escape($line['meta_title']).'"
+            WHERE id_lang = '.(int)$idLang.'
+            AND id_shop = '.(int)$idShop.'
+            AND id_category = '.(int)$category->id;
+            $seo_category->meta_title = \Db::getInstance()->escape($line['meta_title']);
+            $seo_category->save();
+        }
+        if (isset($line['meta_description'])
+            && !empty($line['meta_description'])
+        ) {
+            $sql[] = 'UPDATE `'._DB_PREFIX_.'category_lang`
+            SET meta_description = "'.\Db::getInstance()->escape($line['meta_description']).'"
+            WHERE id_lang = '.(int)$idLang.'
+            AND id_shop = '.(int)$idShop.'
+            AND id_category = '.(int)$category->id;
+            $seo_category->meta_description = \Db::getInstance()->escape($line['meta_description']);
+            $seo_category->save();
+        }
+        if (isset($line['link_rewrite'])
+            && !empty($line['link_rewrite'])
+        ) {
+            if (\Validate::isLinkRewrite($line['link_rewrite'])) {
+                $sql[] = 'UPDATE `'._DB_PREFIX_.'category_lang`
+                SET link_rewrite = "'.\Db::getInstance()->escape($line['link_rewrite']).'"
+                WHERE id_lang = '.(int)$idLang.'
+                AND id_shop = '.(int)$idShop.'
+                AND id_product = '.(int)$category->id;
+                $seo_category->link_rewrite = \Db::getInstance()->escape($line['link_rewrite']);
+                $seo_category->save();
+            } else {
+                $output->writeln(
+                   '<error>Invalid link rewrite on product '.$line['id_product'].' object</error>'
+                );
+            }
+        }
         if (isset($line['bottom_description'])
             && !empty($line['bottom_content'])
         ) {
@@ -294,6 +333,17 @@ class ImportFileCommand extends ContainerAwareCommand
             AND id_shop = '.(int)$idShop.'
             AND id_product = '.(int)$product->id;
             $seo_product->meta_description = \Db::getInstance()->escape($line['meta_description']);
+            $seo_product->save();
+        }
+        if (isset($line['meta_title'])
+            && !empty($line['meta_title'])
+        ) {
+            $sql[] = 'UPDATE `'._DB_PREFIX_.'product_lang`
+            SET meta_title = "'.\Db::getInstance()->escape($line['meta_title']).'"
+            WHERE id_lang = '.(int)$idLang.'
+            AND id_shop = '.(int)$idShop.'
+            AND id_product = '.(int)$product->id;
+            $seo_product->meta_title = \Db::getInstance()->escape($line['meta_title']);
             $seo_product->save();
         }
         if (isset($line['link_rewrite'])
