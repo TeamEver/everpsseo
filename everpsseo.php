@@ -37,7 +37,7 @@ class EverPsSeo extends Module
     {
         $this->name = 'everpsseo';
         $this->tab = 'seo';
-        $this->version = '8.2.1';
+        $this->version = '8.2.2';
         $this->author = 'Team Ever';
         $this->need_instance = 0;
         $this->module_key = '5ddabba8ec414cd5bd646fad24368472';
@@ -48,13 +48,9 @@ class EverPsSeo extends Module
         $this->displayName = $this->l('Ever SEO');
         $this->description = $this->l('🙂 Global optimize and work on your shop SEO 🙂');
         $this->confirmUninstall = $this->l('Are you really sure to remove all seo settings ?');
-        $this->ps_versions_compliancy = array('min' => '1.6', 'max' => _PS_VERSION_);
+        $this->ps_versions_compliancy = array('min' => '1.7', 'max' => _PS_VERSION_);
         $this->siteUrl = Tools::getHttpHost(true).__PS_BASE_URI__;
-        if ($this->isSeven) {
-            $this->imageType = ImageType::getFormattedName('large');
-        } else {
-            $this->imageType = ImageType::getFormatedName('large');
-        }
+        $this->imageType = ImageType::getFormatedName('large');
         $this->protocol_link = (Configuration::get('PS_SSL_ENABLED')
             || Tools::usingSecureMode()) ? 'https://' : 'http://';
         if (strpos(Tools::getValue('controller'), 'EverPsSeo') !== false
@@ -165,7 +161,7 @@ class EverPsSeo extends Module
         }
         $tab->position = Tab::getNewLastPosition($tab->id_parent);
         $tab->module = $this->name;
-        if ($tabClass == 'AdminEverPsSeo' && $this->isSeven) {
+        if ($tabClass == 'AdminEverPsSeo') {
             $tab->icon = 'icon-team-ever';
         }
 
@@ -1313,7 +1309,7 @@ class EverPsSeo extends Module
             );
         }
         // die(var_dump($defaultUrlImage));
-        $defaultImage = '<image src="'.(string)$defaultUrlImage.'"/>';
+        $defaultImage = '<image src="'.(string)$defaultUrlImage.'" style="max-width:80px;" />';
 
         $knowledgegraph_type = array(
             array(
@@ -1701,603 +1697,602 @@ class EverPsSeo extends Module
             )
         );
 
-        if ((bool)$this->isSeven) {
-            $form_fields[] = array(
-                'form' => array(
-                    'legend' => array(
-                        'title' => $this->l('Cache management'),
-                        'icon' => 'icon-cogs',
+        // Cache
+        $form_fields[] = array(
+            'form' => array(
+                'legend' => array(
+                    'title' => $this->l('Cache management'),
+                    'icon' => 'icon-cogs',
+                ),
+                'input' => array(
+                    array(
+                        'type' => 'free',
+                        'label' =>  $this->l('Before enabling cache'),
+                        'name' => 'cache_advices'
                     ),
-                    'input' => array(
-                        array(
-                            'type' => 'free',
-                            'label' =>  $this->l('Before enabling cache'),
-                            'name' => 'cache_advices'
-                        ),
-                        array(
-                            'type' => 'free',
-                            'label' =>  $this->l('Nginx advices'),
-                            'name' => 'nginx_advices'
-                        ),
-                        array(
-                            'type' => 'switch',
-                            'label' => $this->l('Enable Ever SEO cache ?'),
-                            'desc' => $this->l('Will enable all settings for cache'),
-                            'hint' => $this->l('Set "No" to disable module cache'),
-                            'name' => 'EVERSEO_CACHE',
-                            'is_bool' => true,
-                            'values' => array(
-                                array(
-                                    'id' => 'active_on',
-                                    'value' => 1,
-                                    'label' => $this->l('Enabled')
-                                ),
-                                array(
-                                    'id' => 'active_off',
-                                    'value' => 0,
-                                    'label' => $this->l('Disabled')
-                                )
+                    array(
+                        'type' => 'free',
+                        'label' =>  $this->l('Nginx advices'),
+                        'name' => 'nginx_advices'
+                    ),
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('Enable Ever SEO cache ?'),
+                        'desc' => $this->l('Will enable all settings for cache'),
+                        'hint' => $this->l('Set "No" to disable module cache'),
+                        'name' => 'EVERSEO_CACHE',
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled')
                             ),
-                        ),
-                        array(
-                            'type' => 'switch',
-                            'label' => $this->l('Freeze the shop ?'),
-                            'desc' => $this->l('Will freeze the shop (the cache will not be regenerated)'),
-                            'hint' => $this->l('Put yes in case of heavy traffic'),
-                            'name' => 'EVERSEO_FREEZE_CACHE',
-                            'is_bool' => true,
-                            'values' => array(
-                                array(
-                                    'id' => 'active_on',
-                                    'value' => 1,
-                                    'label' => $this->l('Enabled')
-                                ),
-                                array(
-                                    'id' => 'active_off',
-                                    'value' => 0,
-                                    'label' => $this->l('Disabled')
-                                )
-                            ),
-                        ),
-                        array(
-                            'type' => 'switch',
-                            'label' => $this->l('Make all external links target _blank ?'),
-                            'desc' => $this->l('Will open all external links in new page'),
-                            'hint' => $this->l('Set "No" to disable this rule'),
-                            'name' => 'EVERSEO_EXTERNAL_NOFOLLOW',
-                            'is_bool' => true,
-                            'values' => array(
-                                array(
-                                    'id' => 'active_on',
-                                    'value' => 1,
-                                    'label' => $this->l('Enabled')
-                                ),
-                                array(
-                                    'id' => 'active_off',
-                                    'value' => 0,
-                                    'label' => $this->l('Disabled')
-                                )
-                            ),
-                        ),
-                        array(
-                            'type' => 'switch',
-                            'label' => $this->l('Remove inline values ?'),
-                            'desc' => $this->l('Will remove all style values on page'),
-                            'hint' => $this->l('Set "No" to keep inline style values'),
-                            'name' => 'EVERSEO_REMOVE_INLINE',
-                            'is_bool' => true,
-                            'values' => array(
-                                array(
-                                    'id' => 'active_on',
-                                    'value' => 1,
-                                    'label' => $this->l('Enabled')
-                                ),
-                                array(
-                                    'id' => 'active_off',
-                                    'value' => 0,
-                                    'label' => $this->l('Disabled')
-                                )
-                            ),
-                        ),
-                        array(
-                            'type' => 'switch',
-                            'label' => $this->l('Hide empty HTML tags ?'),
-                            'desc' => $this->l('Will add aria-hidden on empty HTML tags'),
-                            'hint' => $this->l('Set "No" to keep empty tags shown'),
-                            'name' => 'EVERSEO_REMOVE_EMPTY',
-                            'is_bool' => true,
-                            'values' => array(
-                                array(
-                                    'id' => 'active_on',
-                                    'value' => 1,
-                                    'label' => $this->l('Enabled')
-                                ),
-                                array(
-                                    'id' => 'active_off',
-                                    'value' => 0,
-                                    'label' => $this->l('Disabled')
-                                )
-                            ),
-                        ),
-                        array(
-                            'type' => 'switch',
-                            'label' => $this->l('Add missing alt and title values ?'),
-                            'desc' => $this->l('Will add shop name as alt and title value'),
-                            'hint' => $this->l('Set "No" to keep empty alt and title tags'),
-                            'name' => 'EVERSEO_ADD_ALT',
-                            'is_bool' => true,
-                            'values' => array(
-                                array(
-                                    'id' => 'active_on',
-                                    'value' => 1,
-                                    'label' => $this->l('Enabled')
-                                ),
-                                array(
-                                    'id' => 'active_off',
-                                    'value' => 0,
-                                    'label' => $this->l('Disabled')
-                                )
-                            ),
-                        ),
-                        array(
-                            'type' => 'switch',
-                            'label' => $this->l('Use GZIP and mod_deflate'),
-                            'desc' => $this->l('Will add rules on your htaccess file'),
-                            'hint' => $this->l('Please ask if mod_deflate is set on your server'),
-                            'name' => 'EVERSEO_DEFLATE',
-                            'is_bool' => true,
-                            'values' => array(
-                                array(
-                                    'id' => 'active_on',
-                                    'value' => 1,
-                                    'label' => $this->l('Enabled')
-                                ),
-                                array(
-                                    'id' => 'active_off',
-                                    'value' => 0,
-                                    'label' => $this->l('Disabled')
-                                )
-                            ),
-                        ),
-                        array(
-                            'type' => 'switch',
-                            'label' => $this->l('Compress HTML ?'),
-                            'desc' => $this->l('Will minify HTML for more speed'),
-                            'hint' => $this->l('Set "No" to let Prestashop do not minify HTML'),
-                            'name' => 'EVERSEO_COMPRESS_HTML',
-                            'is_bool' => true,
-                            'values' => array(
-                                array(
-                                    'id' => 'active_on',
-                                    'value' => 1,
-                                    'label' => $this->l('Enabled')
-                                ),
-                                array(
-                                    'id' => 'active_off',
-                                    'value' => 0,
-                                    'label' => $this->l('Disabled')
-                                )
-                            ),
-                        ),
-                        array(
-                            'type' => 'switch',
-                            'label' => $this->l('Minify products ?'),
-                            'desc' => $this->l('Will enable minification on products'),
-                            'hint' => $this->l('Set "No" to disable module minification on products'),
-                            'name' => 'EVERSEO_MINIFY_PRODUCT',
-                            'is_bool' => true,
-                            'values' => array(
-                                array(
-                                    'id' => 'active_on',
-                                    'value' => 1,
-                                    'label' => $this->l('Enabled')
-                                ),
-                                array(
-                                    'id' => 'active_off',
-                                    'value' => 0,
-                                    'label' => $this->l('Disabled')
-                                )
-                            ),
-                        ),
-                        array(
-                            'type' => 'switch',
-                            'label' => $this->l('HTML cache products ?'),
-                            'desc' => $this->l('Will show HTML cache for unlogged users'),
-                            'hint' => $this->l('Set "No" to disable HTML cache on products'),
-                            'name' => 'EVERSEO_CACHE_PRODUCT',
-                            'is_bool' => true,
-                            'values' => array(
-                                array(
-                                    'id' => 'active_on',
-                                    'value' => 1,
-                                    'label' => $this->l('Enabled')
-                                ),
-                                array(
-                                    'id' => 'active_off',
-                                    'value' => 0,
-                                    'label' => $this->l('Disabled')
-                                )
-                            ),
-                        ),
-                        array(
-                            'type' => 'switch',
-                            'label' => $this->l('HTML cache categories ?'),
-                            'desc' => $this->l('Will show HTML cache for unlogged users'),
-                            'hint' => $this->l('Set "No" to disable HTML cache on categories'),
-                            'name' => 'EVERSEO_CACHE_CATEGORY',
-                            'is_bool' => true,
-                            'values' => array(
-                                array(
-                                    'id' => 'active_on',
-                                    'value' => 1,
-                                    'label' => $this->l('Enabled')
-                                ),
-                                array(
-                                    'id' => 'active_off',
-                                    'value' => 0,
-                                    'label' => $this->l('Disabled')
-                                )
-                            ),
-                        ),
-                        array(
-                            'type' => 'switch',
-                            'label' => $this->l('HTML cache CMS ?'),
-                            'desc' => $this->l('Will show HTML cache for unlogged users'),
-                            'hint' => $this->l('Set "No" to disable HTML cache on CMS'),
-                            'name' => 'EVERSEO_CACHE_CMS',
-                            'is_bool' => true,
-                            'values' => array(
-                                array(
-                                    'id' => 'active_on',
-                                    'value' => 1,
-                                    'label' => $this->l('Enabled')
-                                ),
-                                array(
-                                    'id' => 'active_off',
-                                    'value' => 0,
-                                    'label' => $this->l('Disabled')
-                                )
-                            ),
-                        ),
-                        array(
-                            'type' => 'switch',
-                            'label' => $this->l('HTML cache manufacturers ?'),
-                            'desc' => $this->l('Will show HTML cache for unlogged users'),
-                            'hint' => $this->l('Set "No" to disable HTML cache on manufacturers'),
-                            'name' => 'EVERSEO_CACHE_MANUFACTURER',
-                            'is_bool' => true,
-                            'values' => array(
-                                array(
-                                    'id' => 'active_on',
-                                    'value' => 1,
-                                    'label' => $this->l('Enabled')
-                                ),
-                                array(
-                                    'id' => 'active_off',
-                                    'value' => 0,
-                                    'label' => $this->l('Disabled')
-                                )
-                            ),
-                        ),
-                        array(
-                            'type' => 'switch',
-                            'label' => $this->l('HTML cache suppliers ?'),
-                            'desc' => $this->l('Will show HTML cache for unlogged users'),
-                            'hint' => $this->l('Set "No" to disable HTML cache on suppliers'),
-                            'name' => 'EVERSEO_CACHE_SUPPLIER',
-                            'is_bool' => true,
-                            'values' => array(
-                                array(
-                                    'id' => 'active_on',
-                                    'value' => 1,
-                                    'label' => $this->l('Enabled')
-                                ),
-                                array(
-                                    'id' => 'active_off',
-                                    'value' => 0,
-                                    'label' => $this->l('Disabled')
-                                )
-                            ),
-                        ),
-                        array(
-                            'type' => 'switch',
-                            'label' => $this->l('HTML cache homepage ?'),
-                            'desc' => $this->l('Will show HTML cache for unlogged users'),
-                            'hint' => $this->l('Set "No" to disable HTML cache on homepage'),
-                            'name' => 'EVERSEO_CACHE_HOME',
-                            'is_bool' => true,
-                            'values' => array(
-                                array(
-                                    'id' => 'active_on',
-                                    'value' => 1,
-                                    'label' => $this->l('Enabled')
-                                ),
-                                array(
-                                    'id' => 'active_off',
-                                    'value' => 0,
-                                    'label' => $this->l('Disabled')
-                                )
-                            ),
-                        ),
-                        array(
-                            'type' => 'switch',
-                            'label' => $this->l('HTML cache other pages ?'),
-                            'desc' => $this->l('Will show HTML cache for unlogged users'),
-                            'hint' => $this->l('Set "No" to disable HTML cache on other pages'),
-                            'name' => 'EVERSEO_CACHE_OTHERS',
-                            'is_bool' => true,
-                            'values' => array(
-                                array(
-                                    'id' => 'active_on',
-                                    'value' => 1,
-                                    'label' => $this->l('Enabled')
-                                ),
-                                array(
-                                    'id' => 'active_off',
-                                    'value' => 0,
-                                    'label' => $this->l('Disabled')
-                                )
-                            ),
-                        ),
-                        array(
-                            'type' => 'switch',
-                            'label' => $this->l('Minify categories ?'),
-                            'desc' => $this->l('Will enable minification on categories'),
-                            'hint' => $this->l('Set "No" to disable module minification on categories'),
-                            'name' => 'EVERSEO_MINIFY_CATEGORY',
-                            'is_bool' => true,
-                            'values' => array(
-                                array(
-                                    'id' => 'active_on',
-                                    'value' => 1,
-                                    'label' => $this->l('Enabled')
-                                ),
-                                array(
-                                    'id' => 'active_off',
-                                    'value' => 0,
-                                    'label' => $this->l('Disabled')
-                                )
-                            ),
-                        ),
-                        array(
-                            'type' => 'switch',
-                            'label' => $this->l('Minify homepage ?'),
-                            'desc' => $this->l('Will enable minification on homepage'),
-                            'hint' => $this->l('Set "No" to disable module minification on home'),
-                            'name' => 'EVERSEO_MINIFY_HOME',
-                            'is_bool' => true,
-                            'values' => array(
-                                array(
-                                    'id' => 'active_on',
-                                    'value' => 1,
-                                    'label' => $this->l('Enabled')
-                                ),
-                                array(
-                                    'id' => 'active_off',
-                                    'value' => 0,
-                                    'label' => $this->l('Disabled')
-                                )
-                            ),
-                        ),
-                        array(
-                            'type' => 'switch',
-                            'label' => $this->l('Minify CMS ?'),
-                            'desc' => $this->l('Will enable minification on CMS'),
-                            'hint' => $this->l('Set "No" to disable module minification on CMS'),
-                            'name' => 'EVERSEO_MINIFY_CMS',
-                            'is_bool' => true,
-                            'values' => array(
-                                array(
-                                    'id' => 'active_on',
-                                    'value' => 1,
-                                    'label' => $this->l('Enabled')
-                                ),
-                                array(
-                                    'id' => 'active_off',
-                                    'value' => 0,
-                                    'label' => $this->l('Disabled')
-                                )
-                            ),
-                        ),
-                        array(
-                            'type' => 'switch',
-                            'label' => $this->l('Minify other pages ?'),
-                            'desc' => $this->l('Will enable minification on other pages'),
-                            'hint' => $this->l('Set "No" to disable module minification on other pages'),
-                            'name' => 'EVERSEO_MINIFY_OTHERS',
-                            'is_bool' => true,
-                            'values' => array(
-                                array(
-                                    'id' => 'active_on',
-                                    'value' => 1,
-                                    'label' => $this->l('Enabled')
-                                ),
-                                array(
-                                    'id' => 'active_off',
-                                    'value' => 0,
-                                    'label' => $this->l('Disabled')
-                                )
-                            ),
-                        ),
-                        array(
-                            'type' => 'switch',
-                            'label' => $this->l('Remove HTML comments ?'),
-                            'desc' => $this->l('Works only with HTML compression'),
-                            'hint' => $this->l('Set "No" to show HTML comments'),
-                            'name' => 'EVERSEO_REMOVE_COMMENTS',
-                            'is_bool' => true,
-                            'values' => array(
-                                array(
-                                    'id' => 'active_on',
-                                    'value' => 1,
-                                    'label' => $this->l('Enabled')
-                                ),
-                                array(
-                                    'id' => 'active_off',
-                                    'value' => 0,
-                                    'label' => $this->l('Disabled')
-                                )
-                            ),
-                        ),
-                        array(
-                            'type' => 'switch',
-                            'label' => $this->l('Add aria-label ?'),
-                            'desc' => $this->l('Will add aria label attribute if missing on inputs'),
-                            'hint' => $this->l('Set "No" to let inputs without labels'),
-                            'name' => 'EVERSEO_ADD_MISSING_LABELS',
-                            'is_bool' => true,
-                            'values' => array(
-                                array(
-                                    'id' => 'active_on',
-                                    'value' => 1,
-                                    'label' => $this->l('Enabled')
-                                ),
-                                array(
-                                    'id' => 'active_off',
-                                    'value' => 0,
-                                    'label' => $this->l('Disabled')
-                                )
-                            ),
-                        ),
-                        array(
-                            'type' => 'switch',
-                            'label' => $this->l('Load Google Font locally ?'),
-                            'desc' => $this->l('Will import Google font'),
-                            'hint' => $this->l('Set "No" to let Google font external'),
-                            'name' => 'EVERSEO_GOOGLE_FONT',
-                            'is_bool' => true,
-                            'values' => array(
-                                array(
-                                    'id' => 'active_on',
-                                    'value' => 1,
-                                    'label' => $this->l('Enabled')
-                                ),
-                                array(
-                                    'id' => 'active_off',
-                                    'value' => 0,
-                                    'label' => $this->l('Disabled')
-                                )
-                            ),
-                        ),
-                        array(
-                            'type' => 'switch',
-                            'label' => $this->l('Move all scripts to bottom'),
-                            'desc' => $this->l('Works only with HTML compression'),
-                            'hint' => $this->l('Set "No" to let Prestashop manage this'),
-                            'name' => 'EVERSEO_BOTTOM_SCRIPTS',
-                            'is_bool' => true,
-                            'values' => array(
-                                array(
-                                    'id' => 'active_on',
-                                    'value' => 1,
-                                    'label' => $this->l('Enabled')
-                                ),
-                                array(
-                                    'id' => 'active_off',
-                                    'value' => 0,
-                                    'label' => $this->l('Disabled')
-                                )
-                            ),
-                        ),
-                        array(
-                            'type' => 'switch',
-                            'label' => $this->l('Defer javascript ?'),
-                            'desc' => $this->l('Works only with HTML compression'),
-                            'hint' => $this->l('Set "No" to let scripts do not defer'),
-                            'name' => 'EVERSEO_DEFER',
-                            'is_bool' => true,
-                            'values' => array(
-                                array(
-                                    'id' => 'active_on',
-                                    'value' => 1,
-                                    'label' => $this->l('Enabled')
-                                ),
-                                array(
-                                    'id' => 'active_off',
-                                    'value' => 0,
-                                    'label' => $this->l('Disabled')
-                                )
-                            ),
-                        ),
-                        array(
-                            'type' => 'switch',
-                            'label' => $this->l('Enable Jquery Lazy Load ?'),
-                            'desc' => $this->l('Will add lazy load for all images'),
-                            'hint' => $this->l('Set "No" if you are using another module'),
-                            'name' => 'EVERSEO_LAZY_LOAD',
-                            'is_bool' => true,
-                            'values' => array(
-                                array(
-                                    'id' => 'active_on',
-                                    'value' => 1,
-                                    'label' => $this->l('Enabled')
-                                ),
-                                array(
-                                    'id' => 'active_off',
-                                    'value' => 0,
-                                    'label' => $this->l('Disabled')
-                                )
-                            ),
-                        ),
-                        array(
-                            'type' => 'text',
-                            'label' => $this->l('Cache life'),
-                            'desc' => $this->l('Useful for scripts regeneration'),
-                            'hint' => $this->l('Default will be 120'),
-                            'name' => 'EVERSEO_CACHE_LIFE',
-                            'required' => true,
+                            array(
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled')
+                            )
                         ),
                     ),
-                    'buttons' => array(
-                        'deleteCache' => array(
-                            'name' => 'submitDeleteCache',
-                            'type' => 'submit',
-                            'class' => 'btn btn-default pull-right',
-                            'icon' => 'process-icon-uninstall',
-                            'title' => $this->l('Delete cache files')
-                        ),
-                        'deleteProductCache' => array(
-                            'name' => 'submitDeleteProductCache',
-                            'type' => 'submit',
-                            'class' => 'btn btn-default pull-right',
-                            'icon' => 'process-icon-uninstall',
-                            'title' => $this->l('Delete product cache files')
-                        ),
-                        'deleteCategoryCache' => array(
-                            'name' => 'submitDeleteCategoryCache',
-                            'type' => 'submit',
-                            'class' => 'btn btn-default pull-right',
-                            'icon' => 'process-icon-uninstall',
-                            'title' => $this->l('Delete category cache files')
-                        ),
-                        'deleteCmsCache' => array(
-                            'name' => 'submitDeleteCmsCache',
-                            'type' => 'submit',
-                            'class' => 'btn btn-default pull-right',
-                            'icon' => 'process-icon-uninstall',
-                            'title' => $this->l('Delete CMS cache files')
-                        ),
-                        'deleteSupplierCache' => array(
-                            'name' => 'submitDeleteSupplierCache',
-                            'type' => 'submit',
-                            'class' => 'btn btn-default pull-right',
-                            'icon' => 'process-icon-uninstall',
-                            'title' => $this->l('Delete supplier cache files')
-                        ),
-                        'deleteManufacturerCache' => array(
-                            'name' => 'submitDeleteManufacturerCache',
-                            'type' => 'submit',
-                            'class' => 'btn btn-default pull-right',
-                            'icon' => 'process-icon-uninstall',
-                            'title' => $this->l('Delete manufacturer cache files')
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('Freeze the shop ?'),
+                        'desc' => $this->l('Will freeze the shop (the cache will not be regenerated)'),
+                        'hint' => $this->l('Put yes in case of heavy traffic'),
+                        'name' => 'EVERSEO_FREEZE_CACHE',
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled')
+                            )
                         ),
                     ),
-                    'submit' => array(
-                        'title' => $this->l('Save'),
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('Make all external links target _blank ?'),
+                        'desc' => $this->l('Will open all external links in new page'),
+                        'hint' => $this->l('Set "No" to disable this rule'),
+                        'name' => 'EVERSEO_EXTERNAL_NOFOLLOW',
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                    ),
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('Remove inline values ?'),
+                        'desc' => $this->l('Will remove all style values on page'),
+                        'hint' => $this->l('Set "No" to keep inline style values'),
+                        'name' => 'EVERSEO_REMOVE_INLINE',
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                    ),
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('Hide empty HTML tags ?'),
+                        'desc' => $this->l('Will add aria-hidden on empty HTML tags'),
+                        'hint' => $this->l('Set "No" to keep empty tags shown'),
+                        'name' => 'EVERSEO_REMOVE_EMPTY',
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                    ),
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('Add missing alt and title values ?'),
+                        'desc' => $this->l('Will add shop name as alt and title value'),
+                        'hint' => $this->l('Set "No" to keep empty alt and title tags'),
+                        'name' => 'EVERSEO_ADD_ALT',
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                    ),
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('Use GZIP and mod_deflate'),
+                        'desc' => $this->l('Will add rules on your htaccess file'),
+                        'hint' => $this->l('Please ask if mod_deflate is set on your server'),
+                        'name' => 'EVERSEO_DEFLATE',
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                    ),
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('Compress HTML ?'),
+                        'desc' => $this->l('Will minify HTML for more speed'),
+                        'hint' => $this->l('Set "No" to let Prestashop do not minify HTML'),
+                        'name' => 'EVERSEO_COMPRESS_HTML',
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                    ),
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('Minify products ?'),
+                        'desc' => $this->l('Will enable minification on products'),
+                        'hint' => $this->l('Set "No" to disable module minification on products'),
+                        'name' => 'EVERSEO_MINIFY_PRODUCT',
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                    ),
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('HTML cache products ?'),
+                        'desc' => $this->l('Will show HTML cache for unlogged users'),
+                        'hint' => $this->l('Set "No" to disable HTML cache on products'),
+                        'name' => 'EVERSEO_CACHE_PRODUCT',
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                    ),
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('HTML cache categories ?'),
+                        'desc' => $this->l('Will show HTML cache for unlogged users'),
+                        'hint' => $this->l('Set "No" to disable HTML cache on categories'),
+                        'name' => 'EVERSEO_CACHE_CATEGORY',
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                    ),
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('HTML cache CMS ?'),
+                        'desc' => $this->l('Will show HTML cache for unlogged users'),
+                        'hint' => $this->l('Set "No" to disable HTML cache on CMS'),
+                        'name' => 'EVERSEO_CACHE_CMS',
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                    ),
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('HTML cache manufacturers ?'),
+                        'desc' => $this->l('Will show HTML cache for unlogged users'),
+                        'hint' => $this->l('Set "No" to disable HTML cache on manufacturers'),
+                        'name' => 'EVERSEO_CACHE_MANUFACTURER',
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                    ),
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('HTML cache suppliers ?'),
+                        'desc' => $this->l('Will show HTML cache for unlogged users'),
+                        'hint' => $this->l('Set "No" to disable HTML cache on suppliers'),
+                        'name' => 'EVERSEO_CACHE_SUPPLIER',
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                    ),
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('HTML cache homepage ?'),
+                        'desc' => $this->l('Will show HTML cache for unlogged users'),
+                        'hint' => $this->l('Set "No" to disable HTML cache on homepage'),
+                        'name' => 'EVERSEO_CACHE_HOME',
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                    ),
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('HTML cache other pages ?'),
+                        'desc' => $this->l('Will show HTML cache for unlogged users'),
+                        'hint' => $this->l('Set "No" to disable HTML cache on other pages'),
+                        'name' => 'EVERSEO_CACHE_OTHERS',
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                    ),
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('Minify categories ?'),
+                        'desc' => $this->l('Will enable minification on categories'),
+                        'hint' => $this->l('Set "No" to disable module minification on categories'),
+                        'name' => 'EVERSEO_MINIFY_CATEGORY',
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                    ),
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('Minify homepage ?'),
+                        'desc' => $this->l('Will enable minification on homepage'),
+                        'hint' => $this->l('Set "No" to disable module minification on home'),
+                        'name' => 'EVERSEO_MINIFY_HOME',
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                    ),
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('Minify CMS ?'),
+                        'desc' => $this->l('Will enable minification on CMS'),
+                        'hint' => $this->l('Set "No" to disable module minification on CMS'),
+                        'name' => 'EVERSEO_MINIFY_CMS',
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                    ),
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('Minify other pages ?'),
+                        'desc' => $this->l('Will enable minification on other pages'),
+                        'hint' => $this->l('Set "No" to disable module minification on other pages'),
+                        'name' => 'EVERSEO_MINIFY_OTHERS',
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                    ),
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('Remove HTML comments ?'),
+                        'desc' => $this->l('Works only with HTML compression'),
+                        'hint' => $this->l('Set "No" to show HTML comments'),
+                        'name' => 'EVERSEO_REMOVE_COMMENTS',
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                    ),
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('Add aria-label ?'),
+                        'desc' => $this->l('Will add aria label attribute if missing on inputs'),
+                        'hint' => $this->l('Set "No" to let inputs without labels'),
+                        'name' => 'EVERSEO_ADD_MISSING_LABELS',
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                    ),
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('Load Google Font locally ?'),
+                        'desc' => $this->l('Will import Google font'),
+                        'hint' => $this->l('Set "No" to let Google font external'),
+                        'name' => 'EVERSEO_GOOGLE_FONT',
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                    ),
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('Move all scripts to bottom'),
+                        'desc' => $this->l('Works only with HTML compression'),
+                        'hint' => $this->l('Set "No" to let Prestashop manage this'),
+                        'name' => 'EVERSEO_BOTTOM_SCRIPTS',
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                    ),
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('Defer javascript ?'),
+                        'desc' => $this->l('Works only with HTML compression'),
+                        'hint' => $this->l('Set "No" to let scripts do not defer'),
+                        'name' => 'EVERSEO_DEFER',
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                    ),
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('Enable Jquery Lazy Load ?'),
+                        'desc' => $this->l('Will add lazy load for all images'),
+                        'hint' => $this->l('Set "No" if you are using another module'),
+                        'name' => 'EVERSEO_LAZY_LOAD',
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                    ),
+                    array(
+                        'type' => 'text',
+                        'label' => $this->l('Cache life'),
+                        'desc' => $this->l('Useful for scripts regeneration'),
+                        'hint' => $this->l('Default will be 120'),
+                        'name' => 'EVERSEO_CACHE_LIFE',
+                        'required' => true,
                     ),
                 ),
-            );
-        }
+                'buttons' => array(
+                    'deleteCache' => array(
+                        'name' => 'submitDeleteCache',
+                        'type' => 'submit',
+                        'class' => 'btn btn-default pull-right',
+                        'icon' => 'process-icon-uninstall',
+                        'title' => $this->l('Delete cache files')
+                    ),
+                    'deleteProductCache' => array(
+                        'name' => 'submitDeleteProductCache',
+                        'type' => 'submit',
+                        'class' => 'btn btn-default pull-right',
+                        'icon' => 'process-icon-uninstall',
+                        'title' => $this->l('Delete product cache files')
+                    ),
+                    'deleteCategoryCache' => array(
+                        'name' => 'submitDeleteCategoryCache',
+                        'type' => 'submit',
+                        'class' => 'btn btn-default pull-right',
+                        'icon' => 'process-icon-uninstall',
+                        'title' => $this->l('Delete category cache files')
+                    ),
+                    'deleteCmsCache' => array(
+                        'name' => 'submitDeleteCmsCache',
+                        'type' => 'submit',
+                        'class' => 'btn btn-default pull-right',
+                        'icon' => 'process-icon-uninstall',
+                        'title' => $this->l('Delete CMS cache files')
+                    ),
+                    'deleteSupplierCache' => array(
+                        'name' => 'submitDeleteSupplierCache',
+                        'type' => 'submit',
+                        'class' => 'btn btn-default pull-right',
+                        'icon' => 'process-icon-uninstall',
+                        'title' => $this->l('Delete supplier cache files')
+                    ),
+                    'deleteManufacturerCache' => array(
+                        'name' => 'submitDeleteManufacturerCache',
+                        'type' => 'submit',
+                        'class' => 'btn btn-default pull-right',
+                        'icon' => 'process-icon-uninstall',
+                        'title' => $this->l('Delete manufacturer cache files')
+                    ),
+                ),
+                'submit' => array(
+                    'title' => $this->l('Save'),
+                ),
+            ),
+        );
 
         // Redirect setting
         $form_fields[] = array(
@@ -8203,11 +8198,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
     public function hookDisplayOrderConfirmation($params)
     {
-        if ($this->isSeven) {
-            $order = $params['order'];
-        } else {
-            $order = $params['objOrder'];
-        }
+        $order = $params['order'];
         $address = new Address((int)$order->id_address_delivery);
         $carrier = new Carrier((int)$order->id_carrier);
         $currency = $this->context->currency;
@@ -8313,7 +8304,6 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         }
         // Do not cache if updatedTransaction is set, else page will be reloaded every time
         if ((bool)Configuration::get('EVERSEO_CACHE') === true
-            && $this->isSeven
             && !Tools::getValue('updatedTransaction')
         ) {
             $this->context->controller->addJs($this->_path.'views/js/evercache.js');
@@ -8355,23 +8345,17 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             // Set recaptcha
             $captcha_content = 'https://www.google.com/recaptcha/api.js?render='
                 .Configuration::get('EVERPSCAPTCHA_SITE_KEY');
-            if ($this->isSeven) {
-                $this->context->controller->addJquery();
-                $this->context->controller->registerJavascript(
-                    'remote-google-recaptcha',
-                    $captcha_content,
-                    array(
-                        'server' => 'remote',
-                        'position' => 'bottom',
-                        'priority' => 20,
-                        'defer' => 'defer'
-                    )
-                );
-            } else {
-                $this->context->controller->addJs(
-                    $captcha_content
-                );
-            }
+            $this->context->controller->addJquery();
+            $this->context->controller->registerJavascript(
+                'remote-google-recaptcha',
+                $captcha_content,
+                array(
+                    'server' => 'remote',
+                    'position' => 'bottom',
+                    'priority' => 20,
+                    'defer' => 'defer'
+                )
+            );
             $this->context->smarty->assign(array(
                 'ever_ps_captcha_site_key' => Configuration::get('EVERPSCAPTCHA_SITE_KEY'),
             ));
@@ -8429,7 +8413,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         $simplyUrl = str_replace($shop_url, '', $askedUrl);
         if ($from && $to) {
             $id_ever_seo_backlink = EverPsSeoBacklink::ifBacklinkExists(
-                (string)$from,
+                pSQL($from),
                 (string)$to,
                 (int)$id_shop
             );
@@ -8439,14 +8423,14 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     (int)$id_shop
                 );
             } else {
-                if (false !== stripos((string)$from, Configuration::get(
+                if (false !== stripos(pSQL($from), Configuration::get(
                     'PS_SHOP_DOMAIN_SSL'
                 ))) {
                     //How about tracking visitors ?
                 } else {
                     $backlink = new EverPsSeoBacklink();
                     $backlink->everfrom = Tools::substr(
-                        (string)$from,
+                        pSQL($from),
                         0,
                         255
                     );
@@ -8712,18 +8696,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             if ($seo[0]['indexable'] == 1) {
                 $index = 'index';
             } else {
-                if (!$this->isSeven) {
-                    $index = 'nobots';
-                } else {
-                    $index = 'noindex';
-                }
-            }
-            if (Tools::getValue('page')) {
-                if (!$this->isSeven) {
-                    $index = 'nobots';
-                } else {
-                    $index = 'noindex';
-                }
+                $index = 'noindex';
             }
 
             if ($seo[0]['follow'] == 1) {
@@ -8734,14 +8707,12 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
             if (isset($seo[0]['meta_title'])) {
                 $meta_title = $seo[0]['meta_title'];
-                // $meta_title = Tools::substr($meta_title, 0, 60);
             } else {
                 $meta_title = null;
             }
 
             if (isset($seo[0]['meta_description'])) {
                 $meta_description = $seo[0]['meta_description'];
-                // $meta_description = Tools::substr($meta_description, 0, 160);
             } else {
                 $meta_description = null;
             }
@@ -8795,46 +8766,26 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             ));
         }
 
-        if (EverPsSeoTools::pageHasBannedArgs()) {
+        if ((bool)EverPsSeoTools::pageHasBannedArgs() === true) {
             $index = 'noindex';
         }
 
         if (isset($index)
             && isset($follow)
         ) {
-            if (!$this->isSeven) {
-                $this->context->smarty->assign($index, true);
-                $this->context->smarty->assign($follow, true);
-                if ($index == 'noindex') {
-                    $this->context->smarty->assign('nobots', true);
-                }
-                if ($index == 'nofollow') {
-                    $this->context->smarty->assign('nofollow', true);
-                }
-                if ($meta_title && $meta_description) {
-                    $this->context->smarty->assign($meta_title, true);
-                    $this->context->smarty->assign($meta_description, true);
-                }
-                if (isset($canonical_url)
-                    && !empty($canonical_url)
-                ) {
-                    $this->context->smarty->assign('canonical_url', $canonical_url);
-                }
-            } else {
-                $page = $this->context->controller->getTemplateVarPage();
-                $page['meta']['robots'] = $index . ', ' . $follow;
-                if ($meta_title && $meta_description) {
-                    $page['meta']['title'] = $meta_title;
-                    $page['meta']['description'] = $meta_description;
-                }
-                if ((bool)Configuration::get('EVERSEO_CANONICAL') === true
-                    && isset($canonical_url)
-                    && !empty($canonical_url)
-                ) {
-                    $page['canonical'] = $canonical_url;
-                }
-                $this->context->smarty->assign('page', $page);
+            $page = $this->context->controller->getTemplateVarPage();
+            $page['meta']['robots'] = $index . ', ' . $follow;
+            if ($meta_title && $meta_description) {
+                $page['meta']['title'] = $meta_title;
+                $page['meta']['description'] = $meta_description;
             }
+            if ((bool)Configuration::get('EVERSEO_CANONICAL') === true
+                && isset($canonical_url)
+                && !empty($canonical_url)
+            ) {
+                $page['canonical'] = $canonical_url;
+            }
+            $this->context->smarty->assign('page', $page);
         }
         if ((bool)Configuration::get('EVERSEO_CANONICAL') === false) {
             $canonical_url = false;
@@ -8846,29 +8797,6 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         $identifierUrl = Configuration::get(
             'PS_SHOP_DOMAIN_SSL'
         );
-        if ($controller_name == 'CreateQuotation') {
-            if (Module::isInstalled('opartdevis')) {
-                if (Tools::getValue('confirm')) {
-                    require_once _PS_MODULE_DIR_.'opartdevis/models/OpartQuotation.php';
-                    $quotation = new OpartQuotation(
-                        (int)Tools::getValue('confirm')
-                    );
-                    $cart = new Cart(
-                        (int)$quotation->id_cart
-                    );
-                    $summary = $cart->getSummaryDetails(
-                        null,
-                        true
-                    );
-                }
-                $this->context->smarty->assign(array(
-                    'adwordsopart' =>  Configuration::get(
-                        'EVERSEO_ADWORDS_OPART'
-                    ),
-                    'opart_total' =>  $summary['total_price'],
-                ));
-            }
-        }
         $yearEnd = date('Y-m-d', strtotime('Dec 31'));
         $this->context->smarty->assign(array(
             'ever_customer' => $customer,
@@ -8952,11 +8880,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             ),
         ));
 
-        if (!$this->isSeven) {
-            return $this->display(__FILE__, 'views/templates/front/header16.tpl');
-        } else {
-            return $this->display(__FILE__, 'views/templates/front/header.tpl');
-        }
+        return $this->display(__FILE__, 'views/templates/front/header.tpl');
     }
 
     public function hookDisplayLeftColumn()
@@ -9806,19 +9730,11 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                             'manufacturer' => Manufacturer::getNameById((int)$product->id_manufacturer),
                             'priceValidUntil' => $yearEnd,
                         ));
-                        if (!$this->isSeven) {
-                            return $this->display(
-                                __FILE__,
-                                'views/templates/front/richsnippets16.tpl',
-                                $cacheId
-                            );
-                        } else {
-                            return $this->display(
-                                __FILE__,
-                                'views/templates/front/richsnippets.tpl',
-                                $cacheId
-                            );
-                        }
+                        return $this->display(
+                            __FILE__,
+                            'views/templates/front/richsnippets.tpl',
+                            $cacheId
+                        );
                         break;
 
                     case 'category':
@@ -9843,11 +9759,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                             'homepage' => (string)$homepage,
                             'currentUrl' => (string)$currentUrl
                         ));
-                        if (!$this->isSeven) {
-                            return $this->display(__FILE__, 'views/templates/front/richsnippets16.tpl', $cacheId);
-                        } else {
-                            return $this->display(__FILE__, 'views/templates/front/richsnippets.tpl', $cacheId);
-                        }
+                        return $this->display(__FILE__, 'views/templates/front/richsnippets.tpl', $cacheId);
                         break;
 
                     case 'cms':
@@ -9872,11 +9784,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                             'homepage' => (string)$homepage,
                             'currentUrl' => (string)$currentUrl
                         ));
-                        if (!$this->isSeven) {
-                            return $this->display(__FILE__, 'views/templates/front/richsnippets16.tpl', $cacheId);
-                        } else {
-                            return $this->display(__FILE__, 'views/templates/front/richsnippets.tpl', $cacheId);
-                        }
+                        return $this->display(__FILE__, 'views/templates/front/richsnippets.tpl', $cacheId);
                         break;
 
                     case 'manufacturer':
@@ -9899,11 +9807,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                             'homepage' => (string)$homepage,
                             'currentUrl' => (string)$currentUrl
                         ));
-                        if (!$this->isSeven) {
-                            return $this->display(__FILE__, 'views/templates/front/richsnippets16.tpl', $cacheId);
-                        } else {
-                            return $this->display(__FILE__, 'views/templates/front/richsnippets.tpl', $cacheId);
-                        }
+                        return $this->display(__FILE__, 'views/templates/front/richsnippets.tpl', $cacheId);
                         break;
 
                     case 'supplier':
@@ -9926,11 +9830,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                             'homepage' => (string)$homepage,
                             'currentUrl' => (string)$currentUrl
                         ));
-                        if (!$this->isSeven) {
-                            return $this->display(__FILE__, 'views/templates/front/richsnippets16.tpl', $cacheId);
-                        } else {
-                            return $this->display(__FILE__, 'views/templates/front/richsnippets.tpl', $cacheId);
-                        }
+                        return $this->display(__FILE__, 'views/templates/front/richsnippets.tpl', $cacheId);
                         break;
 
                     default:
@@ -9943,11 +9843,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                             'homepage' => $homepage,
                             'currentUrl' => (string)$currentUrl
                         ));
-                        if (!$this->isSeven) {
-                            return $this->display(__FILE__, 'views/templates/front/richsnippets16.tpl', $cacheId);
-                        } else {
-                            return $this->display(__FILE__, 'views/templates/front/richsnippets.tpl', $cacheId);
-                        }
+                        return $this->display(__FILE__, 'views/templates/front/richsnippets.tpl', $cacheId);
                         break;
                 }
             }

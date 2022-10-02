@@ -201,21 +201,6 @@
 {/literal}
 {/if}
 {* End Adwords contact tracking code *}
-{* Start Adwords Opart quotation tracking code *}
-{if isset($adwordsopart) && $adwordsopart && isset($opart_total) && $opart_total}
-{literal}
-<!-- Event snippet for Demande de devis conversion page -->
-<script>
-  gtag('event', 'conversion', {
-      'send_to': '{/literal}{$adwordsopart|escape:'htmlall':'UTF-8'}{literal}',
-      'value': {/literal}{$opart_total|escape:'htmlall':'UTF-8'}{literal},
-      'currency': 'EUR',
-      'transaction_id': ''
-  });
-</script>
-{/literal}
-{/if}
-{* End Adwords Opart quotation tracking code *}
 
 {if isset($pixelfacebook) && $pixelfacebook}
     {literal}
