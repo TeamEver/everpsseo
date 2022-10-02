@@ -44,6 +44,7 @@ class ExportFileCommand extends Command
         $this->setName('everpsseo:seo:export');
         $this->setDescription('Export SEO datas for categories & products');
         $this->addArgument('action', InputArgument::OPTIONAL, sprintf('Action to execute (Allowed actions: %s).', implode(' / ', $this->allowedActions)));
+        $this->addArgument('idshop id', InputArgument::OPTIONAL, 'Shop ID');
         $this->filenameCategory = dirname(__FILE__) . '/../../output/categories.xlsx';
         $this->filenameProduct = dirname(__FILE__) . '/../../output/products.xlsx';
         $this->logFile = dirname(__FILE__) . '/../../output/logs/log-seo-output-'.date('Y-m-d').'.log';
@@ -53,19 +54,33 @@ class ExportFileCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $action = $input->getArgument('action');
-        $context = (new ContextAdapter())->getContext();
-        $context->employee = new \Employee(1);
-        $shop = $context->shop;
-        if (!\Validate::isLoadedObject($shop)) {
-            $shop = new \Shop((int)\Configuration::get('PS_SHOP_DEFAULT'));
-        }
-        $idShop = $shop->id;
-        \Shop::setContext($shop::CONTEXT_SHOP, $idShop);
-
+        $idShop = $input->getArgument('idshop id');
         if (!in_array($action, $this->allowedActions)) {
             $output->writeln('<comment>Unkown action</comment>');
             return self::ABORTED;
         }
+        $context = (new ContextAdapter())->getContext();
+        $context->employee = new \Employee(1);
+        if (\Validate::isInt($idShop)) {
+            $shop = new \Shop(
+                (int)$idShop
+            );
+            if (!\Validate::isLoadedObject($shop)) {
+                $output->writeln('<comment>Shop not found</comment>');
+                return self::ABORTED;
+            }
+        } else {
+            $shop = $context->shop;
+            if (!\Validate::isLoadedObject($shop)) {
+                $shop = new \Shop((int)\Configuration::get('PS_SHOP_DEFAULT'));
+                $idShop = $shop->id;
+            } else {
+                $output->writeln('<comment>Shop not found</comment>');
+                return self::ABORTED;
+            }
+        }
+        \Shop::setContext($shop::CONTEXT_SHOP, $idShop);
+
         if ($action === 'getrandomcomment') {
             $output->writeln(
                 $this->getRandomFunnyComment($output)

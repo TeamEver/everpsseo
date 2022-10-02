@@ -10395,7 +10395,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         $maxOccur = (int)Configuration::get('EVERSEO_LINKED_NBR');
         $searchedText = (string)Configuration::get('SEARCHED');
         $replacingText = (string)Configuration::get('LINKEDTO');
-        $link = '<a href=\"'.$replacingText.'\" title=\"'.$searchedText.'\">'.$searchedText.'</a>';
+        $link = '<a href=\"'.pSQL($replacingText).'\" title=\"'.pSQL($searchedText).'\">'.pSQL($searchedText).'</a>';
         $limit = (int)Configuration::get('EVERSEO_LINKED_NBR');
 
         //CMS
