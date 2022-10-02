@@ -13,7 +13,7 @@ class PageNotFoundController extends PageNotFoundControllerCore
     {
         require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoRedirect.php';
         if ((bool)Configuration::get('EVERSEO_REWRITE') === true) {
-            $redirCode = pSQL(Configuration::get('EVERSEO_REDIRECT'));
+            $redirCode = (int)Configuration::get('EVERSEO_REDIRECT');
             switch ($redirCode) {
                 case 301:
                     $redirCode = 'Status: 301 Moved Permanently, false, 301';
