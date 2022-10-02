@@ -47,7 +47,7 @@ class ExportFileCommand extends Command
         $this->addArgument('idshop id', InputArgument::OPTIONAL, 'Shop ID');
         $this->filenameCategory = dirname(__FILE__) . '/../../output/categories.xlsx';
         $this->filenameProduct = dirname(__FILE__) . '/../../output/products.xlsx';
-        $this->logFile = dirname(__FILE__) . '/../../output/logs/log-seo-output-'.date('Y-m-d').'.log';
+        $this->logFile = dirname(__FILE__) . '/../../output/logs/log-seo-export-'.date('Y-m-d').'.log';
         $this->module = \Module::getInstanceByName('everpsseo');
     }
 
@@ -411,6 +411,20 @@ class ExportFileCommand extends Command
         return $allCategoriesIds;
     }
 
+    protected function logCommand($msg)
+    {
+        $log  = 'Msg: '.$msg.PHP_EOL.
+                date('j.n.Y').PHP_EOL.
+                "-------------------------".PHP_EOL;
+
+        //Save string to log, use FILE_APPEND to append.
+        file_put_contents(
+            $this->logFile,
+            $log,
+            FILE_APPEND
+        );
+    }
+
     /**
      * Get funny random comment
      * Can be useful for setting comment style example
@@ -422,7 +436,7 @@ class ExportFileCommand extends Command
         $output->getFormatter()->setStyle('styled', $outputStyle);
         $funnyComments = [];
         $funnyComments[] = "<styled>
-            IMPORT ENDED, HAVE A BEER
+            EXPORT ENDED, HAVE A BEER
                          .sssssssss.
                    .sssssssssssssssssss
                  sssssssssssssssssssssssss
@@ -446,14 +460,14 @@ class ExportFileCommand extends Command
                       |...............|
                 </styled>";
         $funnyComments[] = "<styled>
-            IMPORT ENDED, MEOW
+            EXPORT ENDED, MEOW
               ^~^  ,
              ('Y') )
              /   \/
             (\|||/)
             </styled>";
         $funnyComments[] = "<styled>
-            IMPORT ENDED, D'OH
+            EXPORT ENDED, D'OH
             ...___.._____
             ....‘/,-Y”.............“~-.
             ..l.Y.......................^.
@@ -474,7 +488,7 @@ class ExportFileCommand extends Command
             </styled>";
         $funnyComments[] = '<styled>
             |￣￣￣￣￣￣￣￣￣ |
-            |      IMPORT      |
+            |      EXPORT      |
             |      ENDED!      |
             |__________________|
             (\__/) ||
@@ -488,7 +502,7 @@ class ExportFileCommand extends Command
             </styled>";
         $funnyComments[] = "<styled>
             ......_________________________
-            ....../ `---___________--------    | ============= IMPORT-ENDED-BULLET !
+            ....../ `---___________--------    | ============= EXPORT-ENDED-BULLET !
             ...../_==o;;;;;;;;______________|
             .....), ---.(_(__) /
             .......// (..) ), /--
@@ -499,35 +513,5 @@ class ExportFileCommand extends Command
             </styled>";
         $k = array_rand($funnyComments);
         return $funnyComments[$k];
-    }
-
-    /**
-     * Convert to float without using forbidden floatval
-     * @param string to convert
-     * @return float converted
-    */
-    public static function clFloatval($string)
-    {
-        $string = str_replace(',', '.', $string);
-        return (float)$string;
-    }
-
-    /**
-     * Generate percentage change between two numbers.
-     * @param int|float $old
-     * @param int|float $new
-     * @return string
-     */
-    public static function pctChange($old, $new)
-    {
-        if ($old == 0) {
-            $old++;
-            $new++;
-        }
-
-        $percent_change = (($new - $old) / $old);
-        $percent_change = str_replace('-', '', $percent_change);
-
-        return $percent_change;
     }
 }

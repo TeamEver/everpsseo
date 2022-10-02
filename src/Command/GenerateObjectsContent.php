@@ -41,6 +41,7 @@ class GenerateObjectsContent extends Command
         $this->setDescription('Generate objects content (description, etc) for each lang');
         $this->addArgument('action', InputArgument::OPTIONAL, sprintf('Action to execute (Allowed actions: %s).', implode(' / ', $this->allowedActions)));
         $this->addArgument('idshop id', InputArgument::OPTIONAL, 'Shop ID');
+        $this->logFile = dirname(__FILE__) . '/../../output/logs/log-seo-content-generation-'.date('Y-m-d').'.log';
         $this->module = \Module::getInstanceByName('everpsseo');
     }
 
@@ -441,9 +442,9 @@ class GenerateObjectsContent extends Command
         }
     }
 
-    protected function getAllowedGeneratorCategories($is_product = false)
+    protected function getAllowedGeneratorCategories($isProduct = false)
     {
-        if ((bool)$is_product) {
+        if ((bool)$isProduct === true) {
             $categories = json_decode(
                 \Configuration::get(
                     'EVERSEO_PGENERATOR_CATEGORIES'

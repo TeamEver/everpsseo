@@ -41,6 +41,7 @@ class GenerateMetas extends Command
         $this->setDescription('Generate SEO title and meta description for each lang');
         $this->addArgument('action', InputArgument::OPTIONAL, sprintf('Action to execute (Allowed actions: %s).', implode(' / ', $this->allowedActions)));
         $this->addArgument('idshop id', InputArgument::OPTIONAL, 'Shop ID');
+        $this->logFile = dirname(__FILE__) . '/../../output/logs/log-seo-meta-generation-'.date('Y-m-d').'.log';
         $this->module = \Module::getInstanceByName('everpsseo');
     }
 

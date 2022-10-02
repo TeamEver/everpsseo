@@ -35,7 +35,7 @@ class ImportFileCommand extends ContainerAwareCommand
         $this->setDescription('Update SEO datas for categories & products');
         $this->filenameCategory = dirname(__FILE__) . '/../../input/categories.xlsx';
         $this->filenameProduct = dirname(__FILE__) . '/../../input/products.xlsx';
-        $this->logFile = dirname(__FILE__) . '/../../output/logs/log-seo-'.date('Y-m-d').'.log';
+        $this->logFile = dirname(__FILE__) . '/../../output/logs/log-seo-import-'.date('Y-m-d').'.log';
         $this->module = \Module::getInstanceByName('everpsseo');
     }
 
@@ -285,6 +285,34 @@ class ImportFileCommand extends ContainerAwareCommand
             AND id_shop = '.(int)$idShop.'
             AND id_product = '.(int)$product->id;
         }
+        if (isset($line['meta_description'])
+            && !empty($line['meta_description'])
+        ) {
+            $sql[] = 'UPDATE `'._DB_PREFIX_.'product_lang`
+            SET meta_description = "'.\Db::getInstance()->escape($line['meta_description']).'"
+            WHERE id_lang = '.(int)$idLang.'
+            AND id_shop = '.(int)$idShop.'
+            AND id_product = '.(int)$product->id;
+            $seo_product->meta_description = \Db::getInstance()->escape($line['meta_description']);
+            $seo_product->save();
+        }
+        if (isset($line['link_rewrite'])
+            && !empty($line['link_rewrite'])
+        ) {
+            if (\Validate::isLinkRewrite($line['link_rewrite'])) {
+                $sql[] = 'UPDATE `'._DB_PREFIX_.'product_lang`
+                SET link_rewrite = "'.\Db::getInstance()->escape($line['link_rewrite']).'"
+                WHERE id_lang = '.(int)$idLang.'
+                AND id_shop = '.(int)$idShop.'
+                AND id_product = '.(int)$product->id;
+                $seo_product->link_rewrite = \Db::getInstance()->escape($line['link_rewrite']);
+                $seo_product->save();
+            } else {
+                $output->writeln(
+                   '<error>Invalid link rewrite on product '.$line['id_product'].' object</error>'
+                );
+            }
+        }
         if (isset($line['bottom_description'])
             && !empty($line['description'])
         ) {
@@ -296,6 +324,20 @@ class ImportFileCommand extends ContainerAwareCommand
                 \Db::getInstance()->execute($q);
             }
         }
+    }
+
+    protected function logCommand($msg)
+    {
+        $log  = 'Msg: '.$msg.PHP_EOL.
+                date('j.n.Y').PHP_EOL.
+                "-------------------------".PHP_EOL;
+
+        //Save string to log, use FILE_APPEND to append.
+        file_put_contents(
+            $this->logFile,
+            $log,
+            FILE_APPEND
+        );
     }
 
     /**
@@ -386,35 +428,5 @@ class ImportFileCommand extends ContainerAwareCommand
             </styled>";
         $k = array_rand($funnyComments);
         return $funnyComments[$k];
-    }
-
-    /**
-     * Convert to float without using forbidden floatval
-     * @param string to convert
-     * @return float converted
-    */
-    public static function clFloatval($string)
-    {
-        $string = str_replace(',', '.', $string);
-        return (float)$string;
-    }
-
-    /**
-     * Generate percentage change between two numbers.
-     * @param int|float $old
-     * @param int|float $new
-     * @return string
-     */
-    public static function pctChange($old, $new)
-    {
-        if ($old == 0) {
-            $old++;
-            $new++;
-        }
-
-        $percent_change = (($new - $old) / $old);
-        $percent_change = str_replace('-', '', $percent_change);
-
-        return $percent_change;
     }
 }
