@@ -499,6 +499,22 @@ class ImportFileCommand extends ContainerAwareCommand
             .//___//
             //___//
             </styled>";
+        $funnyComments[] = "<styled>
+               IMPORT ENDED
+           ._________________.
+           |.---------------.|
+           ||               ||
+           ||   -._ .-.     ||
+           ||   -._| | |    ||
+           ||   -._|'|'|    ||
+           ||   -._|.-.|    ||
+           ||_______________||
+           /.-.-.-.-.-.-.-.-.\
+          /.-.-.-.-.-.-.-.-.-.\
+         /.-.-.-.-.-.-.-.-.-.-.\
+        /______/__________\___o_\ 
+        \_______________________/
+         </styled>";
         $k = array_rand($funnyComments);
         return $funnyComments[$k];
     }
