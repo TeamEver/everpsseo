@@ -64,7 +64,7 @@ class ImportFileCommand extends ContainerAwareCommand
             ));
         } else {
             $output->writeln(sprintf(
-                '<error>Seo categories file does not exists</error>'
+                '<info>Seo categories file does not exists</info>'
             ));
         }
         // Parse txt file categories
@@ -91,7 +91,7 @@ class ImportFileCommand extends ContainerAwareCommand
             ));
         } else {
             $output->writeln(sprintf(
-                '<error>Seo products file does not exists</error>'
+                '<info>Seo products file does not exists</info>'
             ));
         }
         return self::SUCCESS;
@@ -197,12 +197,12 @@ class ImportFileCommand extends ContainerAwareCommand
                 SET link_rewrite = "'.\Db::getInstance()->escape($line['link_rewrite']).'"
                 WHERE id_lang = '.(int)$idLang.'
                 AND id_shop = '.(int)$idShop.'
-                AND id_product = '.(int)$category->id;
+                AND id_category = '.(int)$category->id;
                 $seo_category->link_rewrite = \Db::getInstance()->escape($line['link_rewrite']);
                 $seo_category->save();
             } else {
                 $output->writeln(
-                   '<error>Invalid link rewrite on product '.$line['id_product'].' object</error>'
+                   '<error>Invalid link rewrite on product '.$line['id_category'].' object</error>'
                 );
             }
         }
@@ -245,9 +245,6 @@ class ImportFileCommand extends ContainerAwareCommand
         if (!isset($line['id_product'])
             || empty($line['id_product'])
         ) {
-            $output->writeln(
-               '<info>Missing id_product column, trying to see if column reference exists</info>'
-            );
             if (!isset($line['reference'])
                 || empty($line['reference'])
             ) {
@@ -267,18 +264,40 @@ class ImportFileCommand extends ContainerAwareCommand
                 );
             }
         } else {
-            $idProduct = preg_replace('/[^0-9]/', '', $line['id_product']);
-            $product = new \Product(
-                (int)$idProduct,
-                false,
-                (int)$idLang,
-                (int)$idShop
-            );
+            if (isset($line['id_product'])
+                && !empty($line['id_product'])
+            ) {
+                $idProduct = preg_replace('/[^0-9]/', '', $line['id_product']);
+                $product = new \Product(
+                    (int)$idProduct,
+                    false,
+                    (int)$idLang,
+                    (int)$idShop
+                );
+            }
+            if (isset($line['reference'])
+                && !empty($line['reference'])
+            ) {
+                $idProduct = \Product::getIdByReference(
+                    $line['reference']
+                );
+                $product = new \Product(
+                    (int)$idProduct,
+                    false,
+                    (int)$idLang,
+                    (int)$idShop
+                );
+            }
         }
         if (!\Validate::isLoadedObject($product)) {
             $output->writeln(
-               '<error>Invalid product '.$line['id_product'].' object</error>'
+               '<error>Invalid product</error>'
             );
+            if ((bool)\Configuration::get('EVER_LOG_CMD') === true) {
+                $this->logCommand(
+                    'invalid product'
+                );
+            }
             return;
         }
         $seo_product = \EverPsSeoProduct::getSeoProduct(
@@ -360,6 +379,11 @@ class ImportFileCommand extends ContainerAwareCommand
                 $output->writeln(
                    '<error>Invalid link rewrite on product '.$line['id_product'].' object</error>'
                 );
+                if ((bool)\Configuration::get('EVER_LOG_CMD') === true) {
+                    $this->logCommand(
+                        'Invalid link rewrite on product '.$line['id_product'].' object'
+                    );
+                }
             }
         }
         if (isset($line['bottom_description'])

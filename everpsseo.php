@@ -1632,6 +1632,26 @@ class EverPsSeo extends Module
                             )
                         ),
                     ),
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('Create logs files on commands ?'),
+                        'desc' => $this->l('Will create logs files on commands errors'),
+                        'hint' => $this->l('Set "No" will only output errors on commands'),
+                        'name' => 'EVER_LOG_CMD',
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                    ),
                 ),
                 'submit' => array(
                     'title' => $this->l('Save'),
@@ -4955,6 +4975,7 @@ class EverPsSeo extends Module
                 )
             ),
             'EVERSEO_REWRITE_LINKS' => Configuration::get('EVERSEO_REWRITE_LINKS'),
+            'EVER_LOG_CMD' => Configuration::get('EVER_LOG_CMD'),
             'EVERSEO_AUTO_PAGEMETA_LANGS[]' => Tools::getValue(
                 'EVERSEO_AUTO_PAGEMETA_LANGS',
                 json_decode(

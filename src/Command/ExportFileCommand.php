@@ -47,6 +47,7 @@ class ExportFileCommand extends Command
         $this->addArgument('idshop id', InputArgument::OPTIONAL, 'Shop ID');
         $this->addArgument('lang id', InputArgument::OPTIONAL, 'Language ID');
         $this->addArgument('category id', InputArgument::OPTIONAL, 'Category ID');
+        $this->addArgument('limit l', InputArgument::OPTIONAL, 'Limit int');
         $this->filenameCategory = dirname(__FILE__) . '/../../output/categories.xlsx';
         $this->filenameProduct = dirname(__FILE__) . '/../../output/products.xlsx';
         $this->logFile = dirname(__FILE__) . '/../../output/logs/log-seo-export-'.date('Y-m-d').'.log';
@@ -57,6 +58,9 @@ class ExportFileCommand extends Command
     {
         $action = $input->getArgument('action');
         $idShop = $input->getArgument('idshop id');
+        $idLang = $input->getArgument('lang id');
+        $categoryId = $input->getArgument('category id');
+        $limit = $input->getArgument('limit l');
         if (!in_array($action, $this->allowedActions)) {
             $output->writeln('<comment>Unkown action</comment>');
             return self::ABORTED;
@@ -95,7 +99,10 @@ class ExportFileCommand extends Command
         $reportName = $action;
         if ($action === 'categories') {
             $dataSet = $this->getAllCategories(
-                (int)$idShop
+                (int)$idShop,
+                (int)$idLang,
+                (int)$categoryId,
+                (int)$limit
             );
             $spreadsheet = new Spreadsheet();
             // Set properties
@@ -229,12 +236,11 @@ class ExportFileCommand extends Command
 
         }
         if ($action === 'products') {
-            $idLang = $input->getArgument('lang id');
-            $categoryLang = $input->getArgument('category id');
             $dataSet = $this->getAllProducts(
                 (int)$idShop,
                 (int)$idLang,
-                (int)$categoryLang
+                (int)$categoryId,
+                (int)$limit
             );
             $spreadsheet = new Spreadsheet();
             // Set properties
@@ -375,7 +381,7 @@ class ExportFileCommand extends Command
         }
     }
 
-    protected function getAllProducts($idShop, $idLang = 0, $idCategory = 0)
+    protected function getAllProducts($idShop, $idLang = 0, $idCategory = 0, $limit = 0)
     {
         $return = [];
         $sql = new \DbQuery();
@@ -395,13 +401,16 @@ class ExportFileCommand extends Command
             $sql->where('pl.id_lang = '.(int)$idLang);
         }
         if ((int)$idCategory > 0) {
-            $sql->where('pl.id_category_default = '.(int)$idCategory);
+            $sql->where('ps.id_category_default = '.(int)$idCategory);
+        }
+        if ((int)$limit > 0) {
+            $sql->limit((int)$limit);
         }
         $allProductIds = \Db::getInstance()->executeS($sql);
         return $allProductIds;
     }
 
-    protected function getAllCategories($idShop, $idLang = 0)
+    protected function getAllCategories($idShop, $idLang = 0, $idCategory = 0, $limit = 0)
     {
         $return = [];
         $sql = new \DbQuery();
@@ -420,6 +429,9 @@ class ExportFileCommand extends Command
         $sql->where('pl.id_shop = '.(int)$idShop);
         if ((int)$idLang > 0) {
             $sql->where('pl.id_lang = '.(int)$idLang);
+        }
+        if ((int)$idCategory > 0) {
+            $sql->where('pl.id_category = '.(int)$idCategory);
         }
         $allCategoriesIds = \Db::getInstance()->executeS($sql);
         return $allCategoriesIds;
