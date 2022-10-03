@@ -41,7 +41,6 @@ class ImportFileCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        // Parse txt file categories
         if (file_exists($this->filenameCategory)) {
             $file = new ImportFile($this->filenameCategory);
             $lines = $file->getLines();

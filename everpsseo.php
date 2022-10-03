@@ -37,7 +37,7 @@ class EverPsSeo extends Module
     {
         $this->name = 'everpsseo';
         $this->tab = 'seo';
-        $this->version = '8.2.2';
+        $this->version = '8.2.3';
         $this->author = 'Team Ever';
         $this->need_instance = 0;
         $this->module_key = '5ddabba8ec414cd5bd646fad24368472';
@@ -148,7 +148,7 @@ class EverPsSeo extends Module
             && $this->installModuleTab('AdminEverPsSeoShortcode', 'AdminEverPsSeo', $this->l('Shortcodes'));
     }
 
-    private function installModuleTab($tabClass, $parent, $tabName)
+    protected function installModuleTab($tabClass, $parent, $tabName)
     {
         $tab = new Tab();
 
@@ -172,7 +172,7 @@ class EverPsSeo extends Module
         return $tab->add();
     }
 
-    private function createSeoHook()
+    protected function createSeoHook()
     {
         if (!Hook::getIdByName('actionChangeSeoShortcodes')) {
             $hook = new Hook();
@@ -185,7 +185,7 @@ class EverPsSeo extends Module
         }
     }
 
-    private function registerEverHook()
+    protected function registerEverHook()
     {
         return $this->registerHook('actionChangeSeoShortcodes')
             && $this->registerHook('actionFrontControllerAfterInit')
@@ -234,7 +234,7 @@ class EverPsSeo extends Module
             && $this->registerHook('displayContentWrapperBottom');
     }
 
-    private function registerEverConfiguration()
+    protected function registerEverConfiguration()
     {
           return Configuration::updateValue('EVERSEO_CONFIGURE', false)
                 && Configuration::updateValue('EVERSEO_LANG', false)
@@ -499,7 +499,7 @@ class EverPsSeo extends Module
             && Configuration::deleteByName('EVERSEO_CACHE_OTHERS');
     }
 
-    private function uninstallModuleTab($tabClass)
+    protected function uninstallModuleTab($tabClass)
     {
         $tab = new Tab((int)Tab::getIdFromClassName($tabClass));
 
@@ -7430,7 +7430,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 #################### END UPDATE HOOKS ####################
 #################### START OBJECT ADD/DELETE ####################
 
-    private function updateSeoTables($id_shop, $id_seo_lang)
+    protected function updateSeoTables($id_shop, $id_seo_lang)
     {
         $seotable = $this->getEverSeoTables();
         foreach ($seotable as $table) {
@@ -7453,7 +7453,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         }
     }
 
-    private function addElementInTable($table, $object, $id_element, $id_shop, $id_lang)
+    protected function addElementInTable($table, $object, $id_element, $id_shop, $id_lang)
     {
         return Db::getInstance()->insert(
             $table,
@@ -7465,7 +7465,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         );
     }
 
-    private function autoSetTitle($object, $id_element, $id_shop, $id_lang)
+    protected function autoSetTitle($object, $id_element, $id_shop, $id_lang)
     {
         switch ($object) {
             case 'id_seo_product':
@@ -7618,7 +7618,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         }
     }
 
-    private function autoSetDescription($object, $id_element, $id_shop, $id_lang)
+    protected function autoSetDescription($object, $id_element, $id_shop, $id_lang)
     {
         switch ($object) {
             case 'id_seo_product':
@@ -7771,7 +7771,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         }
     }
 
-    private function autoSetAlt($id_element, $id_shop, $id_lang)
+    protected function autoSetAlt($id_element, $id_shop, $id_lang)
     {
         $alt = EverPsSeoImage::changeImageAltShortcodes(
             $id_element,
@@ -7797,7 +7797,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         }
     }
 
-    private function autoSetAltSeoImage($id_ever_seo_image, $id_element, $id_shop, $id_lang)
+    protected function autoSetAltSeoImage($id_ever_seo_image, $id_element, $id_shop, $id_lang)
     {
         $alt = EverPsSeoImage::changeImageAltShortcodes(
             $id_element,
@@ -7822,7 +7822,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
     }
 
 
-    private function autoSetContentDesc($object, $id_element, $id_shop, $id_lang)
+    protected function autoSetContentDesc($object, $id_element, $id_shop, $id_lang)
     {
         switch ($object) {
             case 'id_seo_product':
@@ -8007,7 +8007,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         }
     }
 
-    private function autoSetContentShortDesc($object, $id_element, $id_shop, $id_lang)
+    protected function autoSetContentShortDesc($object, $id_element, $id_shop, $id_lang)
     {
         switch ($object) {
             case 'id_seo_product':
@@ -8047,7 +8047,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         }
     }
 
-    private function deleteElementFromTable($table, $object, $id_element)
+    protected function deleteElementFromTable($table, $object, $id_element)
     {
         return Db::getInstance()->delete(
             $table,
@@ -9852,7 +9852,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
 #################### END DISPLAY HOOKS ####################
 #################### START SITEMAPS ####################
-    private function processSitemapProduct($id_shop, $id_lang)
+    protected function processSitemapProduct($id_shop, $id_lang)
     {
         set_time_limit(0);
         if (!Configuration::get('EVERSEO_SITEMAP_PRODUCT')) {
@@ -9915,7 +9915,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
     /**
      * Process image sitemap creation
      */
-    private function processSitemapImage($id_shop, $id_lang)
+    protected function processSitemapImage($id_shop, $id_lang)
     {
         set_time_limit(0);
         if (!Configuration::get('EVERSEO_SITEMAP_IMAGE')) {
@@ -9983,7 +9983,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         }
     }
 
-    private function processSitemapCategory($id_shop, $id_lang)
+    protected function processSitemapCategory($id_shop, $id_lang)
     {
         set_time_limit(0);
         if (!Configuration::get('EVERSEO_SITEMAP_CATEGORY')) {
@@ -10043,7 +10043,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         }
     }
 
-    private function processSitemapPageMeta($id_shop, $id_lang)
+    protected function processSitemapPageMeta($id_shop, $id_lang)
     {
         set_time_limit(0);
         if (!Configuration::get('EVERSEO_SITEMAP_PAGE_META')) {
@@ -10117,7 +10117,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         }
     }
 
-    private function processSitemapManufacturer($id_shop, $id_lang)
+    protected function processSitemapManufacturer($id_shop, $id_lang)
     {
         set_time_limit(0);
         if (!Configuration::get('EVERSEO_SITEMAP_MANUFACTURER')) {
@@ -10170,7 +10170,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         }
     }
 
-    private function processSitemapSupplier($id_shop, $id_lang)
+    protected function processSitemapSupplier($id_shop, $id_lang)
     {
         set_time_limit(0);
         if (!Configuration::get('EVERSEO_SITEMAP_SUPPLIER')) {
@@ -10223,7 +10223,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         }
     }
 
-    private function processSitemapCms($id_shop, $id_lang)
+    protected function processSitemapCms($id_shop, $id_lang)
     {
         set_time_limit(0);
         if (!Configuration::get('EVERSEO_SITEMAP_CMS')) {
@@ -10336,7 +10336,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 #################### END SITEMAPS ####################
 #################### LANG CLEANER ####################
 
-    private function processDeleteUnusedObjects()
+    protected function processDeleteUnusedObjects()
     {
         $pstable = array(
             'category_lang',
@@ -10384,7 +10384,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 #################### END LANG CLEANER ####################
 #################### START INTERNAL LINKING ####################
 
-    private function processInternalLinking($id_shop)
+    protected function processInternalLinking($id_shop)
     {
         set_time_limit(0);
         $id_lang = (int)Configuration::get('EVERSEO_LANG');
@@ -10502,7 +10502,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
     }
 #################### END INTERNAL LINKING ####################
 #################### START SETTERS ####################
-    private function generateRobots()
+    protected function generateRobots()
     {
         if ((bool)Configuration::get('EVERSEO_ROBOTS_TXT_REWRITE') === false) {
             return;
@@ -10513,7 +10513,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         fclose($fp);
     }
 
-    private function setColumnDefault($tableName, $columnName, $default)
+    protected function setColumnDefault($tableName, $columnName, $default)
     {
         $sql =
             'ALTER TABLE '._DB_PREFIX_.pSQL($tableName).'
@@ -10792,7 +10792,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         Db::getInstance()->execute('TRUNCATE TABLE '._DB_PREFIX_.'ever_seo_redirect');
     }
 
-    private function deleteDuplicate()
+    protected function deleteDuplicate()
     {
         $sql = array();
 
@@ -10859,7 +10859,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         }
     }
 
-    private function deleteShopDuplicate()
+    protected function deleteShopDuplicate()
     {
         $sql = array();
 
@@ -10926,7 +10926,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         }
     }
 
-    private function noindexLang($id_lang)
+    protected function noindexLang($id_lang)
     {
         $noindex = array();
         // Products
@@ -10964,7 +10964,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         }
     }
 
-    private function nofollowLang($id_lang)
+    protected function nofollowLang($id_lang)
     {
         $nofollow = array();
         // Products
@@ -11002,7 +11002,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         }
     }
 
-    private function nositemapLang($id_lang)
+    protected function nositemapLang($id_lang)
     {
         $nositemap = array();
         // Products
@@ -11100,7 +11100,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         }
     }
 
-    private function getAllowedSitemapLangs()
+    protected function getAllowedSitemapLangs()
     {
         return json_decode(
             Configuration::get(
@@ -11109,7 +11109,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         );
     }
 
-    private function getBannedLangs()
+    protected function getBannedLangs()
     {
         return json_decode(
             Configuration::get(
@@ -11118,7 +11118,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         );
     }
 
-    private function getAllowedShortcodesLangs($getter)
+    protected function getAllowedShortcodesLangs($getter)
     {
         $allowedLangs = json_decode(
             Configuration::get(
@@ -11131,7 +11131,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         return $allowedLangs;
     }
 
-    private function getEverSeoTables()
+    protected function getEverSeoTables()
     {
         $seotable = array();
         $seotable[] = 'ever_seo_category';
@@ -11144,7 +11144,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         return (array)$seotable;
     }
 
-    private function getSeoTableByPsTable($psTable)
+    protected function getSeoTableByPsTable($psTable)
     {
         switch ($psTable) {
             case 'category_lang':
@@ -11182,7 +11182,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         return (string)$seotable;
     }
 
-    private function getSeoObjByPsTable($psTable)
+    protected function getSeoObjByPsTable($psTable)
     {
         switch ($psTable) {
             case 'ever_seo_category':
@@ -11216,7 +11216,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         return (string)$seoObj;
     }
 
-    private function getColumnStructure($tableName, $columnName, $default)
+    protected function getColumnStructure($tableName, $columnName, $default)
     {
         $describe = Db::getInstance()->ExecuteS('DESCRIBE '._DB_PREFIX_.pSQL($tableName));
         foreach ($describe as $columnDatas) {
@@ -11227,7 +11227,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         }
     }
 
-    private function getAllowedGeneratorCategories($is_product = false)
+    protected function getAllowedGeneratorCategories($is_product = false)
     {
         if ((bool)$is_product) {
             $categories = json_decode(
@@ -11296,7 +11296,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         }
     }
 
-    private function deleteEverCache($obj = false)
+    protected function deleteEverCache($obj = false)
     {
         $cache_folders = array();
         switch ($obj) {

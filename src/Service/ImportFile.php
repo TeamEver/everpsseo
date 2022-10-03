@@ -13,7 +13,6 @@ use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 
 class ImportFile
 {
-
     protected array $headers;
     protected array $lines;
 
