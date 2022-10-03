@@ -45,6 +45,8 @@ class ExportFileCommand extends Command
         $this->setDescription('Export SEO datas for categories & products');
         $this->addArgument('action', InputArgument::OPTIONAL, sprintf('Action to execute (Allowed actions: %s).', implode(' / ', $this->allowedActions)));
         $this->addArgument('idshop id', InputArgument::OPTIONAL, 'Shop ID');
+        $this->addArgument('lang id', InputArgument::OPTIONAL, 'Language ID');
+        $this->addArgument('category id', InputArgument::OPTIONAL, 'Category ID');
         $this->filenameCategory = dirname(__FILE__) . '/../../output/categories.xlsx';
         $this->filenameProduct = dirname(__FILE__) . '/../../output/products.xlsx';
         $this->logFile = dirname(__FILE__) . '/../../output/logs/log-seo-export-'.date('Y-m-d').'.log';
@@ -227,8 +229,12 @@ class ExportFileCommand extends Command
 
         }
         if ($action === 'products') {
+            $idLang = $input->getArgument('lang id');
+            $categoryLang = $input->getArgument('category id');
             $dataSet = $this->getAllProducts(
-                (int)$idShop
+                (int)$idShop,
+                (int)$idLang,
+                (int)$categoryLang
             );
             $spreadsheet = new Spreadsheet();
             // Set properties
@@ -369,7 +375,7 @@ class ExportFileCommand extends Command
         }
     }
 
-    protected function getAllProducts($idShop)
+    protected function getAllProducts($idShop, $idLang = 0, $idCategory = 0)
     {
         $return = [];
         $sql = new \DbQuery();
@@ -385,12 +391,17 @@ class ExportFileCommand extends Command
             'esp',
             'esp.id_seo_product = pl.id_product AND esp.id_shop = '.(int)$idShop
         );
-        $sql->where('pl.id_shop = '.(int)$idShop);
+        if ((int)$idLang > 0) {
+            $sql->where('pl.id_lang = '.(int)$idLang);
+        }
+        if ((int)$idCategory > 0) {
+            $sql->where('pl.id_category_default = '.(int)$idCategory);
+        }
         $allProductIds = \Db::getInstance()->executeS($sql);
         return $allProductIds;
     }
 
-    protected function getAllCategories($idShop)
+    protected function getAllCategories($idShop, $idLang = 0)
     {
         $return = [];
         $sql = new \DbQuery();
@@ -407,6 +418,9 @@ class ExportFileCommand extends Command
             'esc.id_seo_category = pl.id_category AND esc.id_shop = '.(int)$idShop
         );
         $sql->where('pl.id_shop = '.(int)$idShop);
+        if ((int)$idLang > 0) {
+            $sql->where('pl.id_lang = '.(int)$idLang);
+        }
         $allCategoriesIds = \Db::getInstance()->executeS($sql);
         return $allCategoriesIds;
     }
