@@ -32,6 +32,7 @@ class EverPsSeo extends Module
     private $postErrors = array();
     private $postSuccess = array();
     const INPUT_FOLDER  = _PS_MODULE_DIR_.'everpsseo/input/';
+    const OUTPUT_FOLDER  = _PS_MODULE_DIR_.'everpsseo/output/';
 
     public function __construct()
     {
@@ -134,7 +135,6 @@ class EverPsSeo extends Module
             && $this->registerEverHook()
             && $this->registerEverConfiguration()
             && $this->installModuleTab('AdminEverPsSeo', 'SELL', $this->l('SEO'))
-            && $this->installModuleTab('AdminEverPsSeoConfigure', '-1', $this->l('SEO Configuration'))
             && $this->installModuleTab('AdminEverPsSeoProduct', 'AdminEverPsSeo', $this->l('SEO Products'))
             && $this->installModuleTab('AdminEverPsSeoImage', 'AdminEverPsSeo', $this->l('SEO Images'))
             && $this->installModuleTab('AdminEverPsSeoCategory', 'AdminEverPsSeo', $this->l('SEO  Categories'))
@@ -154,11 +154,7 @@ class EverPsSeo extends Module
 
         $tab->active = 1;
         $tab->class_name = $tabClass;
-        if ($tabClass == 'AdminEverPsSeoConfigure') {
-            $tab->id_parent = '-1';
-        } else {
-            $tab->id_parent = (int)Tab::getIdFromClassName($parent);
-        }
+        $tab->id_parent = (int)Tab::getIdFromClassName($parent);
         $tab->position = Tab::getNewLastPosition($tab->id_parent);
         $tab->module = $this->name;
         if ($tabClass == 'AdminEverPsSeo') {
@@ -236,130 +232,130 @@ class EverPsSeo extends Module
 
     protected function registerEverConfiguration()
     {
-          return Configuration::updateValue('EVERSEO_CONFIGURE', false)
-                && Configuration::updateValue('EVERSEO_LANG', false)
-                && Configuration::updateValue('EVERSEO_LINKED_NBR', '1')
-                && Configuration::updateValue('EVERSEO_CMS_LINKED', false)
-                && Configuration::updateValue('EVERSEO_LONG_DESC_LINKED', false)
-                && Configuration::updateValue('EVERSEO_SHORT_DESC_LINKED', false)
-                && Configuration::updateValue('EVERSEO_CATEG_LINKED', false)
-                && Configuration::updateValue('SEARCHED', 'Searched text')
-                && Configuration::updateValue('LINKEDTO', 'Replace by')
-                && Configuration::updateValue('EVERSEO_MANUFACTURER_REASSURANCE', false)
-                && Configuration::updateValue('EVERSEO_SUPPLIER_REASSURANCE', false)
-                && Configuration::updateValue('EVERSEO_RSNIPPETS', true)
-                && Configuration::updateValue('EVERSEO_PRODUCT', true)
-                && Configuration::updateValue('EVERSEO_CATEGORY', true)
-                && Configuration::updateValue('EVERSEO_TAGS', true)
-                && Configuration::updateValue('EVERSEO_PRIORITY', '1')
-                && Configuration::updateValue('EVERSEO_ORDER_BY', '1')
-                && Configuration::updateValue('EVERSEO_CUSTOM_404', true)
-                && Configuration::updateValue('EVERSEO_404_SEARCH', true)
-                && Configuration::updateValue('EVERSEO_REDIRECT', '302')
-                && Configuration::updateValue('EVERSEO_NOT_FOUND', false)
-                && Configuration::updateValue('EVERSEO_QUALITY_LEVEL', '7')
-                && Configuration::updateValue('EVERSEO_KNOWLEDGE', 'Organization')
-                && Configuration::updateValue('EVERSEO_CANONICAL', false)
-                && Configuration::updateValue('EVERSEO_HREF_LANG', false)
-                && Configuration::updateValue('EVERSEO_ANALYTICS', '')
-                && Configuration::updateValue('EVERSEO_SEARCHCONSOLE', '')
-                && Configuration::updateValue('EVERSEO_GTAG', '')
-                && Configuration::updateValue('EVERSEO_FBPIXEL', '')
-                && Configuration::updateValue('EVERSEO_ADWORDS', '')
-                && Configuration::updateValue('EVERSEO_ADWORDS_SENDTO', '')
-                && Configuration::updateValue('EVERSEO_ADWORDS_CONTACT', '')
-                && Configuration::updateValue('EVERSEO_ADWORDS_OPART', '')
-                && Configuration::updateValue('EVERSEO_USE_TWITTER', false)
-                && Configuration::updateValue('EVERSEO_USE_OPENGRAPH', false)
-                && Configuration::updateValue('EVERSEO_TWITTER_NAME', '@te4mever')
-                && Configuration::updateValue('EVERSEO_INDEX_CATEGORY', true)
-                && Configuration::updateValue('EVERSEO_INDEX_PRODUCT', true)
-                && Configuration::updateValue('EVERSEO_INDEX_CMS', true)
-                && Configuration::updateValue('EVERSEO_INDEX_PAGE_META', true)
-                && Configuration::updateValue('EVERSEO_INDEX_MANUFACTURER', true)
-                && Configuration::updateValue('EVERSEO_INDEX_SUPPLIER', true)
-                && Configuration::updateValue('EVERSEO_INDEX_ARGS', false)
-                && Configuration::updateValue('EVERSEO_FOLLOW_CATEGORY', true)
-                && Configuration::updateValue('EVERSEO_FOLLOW_PRODUCT', true)
-                && Configuration::updateValue('EVERSEO_FOLLOW_CMS', true)
-                && Configuration::updateValue('EVERSEO_FOLLOW_PAGE_META', true)
-                && Configuration::updateValue('EVERSEO_FOLLOW_MANUFACTURER', true)
-                && Configuration::updateValue('EVERSEO_FOLLOW_SUPPLIER', true)
-                && Configuration::updateValue('EVERSEO_FOLLOW_ARGS', true)
-                && Configuration::updateValue('EVERSEO_SITEMAP_PRODUCT', true)
-                && Configuration::updateValue('EVERSEO_SITEMAP_IMAGE', true)
-                && Configuration::updateValue('EVERSEO_SITEMAP_CATEGORY', true)
-                && Configuration::updateValue('EVERSEO_SITEMAP_CMS', true)
-                && Configuration::updateValue('EVERSEO_SITEMAP_PAGE_META', true)
-                && Configuration::updateValue('EVERSEO_SITEMAP_MANUFACTURER', false)
-                && Configuration::updateValue('EVERSEO_SITEMAP_SUPPLIER', false)
-                && Configuration::updateValue('EVERSEO_SITEMAP_PRODUCT_FREQUENCY', 'weekly')
-                && Configuration::updateValue('EVERSEO_SITEMAP_IMAGE_FREQUENCY', 'weekly')
-                && Configuration::updateValue('EVERSEO_SITEMAP_CATEGORY_FREQUENCY', 'monthly')
-                && Configuration::updateValue('EVERSEO_SITEMAP_CMS_FREQUENCY', 'monthly')
-                && Configuration::updateValue('EVERSEO_SITEMAP_MANUFACTURER_FREQUENCY', 'yearly')
-                && Configuration::updateValue('EVERSEO_SITEMAP_SUPPLIER_FREQUENCY', 'yearly')
-                && Configuration::updateValue('EVERSEO_SITEMAP_PAGE_META_FREQUENCY', 'monthly')
-                && Configuration::updateValue('EVERSEO_SITEMAP_PRODUCT_PRIORITY', '1')
-                && Configuration::updateValue('EVERSEO_SITEMAP_IMAGE_PRIORITY', '0.8')
-                && Configuration::updateValue('EVERSEO_SITEMAP_CATEGORY_PRIORITY', '0.8')
-                && Configuration::updateValue('EVERSEO_SITEMAP_CMS_PRIORITY', '0.5')
-                && Configuration::updateValue('EVERSEO_SITEMAP_MANUFACTURER_PRIORITY', '0.3')
-                && Configuration::updateValue('EVERSEO_SITEMAP_SUPPLIER_PRIORITY', '0.3')
-                && Configuration::updateValue('EVERSEO_SITEMAP_PAGE_META_PRIORITY', '1')
-                && Configuration::updateValue('EVERSEO_SITEMAP_QTY_ELEMENTS', 5000)
-                && Configuration::updateValue('EVERSEO_HEADER_TAGS', '')
-                && Configuration::updateValue('EVERSEO_REWRITE', true)
-                && Configuration::updateValue('EVERSEO_DELETE_CATEGORY', false)
-                && Configuration::updateValue('EVERSEO_DELETE_PRODUCT', false)
-                && Configuration::updateValue('EVERSEO_DELETE_CMS', false)
-                && Configuration::updateValue('EVERSEO_DELETE_PAGE_META', false)
-                && Configuration::updateValue('EVERSEO_DELETE_MANUFACTURER', false)
-                && Configuration::updateValue('EVERSEO_DELETE_SUPPLIER', false)
-                && Configuration::updateValue('EVERSEO_DELETE_INFO', false)
-                && Configuration::updateValue('EVERSEO_DELETE_GROUP', false)
-                && Configuration::updateValue('EVERSEO_DELETE_GENDER', false)
-                && Configuration::updateValue('EVERSEO_DELETE_FEATURE', false)
-                && Configuration::updateValue('EVERSEO_DELETE_FEATURE_VALUE', false)
-                && Configuration::updateValue('EVERSEO_DELETE_CUST_FIELD', false)
-                && Configuration::updateValue('EVERSEO_DELETE_CONTACT', false)
-                && Configuration::updateValue('EVERSEO_DELETE_COUNTRY', false)
-                && Configuration::updateValue('EVERSEO_DELETE_CART_RULE', false)
-                && Configuration::updateValue('EVERSEO_DELETE_CARRIER', false)
-                && Configuration::updateValue('EVERSEO_DELETE_ATTACHMENT', false)
-                && Configuration::updateValue('EVERSEO_DELETE_ATTRIBUTE', false)
-                && Configuration::updateValue('EVERSEO_DELETE_ATTRIBUTE_GROUP', false)
-                && Configuration::updateValue('EVERSEO_ROBOTS_TXT_REWRITE', false)
-                && Configuration::updateValue('EVERSEO_SITEMAP_QTY_ELEMENTS', 5000)
-                && Configuration::updateValue(
-                    'EVERSEO_SITEMAP_LANGS',
-                    '["'.Configuration::get('PS_LANG_DEFAULT').'"]'
-                )
-                && Configuration::updateValue('EVERSEO_CACHE', false)
-                && Configuration::updateValue('EVERSEO_COMPRESS_HTML', false)
-                && Configuration::updateValue('EVERSEO_REMOVE_COMMENTS', false)
-                && Configuration::updateValue('EVERSEO_ADD_MISSING_LABELS', false)
-                && Configuration::updateValue('EVERSEO_GOOGLE_FONT', false)
-                && Configuration::updateValue('EVERSEO_BOTTOM_SCRIPTS', false)
-                && Configuration::updateValue('EVERSEO_DEFER', false)
-                && Configuration::updateValue('EVERSEO_CACHE_LIFE', 20)
-                && Configuration::updateValue('EVERSEO_LAZY_LOAD', false)
-                && Configuration::updateValue('EVERSEO_MINIFY_PRODUCT', false)
-                && Configuration::updateValue('EVERSEO_MINIFY_CATEGORY', false)
-                && Configuration::updateValue('EVERSEO_MINIFY_HOME', false)
-                && Configuration::updateValue('EVERSEO_MINIFY_CMS', false)
-                && Configuration::updateValue('EVERSEO_MINIFY_OTHERS', false)
-                && Configuration::updateValue('EVERSEO_CACHE_PRODUCT', false)
-                && Configuration::updateValue('EVERSEO_CACHE_CATEGORY', false)
-                && Configuration::updateValue('EVERSEO_CACHE_CMS', false)
-                && Configuration::updateValue('EVERSEO_CACHE_MANUFACTURER', false)
-                && Configuration::updateValue('EVERSEO_CACHE_SUPPLIER', false)
-                && Configuration::updateValue('EVERSEO_CACHE_HOME', false)
-                && Configuration::updateValue('EVERSEO_CACHE_OTHERS', false)
-                && Configuration::updateValue('EVERSEO_EXTERNAL_NOFOLLOW', false)
-                && Configuration::updateValue('EVERSEO_REMOVE_INLINE', false)
-                && Configuration::updateValue('EVERSEO_REMOVE_EMPTY', false)
-                && Configuration::updateValue('EVERSEO_ADD_ALT', false);
+        return Configuration::updateValue('EVERSEO_CONFIGURE', false)
+            && Configuration::updateValue('EVERSEO_LANG', false)
+            && Configuration::updateValue('EVERSEO_LINKED_NBR', '1')
+            && Configuration::updateValue('EVERSEO_CMS_LINKED', false)
+            && Configuration::updateValue('EVERSEO_LONG_DESC_LINKED', false)
+            && Configuration::updateValue('EVERSEO_SHORT_DESC_LINKED', false)
+            && Configuration::updateValue('EVERSEO_CATEG_LINKED', false)
+            && Configuration::updateValue('SEARCHED', 'Searched text')
+            && Configuration::updateValue('LINKEDTO', 'Replace by')
+            && Configuration::updateValue('EVERSEO_MANUFACTURER_REASSURANCE', false)
+            && Configuration::updateValue('EVERSEO_SUPPLIER_REASSURANCE', false)
+            && Configuration::updateValue('EVERSEO_RSNIPPETS', true)
+            && Configuration::updateValue('EVERSEO_PRODUCT', true)
+            && Configuration::updateValue('EVERSEO_CATEGORY', true)
+            && Configuration::updateValue('EVERSEO_TAGS', true)
+            && Configuration::updateValue('EVERSEO_PRIORITY', '1')
+            && Configuration::updateValue('EVERSEO_ORDER_BY', '1')
+            && Configuration::updateValue('EVERSEO_CUSTOM_404', true)
+            && Configuration::updateValue('EVERSEO_404_SEARCH', true)
+            && Configuration::updateValue('EVERSEO_REDIRECT', '302')
+            && Configuration::updateValue('EVERSEO_NOT_FOUND', false)
+            && Configuration::updateValue('EVERSEO_QUALITY_LEVEL', '7')
+            && Configuration::updateValue('EVERSEO_KNOWLEDGE', 'Organization')
+            && Configuration::updateValue('EVERSEO_CANONICAL', false)
+            && Configuration::updateValue('EVERSEO_HREF_LANG', false)
+            && Configuration::updateValue('EVERSEO_ANALYTICS', '')
+            && Configuration::updateValue('EVERSEO_SEARCHCONSOLE', '')
+            && Configuration::updateValue('EVERSEO_GTAG', '')
+            && Configuration::updateValue('EVERSEO_FBPIXEL', '')
+            && Configuration::updateValue('EVERSEO_ADWORDS', '')
+            && Configuration::updateValue('EVERSEO_ADWORDS_SENDTO', '')
+            && Configuration::updateValue('EVERSEO_ADWORDS_CONTACT', '')
+            && Configuration::updateValue('EVERSEO_ADWORDS_OPART', '')
+            && Configuration::updateValue('EVERSEO_USE_TWITTER', false)
+            && Configuration::updateValue('EVERSEO_USE_OPENGRAPH', false)
+            && Configuration::updateValue('EVERSEO_TWITTER_NAME', '@te4mever')
+            && Configuration::updateValue('EVERSEO_INDEX_CATEGORY', true)
+            && Configuration::updateValue('EVERSEO_INDEX_PRODUCT', true)
+            && Configuration::updateValue('EVERSEO_INDEX_CMS', true)
+            && Configuration::updateValue('EVERSEO_INDEX_PAGE_META', true)
+            && Configuration::updateValue('EVERSEO_INDEX_MANUFACTURER', true)
+            && Configuration::updateValue('EVERSEO_INDEX_SUPPLIER', true)
+            && Configuration::updateValue('EVERSEO_INDEX_ARGS', false)
+            && Configuration::updateValue('EVERSEO_FOLLOW_CATEGORY', true)
+            && Configuration::updateValue('EVERSEO_FOLLOW_PRODUCT', true)
+            && Configuration::updateValue('EVERSEO_FOLLOW_CMS', true)
+            && Configuration::updateValue('EVERSEO_FOLLOW_PAGE_META', true)
+            && Configuration::updateValue('EVERSEO_FOLLOW_MANUFACTURER', true)
+            && Configuration::updateValue('EVERSEO_FOLLOW_SUPPLIER', true)
+            && Configuration::updateValue('EVERSEO_FOLLOW_ARGS', true)
+            && Configuration::updateValue('EVERSEO_SITEMAP_PRODUCT', true)
+            && Configuration::updateValue('EVERSEO_SITEMAP_IMAGE', true)
+            && Configuration::updateValue('EVERSEO_SITEMAP_CATEGORY', true)
+            && Configuration::updateValue('EVERSEO_SITEMAP_CMS', true)
+            && Configuration::updateValue('EVERSEO_SITEMAP_PAGE_META', true)
+            && Configuration::updateValue('EVERSEO_SITEMAP_MANUFACTURER', false)
+            && Configuration::updateValue('EVERSEO_SITEMAP_SUPPLIER', false)
+            && Configuration::updateValue('EVERSEO_SITEMAP_PRODUCT_FREQUENCY', 'weekly')
+            && Configuration::updateValue('EVERSEO_SITEMAP_IMAGE_FREQUENCY', 'weekly')
+            && Configuration::updateValue('EVERSEO_SITEMAP_CATEGORY_FREQUENCY', 'monthly')
+            && Configuration::updateValue('EVERSEO_SITEMAP_CMS_FREQUENCY', 'monthly')
+            && Configuration::updateValue('EVERSEO_SITEMAP_MANUFACTURER_FREQUENCY', 'yearly')
+            && Configuration::updateValue('EVERSEO_SITEMAP_SUPPLIER_FREQUENCY', 'yearly')
+            && Configuration::updateValue('EVERSEO_SITEMAP_PAGE_META_FREQUENCY', 'monthly')
+            && Configuration::updateValue('EVERSEO_SITEMAP_PRODUCT_PRIORITY', '1')
+            && Configuration::updateValue('EVERSEO_SITEMAP_IMAGE_PRIORITY', '0.8')
+            && Configuration::updateValue('EVERSEO_SITEMAP_CATEGORY_PRIORITY', '0.8')
+            && Configuration::updateValue('EVERSEO_SITEMAP_CMS_PRIORITY', '0.5')
+            && Configuration::updateValue('EVERSEO_SITEMAP_MANUFACTURER_PRIORITY', '0.3')
+            && Configuration::updateValue('EVERSEO_SITEMAP_SUPPLIER_PRIORITY', '0.3')
+            && Configuration::updateValue('EVERSEO_SITEMAP_PAGE_META_PRIORITY', '1')
+            && Configuration::updateValue('EVERSEO_SITEMAP_QTY_ELEMENTS', 5000)
+            && Configuration::updateValue('EVERSEO_HEADER_TAGS', '')
+            && Configuration::updateValue('EVERSEO_REWRITE', true)
+            && Configuration::updateValue('EVERSEO_DELETE_CATEGORY', false)
+            && Configuration::updateValue('EVERSEO_DELETE_PRODUCT', false)
+            && Configuration::updateValue('EVERSEO_DELETE_CMS', false)
+            && Configuration::updateValue('EVERSEO_DELETE_PAGE_META', false)
+            && Configuration::updateValue('EVERSEO_DELETE_MANUFACTURER', false)
+            && Configuration::updateValue('EVERSEO_DELETE_SUPPLIER', false)
+            && Configuration::updateValue('EVERSEO_DELETE_INFO', false)
+            && Configuration::updateValue('EVERSEO_DELETE_GROUP', false)
+            && Configuration::updateValue('EVERSEO_DELETE_GENDER', false)
+            && Configuration::updateValue('EVERSEO_DELETE_FEATURE', false)
+            && Configuration::updateValue('EVERSEO_DELETE_FEATURE_VALUE', false)
+            && Configuration::updateValue('EVERSEO_DELETE_CUST_FIELD', false)
+            && Configuration::updateValue('EVERSEO_DELETE_CONTACT', false)
+            && Configuration::updateValue('EVERSEO_DELETE_COUNTRY', false)
+            && Configuration::updateValue('EVERSEO_DELETE_CART_RULE', false)
+            && Configuration::updateValue('EVERSEO_DELETE_CARRIER', false)
+            && Configuration::updateValue('EVERSEO_DELETE_ATTACHMENT', false)
+            && Configuration::updateValue('EVERSEO_DELETE_ATTRIBUTE', false)
+            && Configuration::updateValue('EVERSEO_DELETE_ATTRIBUTE_GROUP', false)
+            && Configuration::updateValue('EVERSEO_ROBOTS_TXT_REWRITE', false)
+            && Configuration::updateValue('EVERSEO_SITEMAP_QTY_ELEMENTS', 5000)
+            && Configuration::updateValue(
+                'EVERSEO_SITEMAP_LANGS',
+                '["'.Configuration::get('PS_LANG_DEFAULT').'"]'
+            )
+            && Configuration::updateValue('EVERSEO_CACHE', false)
+            && Configuration::updateValue('EVERSEO_COMPRESS_HTML', false)
+            && Configuration::updateValue('EVERSEO_REMOVE_COMMENTS', false)
+            && Configuration::updateValue('EVERSEO_ADD_MISSING_LABELS', false)
+            && Configuration::updateValue('EVERSEO_GOOGLE_FONT', false)
+            && Configuration::updateValue('EVERSEO_BOTTOM_SCRIPTS', false)
+            && Configuration::updateValue('EVERSEO_DEFER', false)
+            && Configuration::updateValue('EVERSEO_CACHE_LIFE', 20)
+            && Configuration::updateValue('EVERSEO_LAZY_LOAD', false)
+            && Configuration::updateValue('EVERSEO_MINIFY_PRODUCT', false)
+            && Configuration::updateValue('EVERSEO_MINIFY_CATEGORY', false)
+            && Configuration::updateValue('EVERSEO_MINIFY_HOME', false)
+            && Configuration::updateValue('EVERSEO_MINIFY_CMS', false)
+            && Configuration::updateValue('EVERSEO_MINIFY_OTHERS', false)
+            && Configuration::updateValue('EVERSEO_CACHE_PRODUCT', false)
+            && Configuration::updateValue('EVERSEO_CACHE_CATEGORY', false)
+            && Configuration::updateValue('EVERSEO_CACHE_CMS', false)
+            && Configuration::updateValue('EVERSEO_CACHE_MANUFACTURER', false)
+            && Configuration::updateValue('EVERSEO_CACHE_SUPPLIER', false)
+            && Configuration::updateValue('EVERSEO_CACHE_HOME', false)
+            && Configuration::updateValue('EVERSEO_CACHE_OTHERS', false)
+            && Configuration::updateValue('EVERSEO_EXTERNAL_NOFOLLOW', false)
+            && Configuration::updateValue('EVERSEO_REMOVE_INLINE', false)
+            && Configuration::updateValue('EVERSEO_REMOVE_EMPTY', false)
+            && Configuration::updateValue('EVERSEO_ADD_ALT', false);
     }
 
     public function uninstall()
@@ -1715,6 +1711,101 @@ class EverPsSeo extends Module
                     ),
                 ),
             )
+        );
+
+        // Search override fields
+        $form_fields[] = array(
+            'form' => array(
+                'legend' => array(
+                    'title' => $this->l('Search settings'),
+                    'icon' => 'icon-smile',
+                ),
+                'input' => array(
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('Auto redirect search if category is found ?'),
+                        'desc' => $this->l('Will redirect user to category page if search matches category name'),
+                        'hint' => $this->l('Else search won\'t be redirected to category'),
+                        'name' => 'EVER_SEARCH_CATEGORIES',
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                    ),
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('Auto redirect search if manufacturer is found ?'),
+                        'desc' => $this->l('Will redirect user to manufacturer page if search matches manufacturer name'),
+                        'hint' => $this->l('Else search won\'t be redirected to manufacturer'),
+                        'name' => 'EVER_SEARCH_MANUFACTURERS',
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                    ),
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('Auto redirect search if supplier is found ?'),
+                        'desc' => $this->l('Will redirect user to supplier page if search matches supplier name'),
+                        'hint' => $this->l('Else search won\'t be redirected to supplier'),
+                        'name' => 'EVER_SEARCH_SUPPLIERS',
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                    ),
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('Auto redirect search if product is found ?'),
+                        'desc' => $this->l('Will redirect user to product page if search matches product name'),
+                        'hint' => $this->l('Else search won\'t be redirected to product'),
+                        'name' => 'EVER_SEARCH_PRODUCTS',
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                    ),
+                ),
+                'submit' => array(
+                    'title' => $this->l('Save'),
+                ),
+            ),
         );
 
         // Cache
@@ -4976,6 +5067,10 @@ class EverPsSeo extends Module
             ),
             'EVERSEO_REWRITE_LINKS' => Configuration::get('EVERSEO_REWRITE_LINKS'),
             'EVER_LOG_CMD' => Configuration::get('EVER_LOG_CMD'),
+            'EVER_SEARCH_CATEGORIES' => Configuration::get('EVER_SEARCH_CATEGORIES'),
+            'EVER_SEARCH_MANUFACTURERS' => Configuration::get('EVER_SEARCH_MANUFACTURERS'),
+            'EVER_SEARCH_SUPPLIERS' => Configuration::get('EVER_SEARCH_SUPPLIERS'),
+            'EVER_SEARCH_PRODUCTS' => Configuration::get('EVER_SEARCH_PRODUCTS'),
             'EVERSEO_AUTO_PAGEMETA_LANGS[]' => Tools::getValue(
                 'EVERSEO_AUTO_PAGEMETA_LANGS',
                 json_decode(

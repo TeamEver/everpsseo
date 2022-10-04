@@ -162,7 +162,7 @@ class ImportFileCommand extends ContainerAwareCommand
             && !empty($line['description'])
         ) {
             $sql[] = 'UPDATE `'._DB_PREFIX_.'category_lang`
-            SET description = "'.\Db::getInstance()->escape($line['description']).'"
+            SET description = "'.\Db::getInstance()->escape($line['description'], true).'"
             WHERE id_lang = '.(int)$idLang.'
             AND id_shop = '.(int)$idShop.'
             AND id_category = '.(int)$category->id;
@@ -206,14 +206,11 @@ class ImportFileCommand extends ContainerAwareCommand
                 );
             }
         }
-        if (isset($line['bottom_description'])
+        if (isset($line['bottom_content'])
             && !empty($line['bottom_content'])
         ) {
-            $sql[] = 'UPDATE `'._DB_PREFIX_.'ever_seo_category`
-            SET bottom_content = "'.\Db::getInstance()->escape($line['bottom_content']).'"
-            WHERE id_lang = '.(int)$idLang.'
-            AND id_shop = '.(int)$idShop.'
-            AND id_category = '.(int)$category->id;
+            $seo_category->bottom_content = \Db::getInstance()->escape($line['bottom_content'], true);
+            $seo_category->save();
         }
         if (count($sql) > 0) {
             foreach ($sql as $q) {
@@ -386,10 +383,10 @@ class ImportFileCommand extends ContainerAwareCommand
                 }
             }
         }
-        if (isset($line['bottom_description'])
-            && !empty($line['description'])
+        if (isset($line['bottom_content'])
+            && !empty($line['bottom_content'])
         ) {
-            $seo_product->bottom_content = \Db::getInstance()->escape($line['bottom_description'], true);
+            $seo_product->bottom_content = \Db::getInstance()->escape($line['bottom_content'], true);
             $seo_product->save();
         }
         if (count($sql) > 0) {

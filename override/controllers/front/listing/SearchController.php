@@ -109,7 +109,7 @@ class SearchController extends SearchControllerCore
                 );
             }
         }
-        if ((bool)Configuration::get('CL_SEARCH_MANUFACTURERS', null, null, $id_shop) === true) {
+        if ((bool)Configuration::get('EVER_SEARCH_MANUFACTURERS', null, null, $id_shop) === true) {
             $id_obj = Manufacturer::getIdByName($search);
             $obj = new Manufacturer(
                 $id_obj,
@@ -128,7 +128,7 @@ class SearchController extends SearchControllerCore
                 (int)$id_shop
             );
         }
-        if ((bool)Configuration::get('CL_SEARCH_SUPPLIERS', null, null, $id_shop) === true) {
+        if ((bool)Configuration::get('EVER_SEARCH_SUPPLIERS', null, null, $id_shop) === true) {
             $sql->select('s.id_supplier');
             $sql->from('supplier', 's');
             $sql->leftJoin(
@@ -156,7 +156,7 @@ class SearchController extends SearchControllerCore
                 );
             }
         }
-        if ((bool)Configuration::get('CL_SEARCH_PRODUCTS', null, null, $id_shop) === true) {
+        if ((bool)Configuration::get('EVER_SEARCH_PRODUCTS', null, null, $id_shop) === true) {
             $sql->select('pl.id_product');
             $sql->from('product_lang', 'pl');
             $sql->leftJoin(
