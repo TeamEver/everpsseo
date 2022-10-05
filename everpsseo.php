@@ -9059,6 +9059,9 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
     public function hookDisplayFooterProduct($params)
     {
+        if (Tools::getValue('fc') === 'module') {
+            return;
+        }
         if ((bool)Configuration::get(
             'EVERSEO_RSNIPPETS'
         )) {
@@ -9786,6 +9789,9 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
     public function hookFooter($params)
     {
+        if (Tools::getValue('fc') === 'module') {
+            return;
+        }
         if ((bool)Configuration::get(
             'EVERSEO_RSNIPPETS'
         )) {
