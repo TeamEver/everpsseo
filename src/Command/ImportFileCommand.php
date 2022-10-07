@@ -34,6 +34,8 @@ class ImportFileCommand extends ContainerAwareCommand
         $this->setName('everpsseo:seo:import');
         $this->setDescription('Update SEO datas for categories & products');
         $this->filenameCategory = dirname(__FILE__) . '/../../input/categories.xlsx';
+        $this->filenameFeatureValues = dirname(__FILE__) . '/../../input/featurevalues.xlsx';
+        $this->filenameFeatures = dirname(__FILE__) . '/../../input/features.xlsx';
         $this->filenameProduct = dirname(__FILE__) . '/../../input/products.xlsx';
         $this->logFile = dirname(__FILE__) . '/../../output/logs/log-seo-import-'.date('Y-m-d').'.log';
         $this->module = \Module::getInstanceByName('everpsseo');
@@ -94,7 +96,166 @@ class ImportFileCommand extends ContainerAwareCommand
                 '<info>Seo products file does not exists</info>'
             ));
         }
+
+        if (file_exists($this->filenameFeatureValues)) {
+            $file = new ImportFile($this->filenameFeatureValues);
+            $lines = $file->getLines();
+            $headers = $file->getHeaders();
+            $output->writeln(sprintf(
+                '<info>Start SEO feature values update : datetime : '.date('Y-m-d H:i:s').'. Lines total : '.count($lines).'</info>'
+            ));
+            foreach ($lines as $line) {
+                $this->updateFeatureValue($line, $output);
+            }
+            $output->writeln(
+                $this->getRandomFunnyComment($output)
+            );
+            $output->writeln(sprintf(
+                '<comment>Seo feature values files updated. Clearing cache</comment>'
+            ));
+            unlink($this->filenameFeatureValues);
+            \Tools::clearAllCache();
+            $output->writeln(sprintf(
+                '<comment>Cache cleared</comment>'
+            ));
+        } else {
+            $output->writeln(sprintf(
+                '<info>Seo feature values file does not exists</info>'
+            ));
+        }
+
+        if (file_exists($this->filenameFeatures)) {
+            $file = new ImportFile($this->filenameFeatures);
+            $lines = $file->getLines();
+            $headers = $file->getHeaders();
+            $output->writeln(sprintf(
+                '<info>Start SEO features update : datetime : '.date('Y-m-d H:i:s').'. Lines total : '.count($lines).'</info>'
+            ));
+            foreach ($lines as $line) {
+                $this->updateFeatures($line, $output);
+            }
+            $output->writeln(
+                $this->getRandomFunnyComment($output)
+            );
+            $output->writeln(sprintf(
+                '<comment>Seo features files updated. Clearing cache</comment>'
+            ));
+            unlink($this->filenameFeatures);
+            \Tools::clearAllCache();
+            $output->writeln(sprintf(
+                '<comment>Cache cleared</comment>'
+            ));
+        } else {
+            $output->writeln(sprintf(
+                '<info>Seo features file does not exists</info>'
+            ));
+        }
+        
         return self::SUCCESS;
+    }
+
+    protected function updateFeatures($line, $output)
+    {
+        if (!isset($line['id_feature'])
+            || empty($line['id_feature'])
+        ) {
+            $output->writeln(
+               '<error>Missing id_feature column</error>'
+            );
+            return;
+        }
+        if (!isset($line['id_lang'])
+            || empty($line['id_lang'])
+        ) {
+            $output->writeln(
+               '<error>Missing id_lang column</error>'
+            );
+            return;
+        }
+        if (!isset($line['id_shop'])
+            || empty($line['id_shop'])
+        ) {
+            $output->writeln(
+               '<error>Missing id_shop column</error>'
+            );
+            return;
+        }
+        if (!isset($line['name'])
+            || empty($line['name'])
+        ) {
+            $output->writeln(
+               '<error>Missing name column</error>'
+            );
+            return;
+        }
+        $feature = new \Feature(
+            (int)$line['id_feature'],
+            null,
+            (int)$line['id_shop']
+        );
+        if (!\Validate::isLoadedObject($feature)) {
+            $output->writeln(
+               '<error>Feature value is not a valid object</error>'
+            );
+            return;
+        }
+        $feature->name[(int)$line['id_lang']] = $line['name'];
+        $feature->save();
+        $output->writeln(
+           '<info>Feature updated</info>'
+        );
+    }
+
+    protected function updateFeatureValue($line, $output)
+    {
+        if (!isset($line['id_feature_value'])
+            || empty($line['id_feature_value'])
+        ) {
+            $output->writeln(
+               '<error>Missing id_feature_value column</error>'
+            );
+            return;
+        }
+        if (!isset($line['id_lang'])
+            || empty($line['id_lang'])
+        ) {
+            $output->writeln(
+               '<error>Missing id_lang column</error>'
+            );
+            return;
+        }
+        if (!isset($line['id_shop'])
+            || empty($line['id_shop'])
+        ) {
+            $output->writeln(
+               '<error>Missing id_shop column</error>'
+            );
+            return;
+        }
+        if (!isset($line['name'])
+            || empty($line['name'])
+        ) {
+            $output->writeln(
+               '<error>Missing name column</error>'
+            );
+            return;
+        }
+        $featureValue = new \FeatureValue(
+            (int)$line['id_feature_value'],
+            null,
+            (int)$line['id_shop']
+        );
+        if (!\Validate::isLoadedObject($featureValue)) {
+            $output->writeln(
+               '<error>Feature value is not a valid object</error>'
+            );
+            return;
+        }
+        $featureValue->value[(int)$line['id_lang']] = $line['name'];
+        $featureValue->save();
+        $output->writeln(
+           '<info>Feature value updated</info>'
+        );
     }
 
     protected function updateSeoCategories($line, $output)
