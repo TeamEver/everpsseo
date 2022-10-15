@@ -17,9 +17,9 @@ $sql = array();
 $sql[] =
     'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ever_seo_redirect` (
         `id_ever_seo_redirect` int(10) unsigned NOT NULL auto_increment,
-        `not_found` varchar(255) NOT NULL,
-        `everfrom` varchar(255) DEFAULT NULL,
-        `redirection` varchar(255) DEFAULT NULL,
+        `not_found` text NOT NULL,
+        `everfrom` text DEFAULT NULL,
+        `redirection` text DEFAULT NULL,
         `id_shop` int(10) unsigned DEFAULT 1,
         `count` int(10) unsigned DEFAULT NULL,
         `active` int(10) unsigned NOT NULL,
@@ -31,8 +31,8 @@ $sql[] =
 $sql[] =
     'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ever_seo_backlink` (
         `id_ever_seo_backlink` int(10) unsigned NOT NULL auto_increment,
-        `everfrom` varchar(255) NOT NULL,
-        `everto` varchar(255) DEFAULT NULL,
+        `everfrom` text NOT NULL,
+        `everto` text DEFAULT NULL,
         `id_shop` int(10) unsigned NOT NULL,
         `count` int(10) unsigned DEFAULT NULL,
         PRIMARY KEY (`id_ever_seo_backlink`)

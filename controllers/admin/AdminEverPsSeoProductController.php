@@ -609,8 +609,8 @@ class AdminEverPsSeoProductController extends ModuleAdminController
             ) {
                  $this->errors[] = $this->l('link_rewrite is invalid');
             }
-            if (!Tools::getValue('canonical')
-                || !Validate::isLinkRewrite(Tools::getValue('canonical'))
+            if (Tools::getValue('canonical')
+                && !Validate::isLinkRewrite(Tools::getValue('canonical'))
             ) {
                  $this->errors[] = $this->l('canonical is invalid');
             }
@@ -624,8 +624,8 @@ class AdminEverPsSeoProductController extends ModuleAdminController
             ) {
                  $this->errors[] = $this->l('meta_title is invalid');
             }
-            if (!Tools::getValue('meta_description')
-                || !Validate::isGenericName(Tools::getValue('meta_description'))
+            if (Tools::getValue('meta_description')
+                && !Validate::isString(Tools::getValue('meta_description'))
             ) {
                  $this->errors[] = $this->l('meta_description is invalid');
             }

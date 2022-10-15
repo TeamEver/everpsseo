@@ -227,7 +227,8 @@ class EverPsSeo extends Module
             && $this->registerHook('actionOutputHTMLBefore')
             && $this->registerHook('displayReassurance')
             && $this->registerHook('displayOrderConfirmation')
-            && $this->registerHook('displayContentWrapperBottom');
+            && $this->registerHook('displayContentWrapperBottom')
+            && $this->registerHook('actionPresentProductListing');
     }
 
     protected function registerEverConfiguration()
@@ -507,6 +508,7 @@ class EverPsSeo extends Module
 
     public function getContent()
     {
+        $this->registerHook('actionProductSearchProviderRunQueryAfter');
         $this->html = '';
         if (_PS_VERSION_ >= '1.6.1.7') {
             $languages = Language::getIDs(true);
@@ -8561,7 +8563,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 }
             }
         }
-
+        
         switch ($controller_name) {
             case 'product':
                 $id_product = (int)Tools::getValue('id_product');
@@ -8885,24 +8887,19 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         if ((bool)EverPsSeoTools::pageHasBannedArgs() === true) {
             $index = 'noindex';
         }
-
-        if (isset($index)
-            && isset($follow)
-        ) {
-            $page = $this->context->controller->getTemplateVarPage();
-            $page['meta']['robots'] = $index . ', ' . $follow;
-            if ($meta_title && $meta_description) {
-                $page['meta']['title'] = $meta_title;
-                $page['meta']['description'] = $meta_description;
-            }
-            if ((bool)Configuration::get('EVERSEO_CANONICAL') === true
-                && isset($canonical_url)
-                && !empty($canonical_url)
-            ) {
-                $page['canonical'] = $canonical_url;
-            }
-            $this->context->smarty->assign('page', $page);
+        $page = $this->context->controller->getTemplateVarPage();
+        $page['meta']['robots'] = $index . ', ' . $follow;
+        if ($meta_title && $meta_description) {
+            $page['meta']['title'] = $meta_title;
+            $page['meta']['description'] = $meta_description;
         }
+        if ((bool)Configuration::get('EVERSEO_CANONICAL') === true
+            && isset($canonical_url)
+            && !empty($canonical_url)
+        ) {
+            $page['canonical'] = $canonical_url;
+        }
+        $this->context->smarty->assign('page', $page);
         if ((bool)Configuration::get('EVERSEO_CANONICAL') === false) {
             $canonical_url = false;
         }

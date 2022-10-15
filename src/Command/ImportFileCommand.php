@@ -150,7 +150,9 @@ class ImportFileCommand extends ContainerAwareCommand
                 '<info>Seo features file does not exists</info>'
             ));
         }
-        
+        if ((bool)\Configuration::get('EVERSEO_DOOS') === true) {
+            // code...
+        }
         return self::SUCCESS;
     }
 
