@@ -8948,11 +8948,11 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             'siteName' => Configuration::get(
                 'PS_SHOP_NAME'
             ),
-            'pageUrl' => 'https'."//{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}",
             'defaultImage' => (string)$defaultImage,
             'usehreflang' => Configuration::get(
                 'EVERSEO_HREF_LANG'
             ),
+            'currentLanguageIsoCode' => $this->context->language->iso_code,
             'useTwitter' => Configuration::get(
                 'EVERSEO_USE_TWITTER'
             ),
