@@ -38,7 +38,7 @@ class EverPsSeo extends Module
     {
         $this->name = 'everpsseo';
         $this->tab = 'seo';
-        $this->version = '8.2.3';
+        $this->version = '8.3.1';
         $this->author = 'Team Ever';
         $this->need_instance = 0;
         $this->module_key = '5ddabba8ec414cd5bd646fad24368472';
@@ -531,6 +531,13 @@ class EverPsSeo extends Module
 
             if (!count($this->postErrors)) {
                 $this->uploadCategoriesFile();
+            }
+        }
+        if (Tools::isSubmit('submitUploadFeatureValuesFile')) {
+            $this->postValidation();
+
+            if (!count($this->postErrors)) {
+                $this->uploadFeatureValuesFile();
             }
         }
 
@@ -1706,6 +1713,34 @@ class EverPsSeo extends Module
                 'buttons' => array(
                     'import' => array(
                         'name' => 'submitUploadCategoriesFile',
+                        'type' => 'submit',
+                        'class' => 'btn btn-default pull-right',
+                        'icon' => 'process-icon-download',
+                        'title' => $this->l('Upload file')
+                    ),
+                ),
+            )
+        );
+        $form_fields[] = array(
+            'form' => array(
+                'legend' => array(
+                    'title' => $this->l('Upload feature values update file'),
+                    'icon' => 'icon-download',
+                ),
+                'input' => array(
+                    array(
+                        'type' => 'file',
+                        'label' => $this->l('Upload feature values file'),
+                        'desc' => $this->l('Will upload feature values file and wait until update cron is triggered'),
+                        'hint' => $this->l('For SEO updates only'),
+                        'name' => 'featurevalues_file',
+                        'display_image' => false,
+                        'required' => false
+                    ),
+                ),
+                'buttons' => array(
+                    'import' => array(
+                        'name' => 'submitUploadFeatureValuesFile',
                         'type' => 'submit',
                         'class' => 'btn btn-default pull-right',
                         'icon' => 'process-icon-download',
@@ -11413,6 +11448,30 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 return false;
             }
             copy($tmp_name, self::INPUT_FOLDER.'categories.xlsx');
+            $this->html .= $this->displayConfirmation($this->l('File has been uploaded, please wait for cron task'));
+        }
+    }
+
+    protected function uploadFeatureValuesFile()
+    {
+        /* upload the file */
+        if (isset($_FILES['featurevalues_file'])
+            && isset($_FILES['featurevalues_file']['tmp_name'])
+            && !empty($_FILES['featurevalues_file']['tmp_name'])
+        ) {
+            $filename = $_FILES['featurevalues_file']['name'];
+            $exploded_filename = explode('.', $filename);
+            $ext = end($exploded_filename);
+            if (Tools::strtolower($ext) != 'xlsx') {
+                $this->postErrors[] = $this->l('Error : File is not valid.');
+                return false;
+            }
+            if (!($tmp_name = tempnam(_PS_TMP_IMG_DIR_, 'PS'))
+                || !move_uploaded_file($_FILES['featurevalues_file']['tmp_name'], $tmp_name)
+            ) {
+                return false;
+            }
+            copy($tmp_name, self::INPUT_FOLDER.'featurevalues.xlsx');
             $this->html .= $this->displayConfirmation($this->l('File has been uploaded, please wait for cron task'));
         }
     }
