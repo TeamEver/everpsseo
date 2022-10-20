@@ -406,7 +406,7 @@ class GenerateMetas extends Command
                     (int)$id_lang,
                     (int)$id_shop
                 );
-                $meta_title = \Tools::substr(Db::getInstance()->escape($meta_title), 0, 128);
+                $meta_title = \Tools::substr(\Db::getInstance()->escape($meta_title), 0, 128);
 
                 $sql = 'UPDATE `'._DB_PREFIX_.'cms_lang`
                 SET meta_title = "'.\Db::getInstance()->escape($meta_title).'"
@@ -432,7 +432,7 @@ class GenerateMetas extends Command
                     (int)$id_lang,
                     (int)$id_shop
                 );
-                $meta_title = \Tools::substr(Db::getInstance()->escape($meta_title), 0, 128);
+                $meta_title = \Tools::substr(\Db::getInstance()->escape($meta_title), 0, 128);
 
                 $sql = 'UPDATE `'._DB_PREFIX_.'manufacturer_lang`
                 SET meta_title = "'.\Db::getInstance()->escape($meta_title).'"
@@ -489,7 +489,7 @@ class GenerateMetas extends Command
                     (int)$id_lang,
                     (int)$id_shop
                 );
-                $pageMeta->title = \Tools::substr(Db::getInstance()->escape($meta_title), 0, 128);
+                $pageMeta->title = \Tools::substr(\Db::getInstance()->escape($meta_title), 0, 128);
                 // TODO : use SQL query
                 // if ($pageMeta->save()) {
                 //     return true;
@@ -611,7 +611,7 @@ class GenerateMetas extends Command
                     (int)$id_lang,
                     (int)$id_shop
                 );
-                $meta_description = \Tools::substr(Db::getInstance()->escape($meta_description), 0, 250);
+                $meta_description = \Tools::substr(\Db::getInstance()->escape($meta_description), 0, 250);
 
                 $sql = 'UPDATE `'._DB_PREFIX_.'supplier_lang`
                 SET meta_description = "'.\Db::getInstance()->escape($meta_description).'"
@@ -642,7 +642,7 @@ class GenerateMetas extends Command
                     (int)$id_lang,
                     (int)$id_shop
                 );
-                $pageMeta->meta_description = \Tools::substr(Db::getInstance()->escape($meta_description), 0, 250);
+                $pageMeta->meta_description = \Tools::substr(\Db::getInstance()->escape($meta_description), 0, 250);
                 // TODO : use SQL query
                 // if ($pageMeta->save()) {
                 //     return true;
@@ -656,10 +656,10 @@ class GenerateMetas extends Command
         switch ($object) {
             case 'id_seo_product':
                 $product = new \Product(
-                    (int)$id_seo_product,
+                    (int)$id_element,
                     false,
-                    (int)$id_seo_lang,
-                    (int)$id_shop
+                    (int)$id_shop,
+                    (int)$id_lang
                 );
                 $linkRewrite = \Tools::link_rewrite($product->name);
 
@@ -683,8 +683,8 @@ class GenerateMetas extends Command
 
             case 'id_seo_category':
                 $category = new \Category(
-                    (int)$id_seo_category,
-                    (int)$id_seo_lang,
+                    (int)$id_element,
+                    (int)$id_lang,
                     (int)$id_shop
                 );
                 $linkRewrite = \Tools::link_rewrite($category->name);

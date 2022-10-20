@@ -206,20 +206,20 @@ class EverPsSeoProduct extends ObjectModel
             }
         }
         $feature_names = '';
-        foreach ($product->getFeatures() as $key => $value) {
-            $feature = Feature::getFeature(
-                (int)$id_seo_lang,
-                (int)$value['id_feature']
-            );
-            $feature_value = new FeatureValue(
-                (int)$value['id_feature_value']
-            );
-            if ($key == 0) {
-                $feature_names .= $feature['name'].': '.$feature_value->value[(int)$id_seo_lang];
-            } else {
-                $feature_names .= $feature['name'].': '.$feature_value->value[(int)$id_seo_lang].', ';
-            }
-        }
+        // foreach ($product->getFeatures() as $key => $value) {
+        //     $feature = Feature::getFeature(
+        //         (int)$id_seo_lang,
+        //         (int)$value['id_feature']
+        //     );
+        //     $feature_value = new FeatureValue(
+        //         (int)$value['id_feature_value']
+        //     );
+        //     if ($key == 0) {
+        //         $feature_names .= $feature['name'].': '.$feature_value->value[(int)$id_seo_lang];
+        //     } else {
+        //         $feature_names .= $feature['name'].': '.$feature_value->value[(int)$id_seo_lang].', ';
+        //     }
+        // }
         $category = new Category(
             (int)$product->id_category_default,
             (int)$id_seo_lang,
@@ -291,20 +291,20 @@ class EverPsSeoProduct extends ObjectModel
             }
         }
         $feature_names = '';
-        foreach ($product->getFeatures() as $key => $value) {
-            $feature = Feature::getFeature(
-                (int)$id_seo_lang,
-                (int)$value['id_feature']
-            );
-            $feature_value = new FeatureValue(
-                (int)$value['id_feature_value']
-            );
-            if ($key == 0) {
-                $feature_names .= $feature['name'].': '.$feature_value->value[(int)$id_seo_lang];
-            } else {
-                $feature_names .= $feature['name'].': '.$feature_value->value[(int)$id_seo_lang].', ';
-            }
-        }
+        // foreach ($product->getFeatures() as $key => $value) {
+        //     $feature = Feature::getFeature(
+        //         (int)$id_seo_lang,
+        //         (int)$value['id_feature']
+        //     );
+        //     $feature_value = new FeatureValue(
+        //         (int)$value['id_feature_value']
+        //     );
+        //     if ($key == 0) {
+        //         $feature_names .= $feature['name'].': '.$feature_value->value[(int)$id_seo_lang];
+        //     } else {
+        //         $feature_names .= $feature['name'].': '.$feature_value->value[(int)$id_seo_lang].', ';
+        //     }
+        // }
         $manufacturer = new Manufacturer(
             (int)$product->id_manufacturer,
             (int)$id_seo_lang

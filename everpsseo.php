@@ -8888,8 +8888,10 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             $index = 'noindex';
         }
         $page = $this->context->controller->getTemplateVarPage();
-        $page['meta']['robots'] = $index . ', ' . $follow;
-        if ($meta_title && $meta_description) {
+        if (isset($index) && isset($follow)) {
+            $page['meta']['robots'] = $index . ', ' . $follow;
+        }
+        if (isset($meta_title) && isset($meta_description)) {
             $page['meta']['title'] = $meta_title;
             $page['meta']['description'] = $meta_description;
         }
