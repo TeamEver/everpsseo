@@ -306,7 +306,7 @@ class GenerateMetas extends Command
         $output->writeln(sprintf(
             '<info>Start images alt : datetime : '.date('Y-m-d H:i:s').'</info>'
         ));
-        $seoArray = \EverPsSeoCms::getAllSeoCmsIds(
+        $seoArray = \EverPsSeoImage::getAllSeoImagesIds(
             (int)$shop->id
         );
         $allowedLangs = $this->getAllowedShortcodesLangs(
@@ -637,7 +637,7 @@ class GenerateMetas extends Command
                     (int)$id_lang,
                     (int)$id_shop
                 );
-                $pageMeta = new Meta(
+                $pageMeta = new \Meta(
                     (int)$id_element,
                     (int)$id_lang,
                     (int)$id_shop
