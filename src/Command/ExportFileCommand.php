@@ -31,6 +31,7 @@ class ExportFileCommand extends Command
     private $allowedActions = [
         'getrandomcomment',
         'categories',
+        'features',
         'products'
     ];
 
@@ -50,6 +51,7 @@ class ExportFileCommand extends Command
         $this->addArgument('limit l', InputArgument::OPTIONAL, 'Limit int');
         $this->filenameCategory = dirname(__FILE__) . '/../../output/categories.xlsx';
         $this->filenameProduct = dirname(__FILE__) . '/../../output/products.xlsx';
+        $this->filenameFeatures = dirname(__FILE__) . '/../../output/features.xlsx';
         $this->logFile = dirname(__FILE__) . '/../../output/logs/log-seo-export-'.date('Y-m-d').'.log';
         $this->module = \Module::getInstanceByName('everpsseo');
     }
@@ -379,11 +381,145 @@ class ExportFileCommand extends Command
             );
             return self::SUCCESS;
         }
+        if ($action === 'features') {
+            $dataSet = $this->getAllFeatures(
+                (int)$idShop,
+                (int)$idLang,
+                (int)$limit
+            );
+            $spreadsheet = new Spreadsheet();
+            // Set properties
+            $spreadsheet->getProperties()->setCreator($creator)
+                                         ->setLastModifiedBy($creator)
+                                         ->setTitle($title)
+                                         ->setSubject($title)
+                                         ->setDescription($title)
+                                         ->setCategory($title);
+            $spreadsheet->setActiveSheetIndex(0);
+            $r = 2;
+            foreach ($dataSet as $feature) {
+                $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(1, $r, $feature['id_feature']);
+                $spreadsheet->getActiveSheet()->getStyle("A".$r)->getFont()->setBold(true);
+                $spreadsheet->getActiveSheet()->getStyle("A".$r)->getFont()->setName('Arial');
+                $spreadsheet->getActiveSheet()->getStyle("A".$r)->getFont()->setSize(9);
+                $spreadsheet->getActiveSheet()->getColumnDimension("A")->setAutoSize(true);
+
+                $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(2, $r, $feature['id_shop']);
+                $spreadsheet->getActiveSheet()->getStyle("B".$r)->getFont()->setBold(true);
+                $spreadsheet->getActiveSheet()->getStyle("B".$r)->getFont()->setName('Arial');
+                $spreadsheet->getActiveSheet()->getStyle("B".$r)->getFont()->setSize(9);
+                $spreadsheet->getActiveSheet()->getColumnDimension("B")->setAutoSize(true);
+
+                $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(3, $r, $feature['id_lang']);
+                $spreadsheet->getActiveSheet()->getStyle("C".$r)->getFont()->setBold(true);
+                $spreadsheet->getActiveSheet()->getStyle("C".$r)->getFont()->setName('Arial');
+                $spreadsheet->getActiveSheet()->getStyle("C".$r)->getFont()->setSize(9);
+                $spreadsheet->getActiveSheet()->getColumnDimension("C")->setAutoSize(true);
+
+                $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(4, $r, $feature['name']);
+                $spreadsheet->getActiveSheet()->getStyle("D".$r)->getFont()->setBold(true);
+                $spreadsheet->getActiveSheet()->getStyle("D".$r)->getFont()->setName('Arial');
+                $spreadsheet->getActiveSheet()->getStyle("D".$r)->getFont()->setSize(9);
+                $spreadsheet->getActiveSheet()->getColumnDimension("D")->setAutoSize(true);
+
+                $r++;
+            }
+            $spreadsheet->setActiveSheetIndex(0)
+            ->setCellValue('A1', 'id_feature')
+            ->setCellValue('B1', 'id_shop')
+            ->setCellValue('C1', 'id_lang')
+            ->setCellValue('D1', 'name');
+            $spreadsheet->getActiveSheet()->setAutoFilter('A1:D1');
+            // Rename sheet
+            $spreadsheet->getActiveSheet()->setTitle(\Tools::substr($reportName, 0, 31));
+
+            //Text bold in first row
+            $spreadsheet->getActiveSheet()->getStyle('A1:D1')->getFont()->setBold(true);
+
+            //Freeze first row
+            $spreadsheet->getActiveSheet()->freezePane('A2');
+            $styleArray = [
+                'alignment' => [
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
+                ],
+                'borders' => [
+                    'top' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                ],
+                'fill' => [
+                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_GRADIENT_LINEAR,
+                    'rotation' => 90,
+                    'startColor' => [
+                        'argb' => 'FFA0A0A0',
+                    ],
+                    'endColor' => [
+                        'argb' => 'FFFFFFFF',
+                    ],
+                ],
+                'borders' => [
+                    'outline' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK,
+                        'color' => ['argb' => 'FFFF0000'],
+                    ],
+                ],
+            ];
+
+            $spreadsheet->getActiveSheet()->getStyle('A1:D1')->applyFromArray($styleArray);
+
+            // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+            $spreadsheet->setActiveSheetIndex(0);
+            $writer = new Xlsx($spreadsheet);
+            $writer->save(
+                $this->filenameFeatures
+            );
+            $output->writeln(sprintf(
+                '<comment>File generated, you can download it on SEO module from backoffice</comment>'
+            ));
+            $output->writeln(
+                $this->getRandomFunnyComment($output)
+            );
+            return self::SUCCESS;
+        }
+    }
+
+    protected function getAllFeatures($idShop, $idLang = 0, $limit = 0)
+    {
+        $sql = new \DbQuery();
+        $sql->select('*');
+        $sql->from('feature_lang', 'fl');
+        $sql->leftJoin(
+            'feature_shop',
+            'fs',
+            'fs.id_feature = fl.id_feature AND fs.id_shop = '.(int)$idShop
+        );
+        if ((int)$idLang > 0) {
+            $sql->where('fl.id_lang = '.(int)$idLang);
+        }
+        if ((int)$limit > 0) {
+            $sql->limit((int)$limit);
+        }
+        $allFeaturesIds = \Db::getInstance()->executeS($sql);
+        return $allFeaturesIds;
+    }
+
+    protected function getAllFeatureValues($idLang = 0, $limit = 0)
+    {
+        $sql = new \DbQuery();
+        $sql->select('*');
+        $sql->from('feature_value_lang', 'fvl');
+        if ((int)$idLang > 0) {
+            $sql->where('fvl.id_lang = '.(int)$idLang);
+        }
+        if ((int)$limit > 0) {
+            $sql->limit((int)$limit);
+        }
+        $allFeaturesIds = \Db::getInstance()->executeS($sql);
+        return $allFeaturesIds;
     }
 
     protected function getAllProducts($idShop, $idLang = 0, $idCategory = 0, $limit = 0)
     {
-        $return = [];
         $sql = new \DbQuery();
         $sql->select('*');
         $sql->from('product_lang', 'pl');
@@ -412,7 +548,6 @@ class ExportFileCommand extends Command
 
     protected function getAllCategories($idShop, $idLang = 0, $idCategory = 0, $limit = 0)
     {
-        $return = [];
         $sql = new \DbQuery();
         $sql->select('*');
         $sql->from('category_lang', 'pl');
