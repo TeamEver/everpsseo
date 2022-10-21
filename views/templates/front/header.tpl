@@ -82,7 +82,7 @@
 {if isset($usehreflang) && $usehreflang}
     {foreach $everpshreflang as $everlang}
             {if $page.page_name == 'index'}
-                <link rel="alternate" hreflang="{if $everlang.id_lang == $xdefault}x-default{else}{$everlang.locale|escape:'htmlall':'UTF-8'}{/if}" href="/"/>
+                <link rel="alternate" hreflang="{if $everlang.id_lang == $xdefault}x-default{else}{$everlang.locale|escape:'htmlall':'UTF-8'}{/if}" href="{$link->getPageLink('index', true, $everlang.id_lang)}"/>
             {/if}
             {if $page.page_name == 'category'}
                 <link rel="alternate" hreflang="{if $everlang.id_lang == $xdefault}x-default{else}{$everlang.locale|escape:'htmlall':'UTF-8'}{/if}" href="{if $everlang.id_lang == $xdefault}{$link->getCategoryLink($smarty.get.id_category, null, null, null, null )|escape:'htmlall':'UTF-8'}{else}{$link->getCategoryLink($smarty.get.id_category, null, $everlang.id_lang,null,null )|escape:'htmlall':'UTF-8'}{/if}" />

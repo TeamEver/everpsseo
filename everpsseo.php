@@ -38,7 +38,7 @@ class EverPsSeo extends Module
     {
         $this->name = 'everpsseo';
         $this->tab = 'seo';
-        $this->version = '8.3.1';
+        $this->version = '8.3.2';
         $this->author = 'Team Ever';
         $this->need_instance = 0;
         $this->module_key = '5ddabba8ec414cd5bd646fad24368472';
@@ -8699,7 +8699,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                         (int)$id_shop,
                         (int)$id_lang
                     );
-                    $currentUrl = $link->getCMSLink(
+                    $canonical_url = $link->getCMSLink(
                         (object)$cms,
                         null,
                         true,
@@ -8713,7 +8713,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                         $canonical_url = str_replace(
                             $cms->link_rewrite,
                             $seo_cms->canonical,
-                            $currentUrl
+                            $canonical_url
                         );
                     }
                 }
@@ -8732,6 +8732,14 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                         (int)$id_manufacturer,
                         (int)$id_lang
                     );
+                    if ((bool)Configuration::get('EVERSEO_CANONICAL') === true) {
+                        $canonical_url = $link->getManufacturerLink(
+                            $manufacturer,
+                            null,
+                            $this->context->language->id,
+                            $this->context->shop->id
+                        );
+                    }
                     $seo_manufacturer = EverPsSeoManufacturer::getSeoManufacturer(
                         (int)$id_manufacturer,
                         (int)$id_shop,
@@ -8783,6 +8791,14 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                         (int)$id_supplier,
                         (int)$id_lang
                     );
+                    if ((bool)Configuration::get('EVERSEO_CANONICAL') === true) {
+                        $canonical_url = $link->getSupplierLink(
+                            $supplier,
+                            null,
+                            $this->context->language->id,
+                            $this->context->shop->id
+                        );
+                    }
                     $seo_supplier = EverPsSeoSupplier::getSeoSupplier(
                         (int)$id_supplier,
                         (int)$id_shop,
@@ -8935,6 +8951,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             && !empty($canonical_url)
         ) {
             $page['canonical'] = $canonical_url;
+            $page['canonical_url'] = $canonical_url;
         }
         $this->context->smarty->assign('page', $page);
         if ((bool)Configuration::get('EVERSEO_CANONICAL') === false) {
@@ -8943,7 +8960,6 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         $replyto = Configuration::get(
             'PS_SHOP_EMAIL'
         );
-
         $identifierUrl = Configuration::get(
             'PS_SHOP_DOMAIN_SSL'
         );
