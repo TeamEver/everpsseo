@@ -38,7 +38,7 @@ class EverPsSeo extends Module
     {
         $this->name = 'everpsseo';
         $this->tab = 'seo';
-        $this->version = '8.3.2';
+        $this->version = '8.3.5';
         $this->author = 'Team Ever';
         $this->need_instance = 0;
         $this->module_key = '5ddabba8ec414cd5bd646fad24368472';
@@ -508,7 +508,6 @@ class EverPsSeo extends Module
 
     public function getContent()
     {
-        $this->registerHook('actionProductSearchProviderRunQueryAfter');
         $this->html = '';
         if (_PS_VERSION_ >= '1.6.1.7') {
             $languages = Language::getIDs(true);
@@ -8291,8 +8290,8 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 'bottom_content_id' => $obj->id,
                 'bottom_content' => $obj->bottom_content,
             ));
+            return $this->display(__FILE__, 'views/templates/hook/bottom_content.tpl');
         }
-        return $this->display(__FILE__, 'views/templates/hook/bottom_content.tpl');
     }
 
     public function hookDisplayReassurance()
@@ -8650,23 +8649,35 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             case 'category':
                 if ((bool)Configuration::get('EVERSEO_CANONICAL') === true) {
                     $id_category = (int)Tools::getValue('id_category');
-                    $category = new Category(
-                        (int)$id_category,
-                        (int)$id_lang,
-                        (int)$id_shop
-                    );
-                    $seo_category = EverPsSeoCategory::getSeoCategory(
-                        (int)$id_category,
-                        (int)$id_shop,
-                        (int)$id_lang
-                    );
-                    $currentUrl = $link->getCategoryLink(
-                        (object)$category,
-                        null,
-                        (int)$id_lang,
-                        null,
-                        (int)$id_shop
-                    );
+                    if (Tools::getValue('module')) {
+                        return;
+                        $currentUrl = $link->getModuleLink(
+                            Tools::getValue('module'),
+                            'category',
+                            Tools::getAllValues(),
+                            true,
+                            (int)$id_lang,
+                            (int)$id_shop
+                        );
+                    } else {
+                        $category = new Category(
+                            (int)$id_category,
+                            (int)$id_lang,
+                            (int)$id_shop
+                        );
+                        $seo_category = EverPsSeoCategory::getSeoCategory(
+                            (int)$id_category,
+                            (int)$id_shop,
+                            (int)$id_lang
+                        );
+                        $currentUrl = $link->getCategoryLink(
+                            (object)$category,
+                            null,
+                            (int)$id_lang,
+                            null,
+                            (int)$id_shop
+                        );
+                    }
                     if (property_exists('EverPsSeoCategory', 'canonical')
                         && isset($seo_category->canonical)
                         && !empty($seo_category->canonical)
@@ -8678,12 +8689,14 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                         );
                     }
                 }
-                $seo = EverPsSeoTools::getSeoIndexFollow(
-                    pSQL($controller_name),
-                    (int)$id_shop,
-                    (int)Tools::getValue('id_category'),
-                    (int)$id_lang
-                );
+                if (!Tools::getValue('module')) {
+                    $seo = EverPsSeoTools::getSeoIndexFollow(
+                        pSQL($controller_name),
+                        (int)$id_shop,
+                        (int)Tools::getValue('id_category'),
+                        (int)$id_lang
+                    );
+                }
                 break;
 
             case 'cms':
@@ -8992,7 +9005,6 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             'pixelfacebook' => Configuration::get(
                 'EVERSEO_FBPIXEL'
             ),
-            'psversion' => _PS_VERSION_,
             'argsUrl' => Configuration::get(
                 'EVERSEO_INDEX_ARGS'
             ),
@@ -9016,9 +9028,10 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             'xdefault' => Configuration::get(
                 'PS_LANG_DEFAULT'
             ),
-            'everpshreflang' => Language::getLanguages(
-                true,
-                (int)$this->context->shop->id
+            'hreflangTags' => EverPsSeoTools::getHeaderHreflangTemplate(
+                $controller_name,
+                $this->context->shop->id,
+                $this->context->language->id
             ),
             'everseo_use_author' => Configuration::get(
                 'EVERSEO_USE_AUTHOR'
@@ -10261,6 +10274,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     || $pageMeta->page == 'module-ph_simpleblog-page'
                     || $pageMeta->page == 'module-ph_simpleblog-author'
                     || $pageMeta->page == 'module-pm_advancedsearch4-searchresults'
+                    || $pageMeta->page == 'module-pm_advancedsearch-searchresults'
                     || $pageMeta->page == 'module-colissimo-tracking'
                 ) {
                     continue;

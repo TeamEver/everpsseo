@@ -152,7 +152,7 @@ class EverPsSeoTools extends ObjectModel
     */
     public static function getSeoIndexFollow($controller, $id_shop, $id, $id_lang)
     {
-        $cache_id = 'EverPsSeoCategory::getSeoCategory_'
+        $cache_id = 'EverPsSeoTools::getSeoIndexFollow_'
         .(string)$controller
         .'_'
         .(int)$id
@@ -354,5 +354,35 @@ class EverPsSeoTools extends ObjectModel
             return false;
         }
         return true;
+    }
+
+    public static function getHeaderHreflangTemplate($controller, $id_shop, $id_lang)
+    {
+        $cache_id = 'EverPsSeoTools::getHeaderHreflangTemplate_'
+        .(string)$controller
+        .'_'
+        .(int)$id_shop
+        .'_'
+        .(int)$id_lang
+        .'_'
+        .date('m');
+        if (!Cache::isStored($cache_id)) {
+            $template = _PS_MODULE_DIR_ . '/everpsseo/views/templates/hook/hreflangs/'.pSQL($controller).'.tpl';
+            if (file_exists($template)) {
+                Context::getContext()->smarty->assign([
+                    'xdefault' => (int)Configuration::get('PS_LANG_DEFAULT'),
+                    'everpshreflang' => Language::getLanguages(
+                        true,
+                        (int)$id_shop
+                    ),
+                ]);
+                $return = Context::getContext()->smarty->fetch(
+                    $template
+                );
+            }
+            Cache::store($cache_id, $return);
+            return $return;
+        }
+        return Cache::retrieve($cache_id);
     }
 }

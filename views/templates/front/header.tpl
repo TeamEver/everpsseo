@@ -11,7 +11,7 @@
 {/literal}
 {/if}
 {if isset($ever_theme_color) && $ever_theme_color}
-<meta name="theme-color" content="#4285f4">
+<meta name="theme-color" content="{$ever_theme_color|escape:'htmlall':'UTF-8'}">
 {/if}
 <link rel="preconnect" href="https://analytics.twitter.com">
 <link rel="preconnect" href="https://t.co">
@@ -80,23 +80,7 @@
     {/literal}
 {/if}
 {if isset($usehreflang) && $usehreflang}
-    {foreach $everpshreflang as $everlang}
-            {if $page.page_name == 'index'}
-                <link rel="alternate" hreflang="{if $everlang.id_lang == $xdefault}x-default{else}{$everlang.locale|escape:'htmlall':'UTF-8'}{/if}" href="{$link->getPageLink('index', true, $everlang.id_lang)}"/>
-            {/if}
-            {if $page.page_name == 'category'}
-                <link rel="alternate" hreflang="{if $everlang.id_lang == $xdefault}x-default{else}{$everlang.locale|escape:'htmlall':'UTF-8'}{/if}" href="{if $everlang.id_lang == $xdefault}{$link->getCategoryLink($smarty.get.id_category, null, null, null, null )|escape:'htmlall':'UTF-8'}{else}{$link->getCategoryLink($smarty.get.id_category, null, $everlang.id_lang,null,null )|escape:'htmlall':'UTF-8'}{/if}" />
-            {/if}
-            {if $page.page_name == 'product'}
-                <link rel="alternate" hreflang="{if $everlang.id_lang == $xdefault}x-default{else}{$everlang.locale|escape:'htmlall':'UTF-8'}{/if}" href="{$link->getProductLink($smarty.get.id_product, null, null, null, $everlang.id_lang, null, 0, false)|escape:'htmlall':'UTF-8'}" />
-            {/if}
-            {if $page.page_name == 'cms'}
-                <link rel="alternate" hreflang="{if $everlang.id_lang == $xdefault}x-default{else}{$everlang.locale|escape:'htmlall':'UTF-8'}{/if}" href="{$link->getCMSLink($smarty.get.id_cms, null, false, $everlang.id_lang)|escape:'htmlall':'UTF-8'}" />
-            {/if}
-            {if $page.page_name == 'manufacturer'}
-                <link rel="alternate" hreflang="{if $everlang.id_lang == $xdefault}x-default{else}{$everlang.locale|escape:'htmlall':'UTF-8'}{/if}" href="{$link->getManufacturerLink($smarty.get.id_manufacturer, null, $everlang.id_lang , null)|escape:'htmlall':'UTF-8'}" />
-            {/if}
-    {/foreach}
+{$hreflangTags nofilter}
 {/if}
 {if isset($useOpenGraph) && $useOpenGraph}
     {if isset($social_title) && $social_title}
