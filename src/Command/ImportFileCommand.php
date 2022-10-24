@@ -168,7 +168,7 @@ class ImportFileCommand extends ContainerAwareCommand
             $output->writeln(sprintf(
                 '<comment>Seo redirections files updated. Clearing cache</comment>'
             ));
-            unlink($this->filenameProduct);
+            unlink($this->filenameRedirect);
             \Tools::clearAllCache();
             $output->writeln(sprintf(
                 '<comment>Cache cleared</comment>'
@@ -223,16 +223,33 @@ class ImportFileCommand extends ContainerAwareCommand
             );
             return;
         }
-        \Db::getInstance()->insert(
-            'ever_seo_redirect',
-            array(
-                'id_shop' => (int)$line['id_shop'],
-                'not_found' => pSQL($line['not_found']),
-                'redirection' => pSQL($line['redirection']),
-                'code' => (int)$line['code'],
-                'active' => (int)$line['active'],
-            )
+        $redirectExits = \EverPsSeoRedirect::ifRedirectExists(
+            \Db::getInstance()->escape($line['not_found']),
+            (int)$line['id_shop']
         );
+        if (\Validate::isUrl($redirectExits)) {
+            \Db::getInstance()->update(
+                'ever_seo_redirect',
+                array(
+                    'id_shop' => (int)$line['id_shop'],
+                    'redirection' => \Db::getInstance()->escape($line['redirection']),
+                    'code' => (int)$line['code'],
+                    'active' => (int)$line['active'],
+                ),
+                'not_found = '.\Db::getInstance()->escape($line['not_found'])
+            );
+        } else {
+            \Db::getInstance()->insert(
+                'ever_seo_redirect',
+                array(
+                    'id_shop' => (int)$line['id_shop'],
+                    'not_found' => \Db::getInstance()->escape($line['not_found']),
+                    'redirection' => \Db::getInstance()->escape($line['redirection']),
+                    'code' => (int)$line['code'],
+                    'active' => (int)$line['active'],
+                )
+            );
+        }
     }
 
     protected function updateFeatures($line, $output)

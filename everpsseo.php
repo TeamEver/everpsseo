@@ -517,6 +517,14 @@ class EverPsSeo extends Module
         $allowedLangs = $this->getAllowedSitemapLangs();
 
         // XLSX files upload
+        if (Tools::isSubmit('submitUploadRedirectionFile')) {
+            $this->postValidation();
+
+            if (!count($this->postErrors)) {
+                $this->postProcess();
+                $this->uploadRedirectionFile();
+            }
+        }
         if (Tools::isSubmit('submitUploadProductsFile')) {
             $this->postValidation();
 
@@ -1664,6 +1672,34 @@ class EverPsSeo extends Module
         );
 
         // XLSX files import
+        $form_fields[] = array(
+            'form' => array(
+                'legend' => array(
+                    'title' => $this->l('Upload redirection update file'),
+                    'icon' => 'icon-download',
+                ),
+                'input' => array(
+                    array(
+                        'type' => 'file',
+                        'label' => $this->l('Upload redirection file'),
+                        'desc' => $this->l('Will upload redirection file and wait until update cron is triggered'),
+                        'hint' => $this->l('For SEO updates only'),
+                        'name' => 'redirection_file',
+                        'display_image' => false,
+                        'required' => false
+                    ),
+                ),
+                'buttons' => array(
+                    'import' => array(
+                        'name' => 'submitUploadRedirectionFile',
+                        'type' => 'submit',
+                        'class' => 'btn btn-default pull-right',
+                        'icon' => 'process-icon-download',
+                        'title' => $this->l('Upload file')
+                    ),
+                ),
+            )
+        );
         $form_fields[] = array(
             'form' => array(
                 'legend' => array(
@@ -11432,6 +11468,30 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             $categories = array($categories);
         }
         return $categories;
+    }
+
+    protected function uploadRedirectionFile()
+    {
+        /* upload the file */
+        if (isset($_FILES['redirection_file'])
+            && isset($_FILES['redirection_file']['tmp_name'])
+            && !empty($_FILES['products_file']['tmp_name'])
+        ) {
+            $filename = $_FILES['redirection_file']['name'];
+            $exploded_filename = explode('.', $filename);
+            $ext = end($exploded_filename);
+            if (Tools::strtolower($ext) != 'xlsx') {
+                $this->postErrors[] = $this->l('Error : File is not valid.');
+                return false;
+            }
+            if (!($tmp_name = tempnam(_PS_TMP_IMG_DIR_, 'PS'))
+                || !move_uploaded_file($_FILES['redirection_file']['tmp_name'], $tmp_name)
+            ) {
+                return false;
+            }
+            copy($tmp_name, self::INPUT_FOLDER.'redirect.xlsx');
+            $this->html .= $this->displayConfirmation($this->l('File has been uploaded, please wait for cron task'));
+        }
     }
 
     protected function uploadProductsFile()
