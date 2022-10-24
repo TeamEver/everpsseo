@@ -37,6 +37,7 @@ class ImportFileCommand extends ContainerAwareCommand
         $this->filenameFeatureValues = dirname(__FILE__) . '/../../input/featurevalues.xlsx';
         $this->filenameFeatures = dirname(__FILE__) . '/../../input/features.xlsx';
         $this->filenameProduct = dirname(__FILE__) . '/../../input/products.xlsx';
+        $this->filenameRedirect = dirname(__FILE__) . '/../../input/redirect.xlsx';
         $this->logFile = dirname(__FILE__) . '/../../output/logs/log-seo-import-'.date('Y-m-d').'.log';
         $this->module = \Module::getInstanceByName('everpsseo');
     }
@@ -150,10 +151,88 @@ class ImportFileCommand extends ContainerAwareCommand
                 '<info>Seo features file does not exists</info>'
             ));
         }
-        if ((bool)\Configuration::get('EVERSEO_DOOS') === true) {
-            // code...
+        // Parse txt file categories
+        if (file_exists($this->filenameRedirect)) {
+            $file = new ImportFile($this->filenameRedirect);
+            $lines = $file->getLines();
+            $headers = $file->getHeaders();
+            $output->writeln(sprintf(
+                '<info>Start SEO redirections update : datetime : '.date('Y-m-d H:i:s').'. Lines total : '.count($lines).'</info>'
+            ));
+            foreach ($lines as $line) {
+                $this->updateSeoRedirections($line, $output);
+            }
+            $output->writeln(
+                $this->getRandomFunnyComment($output)
+            );
+            $output->writeln(sprintf(
+                '<comment>Seo redirections files updated. Clearing cache</comment>'
+            ));
+            unlink($this->filenameProduct);
+            \Tools::clearAllCache();
+            $output->writeln(sprintf(
+                '<comment>Cache cleared</comment>'
+            ));
+        } else {
+            $output->writeln(sprintf(
+                '<info>Seo redirections file does not exists</info>'
+            ));
         }
         return self::SUCCESS;
+    }
+
+    protected function updateSeoRedirections($line, $output)
+    {
+        if (!isset($line['not_found'])
+            || empty($line['not_found'])
+        ) {
+            $output->writeln(
+               '<error>Missing not_found column</error>'
+            );
+            return;
+        }
+        if (!isset($line['redirection'])
+            || empty($line['redirection'])
+        ) {
+            $output->writeln(
+               '<error>Missing redirection column</error>'
+            );
+            return;
+        }
+        if (!isset($line['id_shop'])
+            || empty($line['id_shop'])
+        ) {
+            $output->writeln(
+               '<error>Missing id_shop column</error>'
+            );
+            return;
+        }
+        if (!isset($line['code'])
+            || empty($line['code'])
+        ) {
+            $output->writeln(
+               '<error>Missing code column</error>'
+            );
+            return;
+        }
+        if (!isset($line['active'])
+            || empty($line['active'])
+        ) {
+            $output->writeln(
+               '<error>Missing active column</error>'
+            );
+            return;
+        }
+        \Db::getInstance()->insert(
+            'ever_seo_redirect',
+            array(
+                'id_shop' => (int)$line['id_shop'],
+                'not_found' => pSQL($line['not_found']),
+                'redirection' => pSQL($line['redirection']),
+                'code' => (int)$line['code'],
+                'active' => (int)$line['active'],
+            )
+        );
     }
 
     protected function updateFeatures($line, $output)
