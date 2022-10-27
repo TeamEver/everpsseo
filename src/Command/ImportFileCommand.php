@@ -518,6 +518,16 @@ class ImportFileCommand extends ContainerAwareCommand
                     (int)$idLang,
                     (int)$idShop
                 );
+                if (!\Validate::isLoadedObject($product)) {
+                    $output->writeln(
+                       '<error>Invalid product</error>'
+                    );
+                    if ((bool)\Configuration::get('EVER_LOG_CMD') === true) {
+                        $this->logCommand(
+                            'invalid product on reference '.$line['reference']
+                        );
+                    }
+                }
             }
         } else {
             if (isset($line['id_product'])
@@ -530,6 +540,16 @@ class ImportFileCommand extends ContainerAwareCommand
                     (int)$idLang,
                     (int)$idShop
                 );
+                if (!\Validate::isLoadedObject($product)) {
+                    $output->writeln(
+                       '<error>Invalid product</error>'
+                    );
+                    if ((bool)\Configuration::get('EVER_LOG_CMD') === true) {
+                        $this->logCommand(
+                            'invalid product on ID '.$line['id_product']
+                        );
+                    }
+                }
             }
             if (isset($line['reference'])
                 && !empty($line['reference'])
@@ -543,6 +563,16 @@ class ImportFileCommand extends ContainerAwareCommand
                     (int)$idLang,
                     (int)$idShop
                 );
+                if (!\Validate::isLoadedObject($product)) {
+                    $output->writeln(
+                       '<error>Invalid product</error>'
+                    );
+                    if ((bool)\Configuration::get('EVER_LOG_CMD') === true) {
+                        $this->logCommand(
+                            'invalid product on reference '.$line['reference']
+                        );
+                    }
+                }
             }
         }
         if (!\Validate::isLoadedObject($product)) {
@@ -642,11 +672,92 @@ class ImportFileCommand extends ContainerAwareCommand
                 }
             }
         }
+        if (isset($line['index'])
+            && !empty($line['index'])
+        ) {
+            if (\Validate::isBool($line['index'])) {
+                $sql[] = 'UPDATE `'._DB_PREFIX_.'ever_seo_product`
+                SET indexable = "'.(int)$line['index'].'"
+                WHERE id_seo_lang = '.(int)$idLang.'
+                AND id_shop = '.(int)$idShop.'
+                AND id_seo_product = '.(int)$product->id;
+            } else {
+                $output->writeln(
+                   '<error>Invalid index on product '.$line['id_product'].' object</error>'
+                );
+                if ((bool)\Configuration::get('EVER_LOG_CMD') === true) {
+                    $this->logCommand(
+                        'Invalid index on product '.$line['id_product'].' object'
+                    );
+                }
+            }
+        }
+        if (isset($line['follow'])
+            && !empty($line['follow'])
+        ) {
+            if (\Validate::isBool($line['follow'])) {
+                $sql[] = 'UPDATE `'._DB_PREFIX_.'ever_seo_product`
+                SET follow = "'.(int)$line['follow'].'"
+                WHERE id_seo_lang = '.(int)$idLang.'
+                AND id_shop = '.(int)$idShop.'
+                AND id_seo_product = '.(int)$product->id;
+            } else {
+                $output->writeln(
+                   '<error>Invalid follow on product '.$line['id_product'].' object</error>'
+                );
+                if ((bool)\Configuration::get('EVER_LOG_CMD') === true) {
+                    $this->logCommand(
+                        'Invalid follow on product '.$line['id_product'].' object'
+                    );
+                }
+            }
+        }
+        if (isset($line['allowed_sitemap'])
+            && !empty($line['allowed_sitemap'])
+        ) {
+            if (\Validate::isBool($line['allowed_sitemap'])) {
+                $sql[] = 'UPDATE `'._DB_PREFIX_.'ever_seo_product`
+                SET allowed_sitemap = "'.\Db::getInstance()->escape($line['allowed_sitemap']).'"
+                WHERE id_seo_lang = '.(int)$idLang.'
+                AND id_shop = '.(int)$idShop.'
+                AND id_seo_product = '.(int)$product->id;
+            } else {
+                $output->writeln(
+                   '<error>Invalid allowed_sitemap on product '.$line['id_product'].' object</error>'
+                );
+                if ((bool)\Configuration::get('EVER_LOG_CMD') === true) {
+                    $this->logCommand(
+                        'Invalid allowed_sitemap on product '.$line['id_product'].' object'
+                    );
+                }
+            }
+        }
         if (isset($line['bottom_content'])
             && !empty($line['bottom_content'])
         ) {
             $seo_product->bottom_content = \Db::getInstance()->escape($line['bottom_content'], true);
             $seo_product->save();
+        }
+        if ((bool)\Configuration::get('EVERSEO_REWRITE_LINKS') === true) {
+            $linkRewrite = \Tools::link_rewrite($product->name);
+            $canonical = \Tools::link_rewrite($product->name);
+            $sql[] = 'UPDATE `'._DB_PREFIX_.'product_lang`
+            SET link_rewrite = "'.\Db::getInstance()->escape($linkRewrite).'"
+            WHERE id_lang = '.(int)$idLang.'
+            AND id_shop = '.(int)$idShop.'
+            AND id_product = '.(int)$product->id;
+
+            $sql[] = 'UPDATE `'._DB_PREFIX_.'ever_seo_product`
+            SET link_rewrite = "'.\Db::getInstance()->escape($linkRewrite).'"
+            WHERE id_seo_lang = '.(int)$idLang.'
+            AND id_shop = '.(int)$idShop.'
+            AND id_seo_product = '.(int)$product->id;
+
+            $sql[] = 'UPDATE `'._DB_PREFIX_.'ever_seo_product`
+            SET canonical = "'.\Db::getInstance()->escape($canonical).'"
+            WHERE id_seo_lang = '.(int)$idLang.'
+            AND id_shop = '.(int)$idShop.'
+            AND id_seo_product = '.(int)$product->id;
         }
         if (count($sql) > 0) {
             foreach ($sql as $q) {
