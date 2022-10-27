@@ -379,9 +379,10 @@ class EverPsSeoTools extends ObjectModel
                 $return = Context::getContext()->smarty->fetch(
                     $template
                 );
+                Cache::store($cache_id, $return);
+                return $return;
             }
-            Cache::store($cache_id, $return);
-            return $return;
+            return false;
         }
         return Cache::retrieve($cache_id);
     }
