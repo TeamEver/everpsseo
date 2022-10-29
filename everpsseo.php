@@ -113,8 +113,8 @@ class EverPsSeo extends Module
 
     public function install()
     {
-        if (version_compare(PHP_VERSION, '7.4.0') < 0) {
-            $this->_errors[] = $this->l('You must have at least PHP 7.4 to use this module version');
+        if (version_compare(PHP_VERSION, '7.2.0') < 0) {
+            $this->_errors[] = $this->l('You must have at least PHP 7.2 to use this module version');
             return false;
         }
         if (extension_loaded('curl') == false) {
@@ -9922,7 +9922,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                             $this->imageType
                         );
                         $currentUrl = $link->getProductLink(
-                            (int)$product,
+                            $product,
                             null,
                             null,
                             null,

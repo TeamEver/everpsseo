@@ -6,6 +6,5 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
-    'League\\Csv\\' => array($vendorDir . '/league/csv/src'),
     'Everpsseo\\Seo\\' => array($baseDir . '/src'),
 );
