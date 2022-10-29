@@ -386,4 +386,254 @@ class EverPsSeoTools extends ObjectModel
         }
         return Cache::retrieve($cache_id);
     }
+
+    public static function indexLang($idLang)
+    {
+        $queries = [];
+        // Products
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_product
+        SET indexable = 1
+        WHERE id_seo_lang = '.(int)$idLang;
+        // Categories
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_category
+        SET indexable = 1
+        WHERE id_seo_lang = '.(int)$idLang;
+        // Manufacturers
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_manufacturer
+        SET indexable = 1
+        WHERE id_seo_lang = '.(int)$idLang;
+        // Manufacturers
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_supplier
+        SET indexable = 1
+        WHERE id_seo_lang = '.(int)$idLang;
+        // Pages
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_pagemeta
+        SET indexable = 1
+        WHERE id_seo_lang = '.(int)$idLang;
+        // CMS categories
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_cms_category
+        SET indexable = 1
+        WHERE id_seo_lang = '.(int)$idLang;
+        // CMS
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_cms
+        SET indexable = 1
+        WHERE id_seo_lang = '.(int)$idLang;
+        // Images
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_image
+        SET indexable = 1
+        WHERE id_seo_lang = '.(int)$idLang;
+        foreach ($queries as $s) {
+            if (!Db::getInstance()->execute($s)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static function followLang($idLang)
+    {
+        $queries = [];
+        // Products
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_product
+        SET follow = 1
+        WHERE id_seo_lang = '.(int)$idLang;
+        // Categories
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_category
+        SET follow = 1
+        WHERE id_seo_lang = '.(int)$idLang;
+        // Manufacturers
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_manufacturer
+        SET follow = 1
+        WHERE id_seo_lang = '.(int)$idLang;
+        // Manufacturers
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_supplier
+        SET follow = 1
+        WHERE id_seo_lang = '.(int)$idLang;
+        // Pages
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_pagemeta
+        SET follow = 1
+        WHERE id_seo_lang = '.(int)$idLang;
+        // CMS categories
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_cms_category
+        SET follow = 1
+        WHERE id_seo_lang = '.(int)$idLang;
+        // CMS
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_cms
+        SET follow = 1
+        WHERE id_seo_lang = '.(int)$idLang;
+        foreach ($queries as $s) {
+            if (!Db::getInstance()->execute($s)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static function sitemapLang($idLang)
+    {
+        $queries = [];
+        // Products
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_product
+        SET allowed_sitemap = 1
+        WHERE id_seo_lang = '.(int)$idLang;
+        // Categories
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_category
+        SET allowed_sitemap = 1
+        WHERE id_seo_lang = '.(int)$idLang;
+        // Manufacturers
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_manufacturer
+        SET allowed_sitemap = 1
+        WHERE id_seo_lang = '.(int)$idLang;
+        // Manufacturers
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_supplier
+        SET allowed_sitemap = 1
+        WHERE id_seo_lang = '.(int)$idLang;
+        // Pages
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_pagemeta
+        SET allowed_sitemap = 1
+        WHERE id_seo_lang = '.(int)$idLang;
+        // CMS categories
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_cms_category
+        SET allowed_sitemap = 1
+        WHERE id_seo_lang = '.(int)$idLang;
+        // CMS
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_cms
+        SET allowed_sitemap = 1
+        WHERE id_seo_lang = '.(int)$idLang;
+        // Images
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_image
+        SET allowed_sitemap = 0
+        WHERE id_seo_lang = '.(int)$idLang;
+        foreach ($queries as $s) {
+            if (!Db::getInstance()->execute($s)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static function noIndexLang($idLang)
+    {
+        $queries = [];
+        // Products
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_product
+        SET indexable = 0
+        WHERE id_seo_lang = '.(int)$idLang;
+        // Categories
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_category
+        SET indexable = 0
+        WHERE id_seo_lang = '.(int)$idLang;
+        // Manufacturers
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_manufacturer
+        SET indexable = 0
+        WHERE id_seo_lang = '.(int)$idLang;
+        // Manufacturers
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_supplier
+        SET indexable = 0
+        WHERE id_seo_lang = '.(int)$idLang;
+        // Pages
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_pagemeta
+        SET indexable = 0
+        WHERE id_seo_lang = '.(int)$idLang;
+        // CMS categories
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_cms_category
+        SET indexable = 0
+        WHERE id_seo_lang = '.(int)$idLang;
+        // CMS
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_cms
+        SET indexable = 0
+        WHERE id_seo_lang = '.(int)$idLang;
+        // Images
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_image
+        SET indexable = 0
+        WHERE id_seo_lang = '.(int)$idLang;
+        foreach ($queries as $s) {
+            if (!Db::getInstance()->execute($s)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static function noFollowLang($idLang)
+    {
+        $queries = [];
+        // Products
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_product
+        SET follow = 0
+        WHERE id_seo_lang = '.(int)$idLang;
+        // Categories
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_category
+        SET follow = 0
+        WHERE id_seo_lang = '.(int)$idLang;
+        // Manufacturers
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_manufacturer
+        SET follow = 0
+        WHERE id_seo_lang = '.(int)$idLang;
+        // Manufacturers
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_supplier
+        SET follow = 0
+        WHERE id_seo_lang = '.(int)$idLang;
+        // Pages
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_pagemeta
+        SET follow = 0
+        WHERE id_seo_lang = '.(int)$idLang;
+        // CMS categories
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_cms_category
+        SET follow = 0
+        WHERE id_seo_lang = '.(int)$idLang;
+        // CMS
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_cms
+        SET follow = 0
+        WHERE id_seo_lang = '.(int)$idLang;
+        foreach ($queries as $s) {
+            if (!Db::getInstance()->execute($s)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static function noSitemapLang($idLang)
+    {
+        $queries = [];
+        // Products
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_product
+        SET allowed_sitemap = 0
+        WHERE id_seo_lang = '.(int)$idLang;
+        // Categories
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_category
+        SET allowed_sitemap = 0
+        WHERE id_seo_lang = '.(int)$idLang;
+        // Manufacturers
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_manufacturer
+        SET allowed_sitemap = 0
+        WHERE id_seo_lang = '.(int)$idLang;
+        // Manufacturers
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_supplier
+        SET allowed_sitemap = 0
+        WHERE id_seo_lang = '.(int)$idLang;
+        // Pages
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_pagemeta
+        SET allowed_sitemap = 0
+        WHERE id_seo_lang = '.(int)$idLang;
+        // CMS categories
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_cms_category
+        SET allowed_sitemap = 0
+        WHERE id_seo_lang = '.(int)$idLang;
+        // CMS
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_cms
+        SET allowed_sitemap = 0
+        WHERE id_seo_lang = '.(int)$idLang;
+        // Images
+        $queries[] = 'UPDATE '._DB_PREFIX_.'ever_seo_image
+        SET allowed_sitemap = 0
+        WHERE id_seo_lang = '.(int)$idLang;
+        foreach ($queries as $s) {
+            if (!Db::getInstance()->execute($s)) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

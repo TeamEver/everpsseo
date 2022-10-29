@@ -38,7 +38,7 @@ class EverPsSeo extends Module
     {
         $this->name = 'everpsseo';
         $this->tab = 'seo';
-        $this->version = '8.3.6';
+        $this->version = '8.4.1';
         $this->author = 'Team Ever';
         $this->need_instance = 0;
         $this->module_key = '5ddabba8ec414cd5bd646fad24368472';
@@ -986,7 +986,7 @@ class EverPsSeo extends Module
             if (!count($this->postErrors)) {
                 $this->postProcess();
                 foreach ($this->getBannedLangs() as $id_lang) {
-                    $this->noindexLang(
+                    EverPsSeoTools::noIndexLang(
                         (int)$id_lang
                     );
                 }
@@ -999,7 +999,7 @@ class EverPsSeo extends Module
             if (!count($this->postErrors)) {
                 $this->postProcess();
                 foreach ($this->getBannedLangs() as $id_lang) {
-                    $this->nofollowLang(
+                    EverPsSeoTools::noFollowLang(
                         (int)$id_lang
                     );
                 }
@@ -1012,7 +1012,46 @@ class EverPsSeo extends Module
             if (!count($this->postErrors)) {
                 $this->postProcess();
                 foreach ($this->getBannedLangs() as $id_lang) {
-                    $this->nositemapLang(
+                    EverPsSeoTools::noSitemapLang(
+                        (int)$id_lang
+                    );
+                }
+            }
+        }
+
+        // Bulk index lang
+        if (Tools::isSubmit('submitIndexLang')) {
+            $this->postValidation();
+            if (!count($this->postErrors)) {
+                $this->postProcess();
+                foreach ($this->getBannedLangs() as $id_lang) {
+                   EverPsSeoTools::indexLang(
+                        (int)$id_lang
+                    );
+                }
+            }
+        }
+
+        // Bulk follow lang
+        if (Tools::isSubmit('submitFollowLang')) {
+            $this->postValidation();
+            if (!count($this->postErrors)) {
+                $this->postProcess();
+                foreach ($this->getBannedLangs() as $id_lang) {
+                    EverPsSeoTools::followLang(
+                        (int)$id_lang
+                    );
+                }
+            }
+        }
+
+        // Bulk follow lang
+        if (Tools::isSubmit('submitSitemapLang')) {
+            $this->postValidation();
+            if (!count($this->postErrors)) {
+                $this->postProcess();
+                foreach ($this->getBannedLangs() as $id_lang) {
+                    EverPsSeoTools::sitemapLang(
                         (int)$id_lang
                     );
                 }
@@ -4612,7 +4651,7 @@ class EverPsSeo extends Module
                 'input' => array(
                     array(
                         'type' => 'select',
-                        'label' => 'Banned languages',
+                        'label' => 'Selected languages',
                         'desc' => 'Choose allowed langs for bulk actions',
                         'hint' => 'This will bulk actions on your whole shop',
                         'name' => 'EVERSEO_BULK_LANGS[]',
@@ -4655,6 +4694,27 @@ class EverPsSeo extends Module
                         'class' => 'btn btn-default pull-right',
                         'icon' => 'process-icon-refresh',
                         'title' => $this->l('No sitemap all selected langs')
+                    ),
+                    'indexLang' => array(
+                        'name' => 'submitIndexLang',
+                        'type' => 'submit',
+                        'class' => 'btn btn-default pull-right',
+                        'icon' => 'process-icon-refresh',
+                        'title' => $this->l('Index all selected langs')
+                    ),
+                    'followLang' => array(
+                        'name' => 'submitFollowLang',
+                        'type' => 'submit',
+                        'class' => 'btn btn-default pull-right',
+                        'icon' => 'process-icon-refresh',
+                        'title' => $this->l('Follow all selected langs')
+                    ),
+                    'sitemapLang' => array(
+                        'name' => 'submitSitemapLang',
+                        'type' => 'submit',
+                        'class' => 'btn btn-default pull-right',
+                        'icon' => 'process-icon-refresh',
+                        'title' => $this->l('Sitemap all selected langs')
                     ),
                 ),
             ),
@@ -11142,129 +11202,6 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         AND esp.id_seo_lang = esp2.id_seo_lang';
 
         foreach ($sql as $s) {
-            if (!Db::getInstance()->execute($s)) {
-                return false;
-            }
-        }
-    }
-
-    protected function noindexLang($id_lang)
-    {
-        $noindex = array();
-        // Products
-        $noindex[] = 'UPDATE '._DB_PREFIX_.'ever_seo_product
-        SET indexable = 0
-        WHERE id_seo_lang = '.(int)$id_lang;
-        // Categories
-        $noindex[] = 'UPDATE '._DB_PREFIX_.'ever_seo_category
-        SET indexable = 0
-        WHERE id_seo_lang = '.(int)$id_lang;
-        // Manufacturers
-        $noindex[] = 'UPDATE '._DB_PREFIX_.'ever_seo_manufacturer
-        SET indexable = 0
-        WHERE id_seo_lang = '.(int)$id_lang;
-        // Manufacturers
-        $noindex[] = 'UPDATE '._DB_PREFIX_.'ever_seo_supplier
-        SET indexable = 0
-        WHERE id_seo_lang = '.(int)$id_lang;
-        // Pages
-        $noindex[] = 'UPDATE '._DB_PREFIX_.'ever_seo_pagemeta
-        SET indexable = 0
-        WHERE id_seo_lang = '.(int)$id_lang;
-        // CMS categories
-        $noindex[] = 'UPDATE '._DB_PREFIX_.'ever_seo_cms_category
-        SET indexable = 0
-        WHERE id_seo_lang = '.(int)$id_lang;
-        // CMS
-        $noindex[] = 'UPDATE '._DB_PREFIX_.'ever_seo_cms
-        SET indexable = 0
-        WHERE id_seo_lang = '.(int)$id_lang;
-        foreach ($noindex as $s) {
-            if (!Db::getInstance()->execute($s)) {
-                return false;
-            }
-        }
-    }
-
-    protected function nofollowLang($id_lang)
-    {
-        $nofollow = array();
-        // Products
-        $nofollow[] = 'UPDATE '._DB_PREFIX_.'ever_seo_product
-        SET follow = 0
-        WHERE id_seo_lang = '.(int)$id_lang;
-        // Categories
-        $nofollow[] = 'UPDATE '._DB_PREFIX_.'ever_seo_category
-        SET follow = 0
-        WHERE id_seo_lang = '.(int)$id_lang;
-        // Manufacturers
-        $nofollow[] = 'UPDATE '._DB_PREFIX_.'ever_seo_manufacturer
-        SET follow = 0
-        WHERE id_seo_lang = '.(int)$id_lang;
-        // Manufacturers
-        $nofollow[] = 'UPDATE '._DB_PREFIX_.'ever_seo_supplier
-        SET follow = 0
-        WHERE id_seo_lang = '.(int)$id_lang;
-        // Pages
-        $nofollow[] = 'UPDATE '._DB_PREFIX_.'ever_seo_pagemeta
-        SET follow = 0
-        WHERE id_seo_lang = '.(int)$id_lang;
-        // CMS categories
-        $nofollow[] = 'UPDATE '._DB_PREFIX_.'ever_seo_cms_category
-        SET follow = 0
-        WHERE id_seo_lang = '.(int)$id_lang;
-        // CMS
-        $nofollow[] = 'UPDATE '._DB_PREFIX_.'ever_seo_cms
-        SET follow = 0
-        WHERE id_seo_lang = '.(int)$id_lang;
-        foreach ($nofollow as $s) {
-            if (!Db::getInstance()->execute($s)) {
-                return false;
-            }
-        }
-    }
-
-    protected function nositemapLang($id_lang)
-    {
-        $nositemap = array();
-        // Products
-        $nositemap[] = 'UPDATE '._DB_PREFIX_.'ever_seo_product
-        SET allowed_sitemap = 0
-        WHERE id_seo_lang = '.(int)$id_lang;
-        // Categories
-        $nositemap[] = 'UPDATE '._DB_PREFIX_.'ever_seo_category
-        SET allowed_sitemap = 0
-        WHERE id_seo_lang = '.(int)$id_lang;
-        // Manufacturers
-        $nositemap[] = 'UPDATE '._DB_PREFIX_.'ever_seo_manufacturer
-        SET allowed_sitemap = 0
-        WHERE id_seo_lang = '.(int)$id_lang;
-        // Manufacturers
-        $nositemap[] = 'UPDATE '._DB_PREFIX_.'ever_seo_supplier
-        SET allowed_sitemap = 0
-        WHERE id_seo_lang = '.(int)$id_lang;
-        // Pages
-        $nositemap[] = 'UPDATE '._DB_PREFIX_.'ever_seo_pagemeta
-        SET allowed_sitemap = 0
-        WHERE id_seo_lang = '.(int)$id_lang;
-        // CMS categories
-        $nositemap[] = 'UPDATE '._DB_PREFIX_.'ever_seo_cms_category
-        SET allowed_sitemap = 0
-        WHERE id_seo_lang = '.(int)$id_lang;
-        // CMS
-        $nositemap[] = 'UPDATE '._DB_PREFIX_.'ever_seo_cms
-        SET allowed_sitemap = 0
-        WHERE id_seo_lang = '.(int)$id_lang;
-        foreach ($nositemap as $s) {
-            if (!Db::getInstance()->execute($s)) {
-                return false;
-            }
-        }
-        // Images
-        $nositemap[] = 'UPDATE '._DB_PREFIX_.'ever_seo_image
-        SET allowed_sitemap = 0
-        WHERE id_seo_lang = '.(int)$id_lang;
-        foreach ($nositemap as $s) {
             if (!Db::getInstance()->execute($s)) {
                 return false;
             }
