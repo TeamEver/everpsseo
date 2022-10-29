@@ -277,7 +277,7 @@ class EverPsSeoTools extends ObjectModel
     public static function getReferrer()
     {
         if (isset($_SERVER['HTTP_REFERER'])) {
-            $referrer = $_SERVER['HTTP_REFERER'];
+            $referrer = pSQL($_SERVER['HTTP_REFERER']);
         } else {
             $referrer = false;
         }

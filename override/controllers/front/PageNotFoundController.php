@@ -35,18 +35,12 @@ class PageNotFoundController extends PageNotFoundControllerCore
                     $redirCode = 'Status: 301 Moved Permanently, false, 301';
                     break;
             }
-            if (isset($_SERVER['HTTP_REFERER'])) {
-                $from = $_SERVER['HTTP_REFERER'];
-            } else {
-                $from = 'null';
-            }
             $url = "https://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
             $splitted = preg_split("#/#", parse_url($url, PHP_URL_PATH));
             $notFoundExists = EverPsSeoRedirect::ifNotFoundExists(
                 $url,
                 (int)$this->context->shop->id,
-                (int)$this->context->language->id,
-                $from
+                (int)$this->context->language->id
             );
             if ($notFoundExists) {
                 $redirectExists = EverPsSeoRedirect::ifRedirectExists(
