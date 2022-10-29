@@ -1790,7 +1790,7 @@ class EverPsSeo extends Module
             'form' => array(
                 'legend' => array(
                     'title' => $this->l('Search settings'),
-                    'icon' => 'icon-smile',
+                    'icon' => 'icon-search',
                 ),
                 'input' => array(
                     array(
