@@ -8126,7 +8126,6 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     }
                 }
                 return true;
-                break;
 
             case 'id_seo_category':
                 $description = EverPsSeoCategory::changeCategoryDescShortcodes(
@@ -8732,14 +8731,6 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     $id_category = (int)Tools::getValue('id_category');
                     if (Tools::getValue('module')) {
                         return;
-                        $currentUrl = $link->getModuleLink(
-                            Tools::getValue('module'),
-                            'category',
-                            Tools::getAllValues(),
-                            true,
-                            (int)$id_lang,
-                            (int)$id_shop
-                        );
                     } else {
                         $category = new Category(
                             (int)$id_category,
@@ -10001,7 +9992,6 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                             'views/templates/front/richsnippets.tpl',
                             $cacheId
                         );
-                        break;
 
                     case 'category':
                         $id_category = Tools::getValue('id_category');
@@ -10026,7 +10016,6 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                             'currentUrl' => (string)$currentUrl
                         ));
                         return $this->display(__FILE__, 'views/templates/front/richsnippets.tpl', $cacheId);
-                        break;
 
                     case 'cms':
                         $id_cms = Tools::getValue('id_cms');
@@ -10051,7 +10040,6 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                             'currentUrl' => (string)$currentUrl
                         ));
                         return $this->display(__FILE__, 'views/templates/front/richsnippets.tpl', $cacheId);
-                        break;
 
                     case 'manufacturer':
                         $id_manufacturer = Tools::getValue('id_manufacturer');
@@ -10074,7 +10062,6 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                             'currentUrl' => (string)$currentUrl
                         ));
                         return $this->display(__FILE__, 'views/templates/front/richsnippets.tpl', $cacheId);
-                        break;
 
                     case 'supplier':
                         $id_supplier = Tools::getValue('id_supplier');
@@ -10097,7 +10084,6 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                             'currentUrl' => (string)$currentUrl
                         ));
                         return $this->display(__FILE__, 'views/templates/front/richsnippets.tpl', $cacheId);
-                        break;
 
                     default:
                         $link = new Link();
@@ -10110,7 +10096,6 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                             'currentUrl' => (string)$currentUrl
                         ));
                         return $this->display(__FILE__, 'views/templates/front/richsnippets.tpl', $cacheId);
-                        break;
                 }
             }
         }
