@@ -108,6 +108,11 @@ class AdminEverPsSeoSupplierController extends ModuleAdminController
                 'title' => $this->l('Views count'),
                 'align' => 'left',
                 'width' => 'auto'
+            ),
+            'status_code' => array(
+                'title' => $this->l('Http code'),
+                'align' => 'left',
+                'width' => 'auto'
             )
         );
 
@@ -244,6 +249,10 @@ class AdminEverPsSeoSupplierController extends ModuleAdminController
                 'text' => $this->l('Use shortcodes for title'),
                 'confirm' => $this->l('Set title using shortcodes ?')
             ),
+            'indexnow' => array(
+                'text' => $this->l('Index now'),
+                'confirm' => $this->l('Index now ?')
+            ),
         );
 
         if (Tools::isSubmit('submitBulkindex'.$this->table)) {
@@ -280,6 +289,10 @@ class AdminEverPsSeoSupplierController extends ModuleAdminController
 
         if (Tools::isSubmit('submitBulktitleshortcodes'.$this->table)) {
             $this->processBulkTitleShortcodes();
+        }
+
+        if (Tools::isSubmit('submitBulkindexnow'.$this->table)) {
+            $this->processBulkIndexNow();
         }
 
         if (Tools::isSubmit('indexable'.$this->table)) {
@@ -884,6 +897,39 @@ class AdminEverPsSeoSupplierController extends ModuleAdminController
                 $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
             } else {
                 Db::getInstance()->execute($sql2);
+            }
+        }
+    }
+
+    protected function processBulkIndexNow()
+    {
+        foreach (Tools::getValue($this->table.'Box') as $idObj) {
+            $everSupplier = new EverPsSeoSupplier(
+                (int)$idObj
+            );
+            $supplier = new Supplier(
+                (int)$everSupplier->id_seo_supplier,
+                (int)$everSupplier->id_seo_lang
+            );
+            $link = new Link();
+            $url = $link->getSupplierLink(
+                $supplier,
+                null,
+                null,
+                null,
+                (int)$everSupplier->id_seo_lang,
+                (int)$this->context->shop->id
+            );
+            $httpCode = EverPsSeoTools::indexNow(
+                $url
+            );
+            $sql = 'UPDATE `'._DB_PREFIX_.'ever_seo_supplier`
+            SET status_code = '.(int)$httpCode.'
+            WHERE id_seo_lang = '.(int)$everSupplier->id_seo_lang.'
+            AND id_shop = '.(int)$this->context->shop->id.'
+            AND id_ever_seo_supplier = '.(int)$everSupplier->id;
+            if (!Db::getInstance()->execute($sql)) {
+                $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
             }
         }
     }

@@ -23,6 +23,7 @@ class EverPsSeoSupplier extends ObjectModel
     public $follow;
     public $allowed_sitemap;
     public $count;
+    public $status_code;
 
     public static $definition = array(
         'table' => 'ever_seo_supplier',
@@ -99,6 +100,11 @@ class EverPsSeoSupplier extends ObjectModel
                 'type' => self::TYPE_INT,
                 'lang' => false,
                 'validate' => 'isunsignedInt'
+            ),
+            'status_code' => array(
+                'type' => self::TYPE_INT,
+                'lang' => false,
+                'validate' => 'isUnsignedInt'
             ),
         )
     );

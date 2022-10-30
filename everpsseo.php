@@ -38,7 +38,7 @@ class EverPsSeo extends Module
     {
         $this->name = 'everpsseo';
         $this->tab = 'seo';
-        $this->version = '8.4.1';
+        $this->version = '8.4.2';
         $this->author = 'Team Ever';
         $this->need_instance = 0;
         $this->module_key = '5ddabba8ec414cd5bd646fad24368472';
@@ -6624,7 +6624,6 @@ class EverPsSeo extends Module
             $product_title[$lang['id_lang']] = (Tools::getValue('EVERSEO_PRODUCT_TITLE_AUTO_'.$lang['id_lang']))
             ? Tools::getValue('EVERSEO_PRODUCT_TITLE_AUTO_'.$lang['id_lang']) : '';
         }
-
         foreach (array_keys($form_values) as $key) {
             if ($key == 'EVERSEO_SITEMAP_LANGS[]') {
                 Configuration::updateValue(
@@ -6750,7 +6749,6 @@ class EverPsSeo extends Module
                 Configuration::updateValue($key, Tools::getValue($key));
             }
         }
-
         /* Uploads image */
         $type = Tools::strtolower(Tools::substr(strrchr($_FILES['image']['name'], '.'), 1));
         $imagesize = @getimagesize($_FILES['image']['tmp_name']);
@@ -6791,115 +6789,102 @@ class EverPsSeo extends Module
                 @unlink($temp_name);
             }
         }
-
         // Set default category index
         $this->getColumnStructure(
             'ever_seo_category',
             'indexable',
             (int)Tools::getValue('EVERSEO_INDEX_CATEGORY')
         );
-
         // Set default product index
         $this->getColumnStructure(
             'ever_seo_product',
             'indexable',
             (int)Tools::getValue('EVERSEO_INDEX_PRODUCT')
         );
-
         // Set default page meta index
         $this->getColumnStructure(
             'ever_seo_pagemeta',
             'indexable',
             (int)Tools::getValue('EVERSEO_INDEX_PAGE_META')
         );
-
         // Set default manufacturer index
         $this->getColumnStructure(
             'ever_seo_manufacturer',
             'indexable',
             (int)Tools::getValue('EVERSEO_INDEX_MANUFACTURER')
         );
-
         // Set default supplier index
         $this->getColumnStructure(
             'ever_seo_supplier',
             'indexable',
             (int)Tools::getValue('EVERSEO_INDEX_SUPPLIER')
         );
-
         // Set default category follow
         $this->getColumnStructure(
             'ever_seo_category',
             'follow',
             (int)Tools::getValue('EVERSEO_FOLLOW_CATEGORY')
         );
-
         // Set default product follow
         $this->getColumnStructure(
             'ever_seo_product',
             'follow',
             (int)Tools::getValue('EVERSEO_FOLLOW_PRODUCT')
         );
-
         // Set default page meta follow
         $this->getColumnStructure(
             'ever_seo_pagemeta',
             'follow',
             (int)Tools::getValue('EVERSEO_FOLLOW_PAGE_META')
         );
-
         // Set default manufacturer follow
         $this->getColumnStructure(
             'ever_seo_manufacturer',
             'follow',
             (int)Tools::getValue('EVERSEO_FOLLOW_MANUFACTURER')
         );
-
         // Set default supplier follow
         $this->getColumnStructure(
             'ever_seo_supplier',
             'follow',
             (int)Tools::getValue('EVERSEO_FOLLOW_SUPPLIER')
         );
-
         // Set default category sitemap
         $this->getColumnStructure(
             'ever_seo_category',
             'allowed_sitemap',
             (int)Tools::getValue('EVERSEO_SITEMAP_CATEGORY')
         );
-
         // Set default product sitemap
         $this->getColumnStructure(
             'ever_seo_product',
             'allowed_sitemap',
             (int)Tools::getValue('EVERSEO_SITEMAP_PRODUCT')
         );
-
         // Set default page meta sitemap
         $this->getColumnStructure(
             'ever_seo_pagemeta',
             'allowed_sitemap',
             (int)Tools::getValue('EVERSEO_SITEMAP_PAGE_META')
         );
-
         // Set default manufacturer sitemap
         $this->getColumnStructure(
             'ever_seo_manufacturer',
             'allowed_sitemap',
             (int)Tools::getValue('EVERSEO_SITEMAP_MANUFACTURER')
         );
-
         // Set default supplier sitemap
         $this->getColumnStructure(
             'ever_seo_supplier',
             'allowed_sitemap',
             (int)Tools::getValue('EVERSEO_SITEMAP_SUPPLIER')
         );
-
         // Generate robots.txt file if rewrite file in ON
         if ((bool)Configuration::get('EVERSEO_ROBOTS_TXT_REWRITE')) {
             $this->generateRobots();
+        }
+        if (!Configuration::get('EVERSEO_INDEXNOW_KEY')) {
+            EverPsSeoTools::generateIndexNowKey();
         }
         $this->postSuccess[] = $this->l('All settings have been saved');
     }

@@ -26,6 +26,7 @@ class EverPsSeoProduct extends ObjectModel
     public $allowed_sitemap;
     public $count;
     public $note;
+    public $status_code;
 
     public static $definition = array(
         'table' => 'ever_seo_product',
@@ -35,18 +36,18 @@ class EverPsSeoProduct extends ObjectModel
             'id_seo_product' => array(
                 'type' => self::TYPE_INT,
                 'lang' => false,
-                'validate' => 'isunsignedInt',
+                'validate' => 'isUnsignedInt',
                 'required' => true
             ),
             'id_shop' => array(
                 'type' => self::TYPE_INT,
                 'lang' => false,
-                'validate' => 'isunsignedInt'
+                'validate' => 'isUnsignedInt'
             ),
             'id_seo_lang' => array(
                 'type' => self::TYPE_INT,
                 'lang' => false,
-                'validate' => 'isunsignedInt'
+                'validate' => 'isUnsignedInt'
             ),
             'meta_title' => array(
                 'type' => self::TYPE_STRING,
@@ -110,12 +111,17 @@ class EverPsSeoProduct extends ObjectModel
             'count' => array(
                 'type' => self::TYPE_INT,
                 'lang' => false,
-                'validate' => 'isunsignedInt'
+                'validate' => 'isUnsignedInt'
             ),
             'note' => array(
                 'type' => self::TYPE_INT,
                 'lang' => false,
-                'validate' => 'isunsignedInt'
+                'validate' => 'isUnsignedInt'
+            ),
+            'status_code' => array(
+                'type' => self::TYPE_INT,
+                'lang' => false,
+                'validate' => 'isUnsignedInt'
             ),
         )
     );

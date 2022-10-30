@@ -636,4 +636,67 @@ class EverPsSeoTools extends ObjectModel
         }
         return true;
     }
+
+    public static function indexNow($url)
+    {
+        if (!Validate::isUrl($url)) {
+            return false;
+        }
+        $siteUrl = Tools::getHttpHost(true).__PS_BASE_URI__;
+        $key = Configuration::get('EVERSEO_INDEXNOW_KEY');
+        if (!$key) {
+            $key = self::generateIndexNowKey();
+        }
+        $indexNowUrl = 'https://api.indexnow.org/indexnow?url='.$url.'&key='.$key.'&keyLocation='.$siteUrl.$key.'.txt';
+        $ch = curl_init(
+            $indexNowUrl
+        );
+        curl_setopt(
+            $ch,
+            CURLOPT_RETURNTRANSFER,
+            true
+        );
+        curl_exec($ch);
+        $response = curl_getinfo($ch);
+        curl_close($ch);
+        $httpCode = $response['http_code'];
+        return $httpCode;
+    }
+
+    public static function generateIndexNowKey()
+    {
+        $ext = '.txt';
+        $key = self::generateRandomString();
+        file_put_contents(
+            _PS_ROOT_DIR_.'/'.$key.$ext,
+            $key
+        );
+        Configuration::updateValue(
+            'EVERSEO_INDEXNOW_KEY',
+            $key
+        );
+        return $key;
+    }
+
+    public static function generateRandomString($length = 32) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return Tools::strtolower($randomString);
+    }
+
+    public static function addElementInTable($table, $object, $id_element, $id_shop, $id_lang)
+    {
+        return Db::getInstance()->insert(
+            $table,
+            array(
+                $object => (int)$id_element,
+                'id_shop' => (int)$id_shop,
+                'id_seo_lang' => (int)$id_lang
+            )
+        );
+    }
 }

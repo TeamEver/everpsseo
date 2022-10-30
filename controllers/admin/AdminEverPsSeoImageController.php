@@ -118,17 +118,18 @@ class AdminEverPsSeoImageController extends ModuleAdminController
                 'title' => $this->l('Lang'),
                 'align' => 'left',
                 'width' => 'auto'
+            ),
+            'status_code' => array(
+                'title' => $this->l('Http code'),
+                'align' => 'left',
+                'width' => 'auto'
             )
         );
 
         $this->colorOnBackground = true;
         $this->isSeven = Tools::version_compare(_PS_VERSION_, '1.7', '>=') ? true : false;
 
-        if ($this->isSeven) {
-            $imageType = ImageType::getFormattedName('large');
-        } else {
-            $imageType = ImageType::getFormatedName('large');
-        }
+        $imageType = ImageType::getFormattedName('large');
 
         $id_shop = (int)$this->context->shop->id;
         $id_lang = (int)$this->context->language->id;
@@ -262,6 +263,10 @@ class AdminEverPsSeoImageController extends ModuleAdminController
                 'text' => $this->l('Use shortcodes for alt'),
                 'confirm' => $this->l('Set alt using shortcodes ?')
             ),
+            'indexnow' => array(
+                'text' => $this->l('Index now'),
+                'confirm' => $this->l('Index now ?')
+            ),
         );
 
         if (Tools::isSubmit('submitBulksitemap'.$this->table)) {
@@ -294,6 +299,10 @@ class AdminEverPsSeoImageController extends ModuleAdminController
 
         if (Tools::isSubmit('submitBulkaltshortcodes'.$this->table)) {
             $this->processBulkAltShortcodes();
+        }
+
+        if (Tools::isSubmit('submitBulkindexnow'.$this->table)) {
+            $this->processBulkIndexNow();
         }
 
         if (Tools::isSubmit('allowed_sitemap'.$this->table)) {
@@ -659,6 +668,53 @@ class AdminEverPsSeoImageController extends ModuleAdminController
             // Hook update triggered
             if (!$image->save()) {
                 $this->errors[] = $this->l('Can\'t update the native object');
+            }
+        }
+    }
+
+    protected function processBulkIndexNow()
+    {
+        foreach (Tools::getValue($this->table.'Box') as $idEverImg) {
+            $everImg = new EverPsSeoImage(
+                (int)$idEverImg
+            );
+            $image = new Image(
+                (int)$everImg->id_seo_img,
+                (int)$everImg->id_seo_lang,
+                (int)$this->context->shop->id
+            );
+            if (!Validate::isLoadedObject($image)) {
+                continue;
+            }
+            $link = new Link();
+            $product = new Product(
+                (int)$everImg->id_seo_product,
+                false,
+                (int)$everImg->id_seo_lang,
+                (int)$this->context->shop->id
+            );
+            if (!Validate::isLoadedObject($product)) {
+                continue;
+            }
+            $richImage = $product->getCover(
+                (int)$product->id
+            );
+            $imageType = ImageType::getFormattedName('large');
+            $url = Tools::getShopProtocol().$link->getImageLink(
+                $product->link_rewrite,
+                $product->id.'-'.$richImage['id_image'],
+                $imageType
+            );
+            $httpCode = EverPsSeoTools::indexNow(
+                $url
+            );
+            $sql = 'UPDATE `'._DB_PREFIX_.'ever_seo_image`
+            SET status_code = "'.(int)$httpCode.'"
+            WHERE id_seo_lang = '.(int)$everImg->id_seo_lang.'
+            AND id_shop = '.(int)$this->context->shop->id.'
+            AND id_ever_seo_image = '.(int)$everImg->id;
+            if (!Db::getInstance()->execute($sql)) {
+                $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
             }
         }
     }

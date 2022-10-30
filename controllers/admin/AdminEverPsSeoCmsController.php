@@ -100,6 +100,11 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
                 'title' => $this->l('Views count'),
                 'align' => 'left',
                 'width' => 'auto'
+            ),
+            'status_code' => array(
+                'title' => $this->l('Http code'),
+                'align' => 'left',
+                'width' => 'auto'
             )
         );
 
@@ -223,6 +228,10 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
                 'text' => $this->l('Short desc as meta desc'),
                 'confirm' => $this->l('Set default CMS content as meta description ?')
             ),
+            'indexnow' => array(
+                'text' => $this->l('Index now'),
+                'confirm' => $this->l('Index now ?')
+            ),
         );
 
         if (Tools::isSubmit('submitBulkindex'.$this->table)) {
@@ -247,6 +256,10 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
 
         if (Tools::isSubmit('submitBulkmetadescriptioncontent'.$this->table)) {
             $this->processBulkSetContentAsMetaDescription();
+        }
+
+        if (Tools::isSubmit('submitBulkindexnow'.$this->table)) {
+            $this->processBulkIndexNow();
         }
 
         if (Tools::isSubmit('indexable'.$this->table)) {
@@ -719,6 +732,44 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
             );
             // Hook update triggered
             if (!$cms->save()) {
+                $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
+            }
+        }
+    }
+
+    protected function processBulkIndexNow()
+    {
+        foreach (Tools::getValue($this->table.'Box') as $idEverCms) {
+            $everCms = new EverPsSeoCms(
+                (int)$idEverCms
+            );
+            $cms = new CMS(
+                (int)$everCms->id_seo_cms,
+                (int)$everCms->id_seo_lang,
+                (int)$this->context->shop->id
+            );
+
+            if (!Validate::isLoadedObject($cms)) {
+                continue;
+            }
+            $link = new Link();
+            $url = $link->getCMSLink(
+                $cms,
+                null,
+                null,
+                null,
+                (int)$everCms->id_seo_lang,
+                (int)$this->context->shop->id
+            );
+            $httpCode = EverPsSeoTools::indexNow(
+                $url
+            );
+            $sql = 'UPDATE `'._DB_PREFIX_.'ever_seo_cms`
+            SET status_code = "'.(int)$httpCode.'"
+            WHERE id_seo_lang = '.(int)$everCms->id_seo_lang.'
+            AND id_shop = '.(int)$this->context->shop->id.'
+            AND id_ever_seo_cms = '.(int)$cms->id;
+            if (!Db::getInstance()->execute($sql)) {
                 $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
             }
         }

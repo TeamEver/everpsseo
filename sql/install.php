@@ -70,6 +70,7 @@ $sql[] =
         `allowed_sitemap` int(10) NOT NULL DEFAULT 1,
         `count` int(10) unsigned DEFAULT 0,
         `note` varchar(255) DEFAULT 0,
+        `status_code` varchar(255) DEFAULT 0,
         PRIMARY KEY (`id_ever_seo_product`)
     ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8';
 
@@ -83,6 +84,7 @@ $sql[] =
         `id_seo_lang` int(10) unsigned NOT NULL,
         `alt` varchar(255) DEFAULT NULL,
         `allowed_sitemap` int(10) unsigned NOT NULL,
+        `status_code` varchar(255) DEFAULT 0,
         PRIMARY KEY (`id_ever_seo_image`)
     ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8';
 
@@ -107,6 +109,7 @@ $sql[] =
         `allowed_sitemap` int(10) NOT NULL DEFAULT 1,
         `count` int(10) unsigned DEFAULT 0,
         `note` varchar(255) DEFAULT 0,
+        `status_code` varchar(255) DEFAULT 0,
         PRIMARY KEY (`id_ever_seo_category`)
     ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8';
 
@@ -129,6 +132,7 @@ $sql[] =
         `allowed_sitemap` int(10) NOT NULL DEFAULT 1,
         `count` int(10) unsigned DEFAULT 0,
         `note` varchar(255) DEFAULT 0,
+        `status_code` varchar(255) DEFAULT 0,
         PRIMARY KEY (`id_ever_seo_manufacturer`)
     ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8';
 
@@ -151,6 +155,7 @@ $sql[] =
         `allowed_sitemap` int(10) NOT NULL DEFAULT 1,
         `count` int(10) unsigned DEFAULT 0,
         `note` varchar(255) DEFAULT 0,
+        `status_code` varchar(255) DEFAULT 0,
         PRIMARY KEY (`id_ever_seo_supplier`)
     ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8';
 
@@ -172,6 +177,7 @@ $sql[] =
         `allowed_sitemap` int(10) NOT NULL DEFAULT 1,
         `count` int(10) unsigned DEFAULT 0,
         `note` varchar(255) DEFAULT 0,
+        `status_code` varchar(255) DEFAULT 0,
         PRIMARY KEY (`id_ever_seo_pagemeta`)
     ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8';
 
@@ -193,6 +199,7 @@ $sql[] =
         `allowed_sitemap` int(10) NOT NULL DEFAULT 1,
         `count` int(10) unsigned DEFAULT 0,
         `note` varchar(255) DEFAULT 0,
+        `status_code` varchar(255) DEFAULT 0,
         PRIMARY KEY (`id_ever_seo_cms_category`)
     ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8';
 
@@ -214,6 +221,7 @@ $sql[] =
         `allowed_sitemap` int(10) NOT NULL DEFAULT 1,
         `count` int(10) unsigned DEFAULT 0,
         `note` varchar(255) DEFAULT 0,
+        `status_code` varchar(255) DEFAULT 0,
         PRIMARY KEY (`id_ever_seo_cms`)
     ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8';
 
