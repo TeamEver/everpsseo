@@ -660,6 +660,10 @@ class EverPsSeoTools extends ObjectModel
         // Get counter & limit
         $dailyCount = (int)Configuration::get('EVERSEO_INDEXNOW_DAY_COUNT');
         $maxLimit = (int)Configuration::get('EVERSEO_INDEXNOW_LIMIT');
+        if ($maxLimit <= 0) {
+            $maxLimit = 200;
+            Configuration::updateValue('EVERSEO_INDEXNOW_LIMIT', $maxLimit);
+        }
         if ($dailyCount >= $maxLimit) {
             return false;
         }
@@ -683,7 +687,8 @@ class EverPsSeoTools extends ObjectModel
         curl_close($ch);
         $httpCode = $response['http_code'];
         // Save counter limit
-        Configuration::updateValue('EVERSEO_INDEXNOW_DAY_COUNT', $dailyCount + 1);
+        Configuration::updateValue('EVERSEO_INDEXNOW_DAY_COUNT', (int)$dailyCount + 1);
+        Configuration::updateValue('EVERSEO_INDEXNOW_DAY', (int)$dayOfWeek);
         return $httpCode;
     }
 
