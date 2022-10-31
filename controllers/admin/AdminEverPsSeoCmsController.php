@@ -765,7 +765,7 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
                 $url
             );
             $sql = 'UPDATE `'._DB_PREFIX_.'ever_seo_cms`
-            SET status_code = "'.(int)$httpCode.'"
+            SET status_code = '.(int)$httpCode.'
             WHERE id_seo_lang = '.(int)$everCms->id_seo_lang.'
             AND id_shop = '.(int)$this->context->shop->id.'
             AND id_ever_seo_cms = '.(int)$cms->id;

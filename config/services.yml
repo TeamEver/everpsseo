@@ -15,6 +15,12 @@ services:
         tags:
             - { name: 'console.command' }
 
+    everpsseo.seo.indexnow:
+        class: Everpsseo\Seo\Command\IndexNow
+        public: true
+        tags:
+            - { name: 'console.command' }
+
     everpsseo.seo.generate_objects_content:
         class: Everpsseo\Seo\Command\GenerateObjectsContent
         public: true

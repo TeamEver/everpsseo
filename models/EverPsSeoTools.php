@@ -637,11 +637,33 @@ class EverPsSeoTools extends ObjectModel
         return true;
     }
 
+    /**
+     * Index now given url
+     * @param string url to send
+     * @return index now page http code
+    */
     public static function indexNow($url)
     {
         if (!Validate::isUrl($url)) {
             return false;
         }
+        // Limit per day
+        $dayCounter = (int)Configuration::get('EVERSEO_INDEXNOW_DAY');
+        $dayOfWeek = date('N');
+        if ($dayCounter <= 0) {
+            Configuration::updateValue('EVERSEO_INDEXNOW_DAY', (int)$dayOfWeek);
+        }
+        // Reset counter every day
+        if ($dayCounter != $dayOfWeek) {
+            Configuration::updateValue('EVERSEO_INDEXNOW_DAY_COUNT', 0);
+        }
+        // Get counter & limit
+        $dailyCount = (int)Configuration::get('EVERSEO_INDEXNOW_DAY_COUNT');
+        $maxLimit = (int)Configuration::get('EVERSEO_INDEXNOW_LIMIT');
+        if ($dailyCount >= $maxLimit) {
+            return false;
+        }
+        // Prepare index now
         $siteUrl = Tools::getHttpHost(true).__PS_BASE_URI__;
         $key = Configuration::get('EVERSEO_INDEXNOW_KEY');
         if (!$key) {
@@ -660,6 +682,8 @@ class EverPsSeoTools extends ObjectModel
         $response = curl_getinfo($ch);
         curl_close($ch);
         $httpCode = $response['http_code'];
+        // Save counter limit
+        Configuration::updateValue('EVERSEO_INDEXNOW_DAY_COUNT', $dailyCount + 1);
         return $httpCode;
     }
 

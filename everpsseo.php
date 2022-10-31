@@ -38,7 +38,7 @@ class EverPsSeo extends Module
     {
         $this->name = 'everpsseo';
         $this->tab = 'seo';
-        $this->version = '8.4.2';
+        $this->version = '8.5.1';
         $this->author = 'Team Ever';
         $this->need_instance = 0;
         $this->module_key = '5ddabba8ec414cd5bd646fad24368472';
@@ -1444,6 +1444,15 @@ class EverPsSeo extends Module
                         'desc' => $this->l('Will redirect to this URL only if SEO maintenance is ON'),
                         'hint' => $this->l('Default will be google.com'),
                         'name' => 'EVERSEO_MAINTENANCE_URL',
+                        'lang' => false,
+                    ),
+                    array(
+                        'type' => 'text',
+                        'label' => $this->l('Index now request limit per day'),
+                        'desc' => $this->l('Set here how many requests can be sent to Index Nox'),
+                        'hint' => $this->l('Format is often UA-12345678-1'),
+                        'required' => true,
+                        'name' => 'EVERSEO_INDEXNOW_LIMIT',
                         'lang' => false,
                     ),
                     array(
@@ -5243,6 +5252,9 @@ class EverPsSeo extends Module
             'EVERSEO_MAINTENANCE_URL' => Configuration::get(
                 'EVERSEO_MAINTENANCE_URL'
             ),
+            'EVERSEO_INDEXNOW_LIMIT' => Configuration::get(
+                'EVERSEO_INDEXNOW_LIMIT'
+            ),
             'EVERSEO_ANALYTICS' => Configuration::get(
                 'EVERSEO_ANALYTICS'
             ),
@@ -5861,6 +5873,12 @@ class EverPsSeo extends Module
                 || !Validate::isString(Tools::getValue('EVERSEO_KNOWLEDGE'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "knowledgegraph" is not valid');
+            }
+
+            if (!Tools::getValue('EVERSEO_INDEXNOW_LIMIT')
+                || !Validate::isInt(Tools::getValue('EVERSEO_INDEXNOW_LIMIT'))
+            ) {
+                $this->postErrors[] = $this->l('Error : The field "Index now day limit" is not valid');
             }
 
             if (!Tools::getIsset('EVERSEO_ANALYTICS')
@@ -8126,6 +8144,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     }
                 }
                 return true;
+                break;
 
             case 'id_seo_category':
                 $description = EverPsSeoCategory::changeCategoryDescShortcodes(
@@ -8731,6 +8750,14 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     $id_category = (int)Tools::getValue('id_category');
                     if (Tools::getValue('module')) {
                         return;
+                        $currentUrl = $link->getModuleLink(
+                            Tools::getValue('module'),
+                            'category',
+                            Tools::getAllValues(),
+                            true,
+                            (int)$id_lang,
+                            (int)$id_shop
+                        );
                     } else {
                         $category = new Category(
                             (int)$id_category,
@@ -9992,6 +10019,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                             'views/templates/front/richsnippets.tpl',
                             $cacheId
                         );
+                        break;
 
                     case 'category':
                         $id_category = Tools::getValue('id_category');
@@ -10016,6 +10044,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                             'currentUrl' => (string)$currentUrl
                         ));
                         return $this->display(__FILE__, 'views/templates/front/richsnippets.tpl', $cacheId);
+                        break;
 
                     case 'cms':
                         $id_cms = Tools::getValue('id_cms');
@@ -10040,6 +10069,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                             'currentUrl' => (string)$currentUrl
                         ));
                         return $this->display(__FILE__, 'views/templates/front/richsnippets.tpl', $cacheId);
+                        break;
 
                     case 'manufacturer':
                         $id_manufacturer = Tools::getValue('id_manufacturer');
@@ -10062,6 +10092,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                             'currentUrl' => (string)$currentUrl
                         ));
                         return $this->display(__FILE__, 'views/templates/front/richsnippets.tpl', $cacheId);
+                        break;
 
                     case 'supplier':
                         $id_supplier = Tools::getValue('id_supplier');
@@ -10084,6 +10115,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                             'currentUrl' => (string)$currentUrl
                         ));
                         return $this->display(__FILE__, 'views/templates/front/richsnippets.tpl', $cacheId);
+                        break;
 
                     default:
                         $link = new Link();
@@ -10096,6 +10128,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                             'currentUrl' => (string)$currentUrl
                         ));
                         return $this->display(__FILE__, 'views/templates/front/richsnippets.tpl', $cacheId);
+                        break;
                 }
             }
         }
