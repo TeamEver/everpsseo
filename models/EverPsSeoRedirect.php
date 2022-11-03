@@ -87,7 +87,45 @@ class EverPsSeoRedirect extends ObjectModel
         return Db::getInstance()->getValue($notfound);
     }
 
-    public static function ifNotFoundExists($urlNotFound, $id_shop, $from = false)
+    public static function saveRedirection($urlNotFound, $id_shop, $from = false, $redirection = false)
+    {
+        $notfound =
+            'SELECT id_ever_seo_redirect
+            FROM `'._DB_PREFIX_.'ever_seo_redirect`
+            WHERE not_found = "'.pSQL($urlNotFound).'"
+                AND id_shop = '.(int)$id_shop;
+
+        $id_redirect = Db::getInstance()->getValue($notfound);
+        if ($id_redirect) {
+            $notFound = new self(
+                (int)$id_redirect
+            );
+        } else {
+            $notFound = new self();
+            $notFound->code = (int)Configuration::get('EVERSEO_REDIRECT');
+        }
+        if ($from) {
+            $notFound->everfrom = pSQL($from, true);
+        } else {
+            $from = EverPsSeoTools::getReferrer();
+            $notFound->everfrom = pSQL($from, true);
+        }
+        if ($redirection) {
+            $notFound->redirection = pSQL($redirection, true);
+            $notFound->active = 1;
+        } else {
+            $splitted = preg_split("#/#", parse_url($urlNotFound, PHP_URL_PATH));
+            $notFound->redirection = self::getRedirectUrl(
+                $splitted,
+                (int)$id_shop,
+                (int)Context::getContext()->language->id
+            );
+            $notFound->active = 1;
+        }
+        return $notFound->save();
+    }
+
+    public static function ifNotFoundExists($urlNotFound, $id_shop, $from = false, $redirection = false)
     {
         $notfound =
             'SELECT id_ever_seo_redirect
@@ -97,7 +135,7 @@ class EverPsSeoRedirect extends ObjectModel
 
         $id_redirect = Db::getInstance()->getValue($notfound);
 
-        if ((int)$id_redirect) {
+        if ($id_redirect) {
             $increment = self::incrementCounter(
                 (int)$id_redirect,
                 (int)$id_shop
@@ -110,6 +148,9 @@ class EverPsSeoRedirect extends ObjectModel
             } else {
                 $from = EverPsSeoTools::getReferrer();
                 $notFound->everfrom = pSQL($from, true);
+            }
+            if ($redirection) {
+                $notFound->redirection = pSQL($redirection, true);
             }
             $notFound->not_found = $urlNotFound;
             $notFound->id_shop = (int)$id_shop;
