@@ -92,8 +92,8 @@ class EverPsSeoRedirect extends ObjectModel
         $notfound =
             'SELECT id_ever_seo_redirect
             FROM `'._DB_PREFIX_.'ever_seo_redirect`
-            WHERE not_found = "'.pSQL($urlNotFound).'"
-                AND id_shop = '.(int)$id_shop;
+            WHERE not_found = "'.pSQL($urlNotFound, true).'"
+            AND id_shop = '.(int)$id_shop;
 
         $id_redirect = Db::getInstance()->getValue($notfound);
         if ($id_redirect) {
@@ -112,53 +112,39 @@ class EverPsSeoRedirect extends ObjectModel
         }
         if ($redirection) {
             $notFound->redirection = pSQL($redirection, true);
-            $notFound->active = 1;
         } else {
-            $splitted = preg_split("#/#", parse_url($urlNotFound, PHP_URL_PATH));
             $notFound->redirection = self::getRedirectUrl(
-                $splitted,
+                pSQL($urlNotFound, true),
                 (int)$id_shop,
                 (int)Context::getContext()->language->id
             );
-            $notFound->active = 1;
         }
-        return $notFound->save();
+        $notFound->active = 1;
+        $notFound->save();
+        return $notFound;
     }
 
-    public static function ifNotFoundExists($urlNotFound, $id_shop, $from = false, $redirection = false)
+    public static function ifNotFoundExists($urlNotFound, $id_shop, $incrementCounter = true)
     {
         $notfound =
             'SELECT id_ever_seo_redirect
             FROM `'._DB_PREFIX_.'ever_seo_redirect`
             WHERE not_found = "'.pSQL($urlNotFound).'"
-                AND id_shop = '.(int)$id_shop;
+            AND id_shop = '.(int)$id_shop;
 
         $id_redirect = Db::getInstance()->getValue($notfound);
-
         if ($id_redirect) {
-            $increment = self::incrementCounter(
-                (int)$id_redirect,
-                (int)$id_shop
+            if ((bool)$incrementCounter === true) {
+                self::incrementCounter(
+                    (int)$id_redirect,
+                    (int)$id_shop
+                );
+            }
+            $notFound = new self(
+                (int)$id_redirect
             );
-            return $increment;
+            return $notFound;
         } else {
-            $notFound = new EverPsSeoRedirect();
-            if ($from) {
-                $notFound->everfrom = pSQL($from, true);
-            } else {
-                $from = EverPsSeoTools::getReferrer();
-                $notFound->everfrom = pSQL($from, true);
-            }
-            if ($redirection) {
-                $notFound->redirection = pSQL($redirection, true);
-            }
-            $notFound->not_found = $urlNotFound;
-            $notFound->id_shop = (int)$id_shop;
-            $notFound->count = 1;
-            $notFound->active = 0;
-            $notFound->code = (int)Configuration::get('EVERSEO_REDIRECT');
-            $notFound->save();
-            //returning false for searching new URL
             return false;
         }
     }
@@ -186,8 +172,32 @@ class EverPsSeoRedirect extends ObjectModel
         return $update;
     }
 
-    public static function getRedirectUrl($urls, $id_shop, $id_lang)
+    public function getRedirectionStatusCode($code)
     {
+        switch ($code) {
+            case 301:
+                $redirectionCode = 'Status: 301 Moved Permanently, false, 301';
+                break;
+            case 302:
+                $redirectionCode = null;
+                break;
+            case 303:
+                $redirectionCode = 'HTTP/1.1 303 See Other';
+                break;
+            case 307:
+                $redirectionCode = 'HTTP/1.1 307 Temporary Redirect';
+                break;
+            
+            default:
+                $redirectionCode = 'Status: 301 Moved Permanently, false, 301';
+                break;
+        }
+        return $redirectionCode;
+    }
+
+    public static function getRedirectUrl($url, $id_shop, $id_lang)
+    {
+        $urls = preg_split("#/#", parse_url($url, PHP_URL_PATH));
         $sql =
             'SELECT DISTINCT physical_uri
                 FROM `'._DB_PREFIX_.'shop_url`
@@ -268,6 +278,25 @@ class EverPsSeoRedirect extends ObjectModel
         if (is_array($return) && count($return) > 0) {
             $return = $return[0];
         }
+        $notFound = self::ifNotFoundExists(
+            $url,
+            (int)$id_shop,
+            false
+        );
+        if (!Validate::isLoadedObject($notFound)) {
+            $notFound = new self();
+            $notFound->code = (int)Configuration::get('EVERSEO_REDIRECT');
+            $notFound->count = 1;
+        } else {
+            $notFound->count = (int)$notFound->count + 1;
+        }
+        $notFound->not_found = pSQL($url, true);
+        $from = EverPsSeoTools::getReferrer();
+        $notFound->everfrom = pSQL($from, true);
+        $notFound->redirection = pSQL($return, true);
+        $notFound->active = 1;
+        $notFound->id_shop = (int)$id_shop;
+        $notFound->save();
         return $return;
     }
 
