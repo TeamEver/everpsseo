@@ -199,7 +199,7 @@ class ImportFileCommand extends ContainerAwareCommand
             );
             return;
         }
-        if (\!Validate::isUrl($line['redirection'])) {
+        if (!\Validate::isUrl($line['redirection'])) {
             $output->writeln(
                '<error>Redirection is not a valid URL</error>'
             );

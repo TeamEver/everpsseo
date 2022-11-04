@@ -8748,16 +8748,8 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             case 'category':
                 if ((bool)Configuration::get('EVERSEO_CANONICAL') === true) {
                     $id_category = (int)Tools::getValue('id_category');
-                    if (Tools::getValue('module')) {
+                    if (Tools::getValue('module') || Tools::getValue('fc') === 'module') {
                         return;
-                        $currentUrl = $link->getModuleLink(
-                            Tools::getValue('module'),
-                            'category',
-                            Tools::getAllValues(),
-                            true,
-                            (int)$id_lang,
-                            (int)$id_shop
-                        );
                     } else {
                         $category = new Category(
                             (int)$id_category,
@@ -8973,7 +8965,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 break;
         }
 
-        if ($seo) {
+        if (isset($seo) && $seo) {
             if ($seo[0]['indexable'] == 1) {
                 $index = 'index';
             } else {

@@ -367,6 +367,9 @@ class EverPsSeoTools extends ObjectModel
         .'_'
         .date('m');
         if (!Cache::isStored($cache_id)) {
+            if (Tools::getValue('fc') === 'module') {
+                return false;
+            }
             $template = _PS_MODULE_DIR_ . '/everpsseo/views/templates/hook/hreflangs/'.pSQL($controller).'.tpl';
             if (file_exists($template)) {
                 Context::getContext()->smarty->assign([
