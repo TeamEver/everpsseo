@@ -38,7 +38,7 @@ class EverPsSeo extends Module
     {
         $this->name = 'everpsseo';
         $this->tab = 'seo';
-        $this->version = '8.5.5';
+        $this->version = '8.5.6';
         $this->author = 'Team Ever';
         $this->need_instance = 0;
         $this->module_key = '5ddabba8ec414cd5bd646fad24368472';
@@ -8633,16 +8633,18 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 (int)$this->context->language->id,
                 (int)$this->context->shop->id
             );
-            $coverId = Product::getCover(
-                (int)$product->id
-            );
-            $defaultImage = $link->getImageLink(
-                $product->link_rewrite,
-                (int)$product->id.'-'.(int)$coverId['id_image'],
-                $this->imageType
-            );
-            if (!$defaultImage) {
-                $defaultImage = _PS_IMG_ . Configuration::get('PS_LOGO');
+            if (Validate::isLoadedObject($product)) {
+                $coverId = Product::getCover(
+                    (int)$product->id
+                );
+                $defaultImage = $link->getImageLink(
+                    $product->link_rewrite,
+                    (int)$product->id.'-'.(int)$coverId['id_image'],
+                    $this->imageType
+                );
+                if (!$defaultImage) {
+                    $defaultImage = _PS_IMG_ . Configuration::get('PS_LOGO');
+                }
             }
         } else {
             $defaultImage = Tools::getHttpHost(true).__PS_BASE_URI__.'/modules/everpsseo/views/img/everpsseo.jpg';
