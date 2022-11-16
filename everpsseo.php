@@ -38,7 +38,7 @@ class EverPsSeo extends Module
     {
         $this->name = 'everpsseo';
         $this->tab = 'seo';
-        $this->version = '8.5.6';
+        $this->version = '8.5.7';
         $this->author = 'Team Ever';
         $this->need_instance = 0;
         $this->module_key = '5ddabba8ec414cd5bd646fad24368472';
@@ -8698,7 +8698,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 }
             }
         }
-        
+
         switch ($controller_name) {
             case 'product':
                 $id_product = (int)Tools::getValue('id_product');
