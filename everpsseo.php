@@ -38,7 +38,7 @@ class EverPsSeo extends Module
     {
         $this->name = 'everpsseo';
         $this->tab = 'seo';
-        $this->version = '8.5.8';
+        $this->version = '8.5.9';
         $this->author = 'Team Ever';
         $this->need_instance = 0;
         $this->module_key = '5ddabba8ec414cd5bd646fad24368472';
@@ -8143,7 +8143,6 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                         return false;
                     }
                 }
-                return true;
                 break;
 
             case 'id_seo_category':
@@ -9948,6 +9947,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         if (Tools::getValue('fc') === 'module') {
             return;
         }
+        $return = false;
         if ((bool)Configuration::get(
             'EVERSEO_RSNIPPETS'
         )) {
@@ -10008,11 +10008,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                             'manufacturer' => Manufacturer::getNameById((int)$product->id_manufacturer),
                             'priceValidUntil' => $yearEnd,
                         ));
-                        return $this->display(
-                            __FILE__,
-                            'views/templates/front/richsnippets.tpl',
-                            $cacheId
-                        );
+                        $return = true;
                         break;
 
                     case 'category':
@@ -10037,7 +10033,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                             'homepage' => (string)$homepage,
                             'currentUrl' => (string)$currentUrl
                         ));
-                        return $this->display(__FILE__, 'views/templates/front/richsnippets.tpl', $cacheId);
+                        $return = true;
                         break;
 
                     case 'cms':
@@ -10062,7 +10058,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                             'homepage' => (string)$homepage,
                             'currentUrl' => (string)$currentUrl
                         ));
-                        return $this->display(__FILE__, 'views/templates/front/richsnippets.tpl', $cacheId);
+                        $return = true;
                         break;
 
                     case 'manufacturer':
@@ -10085,7 +10081,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                             'homepage' => (string)$homepage,
                             'currentUrl' => (string)$currentUrl
                         ));
-                        return $this->display(__FILE__, 'views/templates/front/richsnippets.tpl', $cacheId);
+                        $return = true;
                         break;
 
                     case 'supplier':
@@ -10108,7 +10104,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                             'homepage' => (string)$homepage,
                             'currentUrl' => (string)$currentUrl
                         ));
-                        return $this->display(__FILE__, 'views/templates/front/richsnippets.tpl', $cacheId);
+                        $return = true;
                         break;
 
                     default:
@@ -10121,8 +10117,15 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                             'homepage' => $homepage,
                             'currentUrl' => (string)$currentUrl
                         ));
-                        return $this->display(__FILE__, 'views/templates/front/richsnippets.tpl', $cacheId);
+                        $return = true;
                         break;
+                }
+                if ((bool)$return === true) {                    
+                    return $this->display(
+                        __FILE__,
+                        'views/templates/front/richsnippets.tpl',
+                        $cacheId
+                    );
                 }
             }
         }
