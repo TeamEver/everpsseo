@@ -130,7 +130,7 @@ class EverPsSeoImage extends ObjectModel
             (int)$product->id_supplier,
             (int)$id_seo_lang
         );
-        $message = Configuration::getInt(
+        $message = Configuration::getConfigInMultipleLangs(
             'EVERSEO_IMAGE_ALT_AUTO'
         );
         $shortcodes = array(

@@ -182,7 +182,7 @@ class EverPsSeoSupplier extends ObjectModel
             (int)$id_seo_supplier,
             (int)$id_seo_lang
         );
-        $message = Configuration::getInt(
+        $message = Configuration::getConfigInMultipleLangs(
             'EVERSEO_SUPPLIER_TITLE_AUTO'
         );
         $shortcodes = array(
@@ -252,7 +252,7 @@ class EverPsSeoSupplier extends ObjectModel
             (int)$id_seo_supplier,
             (int)$id_seo_lang
         );
-        $message = Configuration::getInt(
+        $message = Configuration::getConfigInMultipleLangs(
             'EVERSEO_SUPPLIER_METADESC_AUTO'
         );
         $shortcodes = array(

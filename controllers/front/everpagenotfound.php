@@ -26,8 +26,8 @@ class EverpsseoEverpagenotfoundModuleFrontController extends ModuleFrontControll
         header('Status: 404 Not Found');
         $this->context->cookie->disallowWriting();
         parent::initContent();
-        $top_text = Configuration::getInt('EVERSEO_404_TOP');
-        $bottom_text = Configuration::getInt('EVERSEO_404_BOTTOM');
+        $top_text = Configuration::getConfigInMultipleLangs('EVERSEO_404_TOP');
+        $bottom_text = Configuration::getConfigInMultipleLangs('EVERSEO_404_BOTTOM');
         $this->context->smarty->assign(array(
             'use_search' => Configuration::get('EVERSEO_404_SEARCH'),
             'top_text' => $top_text[(int)$this->context->language->id],

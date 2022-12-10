@@ -805,9 +805,9 @@ class AdminEverPsSeoConfigureController extends ModuleAdminController
                 'EVERSEO_NOT_FOUND'
             ),
             'EVERSEO_404_TOP' => (!empty($everseo_404_top[(int)Configuration::get('PS_LANG_DEFAULT')]))
-            ? $everseo_404_top : Configuration::getInt('EVERSEO_404_TOP'),
+            ? $everseo_404_top : Configuration::getConfigInMultipleLangs('EVERSEO_404_TOP'),
             'EVERSEO_404_BOTTOM' => (!empty($everseo_404_bottom[(int)Configuration::get('PS_LANG_DEFAULT')]))
-            ? $everseo_404_bottom : Configuration::getInt('EVERSEO_404_BOTTOM'),
+            ? $everseo_404_bottom : Configuration::getConfigInMultipleLangs('EVERSEO_404_BOTTOM'),
 
             //General SEO
             'EVERSEO_QUALITY_LEVEL' => Configuration::get(

@@ -5464,91 +5464,91 @@ class EverPsSeo extends Module
                 'EVERSEO_DELETE_ATTRIBUTE_GROUP'
             ),
             'EVERSEO_404_TOP' => (!empty($everseo_404_top))
-            ? $everseo_404_top : Configuration::getInt('EVERSEO_404_TOP'),
+            ? $everseo_404_top : Configuration::getConfigInMultipleLangs('EVERSEO_404_TOP'),
             'EVERSEO_404_BOTTOM' => (!empty($everseo_404_bottom))
-            ? $everseo_404_bottom : Configuration::getInt('EVERSEO_404_BOTTOM'),
+            ? $everseo_404_bottom : Configuration::getConfigInMultipleLangs('EVERSEO_404_BOTTOM'),
             // Content generator
             'CATEGORY_DESC_GENERATE' => (!empty($category_desc))
-            ? $category_desc : Configuration::getInt('CATEGORY_DESC_GENERATE'),
+            ? $category_desc : Configuration::getConfigInMultipleLangs('CATEGORY_DESC_GENERATE'),
             'EVERSEO_DELETE_CATEGORY_CONTENT' => Configuration::get(
                 'EVERSEO_DELETE_CATEGORY_CONTENT'
             ),
             // Pagemeta meta desc
             'EVERSEO_PAGEMETA_METADESC_AUTO' => (!empty(
                 $pagemeta_metadesc[(int)Configuration::get('PS_LANG_DEFAULT')]
-            )) ? $pagemeta_metadesc : Configuration::getInt(
+            )) ? $pagemeta_metadesc : Configuration::getConfigInMultipleLangs(
                 'EVERSEO_PAGEMETA_METADESC_AUTO'
             ),
             // Pagemeta title
             'EVERSEO_PAGEMETA_TITLE_AUTO' => (!empty(
                 $pagemeta_title[(int)Configuration::get('PS_LANG_DEFAULT')]
-            )) ? $pagemeta_title : Configuration::getInt(
+            )) ? $pagemeta_title : Configuration::getConfigInMultipleLangs(
                 'EVERSEO_PAGEMETA_TITLE_AUTO'
             ),
             // CMS meta desc
             'EVERSEO_CMS_METADESC_AUTO' => (!empty(
                 $cms_metadesc[(int)Configuration::get('PS_LANG_DEFAULT')]
-            )) ? $cms_metadesc : Configuration::getInt(
+            )) ? $cms_metadesc : Configuration::getConfigInMultipleLangs(
                 'EVERSEO_CMS_METADESC_AUTO'
             ),
             // CMS title
             'EVERSEO_CMS_TITLE_AUTO' => (!empty(
                 $cms_title[(int)Configuration::get('PS_LANG_DEFAULT')]
-            )) ? $cms_title : Configuration::getInt(
+            )) ? $cms_title : Configuration::getConfigInMultipleLangs(
                 'EVERSEO_CMS_TITLE_AUTO'
             ),
             // Supplier meta desc
             'EVERSEO_SUPPLIER_METADESC_AUTO' => (!empty(
                 $supplier_metadesc[(int)Configuration::get('PS_LANG_DEFAULT')]
-            )) ? $supplier_metadesc : Configuration::getInt(
+            )) ? $supplier_metadesc : Configuration::getConfigInMultipleLangs(
                 'EVERSEO_SUPPLIER_METADESC_AUTO'
             ),
             // Supplier title
             'EVERSEO_SUPPLIER_TITLE_AUTO' => (!empty(
                 $supplier_title[(int)Configuration::get('PS_LANG_DEFAULT')]
-            )) ? $supplier_title : Configuration::getInt(
+            )) ? $supplier_title : Configuration::getConfigInMultipleLangs(
                 'EVERSEO_SUPPLIER_TITLE_AUTO'
             ),
             // Manufacturer meta desc
             'EVERSEO_MANUFACTURER_METADESC_AUTO' => (!empty(
                 $m_metadesc[(int)Configuration::get('PS_LANG_DEFAULT')]
-            )) ? $m_metadesc : Configuration::getInt(
+            )) ? $m_metadesc : Configuration::getConfigInMultipleLangs(
                 'EVERSEO_MANUFACTURER_METADESC_AUTO'
             ),
             // Manufacturer title
             'EVERSEO_MANUFACTURER_TITLE_AUTO' => (!empty(
                 $m_title[(int)Configuration::get('PS_LANG_DEFAULT')]
-            )) ? $m_title : Configuration::getInt(
+            )) ? $m_title : Configuration::getConfigInMultipleLangs(
                 'EVERSEO_MANUFACTURER_TITLE_AUTO'
             ),
             // Category meta desc
             'EVERSEO_CATEGORY_METADESC_AUTO' => (!empty(
                 $category_metadesc[(int)Configuration::get('PS_LANG_DEFAULT')]
-            )) ? $category_metadesc : Configuration::getInt(
+            )) ? $category_metadesc : Configuration::getConfigInMultipleLangs(
                 'EVERSEO_CATEGORY_METADESC_AUTO'
             ),
             // Category title
             'EVERSEO_CATEGORY_TITLE_AUTO' => (!empty(
                 $category_title[(int)Configuration::get('PS_LANG_DEFAULT')]
-            )) ? $category_title : Configuration::getInt(
+            )) ? $category_title : Configuration::getConfigInMultipleLangs(
                 'EVERSEO_CATEGORY_TITLE_AUTO'
             ),
             // Image alt
             'EVERSEO_IMAGE_ALT_AUTO' => (!empty(
                 $image_alt[(int)Configuration::get('PS_LANG_DEFAULT')]
-            )) ? $image_alt : Configuration::getInt(
+            )) ? $image_alt : Configuration::getConfigInMultipleLangs(
                 'EVERSEO_IMAGE_ALT_AUTO'
             ),
             // Product meta desc
             'EVERSEO_PRODUCT_METADESC_AUTO' => (!empty(
                 $product_metadesc[(int)Configuration::get('PS_LANG_DEFAULT')]
-            )) ? $product_metadesc : Configuration::getInt(
+            )) ? $product_metadesc : Configuration::getConfigInMultipleLangs(
                 'EVERSEO_PRODUCT_METADESC_AUTO'
             ),
             // Product title
             'EVERSEO_PRODUCT_TITLE_AUTO' => (!empty(
                 $product_title[(int)Configuration::get('PS_LANG_DEFAULT')]
-            )) ? $product_title : Configuration::getInt(
+            )) ? $product_title : Configuration::getConfigInMultipleLangs(
                 'EVERSEO_PRODUCT_TITLE_AUTO'
             ),
             // Generator langs
@@ -5569,11 +5569,11 @@ class EverPsSeo extends Module
                 )
             ),
             'PRODUCT_SHORT_DESC_GENERATE' => (!empty($product_shortdesc))
-            ? $product_shortdesc : Configuration::getInt('PRODUCT_SHORT_DESC_GENERATE'),
+            ? $product_shortdesc : Configuration::getConfigInMultipleLangs('PRODUCT_SHORT_DESC_GENERATE'),
             'PRODUCT_DESC_GENERATE' => (!empty($product_desc))
-            ? $product_desc : Configuration::getInt('PRODUCT_DESC_GENERATE'),
+            ? $product_desc : Configuration::getConfigInMultipleLangs('PRODUCT_DESC_GENERATE'),
             'PRODUCT_BOTTOM_GENERATE' => (!empty($product_bttm))
-            ? $product_bttm : Configuration::getInt('PRODUCT_BOTTOM_GENERATE'),
+            ? $product_bttm : Configuration::getConfigInMultipleLangs('PRODUCT_BOTTOM_GENERATE'),
             'EVERSEO_DELETE_PRODUCT_CONTENT' => Configuration::get(
                 'EVERSEO_DELETE_PRODUCT_CONTENT'
             ),
@@ -5597,9 +5597,9 @@ class EverPsSeo extends Module
                 )
             ),
             'MANUFACTURER_DESC_GENERATE' => (!empty($manufacturer_desc))
-            ? $manufacturer_desc : Configuration::getInt('MANUFACTURER_DESC_GENERATE'),
+            ? $manufacturer_desc : Configuration::getConfigInMultipleLangs('MANUFACTURER_DESC_GENERATE'),
             'SUPPLIER_DESC_GENERATE' => (!empty($supplier_desc))
-            ? $supplier_desc : Configuration::getInt('SUPPLIER_DESC_GENERATE'),
+            ? $supplier_desc : Configuration::getConfigInMultipleLangs('SUPPLIER_DESC_GENERATE'),
             'EVERSEO_DELETE_MANUFACTURER_CONTENT' => Configuration::get(
                 'EVERSEO_DELETE_MANUFACTURER_CONTENT'
             ),

@@ -172,7 +172,7 @@ class EverPsSeoPageMeta extends ObjectModel
             (int)$id_seo_lang,
             (int)$id_shop
         );
-        $message = Configuration::getInt(
+        $message = Configuration::getConfigInMultipleLangs(
             'EVERSEO_PAGEMETA_TITLE_AUTO'
         );
         $shortcodes = array(
@@ -205,7 +205,7 @@ class EverPsSeoPageMeta extends ObjectModel
             (int)$id_seo_lang,
             (int)$id_shop
         );
-        $message = Configuration::getInt(
+        $message = Configuration::getConfigInMultipleLangs(
             'EVERSEO_PAGEMETA_METADESC_AUTO'
         );
         $shortcodes = array(
