@@ -38,7 +38,7 @@ class EverPsSeo extends Module
     {
         $this->name = 'everpsseo';
         $this->tab = 'seo';
-        $this->version = '8.5.9';
+        $this->version = '8.5.10';
         $this->author = 'Team Ever';
         $this->need_instance = 0;
         $this->module_key = '5ddabba8ec414cd5bd646fad24368472';
@@ -8701,6 +8701,9 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         switch ($controller_name) {
             case 'product':
                 $id_product = (int)Tools::getValue('id_product');
+                if ((int)$id_product <= 0) {
+                    return;
+                }
                 $product = new Product(
                     (int)$id_product,
                     false,
@@ -8747,8 +8750,11 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 break;
 
             case 'category':
+                $id_category = (int)Tools::getValue('id_category');
+                if ((int)$id_category <= 0) {
+                    return;
+                }
                 if ((bool)Configuration::get('EVERSEO_CANONICAL') === true) {
-                    $id_category = (int)Tools::getValue('id_category');
                     if (Tools::getValue('module') || Tools::getValue('fc') === 'module') {
                         return;
                     } else {
@@ -8785,15 +8791,18 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     $seo = EverPsSeoTools::getSeoIndexFollow(
                         pSQL($controller_name),
                         (int)$id_shop,
-                        (int)Tools::getValue('id_category'),
+                        (int)$id_category,
                         (int)$id_lang
                     );
                 }
                 break;
 
             case 'cms':
+                $id_cms = (int)Tools::getValue('id_cms');
+                if ((int)$id_cms <= 0) {
+                    return;
+                }
                 if ((bool)Configuration::get('EVERSEO_CANONICAL') === true) {
-                    $id_cms = (int)Tools::getValue('id_cms');
                     $cms = new CMS(
                         (int)$id_cms,
                         (int)$id_lang,
@@ -8825,14 +8834,17 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 $seo = EverPsSeoTools::getSeoIndexFollow(
                     pSQL($controller_name),
                     (int)$id_shop,
-                    (int)Tools::getValue('id_cms'),
+                    (int)$id_cms,
                     (int)$id_lang
                 );
                 break;
 
             case 'manufacturer':
+                $id_manufacturer = (int)Tools::getValue('id_manufacturer');
+                if ((int)$id_manufacturer <= 0) {
+                    return;
+                }
                 if ((bool)Configuration::get('EVERSEO_CANONICAL') === true) {
-                    $id_manufacturer = (int)Tools::getValue('id_manufacturer');
                     $manufacturer = new Manufacturer(
                         (int)$id_manufacturer,
                         (int)$id_lang
@@ -8890,8 +8902,11 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 break;
 
             case 'supplier':
+                $id_supplier = (int)Tools::getValue('id_supplier');
+                if ((int)$id_supplier <= 0) {
+                    return;
+                }
                 if ((bool)Configuration::get('EVERSEO_CANONICAL') === true) {
-                    $id_supplier = (int)Tools::getValue('id_supplier');
                     $supplier = new Supplier(
                         (int)$id_supplier,
                         (int)$id_lang
