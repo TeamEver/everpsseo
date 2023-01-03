@@ -126,6 +126,10 @@ class EverPsSeo extends Module
             $this->_errors[] = $this->l('You have to uninstall Ever PS Image Alt before installing Ever SEO');
             return false;
         }
+        if (Module::isInstalled('everpsredirect')) {
+            $this->_errors[] = $this->l('You have to uninstall Ever PS Redirect before installing Ever SEO');
+            return false;
+        }
         // Install SQL
         include(dirname(__FILE__).'/sql/install.php');
         // Insert SQL
