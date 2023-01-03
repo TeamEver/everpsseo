@@ -22,11 +22,12 @@ use PrestaShop\PrestaShop\Adapter\LegacyContext as ContextAdapter;
 
 class ExportFileCommand extends Command
 {
-    public const SUCCESS = 0;
-    public const FAILURE = 1;
-    public const INVALID = 2;
-    public const ABORTED = 3;
-    protected string $filename;
+    const SUCCESS = 0;
+    const FAILURE = 1;
+    const INVALID = 2;
+    const ABORTED = 3;
+    
+    protected $filename;
 
     private $allowedActions = [
         'getrandomcomment',

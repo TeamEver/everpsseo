@@ -20,10 +20,10 @@ use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 
 class GenerateSitemaps extends Command
 {
-    public const SUCCESS = 0;
-    public const FAILURE = 1;
-    public const INVALID = 2;
-    public const ABORTED = 3;
+    const SUCCESS = 0;
+    const FAILURE = 1;
+    const INVALID = 2;
+    const ABORTED = 3;
 
     private $allowedActions = [
         'idshop',

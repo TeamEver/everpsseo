@@ -18,11 +18,12 @@ use Everpsseo\Seo\Service\ImportFile;
 
 class ImportFileCommand extends ContainerAwareCommand
 {
-    public const SUCCESS = 0;
-    public const FAILURE = 1;
-    public const INVALID = 2;
-    public const ABORTED = 3;
-    protected string $filename;
+    const SUCCESS = 0;
+    const FAILURE = 1;
+    const INVALID = 2;
+    const ABORTED = 3;
+    
+    protected $filename;
 
     public function __construct(KernelInterface $kernel)
     {

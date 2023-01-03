@@ -38,13 +38,14 @@ class EverPsSeo extends Module
     {
         $this->name = 'everpsseo';
         $this->tab = 'seo';
-        $this->version = '8.5.10';
+        $this->version = '8.5.11';
         $this->author = 'Team Ever';
         $this->need_instance = 0;
         $this->module_key = '5ddabba8ec414cd5bd646fad24368472';
         $this->author_address = '0x3F588d3403AadBD94940034bF42f082cBd3F966e';
         $this->bootstrap = true;
         $this->isSeven = Tools::version_compare(_PS_VERSION_, '1.7', '>=') ? true : false;
+        $this->isHeight = Tools::version_compare(_PS_VERSION_, '8.0', '>=') ? true : false;
         parent::__construct();
         $this->displayName = $this->l('Ever SEO');
         $this->description = $this->l('🙂 Global optimize and work on your shop SEO 🙂');
