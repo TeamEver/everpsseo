@@ -8715,6 +8715,9 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     (int)$id_lang,
                     (int)$id_shop
                 );
+                if (!Validate::isLoadedObject($product)) {
+                    return;
+                }
                 $seo_product = EverPsSeoProduct::getSeoProduct(
                     (int)$id_product,
                     (int)$id_shop,
