@@ -38,7 +38,7 @@ class EverPsSeo extends Module
     {
         $this->name = 'everpsseo';
         $this->tab = 'seo';
-        $this->version = '8.5.12';
+        $this->version = '8.5.13';
         $this->author = 'Team Ever';
         $this->need_instance = 0;
         $this->module_key = '5ddabba8ec414cd5bd646fad24368472';
@@ -9988,6 +9988,9 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 switch ($controller_name) {
                     case 'product':
                         $id_product = (int)Tools::getValue('id_product');
+                        if ((int)$id_product <= 0) {
+                            return;
+                        }
                         $link = new Link();
                         $product = new Product(
                             (int)$id_product,
@@ -9995,6 +9998,9 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                             (int)$id_lang,
                             (int)$id_shop
                         );
+                        if (!Validate::isLoadedObject($product)) {
+                            return;
+                        }
                         $richImage = $product->getCover((int)$product->id);
                         $imgUrl = Tools::getShopProtocol().$link->getImageLink(
                             $product->link_rewrite,
