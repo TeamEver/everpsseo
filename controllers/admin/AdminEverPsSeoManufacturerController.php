@@ -109,11 +109,6 @@ class AdminEverPsSeoManufacturerController extends ModuleAdminController
                 'title' => $this->l('Views count'),
                 'align' => 'left',
                 'width' => 'auto'
-            ),
-            'status_code' => array(
-                'title' => $this->l('Http code'),
-                'align' => 'left',
-                'width' => 'auto'
             )
         );
 
@@ -240,10 +235,6 @@ class AdminEverPsSeoManufacturerController extends ModuleAdminController
                 'text' => $this->l('Description as meta desc'),
                 'confirm' => $this->l('Set default description as meta description ?')
             ),
-            'indexnow' => array(
-                'text' => $this->l('Index now'),
-                'confirm' => $this->l('Index now ?')
-            ),
         );
 
         if (Tools::isSubmit('submitBulkindex'.$this->table)) {
@@ -280,10 +271,6 @@ class AdminEverPsSeoManufacturerController extends ModuleAdminController
 
         if (Tools::isSubmit('submitBulktitleshortcodes'.$this->table)) {
             $this->processBulkTitleShortcodes();
-        }
-
-        if (Tools::isSubmit('submitBulkindexnow'.$this->table)) {
-            $this->processBulkIndexNow();
         }
 
         if (Tools::isSubmit('indexable'.$this->table)) {
@@ -340,7 +327,7 @@ class AdminEverPsSeoManufacturerController extends ModuleAdminController
                 'PS_LOGO'
             );
         }
-        $defaultImage = '<image src="'.(string)$defaultUrlImage.'" style="max-width:80px;"/>';
+        $defaultImage = '<image src="'.(string)$defaultUrlImage.'"/>';
 
         $this->fields_form = array(
             'description' => $this->l('Manufacturer SEO'),
@@ -889,39 +876,6 @@ class AdminEverPsSeoManufacturerController extends ModuleAdminController
                 $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
             } else {
                 Db::getInstance()->execute($sql2);
-            }
-        }
-    }
-
-    protected function processBulkIndexNow()
-    {
-        foreach (Tools::getValue($this->table.'Box') as $idObj) {
-            $everManufacturer = new EverPsSeoManufacturer(
-                (int)$idObj
-            );
-            $manufacturer = new EverPsSeoManufacturer(
-                (int)$everManufacturer->id_seo_manufacturer,
-                (int)$everManufacturer->id_seo_lang
-            );
-            $link = new Link();
-            $url = $link->getManufacturerLink(
-                $manufacturer,
-                null,
-                null,
-                null,
-                (int)$everManufacturer->id_seo_lang,
-                (int)$this->context->shop->id
-            );
-            $httpCode = EverPsSeoTools::indexNow(
-                $url
-            );
-            $sql = 'UPDATE `'._DB_PREFIX_.'ever_seo_manufacturer`
-            SET status_code = '.(int)$httpCode.'
-            WHERE id_seo_lang = '.(int)$everManufacturer->id_seo_lang.'
-            AND id_shop = '.(int)$this->context->shop->id.'
-            AND id_ever_seo_manufacturer = '.(int)$everManufacturer->id;
-            if (!Db::getInstance()->execute($sql)) {
-                $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
             }
         }
     }

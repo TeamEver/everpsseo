@@ -73,9 +73,7 @@ class AdminEverPsSeoCategoryController extends ModuleAdminController
             'meta_title' => array(
                 'title' => $this->l('Meta title'),
                 'align' => 'left',
-                'width' => 'auto',
-                'havingFilter' => true,
-                'filter_key' => 'a!meta_title'
+                'width' => 'auto'
             ),
             'meta_description' => array(
                 'title' => $this->l('Meta description'),
@@ -122,11 +120,6 @@ class AdminEverPsSeoCategoryController extends ModuleAdminController
             ),
             'count' => array(
                 'title' => $this->l('Views count'),
-                'align' => 'left',
-                'width' => 'auto'
-            ),
-            'status_code' => array(
-                'title' => $this->l('Http code'),
                 'align' => 'left',
                 'width' => 'auto'
             )
@@ -264,14 +257,6 @@ class AdminEverPsSeoCategoryController extends ModuleAdminController
                 'text' => $this->l('Use shortcodes for title'),
                 'confirm' => $this->l('Set title using shortcodes ?')
             ),
-            'linkrewrite' => array(
-                'text' => $this->l('Generate link rewrite'),
-                'confirm' => $this->l('Generate link rewrite ?')
-            ),
-            'indexnow' => array(
-                'text' => $this->l('Index now'),
-                'confirm' => $this->l('Index now ?')
-            ),
         );
 
         if (Tools::isSubmit('submitBulkindex'.$this->table)) {
@@ -308,14 +293,6 @@ class AdminEverPsSeoCategoryController extends ModuleAdminController
 
         if (Tools::isSubmit('submitBulktitleshortcodes'.$this->table)) {
             $this->processBulkTitleShortcodes();
-        }
-
-        if (Tools::isSubmit('submitBulklinkrewrite'.$this->table)) {
-            $this->processBulkLinkRewrite();
-        }
-
-        if (Tools::isSubmit('submitBulkindexnow'.$this->table)) {
-            $this->processBulkIndexNow();
         }
 
         if (Tools::isSubmit('indexable'.$this->table)) {
@@ -372,7 +349,7 @@ class AdminEverPsSeoCategoryController extends ModuleAdminController
                 'PS_LOGO'
             );
         }
-        $defaultImage = '<image src="'.(string)$defaultUrlImage.'" style="max-width:80px;"/>';
+        $defaultImage = '<image src="'.(string)$defaultUrlImage.'"/>';
 
         $this->fields_form = array(
             'submit' => array(
@@ -940,48 +917,6 @@ class AdminEverPsSeoCategoryController extends ModuleAdminController
         }
     }
 
-    protected function processBulkLinkRewrite()
-    {
-        foreach (Tools::getValue($this->table.'Box') as $idEverCategory) {
-            $everProduct = new EverPsSeoProduct(
-                (int)$idEverCategory
-            );
-            $everCategory = new EverPsSeoCategory(
-                (int)$idEverCategory
-            );
-            $category = new Category(
-                (int)$everCategory->id_seo_category,
-                (int)$everCategory->id_seo_lang,
-                (int)$this->context->shop->id
-            );
-            $linkRewrite = \Tools::link_rewrite($category->name);
-            $canonical = \Tools::link_rewrite($category->name);
-
-            $sql = 'UPDATE `'._DB_PREFIX_.'category_lang`
-            SET link_rewrite = "'.pSQL($linkRewrite).'"
-            WHERE id_lang = '.(int)$everCategory->id_seo_lang.'
-            AND id_shop = '.(int)$this->context->shop->id.'
-            AND id_category = '.(int)$product->id;
-
-            $sql2 = 'UPDATE `'._DB_PREFIX_.'ever_seo_category`
-            SET link_rewrite = "'.pSQL($linkRewrite).'"
-            WHERE id_seo_lang = '.(int)$everCategory->id_seo_lang.'
-            AND id_shop = '.(int)$this->context->shop->id.'
-            AND id_seo_category = '.(int)$product->id;
-
-            $sql2 = 'UPDATE `'._DB_PREFIX_.'ever_seo_category`
-            SET canonical = "'.pSQL($canonical).'"
-            WHERE id_seo_lang = '.(int)$everCategory->id_seo_lang.'
-            AND id_shop = '.(int)$this->context->shop->id.'
-            AND id_seo_category = '.(int)$product->id;
-            if (!Db::getInstance()->execute($sql)) {
-                $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
-            } else {
-                Db::getInstance()->execute($sql2);
-            }
-        }
-    }
-
     protected function processBulkMetadescShortcodes()
     {
         foreach (Tools::getValue($this->table.'Box') as $idEverCategory) {
@@ -1029,44 +964,6 @@ class AdminEverPsSeoCategoryController extends ModuleAdminController
                 $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
             } else {
                 Db::getInstance()->execute($sql2);
-            }
-        }
-    }
-
-    protected function processBulkIndexNow()
-    {
-        foreach (Tools::getValue($this->table.'Box') as $idEverCategory) {
-            $everCategory = new EverPsSeoCategory(
-                (int)$idEverCategory
-            );
-            $category = new Category(
-                (int)$everCategory->id_seo_category,
-                (int)$everCategory->id_seo_lang,
-                (int)$this->context->shop->id
-            );
-
-            if (!Validate::isLoadedObject($category)) {
-                continue;
-            }
-            $link = new Link();
-            $url = $link->getCategoryLink(
-                $category,
-                null,
-                null,
-                null,
-                (int)$everCategory->id_seo_lang,
-                (int)$this->context->shop->id
-            );
-            $httpCode = EverPsSeoTools::indexNow(
-                $url
-            );
-            $sql = 'UPDATE `'._DB_PREFIX_.'ever_seo_category`
-            SET status_code = "'.(int)$httpCode.'"
-            WHERE id_seo_lang = '.(int)$everCategory->id_seo_lang.'
-            AND id_shop = '.(int)$this->context->shop->id.'
-            AND id_seo_category = '.(int)$category->id;
-            if (!Db::getInstance()->execute($sql)) {
-                $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
             }
         }
     }

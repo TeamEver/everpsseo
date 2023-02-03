@@ -5,7 +5,6 @@
 * @license   Tous droits réservés / Le droit d'auteur s'applique (All rights reserved / French copyright law applies)
 * @link https://www.team-ever.com
 *}
-{if isset($manufacturer) && isset($supplier)}
 <div class="tabs container">
     {* Start manufacturer reassurance*}
     {if isset($manufacturer) && $manufacturer}
@@ -28,4 +27,3 @@
     {/if}
     {* End supplier reassurance *}
 </div>
-{/if}

@@ -109,11 +109,6 @@ class AdminEverPsSeoCmsCategoryController extends ModuleAdminController
                 'title' => $this->l('Views count'),
                 'align' => 'left',
                 'width' => 'auto'
-            ),
-            'status_code' => array(
-                'title' => $this->l('Http code'),
-                'align' => 'left',
-                'width' => 'auto'
             )
         );
 
@@ -241,10 +236,6 @@ class AdminEverPsSeoCmsCategoryController extends ModuleAdminController
                 'text' => $this->l('Description as meta desc'),
                 'confirm' => $this->l('Set default description as meta description ?')
             ),
-            'indexnow' => array(
-                'text' => $this->l('Index now'),
-                'confirm' => $this->l('Index now ?')
-            ),
         );
 
         if (Tools::isSubmit('submitBulkindex'.$this->table)) {
@@ -273,10 +264,6 @@ class AdminEverPsSeoCmsCategoryController extends ModuleAdminController
 
         if (Tools::isSubmit('submitBulkmetadescriptiondesc'.$this->table)) {
             $this->processBulkSetDescriptionAsMetaDescription();
-        }
-
-        if (Tools::isSubmit('submitBulkindexnow'.$this->table)) {
-            $this->processBulkIndexNow();
         }
 
         if (Tools::isSubmit('indexable'.$this->table)) {
@@ -745,44 +732,6 @@ class AdminEverPsSeoCmsCategoryController extends ModuleAdminController
             );
             // Hook update triggered
             if (!$cmsCategory->save()) {
-                $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
-            }
-        }
-    }
-
-    protected function processBulkIndexNow()
-    {
-        foreach (Tools::getValue($this->table.'Box') as $idEverCmsCategory) {
-            $everCmsCategory = new EverPsSeoCmsCategory(
-                (int)$idEverCmsCategory
-            );
-            $cmsCategory = new CMSCategory(
-                (int)$everCmsCategory->id_seo_cms,
-                (int)$everCmsCategory->id_seo_lang,
-                (int)$this->context->shop->id
-            );
-
-            if (!Validate::isLoadedObject($cmsCategory)) {
-                continue;
-            }
-            $link = new Link();
-            $url = $link->getCmsCategoryLink(
-                $cms_category,
-                null,
-                null,
-                null,
-                (int)$everCmsCategory->id_seo_lang,
-                (int)$this->context->shop->id
-            );
-            $httpCode = EverPsSeoTools::indexNow(
-                $url
-            );
-            $sql = 'UPDATE `'._DB_PREFIX_.'ever_seo_cms_category`
-            SET status_code = '.(int)$httpCode.'
-            WHERE id_seo_lang = '.(int)$everCmsCategory->id_seo_lang.'
-            AND id_shop = '.(int)$this->context->shop->id.'
-            AND id_seo_cms_category = '.(int)$cmsCategory->id;
-            if (!Db::getInstance()->execute($sql)) {
                 $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
             }
         }

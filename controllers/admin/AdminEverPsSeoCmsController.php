@@ -100,11 +100,6 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
                 'title' => $this->l('Views count'),
                 'align' => 'left',
                 'width' => 'auto'
-            ),
-            'status_code' => array(
-                'title' => $this->l('Http code'),
-                'align' => 'left',
-                'width' => 'auto'
             )
         );
 
@@ -228,10 +223,6 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
                 'text' => $this->l('Short desc as meta desc'),
                 'confirm' => $this->l('Set default CMS content as meta description ?')
             ),
-            'indexnow' => array(
-                'text' => $this->l('Index now'),
-                'confirm' => $this->l('Index now ?')
-            ),
         );
 
         if (Tools::isSubmit('submitBulkindex'.$this->table)) {
@@ -256,10 +247,6 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
 
         if (Tools::isSubmit('submitBulkmetadescriptioncontent'.$this->table)) {
             $this->processBulkSetContentAsMetaDescription();
-        }
-
-        if (Tools::isSubmit('submitBulkindexnow'.$this->table)) {
-            $this->processBulkIndexNow();
         }
 
         if (Tools::isSubmit('indexable'.$this->table)) {
@@ -308,15 +295,15 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
                 $defaultUrlImage = $this->img_url.$seoCMS->id_seo_cms.'.jpg';
             } else {
                 $defaultUrlImage = Tools::getHttpHost(true).'/img/'.Configuration::get(
-                    'PS_LOGO'
-                );
+                        'PS_LOGO'
+                    );
             }
         } else {
             $defaultUrlImage = Tools::getHttpHost(true).'/img/'.Configuration::get(
-                'PS_LOGO'
-            );
+                    'PS_LOGO'
+                );
         }
-        $defaultImage = '<image src="'.(string)$defaultUrlImage.'" style="max-width:80px;"/>';
+        $defaultImage = '<image src="'.(string)$defaultUrlImage.'"/>';
 
         $this->fields_form = array(
             'submit' => array(
@@ -503,42 +490,42 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
             if (!Tools::getValue('meta_title')
                 || !Validate::isGenericName(Tools::getValue('meta_title'))
             ) {
-                 $this->errors[] = $this->l('meta_title is invalid');
+                $this->errors[] = $this->l('meta_title is invalid');
             }
             if (!Tools::getValue('meta_description')
                 || !Validate::isGenericName(Tools::getValue('meta_description'))
             ) {
-                 $this->errors[] = $this->l('meta_description is invalid');
+                $this->errors[] = $this->l('meta_description is invalid');
             }
             if (Tools::getValue('social_title')
                 && !Validate::isGenericName(Tools::getValue('social_title'))
             ) {
-                 $this->errors[] = $this->l('social_title is invalid');
+                $this->errors[] = $this->l('social_title is invalid');
             }
             if (Tools::getValue('social_description')
                 && !Validate::isGenericName(Tools::getValue('social_description'))
             ) {
-                 $this->errors[] = $this->l('social_description is invalid');
+                $this->errors[] = $this->l('social_description is invalid');
             }
             if (Tools::getValue('keywords')
                 && !Validate::isString(Tools::getValue('keywords'))
             ) {
-                 $this->errors[] = $this->l('keywords is invalid');
+                $this->errors[] = $this->l('keywords is invalid');
             }
             if (Tools::getValue('indexable')
                 && !Validate::isBool(Tools::getValue('indexable'))
             ) {
-                 $this->errors[] = $this->l('indexable is invalid');
+                $this->errors[] = $this->l('indexable is invalid');
             }
             if (Tools::getValue('follow')
                 && !Validate::isBool(Tools::getValue('follow'))
             ) {
-                 $this->errors[] = $this->l('follow is invalid');
+                $this->errors[] = $this->l('follow is invalid');
             }
             if (Tools::getValue('allowed_sitemap')
                 && !Validate::isBool(Tools::getValue('allowed_sitemap'))
             ) {
-                 $this->errors[] = $this->l('allowed_sitemap is invalid');
+                $this->errors[] = $this->l('allowed_sitemap is invalid');
             }
             if (!count($this->errors)) {
                 $everCms = new EverPsSeoCms(
@@ -587,8 +574,8 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
                         unlink($tmp_name);
                     }
                     $everCms->social_img_url = $this->img_url
-                    .(int)$everCms->id_seo_cms
-                    .'.jpg';
+                        .(int)$everCms->id_seo_cms
+                        .'.jpg';
                 }
                 $everCms->save();
                 if (!$cms->save() || !$everCms->save()) {
@@ -732,44 +719,6 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
             );
             // Hook update triggered
             if (!$cms->save()) {
-                $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
-            }
-        }
-    }
-
-    protected function processBulkIndexNow()
-    {
-        foreach (Tools::getValue($this->table.'Box') as $idEverCms) {
-            $everCms = new EverPsSeoCms(
-                (int)$idEverCms
-            );
-            $cms = new CMS(
-                (int)$everCms->id_seo_cms,
-                (int)$everCms->id_seo_lang,
-                (int)$this->context->shop->id
-            );
-
-            if (!Validate::isLoadedObject($cms)) {
-                continue;
-            }
-            $link = new Link();
-            $url = $link->getCMSLink(
-                $cms,
-                null,
-                null,
-                null,
-                (int)$everCms->id_seo_lang,
-                (int)$this->context->shop->id
-            );
-            $httpCode = EverPsSeoTools::indexNow(
-                $url
-            );
-            $sql = 'UPDATE `'._DB_PREFIX_.'ever_seo_cms`
-            SET status_code = '.(int)$httpCode.'
-            WHERE id_seo_lang = '.(int)$everCms->id_seo_lang.'
-            AND id_shop = '.(int)$this->context->shop->id.'
-            AND id_ever_seo_cms = '.(int)$cms->id;
-            if (!Db::getInstance()->execute($sql)) {
                 $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
             }
         }

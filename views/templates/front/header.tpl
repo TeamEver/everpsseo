@@ -11,7 +11,7 @@
 {/literal}
 {/if}
 {if isset($ever_theme_color) && $ever_theme_color}
-<meta name="theme-color" content="{$ever_theme_color|escape:'htmlall':'UTF-8'}">
+<meta name="theme-color" content="#4285f4">
 {/if}
 <link rel="preconnect" href="https://analytics.twitter.com">
 <link rel="preconnect" href="https://t.co">
@@ -58,9 +58,45 @@
 {if isset($searchconsole) && $searchconsole}
     <meta name="google-site-verification" content="{$searchconsole|escape:'htmlall':'UTF-8'}">
 {/if}
-
+{if isset($pixelfacebook) && $pixelfacebook}
+    {literal}
+    <!-- Facebook Pixel Code -->
+    <script>
+      !function(f,b,e,v,n,t,s)
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window, document,'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', '{/literal}{$pixelfacebook|escape:'htmlall':'UTF-8'}{literal}');
+      fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id={/literal}{$pixelfacebook|escape:'htmlall':'UTF-8'}{literal}&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Facebook Pixel Code -->
+    {/literal}
+{/if}
 {if isset($usehreflang) && $usehreflang}
-{$hreflangTags nofilter}
+    {foreach $everpshreflang as $everlang}
+            {if $page.page_name == 'index'}
+                <link rel="alternate" hreflang="{if $everlang.id_lang == $xdefault}x-default{else}{$everlang.locale|escape:'htmlall':'UTF-8'}{/if}" href="/"/>
+            {/if}
+            {if $page.page_name == 'category'}
+                <link rel="alternate" hreflang="{if $everlang.id_lang == $xdefault}x-default{else}{$everlang.locale|escape:'htmlall':'UTF-8'}{/if}" href="{if $everlang.id_lang == $xdefault}{$link->getCategoryLink($smarty.get.id_category, null, null, null, null )|escape:'htmlall':'UTF-8'}{else}{$link->getCategoryLink($smarty.get.id_category, null, $everlang.id_lang,null,null )|escape:'htmlall':'UTF-8'}{/if}" />
+            {/if}
+            {if $page.page_name == 'product'}
+                <link rel="alternate" hreflang="{if $everlang.id_lang == $xdefault}x-default{else}{$everlang.locale|escape:'htmlall':'UTF-8'}{/if}" href="{$link->getProductLink($smarty.get.id_product, null, null, null, $everlang.id_lang, null, 0, false)|escape:'htmlall':'UTF-8'}" />
+            {/if}
+            {if $page.page_name == 'cms'}
+                <link rel="alternate" hreflang="{if $everlang.id_lang == $xdefault}x-default{else}{$everlang.locale|escape:'htmlall':'UTF-8'}{/if}" href="{$link->getCMSLink($smarty.get.id_cms, null, false, $everlang.id_lang)|escape:'htmlall':'UTF-8'}" />
+            {/if}
+            {if $page.page_name == 'manufacturer'}
+                <link rel="alternate" hreflang="{if $everlang.id_lang == $xdefault}x-default{else}{$everlang.locale|escape:'htmlall':'UTF-8'}{/if}" href="{$link->getManufacturerLink($smarty.get.id_manufacturer, null, $everlang.id_lang , null)|escape:'htmlall':'UTF-8'}" />
+            {/if}
+    {/foreach}
 {/if}
 {if isset($useOpenGraph) && $useOpenGraph}
     {if isset($social_title) && $social_title}
@@ -116,6 +152,11 @@
     <meta name="twitter:image" content="{$defaultImage|escape:'htmlall':'UTF-8'}" />
     {/if}
 {/if}
+{if isset($awin_code) && $awin_code}
+{literal}
+<script defer="defer" src="https://www.dwin1.com/{/literal}{$awin_code|escape:'htmlall':'UTF-8'}{literal}.js" type="text/javascript"></script>
+{/literal}
+{/if}
 {if isset($ever_ps_captcha_site_key) && $ever_ps_captcha_site_key}
 <script>
     var googlecaptchasitekey = "{$ever_ps_captcha_site_key|escape:'htmlall':'UTF-8'}";
@@ -133,6 +174,7 @@
       gtag('config', '{/literal}{$adwords|escape:'htmlall':'UTF-8'}{literal}');
     </script>
     {/literal}
+
     {literal}
     <script>
       gtag('event', 'page_view', {
@@ -165,6 +207,21 @@
 {/literal}
 {/if}
 {* End Adwords contact tracking code *}
+{* Start Adwords Opart quotation tracking code *}
+{if isset($adwordsopart) && $adwordsopart && isset($opart_total) && $opart_total}
+{literal}
+<!-- Event snippet for Demande de devis conversion page -->
+<script>
+  gtag('event', 'conversion', {
+      'send_to': '{/literal}{$adwordsopart|escape:'htmlall':'UTF-8'}{literal}',
+      'value': {/literal}{$opart_total|escape:'htmlall':'UTF-8'}{literal},
+      'currency': 'EUR',
+      'transaction_id': ''
+  });
+</script>
+{/literal}
+{/if}
+{* End Adwords Opart quotation tracking code *}
 
 {if isset($pixelfacebook) && $pixelfacebook}
     {literal}

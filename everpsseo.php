@@ -31,28 +31,29 @@ class EverPsSeo extends Module
     private $html;
     private $postErrors = array();
     private $postSuccess = array();
-    const INPUT_FOLDER  = _PS_MODULE_DIR_.'everpsseo/input/';
-    const OUTPUT_FOLDER  = _PS_MODULE_DIR_.'everpsseo/output/';
 
     public function __construct()
     {
         $this->name = 'everpsseo';
         $this->tab = 'seo';
-        $this->version = '8.5.12';
+        $this->version = '7.10.9';
         $this->author = 'Team Ever';
         $this->need_instance = 0;
         $this->module_key = '5ddabba8ec414cd5bd646fad24368472';
         $this->author_address = '0x3F588d3403AadBD94940034bF42f082cBd3F966e';
         $this->bootstrap = true;
         $this->isSeven = Tools::version_compare(_PS_VERSION_, '1.7', '>=') ? true : false;
-        $this->isHeight = Tools::version_compare(_PS_VERSION_, '8.0', '>=') ? true : false;
         parent::__construct();
         $this->displayName = $this->l('Ever SEO');
         $this->description = $this->l('🙂 Global optimize and work on your shop SEO 🙂');
         $this->confirmUninstall = $this->l('Are you really sure to remove all seo settings ?');
-        $this->ps_versions_compliancy = array('min' => '1.7', 'max' => _PS_VERSION_);
+        $this->ps_versions_compliancy = array('min' => '1.6', 'max' => _PS_VERSION_);
         $this->siteUrl = Tools::getHttpHost(true).__PS_BASE_URI__;
-        $this->imageType = ImageType::getFormatedName('large');
+        if ($this->isSeven) {
+            $this->imageType = ImageType::getFormattedName('large');
+        } else {
+            $this->imageType = ImageType::getFormatedName('large');
+        }
         $this->protocol_link = (Configuration::get('PS_SSL_ENABLED')
             || Tools::usingSecureMode()) ? 'https://' : 'http://';
         if (strpos(Tools::getValue('controller'), 'EverPsSeo') !== false
@@ -96,7 +97,6 @@ class EverPsSeo extends Module
             }
             $this->context->smarty->assign(array(
                 'image_dir' => $this->_path.'views/img',
-                'input_dir' => $this->siteUrl.'modules/everpsseo/output/',
                 'everpsseo_cron' => $sitemaps_cron_url,
                 'everpsseo_objects' => $objects_cron_url,
                 'indexes' => EverPsSeoSitemap::getSitemapIndexes(),
@@ -114,20 +114,12 @@ class EverPsSeo extends Module
 
     public function install()
     {
-        if (version_compare(PHP_VERSION, '7.2.0') < 0) {
-            $this->_errors[] = $this->l('You must have at least PHP 7.2 to use this module version');
-            return false;
-        }
         if (extension_loaded('curl') == false) {
             $this->_errors[] = $this->l('You have to enable the cURL extension on your server to install this module');
             return false;
         }
         if (Module::isInstalled('everpsimagealt')) {
             $this->_errors[] = $this->l('You have to uninstall Ever PS Image Alt before installing Ever SEO');
-            return false;
-        }
-        if (Module::isInstalled('everpsredirect')) {
-            $this->_errors[] = $this->l('You have to uninstall Ever PS Redirect before installing Ever SEO');
             return false;
         }
         // Install SQL
@@ -140,6 +132,7 @@ class EverPsSeo extends Module
             && $this->registerEverHook()
             && $this->registerEverConfiguration()
             && $this->installModuleTab('AdminEverPsSeo', 'SELL', $this->l('SEO'))
+            && $this->installModuleTab('AdminEverPsSeoConfigure', '-1', $this->l('SEO Configuration'))
             && $this->installModuleTab('AdminEverPsSeoProduct', 'AdminEverPsSeo', $this->l('SEO Products'))
             && $this->installModuleTab('AdminEverPsSeoImage', 'AdminEverPsSeo', $this->l('SEO Images'))
             && $this->installModuleTab('AdminEverPsSeoCategory', 'AdminEverPsSeo', $this->l('SEO  Categories'))
@@ -153,16 +146,20 @@ class EverPsSeo extends Module
             && $this->installModuleTab('AdminEverPsSeoShortcode', 'AdminEverPsSeo', $this->l('Shortcodes'));
     }
 
-    protected function installModuleTab($tabClass, $parent, $tabName)
+    private function installModuleTab($tabClass, $parent, $tabName)
     {
         $tab = new Tab();
 
         $tab->active = 1;
         $tab->class_name = $tabClass;
-        $tab->id_parent = (int)Tab::getIdFromClassName($parent);
+        if ($tabClass == 'AdminEverPsSeoConfigure') {
+            $tab->id_parent = '-1';
+        } else {
+            $tab->id_parent = (int)Tab::getIdFromClassName($parent);
+        }
         $tab->position = Tab::getNewLastPosition($tab->id_parent);
         $tab->module = $this->name;
-        if ($tabClass == 'AdminEverPsSeo') {
+        if ($tabClass == 'AdminEverPsSeo' && $this->isSeven) {
             $tab->icon = 'icon-team-ever';
         }
 
@@ -173,7 +170,7 @@ class EverPsSeo extends Module
         return $tab->add();
     }
 
-    protected function createSeoHook()
+    private function createSeoHook()
     {
         if (!Hook::getIdByName('actionChangeSeoShortcodes')) {
             $hook = new Hook();
@@ -186,7 +183,7 @@ class EverPsSeo extends Module
         }
     }
 
-    protected function registerEverHook()
+    private function registerEverHook()
     {
         return $this->registerHook('actionChangeSeoShortcodes')
             && $this->registerHook('actionFrontControllerAfterInit')
@@ -197,12 +194,13 @@ class EverPsSeo extends Module
             && $this->registerHook('actionClearSf2Cache')
             && $this->registerHook('dashboardZoneTwo')
             && $this->registerHook('displayAdminProductsSeoStepBottom')
+            && $this->registerHook('displayAdminProductsExtra')
             && $this->registerHook('actionAdminControllerSetMedia')
             && $this->registerHook('header')
             && $this->registerHook('footer')
             && $this->registerHook('displayLeftColumn')
             && $this->registerHook('displayRightColumn')
-            && $this->registerHook('displayAfterBodyOpeningTag')
+            && $this->registerHook('displayTop')
             && $this->registerHook('backOfficeHeader')
             && $this->registerHook('orderConfirmation')
             && $this->registerHook('actionObjectLanguageAddAfter')
@@ -231,137 +229,135 @@ class EverPsSeo extends Module
             && $this->registerHook('actionFrontControllerAfterInit')
             && $this->registerHook('actionOutputHTMLBefore')
             && $this->registerHook('displayReassurance')
-            && $this->registerHook('displayOrderConfirmation')
-            && $this->registerHook('displayContentWrapperBottom')
-            && $this->registerHook('actionPresentProductListing');
+            && $this->registerHook('displayContentWrapperBottom');
     }
 
-    protected function registerEverConfiguration()
+    private function registerEverConfiguration()
     {
-        return Configuration::updateValue('EVERSEO_CONFIGURE', false)
-            && Configuration::updateValue('EVERSEO_LANG', false)
-            && Configuration::updateValue('EVERSEO_LINKED_NBR', '1')
-            && Configuration::updateValue('EVERSEO_CMS_LINKED', false)
-            && Configuration::updateValue('EVERSEO_LONG_DESC_LINKED', false)
-            && Configuration::updateValue('EVERSEO_SHORT_DESC_LINKED', false)
-            && Configuration::updateValue('EVERSEO_CATEG_LINKED', false)
-            && Configuration::updateValue('SEARCHED', 'Searched text')
-            && Configuration::updateValue('LINKEDTO', 'Replace by')
-            && Configuration::updateValue('EVERSEO_MANUFACTURER_REASSURANCE', false)
-            && Configuration::updateValue('EVERSEO_SUPPLIER_REASSURANCE', false)
-            && Configuration::updateValue('EVERSEO_RSNIPPETS', true)
-            && Configuration::updateValue('EVERSEO_PRODUCT', true)
-            && Configuration::updateValue('EVERSEO_CATEGORY', true)
-            && Configuration::updateValue('EVERSEO_TAGS', true)
-            && Configuration::updateValue('EVERSEO_PRIORITY', '1')
-            && Configuration::updateValue('EVERSEO_ORDER_BY', '1')
-            && Configuration::updateValue('EVERSEO_CUSTOM_404', true)
-            && Configuration::updateValue('EVERSEO_404_SEARCH', true)
-            && Configuration::updateValue('EVERSEO_REDIRECT', '302')
-            && Configuration::updateValue('EVERSEO_NOT_FOUND', false)
-            && Configuration::updateValue('EVERSEO_QUALITY_LEVEL', '7')
-            && Configuration::updateValue('EVERSEO_KNOWLEDGE', 'Organization')
-            && Configuration::updateValue('EVERSEO_CANONICAL', false)
-            && Configuration::updateValue('EVERSEO_HREF_LANG', false)
-            && Configuration::updateValue('EVERSEO_ANALYTICS', '')
-            && Configuration::updateValue('EVERSEO_SEARCHCONSOLE', '')
-            && Configuration::updateValue('EVERSEO_GTAG', '')
-            && Configuration::updateValue('EVERSEO_FBPIXEL', '')
-            && Configuration::updateValue('EVERSEO_ADWORDS', '')
-            && Configuration::updateValue('EVERSEO_ADWORDS_SENDTO', '')
-            && Configuration::updateValue('EVERSEO_ADWORDS_CONTACT', '')
-            && Configuration::updateValue('EVERSEO_ADWORDS_OPART', '')
-            && Configuration::updateValue('EVERSEO_USE_TWITTER', false)
-            && Configuration::updateValue('EVERSEO_USE_OPENGRAPH', false)
-            && Configuration::updateValue('EVERSEO_TWITTER_NAME', '@te4mever')
-            && Configuration::updateValue('EVERSEO_INDEX_CATEGORY', true)
-            && Configuration::updateValue('EVERSEO_INDEX_PRODUCT', true)
-            && Configuration::updateValue('EVERSEO_INDEX_CMS', true)
-            && Configuration::updateValue('EVERSEO_INDEX_PAGE_META', true)
-            && Configuration::updateValue('EVERSEO_INDEX_MANUFACTURER', true)
-            && Configuration::updateValue('EVERSEO_INDEX_SUPPLIER', true)
-            && Configuration::updateValue('EVERSEO_INDEX_ARGS', false)
-            && Configuration::updateValue('EVERSEO_FOLLOW_CATEGORY', true)
-            && Configuration::updateValue('EVERSEO_FOLLOW_PRODUCT', true)
-            && Configuration::updateValue('EVERSEO_FOLLOW_CMS', true)
-            && Configuration::updateValue('EVERSEO_FOLLOW_PAGE_META', true)
-            && Configuration::updateValue('EVERSEO_FOLLOW_MANUFACTURER', true)
-            && Configuration::updateValue('EVERSEO_FOLLOW_SUPPLIER', true)
-            && Configuration::updateValue('EVERSEO_FOLLOW_ARGS', true)
-            && Configuration::updateValue('EVERSEO_SITEMAP_PRODUCT', true)
-            && Configuration::updateValue('EVERSEO_SITEMAP_IMAGE', true)
-            && Configuration::updateValue('EVERSEO_SITEMAP_CATEGORY', true)
-            && Configuration::updateValue('EVERSEO_SITEMAP_CMS', true)
-            && Configuration::updateValue('EVERSEO_SITEMAP_PAGE_META', true)
-            && Configuration::updateValue('EVERSEO_SITEMAP_MANUFACTURER', false)
-            && Configuration::updateValue('EVERSEO_SITEMAP_SUPPLIER', false)
-            && Configuration::updateValue('EVERSEO_SITEMAP_PRODUCT_FREQUENCY', 'weekly')
-            && Configuration::updateValue('EVERSEO_SITEMAP_IMAGE_FREQUENCY', 'weekly')
-            && Configuration::updateValue('EVERSEO_SITEMAP_CATEGORY_FREQUENCY', 'monthly')
-            && Configuration::updateValue('EVERSEO_SITEMAP_CMS_FREQUENCY', 'monthly')
-            && Configuration::updateValue('EVERSEO_SITEMAP_MANUFACTURER_FREQUENCY', 'yearly')
-            && Configuration::updateValue('EVERSEO_SITEMAP_SUPPLIER_FREQUENCY', 'yearly')
-            && Configuration::updateValue('EVERSEO_SITEMAP_PAGE_META_FREQUENCY', 'monthly')
-            && Configuration::updateValue('EVERSEO_SITEMAP_PRODUCT_PRIORITY', '1')
-            && Configuration::updateValue('EVERSEO_SITEMAP_IMAGE_PRIORITY', '0.8')
-            && Configuration::updateValue('EVERSEO_SITEMAP_CATEGORY_PRIORITY', '0.8')
-            && Configuration::updateValue('EVERSEO_SITEMAP_CMS_PRIORITY', '0.5')
-            && Configuration::updateValue('EVERSEO_SITEMAP_MANUFACTURER_PRIORITY', '0.3')
-            && Configuration::updateValue('EVERSEO_SITEMAP_SUPPLIER_PRIORITY', '0.3')
-            && Configuration::updateValue('EVERSEO_SITEMAP_PAGE_META_PRIORITY', '1')
-            && Configuration::updateValue('EVERSEO_SITEMAP_QTY_ELEMENTS', 5000)
-            && Configuration::updateValue('EVERSEO_HEADER_TAGS', '')
-            && Configuration::updateValue('EVERSEO_REWRITE', true)
-            && Configuration::updateValue('EVERSEO_DELETE_CATEGORY', false)
-            && Configuration::updateValue('EVERSEO_DELETE_PRODUCT', false)
-            && Configuration::updateValue('EVERSEO_DELETE_CMS', false)
-            && Configuration::updateValue('EVERSEO_DELETE_PAGE_META', false)
-            && Configuration::updateValue('EVERSEO_DELETE_MANUFACTURER', false)
-            && Configuration::updateValue('EVERSEO_DELETE_SUPPLIER', false)
-            && Configuration::updateValue('EVERSEO_DELETE_INFO', false)
-            && Configuration::updateValue('EVERSEO_DELETE_GROUP', false)
-            && Configuration::updateValue('EVERSEO_DELETE_GENDER', false)
-            && Configuration::updateValue('EVERSEO_DELETE_FEATURE', false)
-            && Configuration::updateValue('EVERSEO_DELETE_FEATURE_VALUE', false)
-            && Configuration::updateValue('EVERSEO_DELETE_CUST_FIELD', false)
-            && Configuration::updateValue('EVERSEO_DELETE_CONTACT', false)
-            && Configuration::updateValue('EVERSEO_DELETE_COUNTRY', false)
-            && Configuration::updateValue('EVERSEO_DELETE_CART_RULE', false)
-            && Configuration::updateValue('EVERSEO_DELETE_CARRIER', false)
-            && Configuration::updateValue('EVERSEO_DELETE_ATTACHMENT', false)
-            && Configuration::updateValue('EVERSEO_DELETE_ATTRIBUTE', false)
-            && Configuration::updateValue('EVERSEO_DELETE_ATTRIBUTE_GROUP', false)
-            && Configuration::updateValue('EVERSEO_ROBOTS_TXT_REWRITE', false)
-            && Configuration::updateValue('EVERSEO_SITEMAP_QTY_ELEMENTS', 5000)
-            && Configuration::updateValue(
-                'EVERSEO_SITEMAP_LANGS',
-                '["'.Configuration::get('PS_LANG_DEFAULT').'"]'
-            )
-            && Configuration::updateValue('EVERSEO_CACHE', false)
-            && Configuration::updateValue('EVERSEO_COMPRESS_HTML', false)
-            && Configuration::updateValue('EVERSEO_REMOVE_COMMENTS', false)
-            && Configuration::updateValue('EVERSEO_ADD_MISSING_LABELS', false)
-            && Configuration::updateValue('EVERSEO_GOOGLE_FONT', false)
-            && Configuration::updateValue('EVERSEO_BOTTOM_SCRIPTS', false)
-            && Configuration::updateValue('EVERSEO_DEFER', false)
-            && Configuration::updateValue('EVERSEO_CACHE_LIFE', 20)
-            && Configuration::updateValue('EVERSEO_LAZY_LOAD', false)
-            && Configuration::updateValue('EVERSEO_MINIFY_PRODUCT', false)
-            && Configuration::updateValue('EVERSEO_MINIFY_CATEGORY', false)
-            && Configuration::updateValue('EVERSEO_MINIFY_HOME', false)
-            && Configuration::updateValue('EVERSEO_MINIFY_CMS', false)
-            && Configuration::updateValue('EVERSEO_MINIFY_OTHERS', false)
-            && Configuration::updateValue('EVERSEO_CACHE_PRODUCT', false)
-            && Configuration::updateValue('EVERSEO_CACHE_CATEGORY', false)
-            && Configuration::updateValue('EVERSEO_CACHE_CMS', false)
-            && Configuration::updateValue('EVERSEO_CACHE_MANUFACTURER', false)
-            && Configuration::updateValue('EVERSEO_CACHE_SUPPLIER', false)
-            && Configuration::updateValue('EVERSEO_CACHE_HOME', false)
-            && Configuration::updateValue('EVERSEO_CACHE_OTHERS', false)
-            && Configuration::updateValue('EVERSEO_EXTERNAL_NOFOLLOW', false)
-            && Configuration::updateValue('EVERSEO_REMOVE_INLINE', false)
-            && Configuration::updateValue('EVERSEO_REMOVE_EMPTY', false)
-            && Configuration::updateValue('EVERSEO_ADD_ALT', false);
+          return Configuration::updateValue('EVERSEO_CONFIGURE', false)
+                && Configuration::updateValue('EVERSEO_LANG', false)
+                && Configuration::updateValue('EVERSEO_LINKED_NBR', '1')
+                && Configuration::updateValue('EVERSEO_CMS_LINKED', false)
+                && Configuration::updateValue('EVERSEO_LONG_DESC_LINKED', false)
+                && Configuration::updateValue('EVERSEO_SHORT_DESC_LINKED', false)
+                && Configuration::updateValue('EVERSEO_CATEG_LINKED', false)
+                && Configuration::updateValue('SEARCHED', 'Searched text')
+                && Configuration::updateValue('LINKEDTO', 'Replace by')
+                && Configuration::updateValue('EVERSEO_MANUFACTURER_REASSURANCE', false)
+                && Configuration::updateValue('EVERSEO_SUPPLIER_REASSURANCE', false)
+                && Configuration::updateValue('EVERSEO_RSNIPPETS', true)
+                && Configuration::updateValue('EVERSEO_PRODUCT', true)
+                && Configuration::updateValue('EVERSEO_CATEGORY', true)
+                && Configuration::updateValue('EVERSEO_TAGS', true)
+                && Configuration::updateValue('EVERSEO_PRIORITY', '1')
+                && Configuration::updateValue('EVERSEO_ORDER_BY', '1')
+                && Configuration::updateValue('EVERSEO_CUSTOM_404', true)
+                && Configuration::updateValue('EVERSEO_404_SEARCH', true)
+                && Configuration::updateValue('EVERSEO_REDIRECT', '302')
+                && Configuration::updateValue('EVERSEO_NOT_FOUND', false)
+                && Configuration::updateValue('EVERSEO_QUALITY_LEVEL', '7')
+                && Configuration::updateValue('EVERSEO_KNOWLEDGE', 'Organization')
+                && Configuration::updateValue('EVERSEO_CANONICAL', false)
+                && Configuration::updateValue('EVERSEO_HREF_LANG', false)
+                && Configuration::updateValue('EVERSEO_ANALYTICS', '')
+                && Configuration::updateValue('EVERSEO_SEARCHCONSOLE', '')
+                && Configuration::updateValue('EVERSEO_GTAG', '')
+                && Configuration::updateValue('EVERSEO_FBPIXEL', '')
+                && Configuration::updateValue('EVERSEO_ADWORDS', '')
+                && Configuration::updateValue('EVERSEO_ADWORDS_SENDTO', '')
+                && Configuration::updateValue('EVERSEO_ADWORDS_CONTACT', '')
+                && Configuration::updateValue('EVERSEO_ADWORDS_OPART', '')
+                && Configuration::updateValue('EVERSEO_USE_TWITTER', false)
+                && Configuration::updateValue('EVERSEO_USE_OPENGRAPH', false)
+                && Configuration::updateValue('EVERSEO_TWITTER_NAME', '@te4mever')
+                && Configuration::updateValue('EVERSEO_INDEX_CATEGORY', true)
+                && Configuration::updateValue('EVERSEO_INDEX_PRODUCT', true)
+                && Configuration::updateValue('EVERSEO_INDEX_CMS', true)
+                && Configuration::updateValue('EVERSEO_INDEX_PAGE_META', true)
+                && Configuration::updateValue('EVERSEO_INDEX_MANUFACTURER', true)
+                && Configuration::updateValue('EVERSEO_INDEX_SUPPLIER', true)
+                && Configuration::updateValue('EVERSEO_INDEX_ARGS', false)
+                && Configuration::updateValue('EVERSEO_FOLLOW_CATEGORY', true)
+                && Configuration::updateValue('EVERSEO_FOLLOW_PRODUCT', true)
+                && Configuration::updateValue('EVERSEO_FOLLOW_CMS', true)
+                && Configuration::updateValue('EVERSEO_FOLLOW_PAGE_META', true)
+                && Configuration::updateValue('EVERSEO_FOLLOW_MANUFACTURER', true)
+                && Configuration::updateValue('EVERSEO_FOLLOW_SUPPLIER', true)
+                && Configuration::updateValue('EVERSEO_FOLLOW_ARGS', true)
+                && Configuration::updateValue('EVERSEO_SITEMAP_PRODUCT', true)
+                && Configuration::updateValue('EVERSEO_SITEMAP_IMAGE', true)
+                && Configuration::updateValue('EVERSEO_SITEMAP_CATEGORY', true)
+                && Configuration::updateValue('EVERSEO_SITEMAP_CMS', true)
+                && Configuration::updateValue('EVERSEO_SITEMAP_PAGE_META', true)
+                && Configuration::updateValue('EVERSEO_SITEMAP_MANUFACTURER', false)
+                && Configuration::updateValue('EVERSEO_SITEMAP_SUPPLIER', false)
+                && Configuration::updateValue('EVERSEO_SITEMAP_PRODUCT_FREQUENCY', 'weekly')
+                && Configuration::updateValue('EVERSEO_SITEMAP_IMAGE_FREQUENCY', 'weekly')
+                && Configuration::updateValue('EVERSEO_SITEMAP_CATEGORY_FREQUENCY', 'monthly')
+                && Configuration::updateValue('EVERSEO_SITEMAP_CMS_FREQUENCY', 'monthly')
+                && Configuration::updateValue('EVERSEO_SITEMAP_MANUFACTURER_FREQUENCY', 'yearly')
+                && Configuration::updateValue('EVERSEO_SITEMAP_SUPPLIER_FREQUENCY', 'yearly')
+                && Configuration::updateValue('EVERSEO_SITEMAP_PAGE_META_FREQUENCY', 'monthly')
+                && Configuration::updateValue('EVERSEO_SITEMAP_PRODUCT_PRIORITY', '1')
+                && Configuration::updateValue('EVERSEO_SITEMAP_IMAGE_PRIORITY', '0.8')
+                && Configuration::updateValue('EVERSEO_SITEMAP_CATEGORY_PRIORITY', '0.8')
+                && Configuration::updateValue('EVERSEO_SITEMAP_CMS_PRIORITY', '0.5')
+                && Configuration::updateValue('EVERSEO_SITEMAP_MANUFACTURER_PRIORITY', '0.3')
+                && Configuration::updateValue('EVERSEO_SITEMAP_SUPPLIER_PRIORITY', '0.3')
+                && Configuration::updateValue('EVERSEO_SITEMAP_PAGE_META_PRIORITY', '1')
+                && Configuration::updateValue('EVERSEO_SITEMAP_QTY_ELEMENTS', 5000)
+                && Configuration::updateValue('EVERSEO_HEADER_TAGS', '')
+                && Configuration::updateValue('EVERSEO_REWRITE', true)
+                && Configuration::updateValue('EVERSEO_DELETE_CATEGORY', false)
+                && Configuration::updateValue('EVERSEO_DELETE_PRODUCT', false)
+                && Configuration::updateValue('EVERSEO_DELETE_CMS', false)
+                && Configuration::updateValue('EVERSEO_DELETE_PAGE_META', false)
+                && Configuration::updateValue('EVERSEO_DELETE_MANUFACTURER', false)
+                && Configuration::updateValue('EVERSEO_DELETE_SUPPLIER', false)
+                && Configuration::updateValue('EVERSEO_DELETE_INFO', false)
+                && Configuration::updateValue('EVERSEO_DELETE_GROUP', false)
+                && Configuration::updateValue('EVERSEO_DELETE_GENDER', false)
+                && Configuration::updateValue('EVERSEO_DELETE_FEATURE', false)
+                && Configuration::updateValue('EVERSEO_DELETE_FEATURE_VALUE', false)
+                && Configuration::updateValue('EVERSEO_DELETE_CUST_FIELD', false)
+                && Configuration::updateValue('EVERSEO_DELETE_CONTACT', false)
+                && Configuration::updateValue('EVERSEO_DELETE_COUNTRY', false)
+                && Configuration::updateValue('EVERSEO_DELETE_CART_RULE', false)
+                && Configuration::updateValue('EVERSEO_DELETE_CARRIER', false)
+                && Configuration::updateValue('EVERSEO_DELETE_ATTACHMENT', false)
+                && Configuration::updateValue('EVERSEO_DELETE_ATTRIBUTE', false)
+                && Configuration::updateValue('EVERSEO_DELETE_ATTRIBUTE_GROUP', false)
+                && Configuration::updateValue('EVERSEO_ROBOTS_TXT_REWRITE', false)
+                && Configuration::updateValue('EVERSEO_SITEMAP_QTY_ELEMENTS', 5000)
+                && Configuration::updateValue(
+                    'EVERSEO_SITEMAP_LANGS',
+                    '["'.Configuration::get('PS_LANG_DEFAULT').'"]'
+                )
+                && Configuration::updateValue('EVERSEO_CACHE', false)
+                && Configuration::updateValue('EVERSEO_COMPRESS_HTML', false)
+                && Configuration::updateValue('EVERSEO_REMOVE_COMMENTS', false)
+                && Configuration::updateValue('EVERSEO_ADD_MISSING_LABELS', false)
+                && Configuration::updateValue('EVERSEO_GOOGLE_FONT', false)
+                && Configuration::updateValue('EVERSEO_BOTTOM_SCRIPTS', false)
+                && Configuration::updateValue('EVERSEO_DEFER', false)
+                && Configuration::updateValue('EVERSEO_CACHE_LIFE', 20)
+                && Configuration::updateValue('EVERSEO_LAZY_LOAD', false)
+                && Configuration::updateValue('EVERSEO_MINIFY_PRODUCT', false)
+                && Configuration::updateValue('EVERSEO_MINIFY_CATEGORY', false)
+                && Configuration::updateValue('EVERSEO_MINIFY_HOME', false)
+                && Configuration::updateValue('EVERSEO_MINIFY_CMS', false)
+                && Configuration::updateValue('EVERSEO_MINIFY_OTHERS', false)
+                && Configuration::updateValue('EVERSEO_CACHE_PRODUCT', false)
+                && Configuration::updateValue('EVERSEO_CACHE_CATEGORY', false)
+                && Configuration::updateValue('EVERSEO_CACHE_CMS', false)
+                && Configuration::updateValue('EVERSEO_CACHE_MANUFACTURER', false)
+                && Configuration::updateValue('EVERSEO_CACHE_SUPPLIER', false)
+                && Configuration::updateValue('EVERSEO_CACHE_HOME', false)
+                && Configuration::updateValue('EVERSEO_CACHE_OTHERS', false)
+                && Configuration::updateValue('EVERSEO_EXTERNAL_NOFOLLOW', false)
+                && Configuration::updateValue('EVERSEO_REMOVE_INLINE', false)
+                && Configuration::updateValue('EVERSEO_REMOVE_EMPTY', false)
+                && Configuration::updateValue('EVERSEO_ADD_ALT', false);
     }
 
     public function uninstall()
@@ -501,7 +497,7 @@ class EverPsSeo extends Module
             && Configuration::deleteByName('EVERSEO_CACHE_OTHERS');
     }
 
-    protected function uninstallModuleTab($tabClass)
+    private function uninstallModuleTab($tabClass)
     {
         $tab = new Tab((int)Tab::getIdFromClassName($tabClass));
 
@@ -521,38 +517,6 @@ class EverPsSeo extends Module
         }
         $allowedLangs = $this->getAllowedSitemapLangs();
 
-        // XLSX files upload
-        if (Tools::isSubmit('submitUploadRedirectionFile')) {
-            $this->postValidation();
-
-            if (!count($this->postErrors)) {
-                $this->postProcess();
-                $this->uploadRedirectionFile();
-            }
-        }
-        if (Tools::isSubmit('submitUploadProductsFile')) {
-            $this->postValidation();
-
-            if (!count($this->postErrors)) {
-                $this->postProcess();
-                $this->uploadProductsFile();
-            }
-        }
-        if (Tools::isSubmit('submitUploadCategoriesFile')) {
-            $this->postValidation();
-
-            if (!count($this->postErrors)) {
-                $this->uploadCategoriesFile();
-            }
-        }
-        if (Tools::isSubmit('submitUploadFeatureValuesFile')) {
-            $this->postValidation();
-
-            if (!count($this->postErrors)) {
-                $this->uploadFeatureValuesFile();
-            }
-        }
-
         // Main form submition
         if (Tools::isSubmit('submiteverpsseoModule')) {
             $this->postValidation();
@@ -566,27 +530,27 @@ class EverPsSeo extends Module
         if (Tools::isSubmit('submitGenerateProductsContent')) {
             $this->postValidation();
             if (!count($this->postErrors)) {
-                $allowedLangs = $this->getAllowedShortcodesLangs(
-                    'EVERSEO_PGENERATOR_LANGS'
-                );
                 $seoArray = EverPsSeoProduct::getAllSeoProductsIds(
-                    (int)$this->context->shop->id,
-                    $allowedLangs
+                    (int)$this->context->shop->id
                 );
-
+                $allowedLangs = $this->getAllowedShortcodesLangs(
+                    'EVERSEO_AUTO_PRODUCT_LANGS'
+                );
                 foreach ($seoArray as $seo) {
-                    $this->autoSetContentShortDesc(
-                        'id_seo_product',
-                        (int)$seo['id_seo_product'],
-                        (int)$this->context->shop->id,
-                        (int)$seo['id_seo_lang']
-                    );
-                    $this->autoSetContentDesc(
-                        'id_seo_product',
-                        (int)$seo['id_seo_product'],
-                        (int)$this->context->shop->id,
-                        (int)$seo['id_seo_lang']
-                    );
+                    if (in_array((int)$seo['id_seo_lang'], $allowedLangs)) {
+                        $this->autoSetContentShortDesc(
+                            'id_seo_product',
+                            (int)$seo['id_seo_product'],
+                            (int)$this->context->shop->id,
+                            (int)$seo['id_seo_lang']
+                        );
+                        $this->autoSetContentDesc(
+                            'id_seo_product',
+                            (int)$seo['id_seo_product'],
+                            (int)$this->context->shop->id,
+                            (int)$seo['id_seo_lang']
+                        );
+                    }
                 }
             }
         }
@@ -664,27 +628,27 @@ class EverPsSeo extends Module
         if (Tools::isSubmit('submitAutoProduct')) {
             $this->postValidation();
             if (!count($this->postErrors)) {
+                $seoArray = EverPsSeoProduct::getAllSeoProductsIds(
+                    (int)$this->context->shop->id
+                );
                 $allowedLangs = $this->getAllowedShortcodesLangs(
                     'EVERSEO_AUTO_PRODUCT_LANGS'
                 );
-                $seoArray = EverPsSeoProduct::getAllSeoProductsIds(
-                    (int)$this->context->shop->id,
-                    $allowedLangs
-                );
-
                 foreach ($seoArray as $seo) {
-                    $this->autoSetTitle(
-                        'id_seo_product',
-                        (int)$seo['id_seo_product'],
-                        (int)$this->context->shop->id,
-                        (int)$seo['id_seo_lang']
-                    );
-                    $this->autoSetDescription(
-                        'id_seo_product',
-                        (int)$seo['id_seo_product'],
-                        (int)$this->context->shop->id,
-                        (int)$seo['id_seo_lang']
-                    );
+                    if (in_array((int)$seo['id_seo_lang'], $allowedLangs)) {
+                        $this->autoSetTitle(
+                            'id_seo_product',
+                            (int)$seo['id_seo_product'],
+                            (int)$this->context->shop->id,
+                            (int)$seo['id_seo_lang']
+                        );
+                        $this->autoSetDescription(
+                            'id_seo_product',
+                            (int)$seo['id_seo_product'],
+                            (int)$this->context->shop->id,
+                            (int)$seo['id_seo_lang']
+                        );
+                    }
                 }
             }
         }
@@ -991,7 +955,7 @@ class EverPsSeo extends Module
             if (!count($this->postErrors)) {
                 $this->postProcess();
                 foreach ($this->getBannedLangs() as $id_lang) {
-                    EverPsSeoTools::noIndexLang(
+                    $this->noindexLang(
                         (int)$id_lang
                     );
                 }
@@ -1004,7 +968,7 @@ class EverPsSeo extends Module
             if (!count($this->postErrors)) {
                 $this->postProcess();
                 foreach ($this->getBannedLangs() as $id_lang) {
-                    EverPsSeoTools::noFollowLang(
+                    $this->nofollowLang(
                         (int)$id_lang
                     );
                 }
@@ -1017,46 +981,7 @@ class EverPsSeo extends Module
             if (!count($this->postErrors)) {
                 $this->postProcess();
                 foreach ($this->getBannedLangs() as $id_lang) {
-                    EverPsSeoTools::noSitemapLang(
-                        (int)$id_lang
-                    );
-                }
-            }
-        }
-
-        // Bulk index lang
-        if (Tools::isSubmit('submitIndexLang')) {
-            $this->postValidation();
-            if (!count($this->postErrors)) {
-                $this->postProcess();
-                foreach ($this->getBannedLangs() as $id_lang) {
-                   EverPsSeoTools::indexLang(
-                        (int)$id_lang
-                    );
-                }
-            }
-        }
-
-        // Bulk follow lang
-        if (Tools::isSubmit('submitFollowLang')) {
-            $this->postValidation();
-            if (!count($this->postErrors)) {
-                $this->postProcess();
-                foreach ($this->getBannedLangs() as $id_lang) {
-                    EverPsSeoTools::followLang(
-                        (int)$id_lang
-                    );
-                }
-            }
-        }
-
-        // Bulk follow lang
-        if (Tools::isSubmit('submitSitemapLang')) {
-            $this->postValidation();
-            if (!count($this->postErrors)) {
-                $this->postProcess();
-                foreach ($this->getBannedLangs() as $id_lang) {
-                    EverPsSeoTools::sitemapLang(
+                    $this->nositemapLang(
                         (int)$id_lang
                     );
                 }
@@ -1365,7 +1290,7 @@ class EverPsSeo extends Module
             );
         }
         // die(var_dump($defaultUrlImage));
-        $defaultImage = '<image src="'.(string)$defaultUrlImage.'" style="max-width:80px;" />';
+        $defaultImage = '<image src="'.(string)$defaultUrlImage.'"/>';
 
         $knowledgegraph_type = array(
             array(
@@ -1385,7 +1310,7 @@ class EverPsSeo extends Module
             'form' => array(
                 'legend' => array(
                     'title' => $this->l('Global SEO settings'),
-                    'icon' => 'icon-smile',
+                    'icon' => 'icon-cogs',
                 ),
                 'input' => array(
                     array(
@@ -1449,15 +1374,6 @@ class EverPsSeo extends Module
                         'desc' => $this->l('Will redirect to this URL only if SEO maintenance is ON'),
                         'hint' => $this->l('Default will be google.com'),
                         'name' => 'EVERSEO_MAINTENANCE_URL',
-                        'lang' => false,
-                    ),
-                    array(
-                        'type' => 'text',
-                        'label' => $this->l('Index now request limit per day'),
-                        'desc' => $this->l('Set here how many requests can be sent to Index Nox'),
-                        'hint' => $this->l('Format is often UA-12345678-1'),
-                        'required' => true,
-                        'name' => 'EVERSEO_INDEXNOW_LIMIT',
                         'lang' => false,
                     ),
                     array(
@@ -1677,46 +1593,6 @@ class EverPsSeo extends Module
                             'name' => 'name',
                         ),
                     ),
-                    array(
-                        'type' => 'switch',
-                        'label' => $this->l('Regenerate link rewrite ?'),
-                        'desc' => $this->l('Will regenerate link rewrite for products & categories for allowed languages'),
-                        'hint' => $this->l('Set "No" will leave actual link rewrites'),
-                        'name' => 'EVERSEO_REWRITE_LINKS',
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
-                    ),
-                    array(
-                        'type' => 'switch',
-                        'label' => $this->l('Create logs files on commands ?'),
-                        'desc' => $this->l('Will create logs files on commands errors'),
-                        'hint' => $this->l('Set "No" will only output errors on commands'),
-                        'name' => 'EVER_LOG_CMD',
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
-                    ),
                 ),
                 'submit' => array(
                     'title' => $this->l('Save'),
@@ -1724,811 +1600,603 @@ class EverPsSeo extends Module
             ),
         );
 
-        // XLSX files import
-        $form_fields[] = array(
-            'form' => array(
-                'legend' => array(
-                    'title' => $this->l('Upload redirection update file'),
-                    'icon' => 'icon-download',
-                ),
-                'input' => array(
-                    array(
-                        'type' => 'file',
-                        'label' => $this->l('Upload redirection file'),
-                        'desc' => $this->l('Will upload redirection file and wait until update cron is triggered'),
-                        'hint' => $this->l('For SEO updates only'),
-                        'name' => 'redirection_file',
-                        'display_image' => false,
-                        'required' => false
+        if ((bool)$this->isSeven) {
+            $form_fields[] = array(
+                'form' => array(
+                    'legend' => array(
+                        'title' => $this->l('Cache management'),
+                        'icon' => 'icon-cogs',
                     ),
-                ),
-                'buttons' => array(
-                    'import' => array(
-                        'name' => 'submitUploadRedirectionFile',
-                        'type' => 'submit',
-                        'class' => 'btn btn-default pull-right',
-                        'icon' => 'process-icon-download',
-                        'title' => $this->l('Upload file')
-                    ),
-                ),
-            )
-        );
-        $form_fields[] = array(
-            'form' => array(
-                'legend' => array(
-                    'title' => $this->l('Upload products update file'),
-                    'icon' => 'icon-download',
-                ),
-                'input' => array(
-                    array(
-                        'type' => 'file',
-                        'label' => $this->l('Upload products file'),
-                        'desc' => $this->l('Will upload products file and wait until update cron is triggered'),
-                        'hint' => $this->l('For SEO updates only'),
-                        'name' => 'products_file',
-                        'display_image' => false,
-                        'required' => false
-                    ),
-                ),
-                'buttons' => array(
-                    'import' => array(
-                        'name' => 'submitUploadProductsFile',
-                        'type' => 'submit',
-                        'class' => 'btn btn-default pull-right',
-                        'icon' => 'process-icon-download',
-                        'title' => $this->l('Upload file')
-                    ),
-                ),
-            )
-        );
-        $form_fields[] = array(
-            'form' => array(
-                'legend' => array(
-                    'title' => $this->l('Upload categories update file'),
-                    'icon' => 'icon-download',
-                ),
-                'input' => array(
-                    array(
-                        'type' => 'file',
-                        'label' => $this->l('Upload categories file'),
-                        'desc' => $this->l('Will upload categories file and wait until update cron is triggered'),
-                        'hint' => $this->l('For SEO updates only'),
-                        'name' => 'categories_file',
-                        'display_image' => false,
-                        'required' => false
-                    ),
-                ),
-                'buttons' => array(
-                    'import' => array(
-                        'name' => 'submitUploadCategoriesFile',
-                        'type' => 'submit',
-                        'class' => 'btn btn-default pull-right',
-                        'icon' => 'process-icon-download',
-                        'title' => $this->l('Upload file')
-                    ),
-                ),
-            )
-        );
-        $form_fields[] = array(
-            'form' => array(
-                'legend' => array(
-                    'title' => $this->l('Upload feature values update file'),
-                    'icon' => 'icon-download',
-                ),
-                'input' => array(
-                    array(
-                        'type' => 'file',
-                        'label' => $this->l('Upload feature values file'),
-                        'desc' => $this->l('Will upload feature values file and wait until update cron is triggered'),
-                        'hint' => $this->l('For SEO updates only'),
-                        'name' => 'featurevalues_file',
-                        'display_image' => false,
-                        'required' => false
-                    ),
-                ),
-                'buttons' => array(
-                    'import' => array(
-                        'name' => 'submitUploadFeatureValuesFile',
-                        'type' => 'submit',
-                        'class' => 'btn btn-default pull-right',
-                        'icon' => 'process-icon-download',
-                        'title' => $this->l('Upload file')
-                    ),
-                ),
-            )
-        );
-
-        // Search override fields
-        $form_fields[] = array(
-            'form' => array(
-                'legend' => array(
-                    'title' => $this->l('Search settings'),
-                    'icon' => 'icon-search',
-                ),
-                'input' => array(
-                    array(
-                        'type' => 'switch',
-                        'label' => $this->l('Auto redirect search if category is found ?'),
-                        'desc' => $this->l('Will redirect user to category page if search matches category name'),
-                        'hint' => $this->l('Else search won\'t be redirected to category'),
-                        'name' => 'EVER_SEARCH_CATEGORIES',
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled')
+                    'input' => array(
+                        array(
+                            'type' => 'free',
+                            'label' =>  $this->l('Before enabling cache'),
+                            'name' => 'cache_advices'
+                        ),
+                        array(
+                            'type' => 'free',
+                            'label' =>  $this->l('Nginx advices'),
+                            'name' => 'nginx_advices'
+                        ),
+                        array(
+                            'type' => 'switch',
+                            'label' => $this->l('Enable Ever SEO cache ?'),
+                            'desc' => $this->l('Will enable all settings for cache'),
+                            'hint' => $this->l('Set "No" to disable module cache'),
+                            'name' => 'EVERSEO_CACHE',
+                            'is_bool' => true,
+                            'values' => array(
+                                array(
+                                    'id' => 'active_on',
+                                    'value' => 1,
+                                    'label' => $this->l('Enabled')
+                                ),
+                                array(
+                                    'id' => 'active_off',
+                                    'value' => 0,
+                                    'label' => $this->l('Disabled')
+                                )
                             ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
+                        ),
+                        array(
+                            'type' => 'switch',
+                            'label' => $this->l('Freeze the shop ?'),
+                            'desc' => $this->l('Will freeze the shop (the cache will not be regenerated)'),
+                            'hint' => $this->l('Put yes in case of heavy traffic'),
+                            'name' => 'EVERSEO_FREEZE_CACHE',
+                            'is_bool' => true,
+                            'values' => array(
+                                array(
+                                    'id' => 'active_on',
+                                    'value' => 1,
+                                    'label' => $this->l('Enabled')
+                                ),
+                                array(
+                                    'id' => 'active_off',
+                                    'value' => 0,
+                                    'label' => $this->l('Disabled')
+                                )
+                            ),
+                        ),
+                        array(
+                            'type' => 'switch',
+                            'label' => $this->l('Make all external links target _blank ?'),
+                            'desc' => $this->l('Will open all external links in new page'),
+                            'hint' => $this->l('Set "No" to disable this rule'),
+                            'name' => 'EVERSEO_EXTERNAL_NOFOLLOW',
+                            'is_bool' => true,
+                            'values' => array(
+                                array(
+                                    'id' => 'active_on',
+                                    'value' => 1,
+                                    'label' => $this->l('Enabled')
+                                ),
+                                array(
+                                    'id' => 'active_off',
+                                    'value' => 0,
+                                    'label' => $this->l('Disabled')
+                                )
+                            ),
+                        ),
+                        array(
+                            'type' => 'switch',
+                            'label' => $this->l('Remove inline values ?'),
+                            'desc' => $this->l('Will remove all style values on page'),
+                            'hint' => $this->l('Set "No" to keep inline style values'),
+                            'name' => 'EVERSEO_REMOVE_INLINE',
+                            'is_bool' => true,
+                            'values' => array(
+                                array(
+                                    'id' => 'active_on',
+                                    'value' => 1,
+                                    'label' => $this->l('Enabled')
+                                ),
+                                array(
+                                    'id' => 'active_off',
+                                    'value' => 0,
+                                    'label' => $this->l('Disabled')
+                                )
+                            ),
+                        ),
+                        array(
+                            'type' => 'switch',
+                            'label' => $this->l('Hide empty HTML tags ?'),
+                            'desc' => $this->l('Will add aria-hidden on empty HTML tags'),
+                            'hint' => $this->l('Set "No" to keep empty tags shown'),
+                            'name' => 'EVERSEO_REMOVE_EMPTY',
+                            'is_bool' => true,
+                            'values' => array(
+                                array(
+                                    'id' => 'active_on',
+                                    'value' => 1,
+                                    'label' => $this->l('Enabled')
+                                ),
+                                array(
+                                    'id' => 'active_off',
+                                    'value' => 0,
+                                    'label' => $this->l('Disabled')
+                                )
+                            ),
+                        ),
+                        array(
+                            'type' => 'switch',
+                            'label' => $this->l('Add missing alt and title values ?'),
+                            'desc' => $this->l('Will add shop name as alt and title value'),
+                            'hint' => $this->l('Set "No" to keep empty alt and title tags'),
+                            'name' => 'EVERSEO_ADD_ALT',
+                            'is_bool' => true,
+                            'values' => array(
+                                array(
+                                    'id' => 'active_on',
+                                    'value' => 1,
+                                    'label' => $this->l('Enabled')
+                                ),
+                                array(
+                                    'id' => 'active_off',
+                                    'value' => 0,
+                                    'label' => $this->l('Disabled')
+                                )
+                            ),
+                        ),
+                        array(
+                            'type' => 'switch',
+                            'label' => $this->l('Use GZIP and mod_deflate'),
+                            'desc' => $this->l('Will add rules on your htaccess file'),
+                            'hint' => $this->l('Please ask if mod_deflate is set on your server'),
+                            'name' => 'EVERSEO_DEFLATE',
+                            'is_bool' => true,
+                            'values' => array(
+                                array(
+                                    'id' => 'active_on',
+                                    'value' => 1,
+                                    'label' => $this->l('Enabled')
+                                ),
+                                array(
+                                    'id' => 'active_off',
+                                    'value' => 0,
+                                    'label' => $this->l('Disabled')
+                                )
+                            ),
+                        ),
+                        array(
+                            'type' => 'switch',
+                            'label' => $this->l('Compress HTML ?'),
+                            'desc' => $this->l('Will minify HTML for more speed'),
+                            'hint' => $this->l('Set "No" to let Prestashop do not minify HTML'),
+                            'name' => 'EVERSEO_COMPRESS_HTML',
+                            'is_bool' => true,
+                            'values' => array(
+                                array(
+                                    'id' => 'active_on',
+                                    'value' => 1,
+                                    'label' => $this->l('Enabled')
+                                ),
+                                array(
+                                    'id' => 'active_off',
+                                    'value' => 0,
+                                    'label' => $this->l('Disabled')
+                                )
+                            ),
+                        ),
+                        array(
+                            'type' => 'switch',
+                            'label' => $this->l('Minify products ?'),
+                            'desc' => $this->l('Will enable minification on products'),
+                            'hint' => $this->l('Set "No" to disable module minification on products'),
+                            'name' => 'EVERSEO_MINIFY_PRODUCT',
+                            'is_bool' => true,
+                            'values' => array(
+                                array(
+                                    'id' => 'active_on',
+                                    'value' => 1,
+                                    'label' => $this->l('Enabled')
+                                ),
+                                array(
+                                    'id' => 'active_off',
+                                    'value' => 0,
+                                    'label' => $this->l('Disabled')
+                                )
+                            ),
+                        ),
+                        array(
+                            'type' => 'switch',
+                            'label' => $this->l('HTML cache products ?'),
+                            'desc' => $this->l('Will show HTML cache for unlogged users'),
+                            'hint' => $this->l('Set "No" to disable HTML cache on products'),
+                            'name' => 'EVERSEO_CACHE_PRODUCT',
+                            'is_bool' => true,
+                            'values' => array(
+                                array(
+                                    'id' => 'active_on',
+                                    'value' => 1,
+                                    'label' => $this->l('Enabled')
+                                ),
+                                array(
+                                    'id' => 'active_off',
+                                    'value' => 0,
+                                    'label' => $this->l('Disabled')
+                                )
+                            ),
+                        ),
+                        array(
+                            'type' => 'switch',
+                            'label' => $this->l('HTML cache categories ?'),
+                            'desc' => $this->l('Will show HTML cache for unlogged users'),
+                            'hint' => $this->l('Set "No" to disable HTML cache on categories'),
+                            'name' => 'EVERSEO_CACHE_CATEGORY',
+                            'is_bool' => true,
+                            'values' => array(
+                                array(
+                                    'id' => 'active_on',
+                                    'value' => 1,
+                                    'label' => $this->l('Enabled')
+                                ),
+                                array(
+                                    'id' => 'active_off',
+                                    'value' => 0,
+                                    'label' => $this->l('Disabled')
+                                )
+                            ),
+                        ),
+                        array(
+                            'type' => 'switch',
+                            'label' => $this->l('HTML cache CMS ?'),
+                            'desc' => $this->l('Will show HTML cache for unlogged users'),
+                            'hint' => $this->l('Set "No" to disable HTML cache on CMS'),
+                            'name' => 'EVERSEO_CACHE_CMS',
+                            'is_bool' => true,
+                            'values' => array(
+                                array(
+                                    'id' => 'active_on',
+                                    'value' => 1,
+                                    'label' => $this->l('Enabled')
+                                ),
+                                array(
+                                    'id' => 'active_off',
+                                    'value' => 0,
+                                    'label' => $this->l('Disabled')
+                                )
+                            ),
+                        ),
+                        array(
+                            'type' => 'switch',
+                            'label' => $this->l('HTML cache manufacturers ?'),
+                            'desc' => $this->l('Will show HTML cache for unlogged users'),
+                            'hint' => $this->l('Set "No" to disable HTML cache on manufacturers'),
+                            'name' => 'EVERSEO_CACHE_MANUFACTURER',
+                            'is_bool' => true,
+                            'values' => array(
+                                array(
+                                    'id' => 'active_on',
+                                    'value' => 1,
+                                    'label' => $this->l('Enabled')
+                                ),
+                                array(
+                                    'id' => 'active_off',
+                                    'value' => 0,
+                                    'label' => $this->l('Disabled')
+                                )
+                            ),
+                        ),
+                        array(
+                            'type' => 'switch',
+                            'label' => $this->l('HTML cache suppliers ?'),
+                            'desc' => $this->l('Will show HTML cache for unlogged users'),
+                            'hint' => $this->l('Set "No" to disable HTML cache on suppliers'),
+                            'name' => 'EVERSEO_CACHE_SUPPLIER',
+                            'is_bool' => true,
+                            'values' => array(
+                                array(
+                                    'id' => 'active_on',
+                                    'value' => 1,
+                                    'label' => $this->l('Enabled')
+                                ),
+                                array(
+                                    'id' => 'active_off',
+                                    'value' => 0,
+                                    'label' => $this->l('Disabled')
+                                )
+                            ),
+                        ),
+                        array(
+                            'type' => 'switch',
+                            'label' => $this->l('HTML cache homepage ?'),
+                            'desc' => $this->l('Will show HTML cache for unlogged users'),
+                            'hint' => $this->l('Set "No" to disable HTML cache on homepage'),
+                            'name' => 'EVERSEO_CACHE_HOME',
+                            'is_bool' => true,
+                            'values' => array(
+                                array(
+                                    'id' => 'active_on',
+                                    'value' => 1,
+                                    'label' => $this->l('Enabled')
+                                ),
+                                array(
+                                    'id' => 'active_off',
+                                    'value' => 0,
+                                    'label' => $this->l('Disabled')
+                                )
+                            ),
+                        ),
+                        array(
+                            'type' => 'switch',
+                            'label' => $this->l('HTML cache other pages ?'),
+                            'desc' => $this->l('Will show HTML cache for unlogged users'),
+                            'hint' => $this->l('Set "No" to disable HTML cache on other pages'),
+                            'name' => 'EVERSEO_CACHE_OTHERS',
+                            'is_bool' => true,
+                            'values' => array(
+                                array(
+                                    'id' => 'active_on',
+                                    'value' => 1,
+                                    'label' => $this->l('Enabled')
+                                ),
+                                array(
+                                    'id' => 'active_off',
+                                    'value' => 0,
+                                    'label' => $this->l('Disabled')
+                                )
+                            ),
+                        ),
+                        array(
+                            'type' => 'switch',
+                            'label' => $this->l('Minify categories ?'),
+                            'desc' => $this->l('Will enable minification on categories'),
+                            'hint' => $this->l('Set "No" to disable module minification on categories'),
+                            'name' => 'EVERSEO_MINIFY_CATEGORY',
+                            'is_bool' => true,
+                            'values' => array(
+                                array(
+                                    'id' => 'active_on',
+                                    'value' => 1,
+                                    'label' => $this->l('Enabled')
+                                ),
+                                array(
+                                    'id' => 'active_off',
+                                    'value' => 0,
+                                    'label' => $this->l('Disabled')
+                                )
+                            ),
+                        ),
+                        array(
+                            'type' => 'switch',
+                            'label' => $this->l('Minify homepage ?'),
+                            'desc' => $this->l('Will enable minification on homepage'),
+                            'hint' => $this->l('Set "No" to disable module minification on home'),
+                            'name' => 'EVERSEO_MINIFY_HOME',
+                            'is_bool' => true,
+                            'values' => array(
+                                array(
+                                    'id' => 'active_on',
+                                    'value' => 1,
+                                    'label' => $this->l('Enabled')
+                                ),
+                                array(
+                                    'id' => 'active_off',
+                                    'value' => 0,
+                                    'label' => $this->l('Disabled')
+                                )
+                            ),
+                        ),
+                        array(
+                            'type' => 'switch',
+                            'label' => $this->l('Minify CMS ?'),
+                            'desc' => $this->l('Will enable minification on CMS'),
+                            'hint' => $this->l('Set "No" to disable module minification on CMS'),
+                            'name' => 'EVERSEO_MINIFY_CMS',
+                            'is_bool' => true,
+                            'values' => array(
+                                array(
+                                    'id' => 'active_on',
+                                    'value' => 1,
+                                    'label' => $this->l('Enabled')
+                                ),
+                                array(
+                                    'id' => 'active_off',
+                                    'value' => 0,
+                                    'label' => $this->l('Disabled')
+                                )
+                            ),
+                        ),
+                        array(
+                            'type' => 'switch',
+                            'label' => $this->l('Minify other pages ?'),
+                            'desc' => $this->l('Will enable minification on other pages'),
+                            'hint' => $this->l('Set "No" to disable module minification on other pages'),
+                            'name' => 'EVERSEO_MINIFY_OTHERS',
+                            'is_bool' => true,
+                            'values' => array(
+                                array(
+                                    'id' => 'active_on',
+                                    'value' => 1,
+                                    'label' => $this->l('Enabled')
+                                ),
+                                array(
+                                    'id' => 'active_off',
+                                    'value' => 0,
+                                    'label' => $this->l('Disabled')
+                                )
+                            ),
+                        ),
+                        array(
+                            'type' => 'switch',
+                            'label' => $this->l('Remove HTML comments ?'),
+                            'desc' => $this->l('Works only with HTML compression'),
+                            'hint' => $this->l('Set "No" to show HTML comments'),
+                            'name' => 'EVERSEO_REMOVE_COMMENTS',
+                            'is_bool' => true,
+                            'values' => array(
+                                array(
+                                    'id' => 'active_on',
+                                    'value' => 1,
+                                    'label' => $this->l('Enabled')
+                                ),
+                                array(
+                                    'id' => 'active_off',
+                                    'value' => 0,
+                                    'label' => $this->l('Disabled')
+                                )
+                            ),
+                        ),
+                        array(
+                            'type' => 'switch',
+                            'label' => $this->l('Add aria-label ?'),
+                            'desc' => $this->l('Will add aria label attribute if missing on inputs'),
+                            'hint' => $this->l('Set "No" to let inputs without labels'),
+                            'name' => 'EVERSEO_ADD_MISSING_LABELS',
+                            'is_bool' => true,
+                            'values' => array(
+                                array(
+                                    'id' => 'active_on',
+                                    'value' => 1,
+                                    'label' => $this->l('Enabled')
+                                ),
+                                array(
+                                    'id' => 'active_off',
+                                    'value' => 0,
+                                    'label' => $this->l('Disabled')
+                                )
+                            ),
+                        ),
+                        array(
+                            'type' => 'switch',
+                            'label' => $this->l('Load Google Font locally ?'),
+                            'desc' => $this->l('Will import Google font'),
+                            'hint' => $this->l('Set "No" to let Google font external'),
+                            'name' => 'EVERSEO_GOOGLE_FONT',
+                            'is_bool' => true,
+                            'values' => array(
+                                array(
+                                    'id' => 'active_on',
+                                    'value' => 1,
+                                    'label' => $this->l('Enabled')
+                                ),
+                                array(
+                                    'id' => 'active_off',
+                                    'value' => 0,
+                                    'label' => $this->l('Disabled')
+                                )
+                            ),
+                        ),
+                        array(
+                            'type' => 'switch',
+                            'label' => $this->l('Move all scripts to bottom'),
+                            'desc' => $this->l('Works only with HTML compression'),
+                            'hint' => $this->l('Set "No" to let Prestashop manage this'),
+                            'name' => 'EVERSEO_BOTTOM_SCRIPTS',
+                            'is_bool' => true,
+                            'values' => array(
+                                array(
+                                    'id' => 'active_on',
+                                    'value' => 1,
+                                    'label' => $this->l('Enabled')
+                                ),
+                                array(
+                                    'id' => 'active_off',
+                                    'value' => 0,
+                                    'label' => $this->l('Disabled')
+                                )
+                            ),
+                        ),
+                        array(
+                            'type' => 'switch',
+                            'label' => $this->l('Defer javascript ?'),
+                            'desc' => $this->l('Works only with HTML compression'),
+                            'hint' => $this->l('Set "No" to let scripts do not defer'),
+                            'name' => 'EVERSEO_DEFER',
+                            'is_bool' => true,
+                            'values' => array(
+                                array(
+                                    'id' => 'active_on',
+                                    'value' => 1,
+                                    'label' => $this->l('Enabled')
+                                ),
+                                array(
+                                    'id' => 'active_off',
+                                    'value' => 0,
+                                    'label' => $this->l('Disabled')
+                                )
+                            ),
+                        ),
+                        array(
+                            'type' => 'switch',
+                            'label' => $this->l('Enable Jquery Lazy Load ?'),
+                            'desc' => $this->l('Will add lazy load for all images'),
+                            'hint' => $this->l('Set "No" if you are using another module'),
+                            'name' => 'EVERSEO_LAZY_LOAD',
+                            'is_bool' => true,
+                            'values' => array(
+                                array(
+                                    'id' => 'active_on',
+                                    'value' => 1,
+                                    'label' => $this->l('Enabled')
+                                ),
+                                array(
+                                    'id' => 'active_off',
+                                    'value' => 0,
+                                    'label' => $this->l('Disabled')
+                                )
+                            ),
+                        ),
+                        array(
+                            'type' => 'text',
+                            'label' => $this->l('Cache life'),
+                            'desc' => $this->l('Useful for scripts regeneration'),
+                            'hint' => $this->l('Default will be 120'),
+                            'name' => 'EVERSEO_CACHE_LIFE',
+                            'required' => true,
                         ),
                     ),
-                    array(
-                        'type' => 'switch',
-                        'label' => $this->l('Auto redirect search if manufacturer is found ?'),
-                        'desc' => $this->l('Will redirect user to manufacturer page if search matches manufacturer name'),
-                        'hint' => $this->l('Else search won\'t be redirected to manufacturer'),
-                        'name' => 'EVER_SEARCH_MANUFACTURERS',
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
+                    'buttons' => array(
+                        'deleteCache' => array(
+                            'name' => 'submitDeleteCache',
+                            'type' => 'submit',
+                            'class' => 'btn btn-default pull-right',
+                            'icon' => 'process-icon-uninstall',
+                            'title' => $this->l('Delete cache files')
+                        ),
+                        'deleteProductCache' => array(
+                            'name' => 'submitDeleteProductCache',
+                            'type' => 'submit',
+                            'class' => 'btn btn-default pull-right',
+                            'icon' => 'process-icon-uninstall',
+                            'title' => $this->l('Delete product cache files')
+                        ),
+                        'deleteCategoryCache' => array(
+                            'name' => 'submitDeleteCategoryCache',
+                            'type' => 'submit',
+                            'class' => 'btn btn-default pull-right',
+                            'icon' => 'process-icon-uninstall',
+                            'title' => $this->l('Delete category cache files')
+                        ),
+                        'deleteCmsCache' => array(
+                            'name' => 'submitDeleteCmsCache',
+                            'type' => 'submit',
+                            'class' => 'btn btn-default pull-right',
+                            'icon' => 'process-icon-uninstall',
+                            'title' => $this->l('Delete CMS cache files')
+                        ),
+                        'deleteSupplierCache' => array(
+                            'name' => 'submitDeleteSupplierCache',
+                            'type' => 'submit',
+                            'class' => 'btn btn-default pull-right',
+                            'icon' => 'process-icon-uninstall',
+                            'title' => $this->l('Delete supplier cache files')
+                        ),
+                        'deleteManufacturerCache' => array(
+                            'name' => 'submitDeleteManufacturerCache',
+                            'type' => 'submit',
+                            'class' => 'btn btn-default pull-right',
+                            'icon' => 'process-icon-uninstall',
+                            'title' => $this->l('Delete manufacturer cache files')
                         ),
                     ),
-                    array(
-                        'type' => 'switch',
-                        'label' => $this->l('Auto redirect search if supplier is found ?'),
-                        'desc' => $this->l('Will redirect user to supplier page if search matches supplier name'),
-                        'hint' => $this->l('Else search won\'t be redirected to supplier'),
-                        'name' => 'EVER_SEARCH_SUPPLIERS',
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
-                    ),
-                    array(
-                        'type' => 'switch',
-                        'label' => $this->l('Auto redirect search if product is found ?'),
-                        'desc' => $this->l('Will redirect user to product page if search matches product name'),
-                        'hint' => $this->l('Else search won\'t be redirected to product'),
-                        'name' => 'EVER_SEARCH_PRODUCTS',
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
-                    ),
-                ),
-                'submit' => array(
-                    'title' => $this->l('Save'),
-                ),
-            ),
-        );
-
-        // Cache
-        $form_fields[] = array(
-            'form' => array(
-                'legend' => array(
-                    'title' => $this->l('Cache management'),
-                    'icon' => 'icon-cogs',
-                ),
-                'input' => array(
-                    array(
-                        'type' => 'free',
-                        'label' =>  $this->l('Before enabling cache'),
-                        'name' => 'cache_advices'
-                    ),
-                    array(
-                        'type' => 'free',
-                        'label' =>  $this->l('Nginx advices'),
-                        'name' => 'nginx_advices'
-                    ),
-                    array(
-                        'type' => 'switch',
-                        'label' => $this->l('Enable Ever SEO cache ?'),
-                        'desc' => $this->l('Will enable all settings for cache'),
-                        'hint' => $this->l('Set "No" to disable module cache'),
-                        'name' => 'EVERSEO_CACHE',
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
-                    ),
-                    array(
-                        'type' => 'switch',
-                        'label' => $this->l('Freeze the shop ?'),
-                        'desc' => $this->l('Will freeze the shop (the cache will not be regenerated)'),
-                        'hint' => $this->l('Put yes in case of heavy traffic'),
-                        'name' => 'EVERSEO_FREEZE_CACHE',
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
-                    ),
-                    array(
-                        'type' => 'switch',
-                        'label' => $this->l('Make all external links target _blank ?'),
-                        'desc' => $this->l('Will open all external links in new page'),
-                        'hint' => $this->l('Set "No" to disable this rule'),
-                        'name' => 'EVERSEO_EXTERNAL_NOFOLLOW',
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
-                    ),
-                    array(
-                        'type' => 'switch',
-                        'label' => $this->l('Remove inline values ?'),
-                        'desc' => $this->l('Will remove all style values on page'),
-                        'hint' => $this->l('Set "No" to keep inline style values'),
-                        'name' => 'EVERSEO_REMOVE_INLINE',
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
-                    ),
-                    array(
-                        'type' => 'switch',
-                        'label' => $this->l('Hide empty HTML tags ?'),
-                        'desc' => $this->l('Will add aria-hidden on empty HTML tags'),
-                        'hint' => $this->l('Set "No" to keep empty tags shown'),
-                        'name' => 'EVERSEO_REMOVE_EMPTY',
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
-                    ),
-                    array(
-                        'type' => 'switch',
-                        'label' => $this->l('Add missing alt and title values ?'),
-                        'desc' => $this->l('Will add shop name as alt and title value'),
-                        'hint' => $this->l('Set "No" to keep empty alt and title tags'),
-                        'name' => 'EVERSEO_ADD_ALT',
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
-                    ),
-                    array(
-                        'type' => 'switch',
-                        'label' => $this->l('Use GZIP and mod_deflate'),
-                        'desc' => $this->l('Will add rules on your htaccess file'),
-                        'hint' => $this->l('Please ask if mod_deflate is set on your server'),
-                        'name' => 'EVERSEO_DEFLATE',
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
-                    ),
-                    array(
-                        'type' => 'switch',
-                        'label' => $this->l('Compress HTML ?'),
-                        'desc' => $this->l('Will minify HTML for more speed'),
-                        'hint' => $this->l('Set "No" to let Prestashop do not minify HTML'),
-                        'name' => 'EVERSEO_COMPRESS_HTML',
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
-                    ),
-                    array(
-                        'type' => 'switch',
-                        'label' => $this->l('Minify products ?'),
-                        'desc' => $this->l('Will enable minification on products'),
-                        'hint' => $this->l('Set "No" to disable module minification on products'),
-                        'name' => 'EVERSEO_MINIFY_PRODUCT',
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
-                    ),
-                    array(
-                        'type' => 'switch',
-                        'label' => $this->l('HTML cache products ?'),
-                        'desc' => $this->l('Will show HTML cache for unlogged users'),
-                        'hint' => $this->l('Set "No" to disable HTML cache on products'),
-                        'name' => 'EVERSEO_CACHE_PRODUCT',
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
-                    ),
-                    array(
-                        'type' => 'switch',
-                        'label' => $this->l('HTML cache categories ?'),
-                        'desc' => $this->l('Will show HTML cache for unlogged users'),
-                        'hint' => $this->l('Set "No" to disable HTML cache on categories'),
-                        'name' => 'EVERSEO_CACHE_CATEGORY',
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
-                    ),
-                    array(
-                        'type' => 'switch',
-                        'label' => $this->l('HTML cache CMS ?'),
-                        'desc' => $this->l('Will show HTML cache for unlogged users'),
-                        'hint' => $this->l('Set "No" to disable HTML cache on CMS'),
-                        'name' => 'EVERSEO_CACHE_CMS',
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
-                    ),
-                    array(
-                        'type' => 'switch',
-                        'label' => $this->l('HTML cache manufacturers ?'),
-                        'desc' => $this->l('Will show HTML cache for unlogged users'),
-                        'hint' => $this->l('Set "No" to disable HTML cache on manufacturers'),
-                        'name' => 'EVERSEO_CACHE_MANUFACTURER',
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
-                    ),
-                    array(
-                        'type' => 'switch',
-                        'label' => $this->l('HTML cache suppliers ?'),
-                        'desc' => $this->l('Will show HTML cache for unlogged users'),
-                        'hint' => $this->l('Set "No" to disable HTML cache on suppliers'),
-                        'name' => 'EVERSEO_CACHE_SUPPLIER',
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
-                    ),
-                    array(
-                        'type' => 'switch',
-                        'label' => $this->l('HTML cache homepage ?'),
-                        'desc' => $this->l('Will show HTML cache for unlogged users'),
-                        'hint' => $this->l('Set "No" to disable HTML cache on homepage'),
-                        'name' => 'EVERSEO_CACHE_HOME',
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
-                    ),
-                    array(
-                        'type' => 'switch',
-                        'label' => $this->l('HTML cache other pages ?'),
-                        'desc' => $this->l('Will show HTML cache for unlogged users'),
-                        'hint' => $this->l('Set "No" to disable HTML cache on other pages'),
-                        'name' => 'EVERSEO_CACHE_OTHERS',
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
-                    ),
-                    array(
-                        'type' => 'switch',
-                        'label' => $this->l('Minify categories ?'),
-                        'desc' => $this->l('Will enable minification on categories'),
-                        'hint' => $this->l('Set "No" to disable module minification on categories'),
-                        'name' => 'EVERSEO_MINIFY_CATEGORY',
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
-                    ),
-                    array(
-                        'type' => 'switch',
-                        'label' => $this->l('Minify homepage ?'),
-                        'desc' => $this->l('Will enable minification on homepage'),
-                        'hint' => $this->l('Set "No" to disable module minification on home'),
-                        'name' => 'EVERSEO_MINIFY_HOME',
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
-                    ),
-                    array(
-                        'type' => 'switch',
-                        'label' => $this->l('Minify CMS ?'),
-                        'desc' => $this->l('Will enable minification on CMS'),
-                        'hint' => $this->l('Set "No" to disable module minification on CMS'),
-                        'name' => 'EVERSEO_MINIFY_CMS',
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
-                    ),
-                    array(
-                        'type' => 'switch',
-                        'label' => $this->l('Minify other pages ?'),
-                        'desc' => $this->l('Will enable minification on other pages'),
-                        'hint' => $this->l('Set "No" to disable module minification on other pages'),
-                        'name' => 'EVERSEO_MINIFY_OTHERS',
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
-                    ),
-                    array(
-                        'type' => 'switch',
-                        'label' => $this->l('Remove HTML comments ?'),
-                        'desc' => $this->l('Works only with HTML compression'),
-                        'hint' => $this->l('Set "No" to show HTML comments'),
-                        'name' => 'EVERSEO_REMOVE_COMMENTS',
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
-                    ),
-                    array(
-                        'type' => 'switch',
-                        'label' => $this->l('Add aria-label ?'),
-                        'desc' => $this->l('Will add aria label attribute if missing on inputs'),
-                        'hint' => $this->l('Set "No" to let inputs without labels'),
-                        'name' => 'EVERSEO_ADD_MISSING_LABELS',
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
-                    ),
-                    array(
-                        'type' => 'switch',
-                        'label' => $this->l('Load Google Font locally ?'),
-                        'desc' => $this->l('Will import Google font'),
-                        'hint' => $this->l('Set "No" to let Google font external'),
-                        'name' => 'EVERSEO_GOOGLE_FONT',
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
-                    ),
-                    array(
-                        'type' => 'switch',
-                        'label' => $this->l('Move all scripts to bottom'),
-                        'desc' => $this->l('Works only with HTML compression'),
-                        'hint' => $this->l('Set "No" to let Prestashop manage this'),
-                        'name' => 'EVERSEO_BOTTOM_SCRIPTS',
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
-                    ),
-                    array(
-                        'type' => 'switch',
-                        'label' => $this->l('Defer javascript ?'),
-                        'desc' => $this->l('Works only with HTML compression'),
-                        'hint' => $this->l('Set "No" to let scripts do not defer'),
-                        'name' => 'EVERSEO_DEFER',
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
-                    ),
-                    array(
-                        'type' => 'switch',
-                        'label' => $this->l('Enable Jquery Lazy Load ?'),
-                        'desc' => $this->l('Will add lazy load for all images'),
-                        'hint' => $this->l('Set "No" if you are using another module'),
-                        'name' => 'EVERSEO_LAZY_LOAD',
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
-                    ),
-                    array(
-                        'type' => 'text',
-                        'label' => $this->l('Cache life'),
-                        'desc' => $this->l('Useful for scripts regeneration'),
-                        'hint' => $this->l('Default will be 120'),
-                        'name' => 'EVERSEO_CACHE_LIFE',
-                        'required' => true,
+                    'submit' => array(
+                        'title' => $this->l('Save'),
                     ),
                 ),
-                'buttons' => array(
-                    'deleteCache' => array(
-                        'name' => 'submitDeleteCache',
-                        'type' => 'submit',
-                        'class' => 'btn btn-default pull-right',
-                        'icon' => 'process-icon-uninstall',
-                        'title' => $this->l('Delete cache files')
-                    ),
-                    'deleteProductCache' => array(
-                        'name' => 'submitDeleteProductCache',
-                        'type' => 'submit',
-                        'class' => 'btn btn-default pull-right',
-                        'icon' => 'process-icon-uninstall',
-                        'title' => $this->l('Delete product cache files')
-                    ),
-                    'deleteCategoryCache' => array(
-                        'name' => 'submitDeleteCategoryCache',
-                        'type' => 'submit',
-                        'class' => 'btn btn-default pull-right',
-                        'icon' => 'process-icon-uninstall',
-                        'title' => $this->l('Delete category cache files')
-                    ),
-                    'deleteCmsCache' => array(
-                        'name' => 'submitDeleteCmsCache',
-                        'type' => 'submit',
-                        'class' => 'btn btn-default pull-right',
-                        'icon' => 'process-icon-uninstall',
-                        'title' => $this->l('Delete CMS cache files')
-                    ),
-                    'deleteSupplierCache' => array(
-                        'name' => 'submitDeleteSupplierCache',
-                        'type' => 'submit',
-                        'class' => 'btn btn-default pull-right',
-                        'icon' => 'process-icon-uninstall',
-                        'title' => $this->l('Delete supplier cache files')
-                    ),
-                    'deleteManufacturerCache' => array(
-                        'name' => 'submitDeleteManufacturerCache',
-                        'type' => 'submit',
-                        'class' => 'btn btn-default pull-right',
-                        'icon' => 'process-icon-uninstall',
-                        'title' => $this->l('Delete manufacturer cache files')
-                    ),
-                ),
-                'submit' => array(
-                    'title' => $this->l('Save'),
-                ),
-            ),
-        );
+            );
+        }
 
         // Redirect setting
         $form_fields[] = array(
@@ -3383,6 +3051,26 @@ class EverPsSeo extends Module
                     ),
                     array(
                         'type' => 'switch',
+                        'label' => $this->l('Add content to product bottom ?'),
+                        'desc' => $this->l('Will set content to bottom of each product'),
+                        'hint' => $this->l('Set "No" to add default product content'),
+                        'name' => 'EVERSEO_BOTTOM_PRODUCT_CONTENT',
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                    ),
+                    array(
+                        'type' => 'switch',
                         'label' => $this->l('Delete content before updating ?'),
                         'desc' => $this->l('Will delete content already set'),
                         'hint' => $this->l('Set "No" to add content after'),
@@ -3444,26 +3132,6 @@ class EverPsSeo extends Module
                         'name' => 'PRODUCT_SHORT_DESC_GENERATE',
                         'lang' => true,
                         'autoload_rte' => true
-                    ),
-                    array(
-                        'type' => 'switch',
-                        'label' => $this->l('Activate product bottom generation ?'),
-                        'desc' => $this->l('Will set content to bottom of each product'),
-                        'hint' => $this->l('Set "yes" for add this in generation content'),
-                        'name' => 'EVERSEO_BOTTOM_PRODUCT_CONTENT',
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
                     ),
                     array(
                         'type' => 'textarea',
@@ -4665,7 +4333,7 @@ class EverPsSeo extends Module
                 'input' => array(
                     array(
                         'type' => 'select',
-                        'label' => 'Selected languages',
+                        'label' => 'Banned languages',
                         'desc' => 'Choose allowed langs for bulk actions',
                         'hint' => 'This will bulk actions on your whole shop',
                         'name' => 'EVERSEO_BULK_LANGS[]',
@@ -4708,27 +4376,6 @@ class EverPsSeo extends Module
                         'class' => 'btn btn-default pull-right',
                         'icon' => 'process-icon-refresh',
                         'title' => $this->l('No sitemap all selected langs')
-                    ),
-                    'indexLang' => array(
-                        'name' => 'submitIndexLang',
-                        'type' => 'submit',
-                        'class' => 'btn btn-default pull-right',
-                        'icon' => 'process-icon-refresh',
-                        'title' => $this->l('Index all selected langs')
-                    ),
-                    'followLang' => array(
-                        'name' => 'submitFollowLang',
-                        'type' => 'submit',
-                        'class' => 'btn btn-default pull-right',
-                        'icon' => 'process-icon-refresh',
-                        'title' => $this->l('Follow all selected langs')
-                    ),
-                    'sitemapLang' => array(
-                        'name' => 'submitSitemapLang',
-                        'type' => 'submit',
-                        'class' => 'btn btn-default pull-right',
-                        'icon' => 'process-icon-refresh',
-                        'title' => $this->l('Sitemap all selected langs')
                     ),
                 ),
             ),
@@ -5211,12 +4858,6 @@ class EverPsSeo extends Module
                     )
                 )
             ),
-            'EVERSEO_REWRITE_LINKS' => Configuration::get('EVERSEO_REWRITE_LINKS'),
-            'EVER_LOG_CMD' => Configuration::get('EVER_LOG_CMD'),
-            'EVER_SEARCH_CATEGORIES' => Configuration::get('EVER_SEARCH_CATEGORIES'),
-            'EVER_SEARCH_MANUFACTURERS' => Configuration::get('EVER_SEARCH_MANUFACTURERS'),
-            'EVER_SEARCH_SUPPLIERS' => Configuration::get('EVER_SEARCH_SUPPLIERS'),
-            'EVER_SEARCH_PRODUCTS' => Configuration::get('EVER_SEARCH_PRODUCTS'),
             'EVERSEO_AUTO_PAGEMETA_LANGS[]' => Tools::getValue(
                 'EVERSEO_AUTO_PAGEMETA_LANGS',
                 json_decode(
@@ -5256,9 +4897,6 @@ class EverPsSeo extends Module
             ),
             'EVERSEO_MAINTENANCE_URL' => Configuration::get(
                 'EVERSEO_MAINTENANCE_URL'
-            ),
-            'EVERSEO_INDEXNOW_LIMIT' => Configuration::get(
-                'EVERSEO_INDEXNOW_LIMIT'
             ),
             'EVERSEO_ANALYTICS' => Configuration::get(
                 'EVERSEO_ANALYTICS'
@@ -5878,12 +5516,6 @@ class EverPsSeo extends Module
                 || !Validate::isString(Tools::getValue('EVERSEO_KNOWLEDGE'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "knowledgegraph" is not valid');
-            }
-
-            if (!Tools::getValue('EVERSEO_INDEXNOW_LIMIT')
-                || !Validate::isInt(Tools::getValue('EVERSEO_INDEXNOW_LIMIT'))
-            ) {
-                $this->postErrors[] = $this->l('Error : The field "Index now day limit" is not valid');
             }
 
             if (!Tools::getIsset('EVERSEO_ANALYTICS')
@@ -6647,6 +6279,7 @@ class EverPsSeo extends Module
             $product_title[$lang['id_lang']] = (Tools::getValue('EVERSEO_PRODUCT_TITLE_AUTO_'.$lang['id_lang']))
             ? Tools::getValue('EVERSEO_PRODUCT_TITLE_AUTO_'.$lang['id_lang']) : '';
         }
+
         foreach (array_keys($form_values) as $key) {
             if ($key == 'EVERSEO_SITEMAP_LANGS[]') {
                 Configuration::updateValue(
@@ -6772,6 +6405,7 @@ class EverPsSeo extends Module
                 Configuration::updateValue($key, Tools::getValue($key));
             }
         }
+
         /* Uploads image */
         $type = Tools::strtolower(Tools::substr(strrchr($_FILES['image']['name'], '.'), 1));
         $imagesize = @getimagesize($_FILES['image']['tmp_name']);
@@ -6812,103 +6446,117 @@ class EverPsSeo extends Module
                 @unlink($temp_name);
             }
         }
+
         // Set default category index
         $this->getColumnStructure(
             'ever_seo_category',
             'indexable',
             (int)Tools::getValue('EVERSEO_INDEX_CATEGORY')
         );
+
         // Set default product index
         $this->getColumnStructure(
             'ever_seo_product',
             'indexable',
             (int)Tools::getValue('EVERSEO_INDEX_PRODUCT')
         );
+
         // Set default page meta index
         $this->getColumnStructure(
             'ever_seo_pagemeta',
             'indexable',
             (int)Tools::getValue('EVERSEO_INDEX_PAGE_META')
         );
+
         // Set default manufacturer index
         $this->getColumnStructure(
             'ever_seo_manufacturer',
             'indexable',
             (int)Tools::getValue('EVERSEO_INDEX_MANUFACTURER')
         );
+
         // Set default supplier index
         $this->getColumnStructure(
             'ever_seo_supplier',
             'indexable',
             (int)Tools::getValue('EVERSEO_INDEX_SUPPLIER')
         );
+
         // Set default category follow
         $this->getColumnStructure(
             'ever_seo_category',
             'follow',
             (int)Tools::getValue('EVERSEO_FOLLOW_CATEGORY')
         );
+
         // Set default product follow
         $this->getColumnStructure(
             'ever_seo_product',
             'follow',
             (int)Tools::getValue('EVERSEO_FOLLOW_PRODUCT')
         );
+
         // Set default page meta follow
         $this->getColumnStructure(
             'ever_seo_pagemeta',
             'follow',
             (int)Tools::getValue('EVERSEO_FOLLOW_PAGE_META')
         );
+
         // Set default manufacturer follow
         $this->getColumnStructure(
             'ever_seo_manufacturer',
             'follow',
             (int)Tools::getValue('EVERSEO_FOLLOW_MANUFACTURER')
         );
+
         // Set default supplier follow
         $this->getColumnStructure(
             'ever_seo_supplier',
             'follow',
             (int)Tools::getValue('EVERSEO_FOLLOW_SUPPLIER')
         );
+
         // Set default category sitemap
         $this->getColumnStructure(
             'ever_seo_category',
             'allowed_sitemap',
             (int)Tools::getValue('EVERSEO_SITEMAP_CATEGORY')
         );
+
         // Set default product sitemap
         $this->getColumnStructure(
             'ever_seo_product',
             'allowed_sitemap',
             (int)Tools::getValue('EVERSEO_SITEMAP_PRODUCT')
         );
+
         // Set default page meta sitemap
         $this->getColumnStructure(
             'ever_seo_pagemeta',
             'allowed_sitemap',
             (int)Tools::getValue('EVERSEO_SITEMAP_PAGE_META')
         );
+
         // Set default manufacturer sitemap
         $this->getColumnStructure(
             'ever_seo_manufacturer',
             'allowed_sitemap',
             (int)Tools::getValue('EVERSEO_SITEMAP_MANUFACTURER')
         );
+
         // Set default supplier sitemap
         $this->getColumnStructure(
             'ever_seo_supplier',
             'allowed_sitemap',
             (int)Tools::getValue('EVERSEO_SITEMAP_SUPPLIER')
         );
+
         // Generate robots.txt file if rewrite file in ON
         if ((bool)Configuration::get('EVERSEO_ROBOTS_TXT_REWRITE')) {
             $this->generateRobots();
         }
-        if (!Configuration::get('EVERSEO_INDEXNOW_KEY')) {
-            EverPsSeoTools::generateIndexNowKey();
-        }
+
         $this->postSuccess[] = $this->l('All settings have been saved');
     }
 
@@ -7012,11 +6660,11 @@ class EverPsSeo extends Module
                     case 301:
                         $prepend_rules .= 'Redirect permanent '.$redirect->not_found.' '.$redirect->redirection."\n\n";
                         break;
-
+                    
                     case 302:
                         $prepend_rules .= 'Redirect '.$redirect->not_found.' '.$redirect->redirection."\n\n";
                         break;
-
+                    
                     case 303:
                         # code...
                         break;
@@ -7497,7 +7145,6 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
     public function hookActionObjectCategoryUpdateAfter($params)
     {
-        // If fucking Elementor is rewriting object from FO
         if ((bool)EverPsSeoTools::isAdminController() === false) {
             return;
         }
@@ -7686,7 +7333,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 #################### END UPDATE HOOKS ####################
 #################### START OBJECT ADD/DELETE ####################
 
-    protected function updateSeoTables($id_shop, $id_seo_lang)
+    private function updateSeoTables($id_shop, $id_seo_lang)
     {
         $seotable = $this->getEverSeoTables();
         foreach ($seotable as $table) {
@@ -7709,7 +7356,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         }
     }
 
-    protected function addElementInTable($table, $object, $id_element, $id_shop, $id_lang)
+    private function addElementInTable($table, $object, $id_element, $id_shop, $id_lang)
     {
         return Db::getInstance()->insert(
             $table,
@@ -7721,7 +7368,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         );
     }
 
-    protected function autoSetTitle($object, $id_element, $id_shop, $id_lang)
+    private function autoSetTitle($object, $id_element, $id_shop, $id_lang)
     {
         switch ($object) {
             case 'id_seo_product':
@@ -7874,7 +7521,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         }
     }
 
-    protected function autoSetDescription($object, $id_element, $id_shop, $id_lang)
+    private function autoSetDescription($object, $id_element, $id_shop, $id_lang)
     {
         switch ($object) {
             case 'id_seo_product':
@@ -8027,7 +7674,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         }
     }
 
-    protected function autoSetAlt($id_element, $id_shop, $id_lang)
+    private function autoSetAlt($id_element, $id_shop, $id_lang)
     {
         $alt = EverPsSeoImage::changeImageAltShortcodes(
             $id_element,
@@ -8053,7 +7700,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         }
     }
 
-    protected function autoSetAltSeoImage($id_ever_seo_image, $id_element, $id_shop, $id_lang)
+    private function autoSetAltSeoImage($id_ever_seo_image, $id_element, $id_shop, $id_lang)
     {
         $alt = EverPsSeoImage::changeImageAltShortcodes(
             $id_element,
@@ -8078,16 +7725,23 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
     }
 
 
-    protected function autoSetContentDesc($object, $id_element, $id_shop, $id_lang)
+    private function autoSetContentDesc($object, $id_element, $id_shop, $id_lang)
     {
         switch ($object) {
             case 'id_seo_product':
-                $description = EverPsSeoProduct::changeProductDescShortcodes(
-                    (int)$id_element,
-                    (int)$id_lang,
-                    (int)$id_shop
-                );
-
+                if ((bool)Configuration::get('EVERSEO_BOTTOM_PRODUCT_CONTENT') === false) {
+                    $description = EverPsSeoProduct::changeProductDescShortcodes(
+                        (int)$id_element,
+                        (int)$id_lang,
+                        (int)$id_shop
+                    );
+                } else {
+                    $description = EverPsSeoProduct::changeProductBottomShortcodes(
+                        (int)$id_element,
+                        (int)$id_lang,
+                        (int)$id_shop
+                    );
+                }
                 if (empty($description)) {
                     return;
                 }
@@ -8100,53 +7754,27 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 if (!in_array($product->id_category_default, $this->getAllowedGeneratorCategories(true))) {
                     return;
                 }
-
-                if ((bool)Configuration::get('EVERSEO_DELETE_PRODUCT_CONTENT') === true) {
-                    $product->description = $description;
+                if ((bool)Configuration::get('EVERSEO_BOTTOM_PRODUCT_CONTENT') === false) {
+                    if ((bool)Configuration::get('EVERSEO_DELETE_PRODUCT_CONTENT') === true) {
+                        $product->description = $description;
+                    } else {
+                        $product->description .= $description;
+                    }
+                    if ($product->save()) {
+                        return true;
+                    }
                 } else {
-                    $product->description .= $description;
-                }
-                $meta_title = Tools::substr($meta_title, 0, 128);
-
-                $sql_desc = 'UPDATE `'._DB_PREFIX_.'product_lang`
-                    SET description = "'.pSQL($product->description, true).'"
-                    WHERE id_lang = '.(int)$id_lang.'
-                    AND id_shop = '.(int)$id_shop.'
-                    AND id_product = '.(int)$id_element;
-
-                if (!Db::getInstance()->execute($sql_desc)) {
-                    return false;
-                }
-
-                if ((bool)Configuration::get('EVERSEO_BOTTOM_PRODUCT_CONTENT') === true) {
                     $obj = EverPsSeoProduct::getSeoProduct(
                         (int)$id_element,
                         (int)$id_lang,
                         (int)$id_shop
                     );
-
-                    $descriptionBottom = EverPsSeoProduct::changeProductBottomShortcodes(
-                        (int)$id_element,
-                        (int)$id_lang,
-                        (int)$id_shop
-                    );
-                    if (empty($descriptionBottom)) {
-                        return;
-                    }
                     if ((bool)Configuration::get('EVERSEO_DELETE_PRODUCT_CONTENT') === false) {
-                        $obj->bottom_content = $obj->bottom_content.' '.$descriptionBottom;
+                        $obj->bottom_content = $obj->bottom_content.' '.$description;
                     } else {
-                        $obj->bottom_content = $descriptionBottom;
+                        $obj->bottom_content = $description;
                     }
-                    $sql_ever_desc = 'UPDATE `'._DB_PREFIX_.'ever_seo_product`
-                        SET bottom_content = "'.pSQL($obj->bottom_content, true).'"
-                        WHERE id_seo_lang = '.(int)$id_lang.'
-                        AND id_shop = '.(int)$id_shop.'
-                        AND id_seo_product = '.(int)$id_element;
-
-                    if (!Db::getInstance()->execute($sql_ever_desc)) {
-                        return false;
-                    }
+                    return $obj->save();
                 }
                 break;
 
@@ -8262,7 +7890,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         }
     }
 
-    protected function autoSetContentShortDesc($object, $id_element, $id_shop, $id_lang)
+    private function autoSetContentShortDesc($object, $id_element, $id_shop, $id_lang)
     {
         switch ($object) {
             case 'id_seo_product':
@@ -8288,21 +7916,14 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 } else {
                     $product->description_short .= $description_short;
                 }
-
-                $sql_desc_short = 'UPDATE `'._DB_PREFIX_.'product_lang`
-                    SET description_short = "'.pSQL($product->description_short, true).'"
-                    WHERE id_lang = '.(int)$id_lang.'
-                    AND id_shop = '.(int)$id_shop.'
-                    AND id_product = '.(int)$id_element;
-
-                if (Db::getInstance()->execute($sql_desc_short)) {
+                if ($product->save()) {
                     return true;
                 }
                 break;
         }
     }
 
-    protected function deleteElementFromTable($table, $object, $id_element)
+    private function deleteElementFromTable($table, $object, $id_element)
     {
         return Db::getInstance()->delete(
             $table,
@@ -8312,22 +7933,17 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 #################### END OBJECT ADD/DELETE ####################
 #################### START DISPLAY HOOKS ####################
 
-    public function hookDisplayAdminProductsSeoStepBottom($params)
+// [ukoo_leaha] [2022-11-16 11:42] -> public function hookDisplayAdminProductsSeoStepBottom($params)
+    public function hookDisplayAdminProductsExtra($params)
     {
         $id_product = (int)$params['id_product'];
         $link = new Link();
-        $seo_product = EverPsSeoProduct::getSeoProduct(
-            (int)$id_product,
-            (int)Context::getContext()->shop->id,
-            (int)Context::getContext()->language->id
-        );
         $this->context->smarty->assign(array(
-            'seo_product' => $seo_product,
             'everlink' => $link->getAdminLink(
                 'AdminEverPsSeoProduct',
                 true,
                 [],
-                ['updateever_seo_product' => true, 'id_ever_seo_product' => $seo_product->id]
+                ['updateever_seo_product' => true, 'id_ever_seo_product' => $id_product]
             ),
         ));
         return $this->context->smarty->fetch($this->local_path.'views/templates/admin/seo_product.tpl');
@@ -8344,11 +7960,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         if (!in_array(Tools::getValue('controller'), $allowed_controllers)) {
             return;
         }
-        if ((int)Tools::getValue('page') > 0) {
-            return;
-        }
-        $controller_name = Tools::getValue('controller');
-        switch ($controller_name) {
+        switch (Tools::getValue('controller')) {
             case 'manufacturer':
                 $obj = EverPsSeoManufacturer::getSeoManufacturer(
                     (int)Tools::getValue('id_manufacturer'),
@@ -8356,7 +7968,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     (int)Context::getContext()->language->id
                 );
                 break;
-
+            
             case 'supplier':
                 $obj = EverPsSeoSupplier::getSeoSupplier(
                     (int)Tools::getValue('id_supplier'),
@@ -8364,7 +7976,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     (int)Context::getContext()->language->id
                 );
                 break;
-
+            
             case 'category':
                 $obj = EverPsSeoCategory::getSeoCategory(
                     (int)Tools::getValue('id_category'),
@@ -8372,7 +7984,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     (int)Context::getContext()->language->id
                 );
                 break;
-
+            
             case 'product':
                 $obj = EverPsSeoProduct::getSeoProduct(
                     (int)Tools::getValue('id_product'),
@@ -8385,9 +7997,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 $obj = false;
                 break;
         }
-        if (Validate::isLoadedObject($obj)
-            && !empty($obj->bottom_content)
-        ) {
+        if (Validate::isLoadedObject($obj) && !empty($obj->bottom_content)) {
             $this->context->smarty->assign(array(
                 'everseo_controller' => Tools::getValue('controller'),
                 'bottom_content_id' => $obj->id,
@@ -8402,39 +8012,37 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         if (!(int)Tools::getValue('id_product')) {
             return;
         }
-        $id_product = (int)Tools::getValue('id_product');
-        $cacheId = $this->getCacheId($this->name.'-reassurance-'.$id_product.'-'.date('Ymd'));
-        if (!$this->isCached('reassurance.tpl', $cacheId)) {
-            $product = new Product(
-                (int)$id_product,
-                false,
-                (int)$this->context->language->id,
-                (int)$this->context->shop->id
+        $product = new Product(
+            (int)Tools::getValue('id_product'),
+            false,
+            (int)$this->context->language->id,
+            (int)$this->context->shop->id
+        );
+        if ((int)$product->id_manufacturer
+            && (bool)Configuration::get('EVERSEO_MANUFACTURER_REASSURANCE')
+        ) {
+            $manufacturer = new Manufacturer(
+                (int)$product->id_manufacturer,
+                (int)$this->context->language->id
             );
-            if ((int)$product->id_manufacturer
-                && (bool)Configuration::get('EVERSEO_MANUFACTURER_REASSURANCE')
-            ) {
-                $manufacturer = new Manufacturer(
-                    (int)$product->id_manufacturer,
-                    (int)$this->context->language->id
-                );
-                $this->context->smarty->assign(array(
-                    'manufacturer' => $manufacturer,
-                ));
-            }
-            if ((int)$product->id_supplier
-                && (bool)Configuration::get('EVERSEO_SUPPLIER_REASSURANCE')
-            ) {
-                $supplier = new Supplier(
-                    (int)$product->id_supplier,
-                    (int)$this->context->language->id
-                );
-                $this->context->smarty->assign(array(
-                    'supplier' => $supplier,
-                ));
-            }
+            $this->context->smarty->assign(array(
+                'manufacturer' => $manufacturer,
+            ));
         }
-        return $this->display(__FILE__, 'views/templates/hook/reassurance.tpl', $cacheId);
+        if ((int)$product->id_supplier
+            && (bool)Configuration::get('EVERSEO_SUPPLIER_REASSURANCE')
+        ) {
+            $supplier = new Supplier(
+                (int)$product->id_supplier,
+                (int)$this->context->language->id
+            );
+            $this->context->smarty->assign(array(
+                'supplier' => $supplier,
+            ));
+        }
+        if (isset($manufacturer) || isset($supplier)) {
+            return $this->display(__FILE__, 'views/templates/hook/reassurance.tpl');
+        }
     }
 
     public function hookActionAdminControllerSetMedia()
@@ -8451,9 +8059,32 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         // return $this->hookActionAdminControllerSetMedia();
     }
 
+    public function hookDashboardZoneTwo($params)
+    {
+        $moduleConfUrl  = 'index.php?controller=AdminModules&configure=everpsseo&token=';
+        $moduleConfUrl .= Tools::getAdminTokenLite('AdminModules');
+        $bestProducts = EverPsSeoStats::getBestViewedProducts();
+        $bestCategories = EverPsSeoStats::getBestViewedCategories();
+        $bestRedirects = EverPsSeoStats::getBestViewed404();
+        $bestReferals = EverPsSeoStats::getBestViewedReferals();
+        $this->context->smarty->assign(array(
+            'image_dir' => Tools::getHttpHost(true).__PS_BASE_URI__.'modules/everpsseo/',
+            'moduleConfUrl' => $moduleConfUrl,
+            'bestProducts' => $bestProducts,
+            'bestCategories' => $bestCategories,
+            'bestRedirects' => $bestRedirects,
+            'bestReferals' => $bestReferals,
+        ));
+        return $this->display(__FILE__, 'views/templates/admin/dashboard.tpl');
+    }
+
     public function hookDisplayOrderConfirmation($params)
     {
-        $order = $params['order'];
+        if ($this->isSeven) {
+            $order = $params['order'];
+        } else {
+            $order = $params['objOrder'];
+        }
         $address = new Address((int)$order->id_address_delivery);
         $carrier = new Carrier((int)$order->id_carrier);
         $currency = $this->context->currency;
@@ -8559,6 +8190,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         }
         // Do not cache if updatedTransaction is set, else page will be reloaded every time
         if ((bool)Configuration::get('EVERSEO_CACHE') === true
+            && $this->isSeven
             && !Tools::getValue('updatedTransaction')
         ) {
             $this->context->controller->addJs($this->_path.'views/js/evercache.js');
@@ -8600,17 +8232,23 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             // Set recaptcha
             $captcha_content = 'https://www.google.com/recaptcha/api.js?render='
                 .Configuration::get('EVERPSCAPTCHA_SITE_KEY');
-            $this->context->controller->addJquery();
-            $this->context->controller->registerJavascript(
-                'remote-google-recaptcha',
-                $captcha_content,
-                array(
-                    'server' => 'remote',
-                    'position' => 'bottom',
-                    'priority' => 20,
-                    'defer' => 'defer'
-                )
-            );
+            if ($this->isSeven) {
+                $this->context->controller->addJquery();
+                $this->context->controller->registerJavascript(
+                    'remote-google-recaptcha',
+                    $captcha_content,
+                    array(
+                        'server' => 'remote',
+                        'position' => 'bottom',
+                        'priority' => 20,
+                        'defer' => 'defer'
+                    )
+                );
+            } else {
+                $this->context->controller->addJs(
+                    $captcha_content
+                );
+            }
             $this->context->smarty->assign(array(
                 'ever_ps_captcha_site_key' => Configuration::get('EVERPSCAPTCHA_SITE_KEY'),
             ));
@@ -8637,18 +8275,16 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 (int)$this->context->language->id,
                 (int)$this->context->shop->id
             );
-            if (Validate::isLoadedObject($product)) {
-                $coverId = Product::getCover(
-                    (int)$product->id
-                );
-                $defaultImage = $link->getImageLink(
-                    $product->link_rewrite,
-                    (int)$product->id.'-'.(int)$coverId['id_image'],
-                    $this->imageType
-                );
-                if (!$defaultImage) {
-                    $defaultImage = _PS_IMG_ . Configuration::get('PS_LOGO');
-                }
+            $coverId = Product::getCover(
+                (int)$product->id
+            );
+            $defaultImage = $link->getImageLink(
+                $product->link_rewrite,
+                (int)$product->id.'-'.(int)$coverId['id_image'],
+                $this->imageType
+            );
+            if (!$defaultImage) {
+                $defaultImage = _PS_IMG_ . Configuration::get('PS_LOGO');
             }
         } else {
             $defaultImage = Tools::getHttpHost(true).__PS_BASE_URI__.'/modules/everpsseo/views/img/everpsseo.jpg';
@@ -8670,7 +8306,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         $simplyUrl = str_replace($shop_url, '', $askedUrl);
         if ($from && $to) {
             $id_ever_seo_backlink = EverPsSeoBacklink::ifBacklinkExists(
-                pSQL($from),
+                (string)$from,
                 (string)$to,
                 (int)$id_shop
             );
@@ -8680,14 +8316,14 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     (int)$id_shop
                 );
             } else {
-                if (false !== stripos(pSQL($from), Configuration::get(
+                if (false !== stripos((string)$from, Configuration::get(
                     'PS_SHOP_DOMAIN_SSL'
                 ))) {
                     //How about tracking visitors ?
                 } else {
                     $backlink = new EverPsSeoBacklink();
                     $backlink->everfrom = Tools::substr(
-                        pSQL($from),
+                        (string)$from,
                         0,
                         255
                     );
@@ -8706,84 +8342,78 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         switch ($controller_name) {
             case 'product':
                 $id_product = (int)Tools::getValue('id_product');
-                if ((int)$id_product <= 0) {
-                    return;
-                }
-                $product = new Product(
-                    (int)$id_product,
-                    false,
-                    (int)$id_lang,
-                    (int)$id_shop
-                );
-                if (!Validate::isLoadedObject($product)) {
-                    return;
-                }
-                $seo_product = EverPsSeoProduct::getSeoProduct(
-                    (int)$id_product,
-                    (int)$id_shop,
-                    (int)$id_lang
-                );
-                $currentUrl = $link->getProductLink(
-                    (int)$product->id,
-                    null,
-                    null,
-                    null,
-                    (int)$id_lang,
-                    (int)$id_shop
-                );
-                if (property_exists('EverPsSeoProduct', 'canonical')
-                    && isset($seo_product->canonical)
-                    && !empty($seo_product->canonical)
-                ) {
-                    $canonical_url = str_replace(
-                        $product->link_rewrite,
-                        $seo_product->canonical,
-                        $currentUrl
+                    if ((int)$id_product <= 0) {
+                        return;
+                    }
+                    $product = new Product(
+                        (int)$id_product,
+                        false,
+                        (int)$id_lang,
+                        (int)$id_shop
                     );
-                }
-                $product->description_short = str_replace(
-                    '"',
-                    '',
-                    $product->description_short
-                );
-                $this->context->smarty->assign(array(
-                    'everproduct' => $product,
-                ));
-                $seo = EverPsSeoTools::getSeoIndexFollow(
-                    pSQL($controller_name),
-                    (int)$id_shop,
-                    (int)Tools::getValue('id_product'),
-                    (int)$id_lang
-                );
+                    if (!Validate::isLoadedObject($product)) {
+                        return;
+                    }
+                    $seo_product = EverPsSeoProduct::getSeoProduct(
+                        (int)$id_product,
+                        (int)$id_shop,
+                        (int)$id_lang
+                    );
+                    $currentUrl = $link->getProductLink(
+                        (int)$product->id,
+                        null,
+                        null,
+                        null,
+                        (int)$id_lang,
+                        (int)$id_shop
+                    );
+                    if (property_exists('EverPsSeoProduct', 'canonical')
+                        && isset($seo_product->canonical)
+                        && !empty($seo_product->canonical)
+                    ) {
+                        $canonical_url = str_replace(
+                            $product->link_rewrite,
+                            $seo_product->canonical,
+                            $currentUrl
+                        );
+                    }
+                    $product->description_short = str_replace(
+                        '"',
+                        '',
+                        $product->description_short
+                    );
+                    $this->context->smarty->assign(array(
+                        'everproduct' => $product,
+                    ));
+                    $seo = EverPsSeoTools::getSeoIndexFollow(
+                        (string)$controller_name,
+                        (int)$id_shop,
+                        (int)Tools::getValue('id_product'),
+                        (int)$id_lang
+                    );
+//                }
                 break;
 
             case 'category':
-                $id_category = (int)Tools::getValue('id_category');
-                if ((int)$id_category <= 0) {
-                    return;
-                }
-                if ((bool)Configuration::get('EVERSEO_CANONICAL') === true) {
-                    if (Tools::getValue('module') || Tools::getValue('fc') === 'module') {
-                        return;
-                    } else {
-                        $category = new Category(
-                            (int)$id_category,
-                            (int)$id_lang,
-                            (int)$id_shop
-                        );
-                        $seo_category = EverPsSeoCategory::getSeoCategory(
-                            (int)$id_category,
-                            (int)$id_shop,
-                            (int)$id_lang
-                        );
-                        $currentUrl = $link->getCategoryLink(
-                            (object)$category,
-                            null,
-                            (int)$id_lang,
-                            null,
-                            (int)$id_shop
-                        );
-                    }
+                if ((int)Configuration::get('EVERSEO_CANONICAL')) {
+                    $id_category = (int)Tools::getValue('id_category');
+                    $category = new Category(
+                        (int)$id_category,
+                        (int)$id_lang,
+                        (int)$id_shop
+                    );
+                    $seo_category = EverPsSeoCategory::getSeoCategory(
+                        (int)$id_category,
+                        (int)$id_shop,
+                        (int)$id_lang
+                    );
+                    $currentUrl = $link->getCategoryLink(
+                        (object)$category,
+                        null,
+                        (int)$id_lang,
+                        null,
+                        (int)$id_shop
+                    );
                     if (property_exists('EverPsSeoCategory', 'canonical')
                         && isset($seo_category->canonical)
                         && !empty($seo_category->canonical)
@@ -8795,22 +8425,17 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                         );
                     }
                 }
-                if (!Tools::getValue('module')) {
-                    $seo = EverPsSeoTools::getSeoIndexFollow(
-                        pSQL($controller_name),
-                        (int)$id_shop,
-                        (int)$id_category,
-                        (int)$id_lang
-                    );
-                }
+                $seo = EverPsSeoTools::getSeoIndexFollow(
+                    (string)$controller_name,
+                    (int)$id_shop,
+                    (int)Tools::getValue('id_category'),
+                    (int)$id_lang
+                );
                 break;
 
             case 'cms':
-                $id_cms = (int)Tools::getValue('id_cms');
-                if ((int)$id_cms <= 0) {
-                    return;
-                }
-                if ((bool)Configuration::get('EVERSEO_CANONICAL') === true) {
+                if ((int)Configuration::get('EVERSEO_CANONICAL')) {
+                    $id_cms = (int)Tools::getValue('id_cms');
                     $cms = new CMS(
                         (int)$id_cms,
                         (int)$id_lang,
@@ -8821,7 +8446,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                         (int)$id_shop,
                         (int)$id_lang
                     );
-                    $canonical_url = $link->getCMSLink(
+                    $currentUrl = $link->getCMSLink(
                         (object)$cms,
                         null,
                         true,
@@ -8835,36 +8460,25 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                         $canonical_url = str_replace(
                             $cms->link_rewrite,
                             $seo_cms->canonical,
-                            $canonical_url
+                            $currentUrl
                         );
                     }
                 }
                 $seo = EverPsSeoTools::getSeoIndexFollow(
-                    pSQL($controller_name),
+                    (string)$controller_name,
                     (int)$id_shop,
-                    (int)$id_cms,
+                    (int)Tools::getValue('id_cms'),
                     (int)$id_lang
                 );
                 break;
 
             case 'manufacturer':
-                $id_manufacturer = (int)Tools::getValue('id_manufacturer');
-                if ((int)$id_manufacturer <= 0) {
-                    return;
-                }
-                if ((bool)Configuration::get('EVERSEO_CANONICAL') === true) {
+                if ((int)Configuration::get('EVERSEO_CANONICAL')) {
+                    $id_manufacturer = (int)Tools::getValue('id_manufacturer');
                     $manufacturer = new Manufacturer(
                         (int)$id_manufacturer,
                         (int)$id_lang
                     );
-                    if ((bool)Configuration::get('EVERSEO_CANONICAL') === true) {
-                        $canonical_url = $link->getManufacturerLink(
-                            $manufacturer,
-                            null,
-                            $this->context->language->id,
-                            $this->context->shop->id
-                        );
-                    }
                     $seo_manufacturer = EverPsSeoManufacturer::getSeoManufacturer(
                         (int)$id_manufacturer,
                         (int)$id_shop,
@@ -8889,7 +8503,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 }
                 if (Tools::getValue('id_manufacturer')) {
                     $seo = EverPsSeoTools::getSeoIndexFollow(
-                        pSQL($controller_name),
+                        (string)$controller_name,
                         (int)$id_shop,
                         (int)Tools::getValue('id_manufacturer'),
                         (int)$id_lang
@@ -8898,7 +8512,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     $pageMetaId = Db::getInstance()->getValue(
                         'SELECT id_meta
                         FROM '._DB_PREFIX_.'meta
-                        WHERE page = "'.pSQL($controller_name).'"'
+                        WHERE page = "'.(string)$controller_name.'"'
                     );
                     $seo = EverPsSeoTools::getSeoIndexFollow(
                         false,
@@ -8910,23 +8524,12 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 break;
 
             case 'supplier':
-                $id_supplier = (int)Tools::getValue('id_supplier');
-                if ((int)$id_supplier <= 0) {
-                    return;
-                }
-                if ((bool)Configuration::get('EVERSEO_CANONICAL') === true) {
+                if ((int)Configuration::get('EVERSEO_CANONICAL')) {
+                    $id_supplier = (int)Tools::getValue('id_supplier');
                     $supplier = new Supplier(
                         (int)$id_supplier,
                         (int)$id_lang
                     );
-                    if ((bool)Configuration::get('EVERSEO_CANONICAL') === true) {
-                        $canonical_url = $link->getSupplierLink(
-                            $supplier,
-                            null,
-                            $this->context->language->id,
-                            $this->context->shop->id
-                        );
-                    }
                     $seo_supplier = EverPsSeoSupplier::getSeoSupplier(
                         (int)$id_supplier,
                         (int)$id_shop,
@@ -8951,7 +8554,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 }
                 if (Tools::getValue('id_supplier')) {
                     $seo = EverPsSeoTools::getSeoIndexFollow(
-                        pSQL($controller_name),
+                        (string)$controller_name,
                         (int)$id_shop,
                         (int)Tools::getValue('id_supplier'),
                         (int)$id_lang
@@ -8960,7 +8563,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     $pageMetaId = Db::getInstance()->getValue(
                         'SELECT id_meta
                         FROM '._DB_PREFIX_.'meta
-                        WHERE page = "'.pSQL($controller_name).'"'
+                        WHERE page = "'.(string)$controller_name.'"'
                     );
                     $seo = EverPsSeoTools::getSeoIndexFollow(
                         false,
@@ -8975,13 +8578,13 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 $pageMetaId = Db::getInstance()->getValue(
                     'SELECT id_meta
                     FROM '._DB_PREFIX_.'meta
-                    WHERE page = "'.pSQL($controller_name).'"'
+                    WHERE page = "'.(string)$controller_name.'"'
                 );
-                if ((bool)Configuration::get('EVERSEO_CANONICAL') === true) {
-                    $canonical_url = $link->getPageLink(pSQL($controller_name));
+                if ((int)Configuration::get('EVERSEO_CANONICAL')) {
+                    $canonical_url = $link->getPageLink((string)$controller_name);
                 }
                 $seo = EverPsSeoTools::getSeoIndexFollow(
-                    pSQL($controller_name),
+                    (string)$controller_name,
                     (int)$id_shop,
                     (int)$pageMetaId,
                     (int)$id_lang
@@ -8989,11 +8592,22 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 break;
         }
 
-        if (isset($seo) && $seo) {
+        if ($seo) {
             if ($seo[0]['indexable'] == 1) {
                 $index = 'index';
             } else {
-                $index = 'noindex';
+                if (!$this->isSeven) {
+                    $index = 'nobots';
+                } else {
+                    $index = 'noindex';
+                }
+            }
+            if (Tools::getValue('page')) {
+                if (!$this->isSeven) {
+                    $index = 'nobots';
+                } else {
+                    $index = 'noindex';
+                }
             }
 
             if ($seo[0]['follow'] == 1) {
@@ -9004,12 +8618,14 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
             if (isset($seo[0]['meta_title'])) {
                 $meta_title = $seo[0]['meta_title'];
+                $meta_title = Tools::substr($meta_title, 0, 60);
             } else {
                 $meta_title = null;
             }
 
             if (isset($seo[0]['meta_description'])) {
                 $meta_description = $seo[0]['meta_description'];
+                $meta_description = Tools::substr($meta_description, 0, 160);
             } else {
                 $meta_description = null;
             }
@@ -9056,6 +8672,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     );
                 }
             }
+
             $this->context->smarty->assign(array(
                 'social_title' => $social_title,
                 'social_description' => $social_description,
@@ -9063,38 +8680,79 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             ));
         }
 
-        if ((bool)EverPsSeoTools::pageHasBannedArgs() === true) {
+        if (EverPsSeoTools::pageHasBannedArgs()) {
             $index = 'noindex';
         }
-        $page = $this->context->controller->getTemplateVarPage();
-        if (isset($index) && isset($follow)) {
-            $page['meta']['robots'] = $index . ', ' . $follow;
-        }
-        if (isset($meta_title) && isset($meta_description)) {
-            $page['meta']['title'] = $meta_title;
-            $page['meta']['description'] = $meta_description;
-        }
-        if ((bool)Configuration::get('EVERSEO_CANONICAL') === true
-            && isset($canonical_url)
-            && !empty($canonical_url)
+
+        if (isset($index)
+            && isset($follow)
         ) {
-            $page['canonical'] = $canonical_url;
-            $page['canonical_url'] = $canonical_url;
+            if (!$this->isSeven) {
+                $this->context->smarty->assign($index, true);
+                $this->context->smarty->assign($follow, true);
+                if ($meta_title && $meta_description) {
+                    $this->context->smarty->assign($meta_title, true);
+                    $this->context->smarty->assign($meta_description, true);
+                    if ((bool)Configuration::get('EVERSEO_CANONICAL') === true
+                        && isset($canonical_url)
+                        && !empty($canonical_url)
+                    ) {
+                        $this->context->smarty->assign($canonical_url, true);
+                    }
+                }
+            } else {
+                $page = $this->context->controller->getTemplateVarPage();
+                $page['meta']['robots'] = $index . ', ' . $follow;
+                if ($meta_title && $meta_description) {
+                    $page['meta']['title'] = $meta_title;
+                    $page['meta']['description'] = $meta_description;
+                    if ((bool)Configuration::get('EVERSEO_CANONICAL') === true
+                        && isset($canonical_url)
+                        && !empty($canonical_url)
+                    ) {
+                        $page['canonical'] = $canonical_url;
+                    }
+                }
+                $this->context->smarty->assign('page', $page);
+            }
         }
-        $this->context->smarty->assign('page', $page);
         if ((bool)Configuration::get('EVERSEO_CANONICAL') === false) {
             $canonical_url = false;
         }
         $replyto = Configuration::get(
             'PS_SHOP_EMAIL'
         );
+
         $identifierUrl = Configuration::get(
             'PS_SHOP_DOMAIN_SSL'
         );
+        if ($controller_name == 'CreateQuotation') {
+            if (Module::isInstalled('opartdevis')) {
+                if (Tools::getValue('confirm')) {
+                    require_once _PS_MODULE_DIR_.'opartdevis/models/OpartQuotation.php';
+                    $quotation = new OpartQuotation(
+                        (int)Tools::getValue('confirm')
+                    );
+                    $cart = new Cart(
+                        (int)$quotation->id_cart
+                    );
+                    $summary = $cart->getSummaryDetails(
+                        null,
+                        true
+                    );
+                }
+                $this->context->smarty->assign(array(
+                    'adwordsopart' =>  Configuration::get(
+                        'EVERSEO_ADWORDS_OPART'
+                    ),
+                    'opart_total' =>  $summary['total_price'],
+                ));
+            }
+        }
         $yearEnd = date('Y-m-d', strtotime('Dec 31'));
         $this->context->smarty->assign(array(
             'ever_customer' => $customer,
-            'controller_name' => pSQL($controller_name),
+            'controller_name' => (string)$controller_name,
             'sitename' => (string)Configuration::get('PS_SHOP_NAME'),
             'site_url' => $this->siteUrl,
             'shop_logo' => $this->siteUrl._PS_IMG_.Configuration::get('PS_LOGO'),
@@ -9120,17 +8778,18 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             'pixelfacebook' => Configuration::get(
                 'EVERSEO_FBPIXEL'
             ),
+            'psversion' => _PS_VERSION_,
             'argsUrl' => Configuration::get(
                 'EVERSEO_INDEX_ARGS'
             ),
             'siteName' => Configuration::get(
                 'PS_SHOP_NAME'
             ),
+            'pageUrl' => 'https'."//{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}",
             'defaultImage' => (string)$defaultImage,
             'usehreflang' => Configuration::get(
                 'EVERSEO_HREF_LANG'
             ),
-            'currentLanguageIsoCode' => $this->context->language->iso_code,
             'useTwitter' => Configuration::get(
                 'EVERSEO_USE_TWITTER'
             ),
@@ -9143,10 +8802,9 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             'xdefault' => Configuration::get(
                 'PS_LANG_DEFAULT'
             ),
-            'hreflangTags' => EverPsSeoTools::getHeaderHreflangTemplate(
-                $controller_name,
-                $this->context->shop->id,
-                $this->context->language->id
+            'everpshreflang' => Language::getLanguages(
+                true,
+                (int)$this->context->shop->id
             ),
             'everseo_use_author' => Configuration::get(
                 'EVERSEO_USE_AUTHOR'
@@ -9174,7 +8832,11 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             ),
         ));
 
-        return $this->display(__FILE__, 'views/templates/front/header.tpl');
+        if (!$this->isSeven) {
+            return $this->display(__FILE__, 'views/templates/front/header16.tpl');
+        } else {
+            return $this->display(__FILE__, 'views/templates/front/header.tpl');
+        }
     }
 
     public function hookDisplayLeftColumn()
@@ -9187,23 +8849,15 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         if ((bool)Configuration::get('EVERSEO_GCOLUMN')
             && !(bool)Configuration::get('EVERSEO_GTOP')
         ) {
-            $cacheId = $this->getCacheId($this->name.'-gtranslate-'.date('Ymd'));
-            if (!$this->isCached('gtranslate.tpl', $cacheId)) {
-                $default_lang = Configuration::get(
-                    'PS_LANG_DEFAULT'
-                );
-                $language = new Language((int)$default_lang);
-                $this->context->smarty->assign(array(
-                    'default_iso_code' => (string)$language->iso_code,
-                ));
-            }
-            return $this->display(__FILE__, 'views/templates/hook/gtranslate.tpl', $cacheId);
+            $default_lang = Configuration::get(
+                'PS_LANG_DEFAULT'
+            );
+            $language = new Language((int)$default_lang);
+            $this->context->smarty->assign(array(
+                'default_iso_code' => (string)$language->iso_code,
+            ));
+            return $this->display(__FILE__, 'views/templates/hook/gtranslate.tpl');
         }
-    }
-
-    public function hookDisplayAfterBodyOpeningTag()
-    {
-        return $this->hookDisplayTop();
     }
 
     public function hookDisplayTopColumn()
@@ -9213,33 +8867,27 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
     public function hookDisplayTop()
     {
-        $cacheId = $this->getCacheId($this->name.'-displaytop-'.date('Ymd'));
-        if (!$this->isCached('displaytop.tpl', $cacheId)) {
-            $default_lang = Configuration::get(
-                'PS_LANG_DEFAULT'
-            );
-            $language = new Language((int)$default_lang);
-            $this->context->smarty->assign(array(
-                'gtag_manager' => Configuration::get(
-                    'EVERSEO_GTAG'
-                ),
-                'default_iso_code' => (string)$language->iso_code,
-                'translate_top' => Configuration::get(
-                    'EVERSEO_GTOP'
-                ),
-                'translate_column' => Configuration::get(
-                    'EVERSEO_GCOLUMN'
-                ),
-            ));
-        }
-        return $this->display(__FILE__, 'views/templates/hook/displaytop.tpl', $cacheId);
+        $default_lang = Configuration::get(
+            'PS_LANG_DEFAULT'
+        );
+        $language = new Language((int)$default_lang);
+        $this->context->smarty->assign(array(
+            'gtag_manager' => Configuration::get(
+                'EVERSEO_GTAG'
+            ),
+            'default_iso_code' => (string)$language->iso_code,
+            'translate_top' => Configuration::get(
+                'EVERSEO_GTOP'
+            ),
+            'translate_column' => Configuration::get(
+                'EVERSEO_GCOLUMN'
+            ),
+        ));
+        return $this->display(__FILE__, 'views/templates/hook/displaytop.tpl');
     }
 
     public function hookDisplayFooterProduct($params)
     {
-        if (Tools::getValue('fc') === 'module') {
-            return;
-        }
         if ((bool)Configuration::get(
             'EVERSEO_RSNIPPETS'
         )) {
@@ -9967,196 +9615,218 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
     public function hookFooter($params)
     {
-        if (Tools::getValue('fc') === 'module') {
-            return;
-        }
-        $return = false;
         if ((bool)Configuration::get(
             'EVERSEO_RSNIPPETS'
         )) {
             $controller_name = Tools::getValue('controller');
-            $cacheId = $this->getCacheId($this->name.'-richsnippets-'.$controller_name.'-'.date('Ymd'));
-            if (!$this->isCached('richsnippets.tpl', $cacheId)) {
-                $shop_name = Configuration::get('PS_SHOP_NAME');
-                $shop_logo = _PS_IMG_ . Configuration::get('PS_LOGO');
-                $homepage = Tools::getHttpHost(true).__PS_BASE_URI__;
-                $id_lang = (int)$this->context->language->id;
-                $id_shop = (int)$this->context->shop->id;
-                $id_currency = (int)$this->context->currency->id;
-                $currency = new Currency((int)$id_currency);
+            $shop_name = Configuration::get('PS_SHOP_NAME');
+            $shop_logo = _PS_IMG_ . Configuration::get('PS_LOGO');
+            $homepage = Tools::getHttpHost(true).__PS_BASE_URI__;
+            $id_lang = (int)$this->context->language->id;
+            $id_shop = (int)$this->context->shop->id;
+            $id_currency = (int)$this->context->currency->id;
+            $currency = new Currency((int)$id_currency);
 
-                switch ($controller_name) {
-                    case 'product':
-                        $id_product = (int)Tools::getValue('id_product');
-                        $link = new Link();
-                        $product = new Product(
-                            (int)$id_product,
-                            false,
-                            (int)$id_lang,
-                            (int)$id_shop
-                        );
-                        $richImage = $product->getCover((int)$product->id);
-                        $imgUrl = Tools::getShopProtocol().$link->getImageLink(
-                            $product->link_rewrite,
-                            (int)$product->id.'-'.$richImage['id_image'],
-                            $this->imageType
-                        );
-                        $currentUrl = $link->getProductLink(
-                            $product,
-                            null,
-                            null,
-                            null,
-                            (int)$id_lang,
-                            (int)$id_shop
-                        );
-                        $yearEnd = date('Y-m-d', strtotime('Dec 31'));
-                        $this->context->smarty->assign(array(
-                            'controller' => pSQL($controller_name),
-                            'shop_name' => (string)$shop_name,
-                            'shop_logo' => $shop_logo,
-                            'homepage' => $homepage,
-                            'currentUrl' => $currentUrl,
-                            'productId' => (int)$product->id,
-                            'productReference' => (string)$product->reference,
-                            'productName' => (string)$product->name,
-                            'productID' => (int)$product->id,
-                            'productCondition' => (string)$product->condition,
-                            'productQuantity' => $product->quantity,
-                            'descriptionShort' => (string)$product->description_short,
-                            'productPrice' => $product->price,
-                            'currencyIsocode' => $currency->iso_code,
-                            'currencyPrefix' => $currency->prefix,
-                            'currencySuffix' => $currency->suffix,
-                            'imgUrl' => (string)$imgUrl,
-                            'manufacturer' => Manufacturer::getNameById((int)$product->id_manufacturer),
-                            'priceValidUntil' => $yearEnd,
-                        ));
-                        $return = true;
-                        break;
-
-                    case 'category':
-                        $id_category = Tools::getValue('id_category');
-                        $link = new Link();
-                        $category = new Category(
-                            (int)$id_category,
-                            (int)$id_lang,
-                            (int)$id_shop
-                        );
-                        $currentUrl = $link->getCategoryLink(
-                            (object)$category,
-                            null,
-                            (int)$id_lang,
-                            null,
-                            (int)$id_shop
-                        );
-                        $this->context->smarty->assign(array(
-                            'controller' => pSQL($controller_name),
-                            'shop_name' => (string)$shop_name,
-                            'shop_logo' => (string)$shop_logo,
-                            'homepage' => (string)$homepage,
-                            'currentUrl' => (string)$currentUrl
-                        ));
-                        $return = true;
-                        break;
-
-                    case 'cms':
-                        $id_cms = Tools::getValue('id_cms');
-                        $link = new Link();
-                        $cms = new CMS(
-                            (int)$id_cms,
-                            (int)$id_lang,
-                            (int)$id_shop
-                        );
-                        $currentUrl = $link->getCMSLink(
-                            (object)$cms,
-                            null,
-                            true,
-                            (int)$id_lang,
-                            (int)$id_shop
-                        );
-                        $this->context->smarty->assign(array(
-                            'controller' => pSQL($controller_name),
-                            'shop_name' => (string)$shop_name,
-                            'shop_logo' => (string)$shop_logo,
-                            'homepage' => (string)$homepage,
-                            'currentUrl' => (string)$currentUrl
-                        ));
-                        $return = true;
-                        break;
-
-                    case 'manufacturer':
-                        $id_manufacturer = Tools::getValue('id_manufacturer');
-                        $link = new Link();
-                        $manufacturer = new Manufacturer(
-                            (int)$id_manufacturer,
-                            (int)$id_lang
-                        );
-                        $currentUrl = $link->getManufacturerLink(
-                            (object)$manufacturer,
-                            null,
-                            (int)$id_lang,
-                            (int)$id_shop
-                        );
-                        $this->context->smarty->assign(array(
-                            'controller' => pSQL($controller_name),
-                            'shop_name' => (string)$shop_name,
-                            'shop_logo' => (string)$shop_logo,
-                            'homepage' => (string)$homepage,
-                            'currentUrl' => (string)$currentUrl
-                        ));
-                        $return = true;
-                        break;
-
-                    case 'supplier':
-                        $id_supplier = Tools::getValue('id_supplier');
-                        $link = new Link();
-                        $supplier = new Supplier(
-                            (int)$id_supplier,
-                            (int)$id_lang
-                        );
-                        $currentUrl = $link->getSupplierLink(
-                            (object)$supplier,
-                            null,
-                            (int)$id_lang,
-                            (int)$id_shop
-                        );
-                        $this->context->smarty->assign(array(
-                            'controller' => pSQL($controller_name),
-                            'shop_name' => (string)$shop_name,
-                            'shop_logo' => (string)$shop_logo,
-                            'homepage' => (string)$homepage,
-                            'currentUrl' => (string)$currentUrl
-                        ));
-                        $return = true;
-                        break;
-
-                    default:
-                        $link = new Link();
-                        $currentUrl = $link->getPageLink(pSQL($controller_name));
-                        $this->context->smarty->assign(array(
-                            'controller' => pSQL($controller_name),
-                            'shop_name' => (string)$shop_name,
-                            'shop_logo' => (string)$shop_logo,
-                            'homepage' => $homepage,
-                            'currentUrl' => (string)$currentUrl
-                        ));
-                        $return = true;
-                        break;
-                }
-                if ((bool)$return === true) {                    
-                    return $this->display(
-                        __FILE__,
-                        'views/templates/front/richsnippets.tpl',
-                        $cacheId
+            switch ($controller_name) {
+                case 'product':
+                    $id_product = (int)Tools::getValue('id_product');
+                    if ((int)$id_product <= 0) {
+                        return;
+                    }
+                    $link = new Link();
+                    $product = new Product(
+                        (int)$id_product,
+                        false,
+                        (int)$id_lang,
+                        (int)$id_shop
                     );
-                }
+                    if (!Validate::isLoadedObject($product)) {
+                        return;
+                    }
+                    $richImage = $product->getCover((int)$product->id);
+                    $imgUrl = Tools::getShopProtocol().$link->getImageLink(
+                        $product->link_rewrite,
+                        (int)$product->id.'-'.$richImage['id_image'],
+                        $this->imageType
+                    );
+                    $currentUrl = $link->getProductLink(
+                        (int)$product->id,
+                        null,
+                        null,
+                        null,
+                        (int)$id_lang,
+                        (int)$id_shop
+                    );
+                    $yearEnd = date('Y-m-d', strtotime('Dec 31'));
+                    $this->context->smarty->assign(array(
+                        'controller' => (string)$controller_name,
+                        'shop_name' => (string)$shop_name,
+                        'shop_logo' => $shop_logo,
+                        'homepage' => $homepage,
+                        'currentUrl' => $currentUrl,
+                        'productId' => (int)$product->id,
+                        'productReference' => (string)$product->reference,
+                        'productName' => (string)$product->name,
+                        'productID' => (int)$product->id,
+                        'productCondition' => (string)$product->condition,
+                        'productQuantity' => $product->quantity,
+                        'descriptionShort' => (string)$product->description_short,
+                        'productPrice' => $product->price,
+                        'currencyIsocode' => $currency->iso_code,
+                        'currencyPrefix' => $currency->prefix,
+                        'currencySuffix' => $currency->suffix,
+                        'imgUrl' => (string)$imgUrl,
+                        'manufacturer' => Manufacturer::getNameById((int)$product->id_manufacturer),
+                        'priceValidUntil' => $yearEnd,
+                    ));
+                    if (!$this->isSeven) {
+                        return $this->display(
+                            __FILE__,
+                            'views/templates/front/richsnippets16.tpl'
+                        );
+                    } else {
+                        return $this->display(
+                            __FILE__,
+                            'views/templates/front/richsnippets.tpl'
+                        );
+                    }
+                    break;
+
+                case 'category':
+                    $id_category = Tools::getValue('id_category');
+                    $link = new Link();
+                    $category = new Category(
+                        (int)$id_category,
+                        (int)$id_lang,
+                        (int)$id_shop
+                    );
+                    $currentUrl = $link->getCategoryLink(
+                        (object)$category,
+                        null,
+                        (int)$id_lang,
+                        null,
+                        (int)$id_shop
+                    );
+                    $this->context->smarty->assign(array(
+                        'controller' => (string)$controller_name,
+                        'shop_name' => (string)$shop_name,
+                        'shop_logo' => (string)$shop_logo,
+                        'homepage' => (string)$homepage,
+                        'currentUrl' => (string)$currentUrl
+                    ));
+                    if (!$this->isSeven) {
+                        return $this->display(__FILE__, 'views/templates/front/richsnippets16.tpl');
+                    } else {
+                        return $this->display(__FILE__, 'views/templates/front/richsnippets.tpl');
+                    }
+                    break;
+
+                case 'cms':
+                    $id_cms = Tools::getValue('id_cms');
+                    $link = new Link();
+                    $cms = new CMS(
+                        (int)$id_cms,
+                        (int)$id_lang,
+                        (int)$id_shop
+                    );
+                    $currentUrl = $link->getCMSLink(
+                        (object)$cms,
+                        null,
+                        true,
+                        (int)$id_lang,
+                        (int)$id_shop
+                    );
+                    $this->context->smarty->assign(array(
+                        'controller' => (string)$controller_name,
+                        'shop_name' => (string)$shop_name,
+                        'shop_logo' => (string)$shop_logo,
+                        'homepage' => (string)$homepage,
+                        'currentUrl' => (string)$currentUrl
+                    ));
+                    if (!$this->isSeven) {
+                        return $this->display(__FILE__, 'views/templates/front/richsnippets16.tpl');
+                    } else {
+                        return $this->display(__FILE__, 'views/templates/front/richsnippets.tpl');
+                    }
+                    break;
+
+                case 'manufacturer':
+                    $id_manufacturer = Tools::getValue('id_manufacturer');
+                    $link = new Link();
+                    $manufacturer = new Manufacturer(
+                        (int)$id_manufacturer,
+                        (int)$id_lang
+                    );
+                    $currentUrl = $link->getManufacturerLink(
+                        (object)$manufacturer,
+                        null,
+                        (int)$id_lang,
+                        (int)$id_shop
+                    );
+                    $this->context->smarty->assign(array(
+                        'controller' => (string)$controller_name,
+                        'shop_name' => (string)$shop_name,
+                        'shop_logo' => (string)$shop_logo,
+                        'homepage' => (string)$homepage,
+                        'currentUrl' => (string)$currentUrl
+                    ));
+                    if (!$this->isSeven) {
+                        return $this->display(__FILE__, 'views/templates/front/richsnippets16.tpl');
+                    } else {
+                        return $this->display(__FILE__, 'views/templates/front/richsnippets.tpl');
+                    }
+                    break;
+
+                case 'supplier':
+                    $id_supplier = Tools::getValue('id_supplier');
+                    $link = new Link();
+                    $supplier = new Supplier(
+                        (int)$id_supplier,
+                        (int)$id_lang
+                    );
+                    $currentUrl = $link->getSupplierLink(
+                        (object)$supplier,
+                        null,
+                        (int)$id_lang,
+                        (int)$id_shop
+                    );
+                    $this->context->smarty->assign(array(
+                        'controller' => (string)$controller_name,
+                        'shop_name' => (string)$shop_name,
+                        'shop_logo' => (string)$shop_logo,
+                        'homepage' => (string)$homepage,
+                        'currentUrl' => (string)$currentUrl
+                    ));
+                    if (!$this->isSeven) {
+                        return $this->display(__FILE__, 'views/templates/front/richsnippets16.tpl');
+                    } else {
+                        return $this->display(__FILE__, 'views/templates/front/richsnippets.tpl');
+                    }
+                    break;
+
+                default:
+                    $link = new Link();
+                    $currentUrl = $link->getPageLink((string)$controller_name);
+                    $this->context->smarty->assign(array(
+                        'controller' => (string)$controller_name,
+                        'shop_name' => (string)$shop_name,
+                        'shop_logo' => (string)$shop_logo,
+                        'homepage' => $homepage,
+                        'currentUrl' => (string)$currentUrl
+                    ));
+                    if (!$this->isSeven) {
+                        return $this->display(__FILE__, 'views/templates/front/richsnippets16.tpl');
+                    } else {
+                        return $this->display(__FILE__, 'views/templates/front/richsnippets.tpl');
+                    }
+                    break;
             }
         }
     }
 
 #################### END DISPLAY HOOKS ####################
 #################### START SITEMAPS ####################
-    protected function processSitemapProduct($id_shop, $id_lang)
+    private function processSitemapProduct($id_shop, $id_lang)
     {
         set_time_limit(0);
         if (!Configuration::get('EVERSEO_SITEMAP_PRODUCT')) {
@@ -10192,7 +9862,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     (int)$id_shop
                 );
                 $productUrl = $link->getProductLink(
-                    $product,
+                    (int)$product->id,
                     null,
                     null,
                     null,
@@ -10219,7 +9889,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
     /**
      * Process image sitemap creation
      */
-    protected function processSitemapImage($id_shop, $id_lang)
+    private function processSitemapImage($id_shop, $id_lang)
     {
         set_time_limit(0);
         if (!Configuration::get('EVERSEO_SITEMAP_IMAGE')) {
@@ -10287,7 +9957,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         }
     }
 
-    protected function processSitemapCategory($id_shop, $id_lang)
+    private function processSitemapCategory($id_shop, $id_lang)
     {
         set_time_limit(0);
         if (!Configuration::get('EVERSEO_SITEMAP_CATEGORY')) {
@@ -10347,7 +10017,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         }
     }
 
-    protected function processSitemapPageMeta($id_shop, $id_lang)
+    private function processSitemapPageMeta($id_shop, $id_lang)
     {
         set_time_limit(0);
         if (!Configuration::get('EVERSEO_SITEMAP_PAGE_META')) {
@@ -10392,9 +10062,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     || $pageMeta->page == 'module-ph_simpleblog-categorypage'
                     || $pageMeta->page == 'module-ph_simpleblog-page'
                     || $pageMeta->page == 'module-ph_simpleblog-author'
-                    || $pageMeta->page == 'module-ph_simpleblog-authorpage'
                     || $pageMeta->page == 'module-pm_advancedsearch4-searchresults'
-                    || $pageMeta->page == 'module-pm_advancedsearch-searchresults'
                     || $pageMeta->page == 'module-colissimo-tracking'
                 ) {
                     continue;
@@ -10423,7 +10091,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         }
     }
 
-    protected function processSitemapManufacturer($id_shop, $id_lang)
+    private function processSitemapManufacturer($id_shop, $id_lang)
     {
         set_time_limit(0);
         if (!Configuration::get('EVERSEO_SITEMAP_MANUFACTURER')) {
@@ -10476,7 +10144,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         }
     }
 
-    protected function processSitemapSupplier($id_shop, $id_lang)
+    private function processSitemapSupplier($id_shop, $id_lang)
     {
         set_time_limit(0);
         if (!Configuration::get('EVERSEO_SITEMAP_SUPPLIER')) {
@@ -10529,7 +10197,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         }
     }
 
-    protected function processSitemapCms($id_shop, $id_lang)
+    private function processSitemapCms($id_shop, $id_lang)
     {
         set_time_limit(0);
         if (!Configuration::get('EVERSEO_SITEMAP_CMS')) {
@@ -10642,7 +10310,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 #################### END SITEMAPS ####################
 #################### LANG CLEANER ####################
 
-    protected function processDeleteUnusedObjects()
+    private function processDeleteUnusedObjects()
     {
         $pstable = array(
             'category_lang',
@@ -10690,7 +10358,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 #################### END LANG CLEANER ####################
 #################### START INTERNAL LINKING ####################
 
-    protected function processInternalLinking($id_shop)
+    private function processInternalLinking($id_shop)
     {
         set_time_limit(0);
         $id_lang = (int)Configuration::get('EVERSEO_LANG');
@@ -10701,7 +10369,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         $maxOccur = (int)Configuration::get('EVERSEO_LINKED_NBR');
         $searchedText = (string)Configuration::get('SEARCHED');
         $replacingText = (string)Configuration::get('LINKEDTO');
-        $link = '<a href=\"'.pSQL($replacingText).'\" title=\"'.pSQL($searchedText).'\">'.pSQL($searchedText).'</a>';
+        $link = '<a href=\"'.$replacingText.'\" title=\"'.$searchedText.'\">'.$searchedText.'</a>';
         $limit = (int)Configuration::get('EVERSEO_LINKED_NBR');
 
         //CMS
@@ -10711,15 +10379,15 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 SET content =
                 REPLACE(
                     content,
-                    "'.pSQL($searchedText, true).'",
-                    "'.pSQL($link, true).'")
+                    "'.pSQL($searchedText).'",
+                    "'.pSQL($link).'")
                 WHERE INSTR(
                     content,
-                    "'.pSQL($searchedText, true).'"
+                    "'.pSQL($searchedText).'"
                 ) > 0
                 AND INSTR(
                     content,
-                    "'.pSQL($searchedText, true).'"
+                    "'.pSQL($searchedText).'"
                 ) <= '.(int)$maxOccur.'
                 AND id_shop = '.(int)$id_shop.'
                 AND id_lang = '.(int)$id_lang.'
@@ -10739,12 +10407,12 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 SET description =
                 REPLACE(
                     description,
-                    "'.pSQL($searchedText, true).'",
+                    "'.pSQL($searchedText).'",
                     "'.$link.'"
                 )
                 WHERE INSTR(
                     description,
-                    "'.pSQL($searchedText, true).'"
+                    "'.pSQL($searchedText).'"
                 ) > 0
                 AND id_shop = '.(int)$id_shop.'
                 AND id_lang = '.(int)$id_lang.'
@@ -10763,12 +10431,12 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 SET description_short =
                 REPLACE(
                     description_short,
-                    "'.pSQL($searchedText, true).'",
+                    "'.pSQL($searchedText).'",
                     "'.$link.'"
                 )
                 WHERE INSTR(
                     description_short,
-                    "'.pSQL($searchedText, true).'"
+                    "'.pSQL($searchedText).'"
                 ) > 0
                 AND id_shop = '.(int)$id_shop.'
                 AND id_lang = '.(int)$id_lang.'
@@ -10788,12 +10456,12 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 SET description =
                 REPLACE(
                     description,
-                    "'.pSQL($searchedText, true).'",
+                    "'.pSQL($searchedText).'",
                     "'.$link.'"
                 )
                 WHERE INSTR(
                     description,
-                    "'.pSQL($searchedText, true).'"
+                    "'.pSQL($searchedText).'"
                 ) > 0
                 AND id_shop = '.(int)$id_shop.'
                 AND id_lang = '.(int)$id_lang.'
@@ -10808,7 +10476,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
     }
 #################### END INTERNAL LINKING ####################
 #################### START SETTERS ####################
-    protected function generateRobots()
+    private function generateRobots()
     {
         if ((bool)Configuration::get('EVERSEO_ROBOTS_TXT_REWRITE') === false) {
             return;
@@ -10819,7 +10487,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         fclose($fp);
     }
 
-    protected function setColumnDefault($tableName, $columnName, $default)
+    private function setColumnDefault($tableName, $columnName, $default)
     {
         $sql =
             'ALTER TABLE '._DB_PREFIX_.pSQL($tableName).'
@@ -11098,7 +10766,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         Db::getInstance()->execute('TRUNCATE TABLE '._DB_PREFIX_.'ever_seo_redirect');
     }
 
-    protected function deleteDuplicate()
+    private function deleteDuplicate()
     {
         $sql = array();
 
@@ -11165,7 +10833,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         }
     }
 
-    protected function deleteShopDuplicate()
+    private function deleteShopDuplicate()
     {
         $sql = array();
 
@@ -11226,6 +10894,129 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         AND esp.id_seo_lang = esp2.id_seo_lang';
 
         foreach ($sql as $s) {
+            if (!Db::getInstance()->execute($s)) {
+                return false;
+            }
+        }
+    }
+
+    private function noindexLang($id_lang)
+    {
+        $noindex = array();
+        // Products
+        $noindex[] = 'UPDATE '._DB_PREFIX_.'ever_seo_product
+        SET indexable = 0
+        WHERE id_seo_lang = '.(int)$id_lang;
+        // Categories
+        $noindex[] = 'UPDATE '._DB_PREFIX_.'ever_seo_category
+        SET indexable = 0
+        WHERE id_seo_lang = '.(int)$id_lang;
+        // Manufacturers
+        $noindex[] = 'UPDATE '._DB_PREFIX_.'ever_seo_manufacturer
+        SET indexable = 0
+        WHERE id_seo_lang = '.(int)$id_lang;
+        // Manufacturers
+        $noindex[] = 'UPDATE '._DB_PREFIX_.'ever_seo_supplier
+        SET indexable = 0
+        WHERE id_seo_lang = '.(int)$id_lang;
+        // Pages
+        $noindex[] = 'UPDATE '._DB_PREFIX_.'ever_seo_pagemeta
+        SET indexable = 0
+        WHERE id_seo_lang = '.(int)$id_lang;
+        // CMS categories
+        $noindex[] = 'UPDATE '._DB_PREFIX_.'ever_seo_cms_category
+        SET indexable = 0
+        WHERE id_seo_lang = '.(int)$id_lang;
+        // CMS
+        $noindex[] = 'UPDATE '._DB_PREFIX_.'ever_seo_cms
+        SET indexable = 0
+        WHERE id_seo_lang = '.(int)$id_lang;
+        foreach ($noindex as $s) {
+            if (!Db::getInstance()->execute($s)) {
+                return false;
+            }
+        }
+    }
+
+    private function nofollowLang($id_lang)
+    {
+        $nofollow = array();
+        // Products
+        $nofollow[] = 'UPDATE '._DB_PREFIX_.'ever_seo_product
+        SET follow = 0
+        WHERE id_seo_lang = '.(int)$id_lang;
+        // Categories
+        $nofollow[] = 'UPDATE '._DB_PREFIX_.'ever_seo_category
+        SET follow = 0
+        WHERE id_seo_lang = '.(int)$id_lang;
+        // Manufacturers
+        $nofollow[] = 'UPDATE '._DB_PREFIX_.'ever_seo_manufacturer
+        SET follow = 0
+        WHERE id_seo_lang = '.(int)$id_lang;
+        // Manufacturers
+        $nofollow[] = 'UPDATE '._DB_PREFIX_.'ever_seo_supplier
+        SET follow = 0
+        WHERE id_seo_lang = '.(int)$id_lang;
+        // Pages
+        $nofollow[] = 'UPDATE '._DB_PREFIX_.'ever_seo_pagemeta
+        SET follow = 0
+        WHERE id_seo_lang = '.(int)$id_lang;
+        // CMS categories
+        $nofollow[] = 'UPDATE '._DB_PREFIX_.'ever_seo_cms_category
+        SET follow = 0
+        WHERE id_seo_lang = '.(int)$id_lang;
+        // CMS
+        $nofollow[] = 'UPDATE '._DB_PREFIX_.'ever_seo_cms
+        SET follow = 0
+        WHERE id_seo_lang = '.(int)$id_lang;
+        foreach ($nofollow as $s) {
+            if (!Db::getInstance()->execute($s)) {
+                return false;
+            }
+        }
+    }
+
+    private function nositemapLang($id_lang)
+    {
+        $nositemap = array();
+        // Products
+        $nositemap[] = 'UPDATE '._DB_PREFIX_.'ever_seo_product
+        SET allowed_sitemap = 0
+        WHERE id_seo_lang = '.(int)$id_lang;
+        // Categories
+        $nositemap[] = 'UPDATE '._DB_PREFIX_.'ever_seo_category
+        SET allowed_sitemap = 0
+        WHERE id_seo_lang = '.(int)$id_lang;
+        // Manufacturers
+        $nositemap[] = 'UPDATE '._DB_PREFIX_.'ever_seo_manufacturer
+        SET allowed_sitemap = 0
+        WHERE id_seo_lang = '.(int)$id_lang;
+        // Manufacturers
+        $nositemap[] = 'UPDATE '._DB_PREFIX_.'ever_seo_supplier
+        SET allowed_sitemap = 0
+        WHERE id_seo_lang = '.(int)$id_lang;
+        // Pages
+        $nositemap[] = 'UPDATE '._DB_PREFIX_.'ever_seo_pagemeta
+        SET allowed_sitemap = 0
+        WHERE id_seo_lang = '.(int)$id_lang;
+        // CMS categories
+        $nositemap[] = 'UPDATE '._DB_PREFIX_.'ever_seo_cms_category
+        SET allowed_sitemap = 0
+        WHERE id_seo_lang = '.(int)$id_lang;
+        // CMS
+        $nositemap[] = 'UPDATE '._DB_PREFIX_.'ever_seo_cms
+        SET allowed_sitemap = 0
+        WHERE id_seo_lang = '.(int)$id_lang;
+        foreach ($nositemap as $s) {
+            if (!Db::getInstance()->execute($s)) {
+                return false;
+            }
+        }
+        // Images
+        $nositemap[] = 'UPDATE '._DB_PREFIX_.'ever_seo_image
+        SET allowed_sitemap = 0
+        WHERE id_seo_lang = '.(int)$id_lang;
+        foreach ($nositemap as $s) {
             if (!Db::getInstance()->execute($s)) {
                 return false;
             }
@@ -11233,6 +11024,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
     }
 #################### END SETTERS ####################
 #################### START GETTERS ####################
+
 
     public function getCombinationsNames($id_product_attribute, $id_lang, $id_shop)
     {
@@ -11283,7 +11075,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         }
     }
 
-    protected function getAllowedSitemapLangs()
+    private function getAllowedSitemapLangs()
     {
         return json_decode(
             Configuration::get(
@@ -11292,7 +11084,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         );
     }
 
-    protected function getBannedLangs()
+    private function getBannedLangs()
     {
         return json_decode(
             Configuration::get(
@@ -11301,7 +11093,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         );
     }
 
-    protected function getAllowedShortcodesLangs($getter)
+    private function getAllowedShortcodesLangs($getter)
     {
         $allowedLangs = json_decode(
             Configuration::get(
@@ -11314,7 +11106,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         return $allowedLangs;
     }
 
-    protected function getEverSeoTables()
+    private function getEverSeoTables()
     {
         $seotable = array();
         $seotable[] = 'ever_seo_category';
@@ -11327,7 +11119,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         return (array)$seotable;
     }
 
-    protected function getSeoTableByPsTable($psTable)
+    private function getSeoTableByPsTable($psTable)
     {
         switch ($psTable) {
             case 'category_lang':
@@ -11365,7 +11157,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         return (string)$seotable;
     }
 
-    protected function getSeoObjByPsTable($psTable)
+    private function getSeoObjByPsTable($psTable)
     {
         switch ($psTable) {
             case 'ever_seo_category':
@@ -11399,7 +11191,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         return (string)$seoObj;
     }
 
-    protected function getColumnStructure($tableName, $columnName, $default)
+    private function getColumnStructure($tableName, $columnName, $default)
     {
         $describe = Db::getInstance()->ExecuteS('DESCRIBE '._DB_PREFIX_.pSQL($tableName));
         foreach ($describe as $columnDatas) {
@@ -11410,7 +11202,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         }
     }
 
-    protected function getAllowedGeneratorCategories($is_product = false)
+    private function getAllowedGeneratorCategories($is_product = false)
     {
         if ((bool)$is_product) {
             $categories = json_decode(
@@ -11431,103 +11223,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         return $categories;
     }
 
-    protected function uploadRedirectionFile()
-    {
-        /* upload the file */
-        if (isset($_FILES['redirection_file'])
-            && isset($_FILES['redirection_file']['tmp_name'])
-            && !empty($_FILES['products_file']['tmp_name'])
-        ) {
-            $filename = $_FILES['redirection_file']['name'];
-            $exploded_filename = explode('.', $filename);
-            $ext = end($exploded_filename);
-            if (Tools::strtolower($ext) != 'xlsx') {
-                $this->postErrors[] = $this->l('Error : File is not valid.');
-                return false;
-            }
-            if (!($tmp_name = tempnam(_PS_TMP_IMG_DIR_, 'PS'))
-                || !move_uploaded_file($_FILES['redirection_file']['tmp_name'], $tmp_name)
-            ) {
-                return false;
-            }
-            copy($tmp_name, self::INPUT_FOLDER.'redirect.xlsx');
-            $this->html .= $this->displayConfirmation($this->l('File has been uploaded, please wait for cron task'));
-        }
-    }
-
-    protected function uploadProductsFile()
-    {
-        /* upload the file */
-        if (isset($_FILES['products_file'])
-            && isset($_FILES['products_file']['tmp_name'])
-            && !empty($_FILES['products_file']['tmp_name'])
-        ) {
-            $filename = $_FILES['products_file']['name'];
-            $exploded_filename = explode('.', $filename);
-            $ext = end($exploded_filename);
-            if (Tools::strtolower($ext) != 'xlsx') {
-                $this->postErrors[] = $this->l('Error : File is not valid.');
-                return false;
-            }
-            if (!($tmp_name = tempnam(_PS_TMP_IMG_DIR_, 'PS'))
-                || !move_uploaded_file($_FILES['products_file']['tmp_name'], $tmp_name)
-            ) {
-                return false;
-            }
-            copy($tmp_name, self::INPUT_FOLDER.'products.xlsx');
-            $this->html .= $this->displayConfirmation($this->l('File has been uploaded, please wait for cron task'));
-        }
-    }
-
-    protected function uploadCategoriesFile()
-    {
-        /* upload the file */
-        if (isset($_FILES['categories_file'])
-            && isset($_FILES['categories_file']['tmp_name'])
-            && !empty($_FILES['categories_file']['tmp_name'])
-        ) {
-            $filename = $_FILES['categories_file']['name'];
-            $exploded_filename = explode('.', $filename);
-            $ext = end($exploded_filename);
-            if (Tools::strtolower($ext) != 'xlsx') {
-                $this->postErrors[] = $this->l('Error : File is not valid.');
-                return false;
-            }
-            if (!($tmp_name = tempnam(_PS_TMP_IMG_DIR_, 'PS'))
-                || !move_uploaded_file($_FILES['categories_file']['tmp_name'], $tmp_name)
-            ) {
-                return false;
-            }
-            copy($tmp_name, self::INPUT_FOLDER.'categories.xlsx');
-            $this->html .= $this->displayConfirmation($this->l('File has been uploaded, please wait for cron task'));
-        }
-    }
-
-    protected function uploadFeatureValuesFile()
-    {
-        /* upload the file */
-        if (isset($_FILES['featurevalues_file'])
-            && isset($_FILES['featurevalues_file']['tmp_name'])
-            && !empty($_FILES['featurevalues_file']['tmp_name'])
-        ) {
-            $filename = $_FILES['featurevalues_file']['name'];
-            $exploded_filename = explode('.', $filename);
-            $ext = end($exploded_filename);
-            if (Tools::strtolower($ext) != 'xlsx') {
-                $this->postErrors[] = $this->l('Error : File is not valid.');
-                return false;
-            }
-            if (!($tmp_name = tempnam(_PS_TMP_IMG_DIR_, 'PS'))
-                || !move_uploaded_file($_FILES['featurevalues_file']['tmp_name'], $tmp_name)
-            ) {
-                return false;
-            }
-            copy($tmp_name, self::INPUT_FOLDER.'featurevalues.xlsx');
-            $this->html .= $this->displayConfirmation($this->l('File has been uploaded, please wait for cron task'));
-        }
-    }
-
-    protected function deleteEverCache($obj = false)
+    private function deleteEverCache($obj = false)
     {
         $cache_folders = array();
         switch ($obj) {

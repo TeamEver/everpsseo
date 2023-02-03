@@ -26,7 +26,6 @@ class EverPsSeoProduct extends ObjectModel
     public $allowed_sitemap;
     public $count;
     public $note;
-    public $status_code;
 
     public static $definition = array(
         'table' => 'ever_seo_product',
@@ -36,18 +35,18 @@ class EverPsSeoProduct extends ObjectModel
             'id_seo_product' => array(
                 'type' => self::TYPE_INT,
                 'lang' => false,
-                'validate' => 'isUnsignedInt',
+                'validate' => 'isunsignedInt',
                 'required' => true
             ),
             'id_shop' => array(
                 'type' => self::TYPE_INT,
                 'lang' => false,
-                'validate' => 'isUnsignedInt'
+                'validate' => 'isunsignedInt'
             ),
             'id_seo_lang' => array(
                 'type' => self::TYPE_INT,
                 'lang' => false,
-                'validate' => 'isUnsignedInt'
+                'validate' => 'isunsignedInt'
             ),
             'meta_title' => array(
                 'type' => self::TYPE_STRING,
@@ -111,22 +110,17 @@ class EverPsSeoProduct extends ObjectModel
             'count' => array(
                 'type' => self::TYPE_INT,
                 'lang' => false,
-                'validate' => 'isUnsignedInt'
+                'validate' => 'isunsignedInt'
             ),
             'note' => array(
                 'type' => self::TYPE_INT,
                 'lang' => false,
-                'validate' => 'isUnsignedInt'
-            ),
-            'status_code' => array(
-                'type' => self::TYPE_INT,
-                'lang' => false,
-                'validate' => 'isUnsignedInt'
+                'validate' => 'isunsignedInt'
             ),
         )
     );
 
-    public static function getAllSeoProductsIds($id_shop, $allowedLangs = false)
+    public static function getAllSeoProductsIds($id_shop)
     {
         $cache_id = 'EverPsSeoProduct::getAllSeoProductsIds_'
         .(int)$id_shop;
@@ -134,11 +128,7 @@ class EverPsSeoProduct extends ObjectModel
             $sql = new DbQuery();
             $sql->select('*');
             $sql->from('ever_seo_product');
-            if ($allowedLangs) {
-                $sql->where('id_shop = '.(int)$id_shop.' AND id_seo_lang IN ('.implode(',', $allowedLangs).')');
-            } else {
-                $sql->where('id_shop = '.(int)$id_shop);
-            }
+            $sql->where('id_shop = '.(int)$id_shop);
             $return = Db::getInstance()->executeS($sql);
             Cache::store($cache_id, $return);
             return $return;
@@ -212,20 +202,20 @@ class EverPsSeoProduct extends ObjectModel
             }
         }
         $feature_names = '';
-        // foreach ($product->getFeatures() as $key => $value) {
-        //     $feature = Feature::getFeature(
-        //         (int)$id_seo_lang,
-        //         (int)$value['id_feature']
-        //     );
-        //     $feature_value = new FeatureValue(
-        //         (int)$value['id_feature_value']
-        //     );
-        //     if ($key == 0) {
-        //         $feature_names .= $feature['name'].': '.$feature_value->value[(int)$id_seo_lang];
-        //     } else {
-        //         $feature_names .= $feature['name'].': '.$feature_value->value[(int)$id_seo_lang].', ';
-        //     }
-        // }
+        foreach ($product->getFeatures() as $key => $value) {
+            $feature = Feature::getFeature(
+                (int)$id_seo_lang,
+                (int)$value['id_feature']
+            );
+            $feature_value = new FeatureValue(
+                (int)$value['id_feature_value']
+            );
+            if ($key == 0) {
+                $feature_names .= $feature['name'].': '.$feature_value->value[(int)$id_seo_lang];
+            } else {
+                $feature_names .= $feature['name'].': '.$feature_value->value[(int)$id_seo_lang].', ';
+            }
+        }
         $category = new Category(
             (int)$product->id_category_default,
             (int)$id_seo_lang,
@@ -297,20 +287,20 @@ class EverPsSeoProduct extends ObjectModel
             }
         }
         $feature_names = '';
-        // foreach ($product->getFeatures() as $key => $value) {
-        //     $feature = Feature::getFeature(
-        //         (int)$id_seo_lang,
-        //         (int)$value['id_feature']
-        //     );
-        //     $feature_value = new FeatureValue(
-        //         (int)$value['id_feature_value']
-        //     );
-        //     if ($key == 0) {
-        //         $feature_names .= $feature['name'].': '.$feature_value->value[(int)$id_seo_lang];
-        //     } else {
-        //         $feature_names .= $feature['name'].': '.$feature_value->value[(int)$id_seo_lang].', ';
-        //     }
-        // }
+        foreach ($product->getFeatures() as $key => $value) {
+            $feature = Feature::getFeature(
+                (int)$id_seo_lang,
+                (int)$value['id_feature']
+            );
+            $feature_value = new FeatureValue(
+                (int)$value['id_feature_value']
+            );
+            if ($key == 0) {
+                $feature_names .= $feature['name'].': '.$feature_value->value[(int)$id_seo_lang];
+            } else {
+                $feature_names .= $feature['name'].': '.$feature_value->value[(int)$id_seo_lang].', ';
+            }
+        }
         $manufacturer = new Manufacturer(
             (int)$product->id_manufacturer,
             (int)$id_seo_lang
@@ -645,7 +635,7 @@ class EverPsSeoProduct extends ObjectModel
             Db::getInstance()->Execute($s);
         }
     }
-
+    
     /**
      * @return bool
      */

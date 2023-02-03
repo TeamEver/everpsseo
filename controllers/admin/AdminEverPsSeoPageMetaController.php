@@ -116,11 +116,6 @@ class AdminEverPsSeoPageMetaController extends ModuleAdminController
                 'title' => $this->l('Views count'),
                 'align' => 'left',
                 'width' => 'auto'
-            ),
-            'status_code' => array(
-                'title' => $this->l('Http code'),
-                'align' => 'left',
-                'width' => 'auto'
             )
         );
 
@@ -234,10 +229,6 @@ class AdminEverPsSeoPageMetaController extends ModuleAdminController
             'metadescription' => array(
                 'text' => $this->l('Meta description'),
                 'confirm' => $this->l('Get default description from Prestashop ?')),
-            'indexnow' => array(
-                'text' => $this->l('Index now'),
-                'confirm' => $this->l('Index now ?')
-            ),
         );
 
         if (Tools::isSubmit('submitBulkindex'.$this->table)) {
@@ -258,10 +249,6 @@ class AdminEverPsSeoPageMetaController extends ModuleAdminController
 
         if (Tools::isSubmit('submitBulkmetadescription'.$this->table)) {
             $this->processBulkMetadescription();
-        }
-
-        if (Tools::isSubmit('submitBulkindexnow'.$this->table)) {
-            $this->processBulkIndexNow();
         }
 
         if (Tools::isSubmit('indexable'.$this->table)) {
@@ -317,7 +304,7 @@ class AdminEverPsSeoPageMetaController extends ModuleAdminController
                 'PS_LOGO'
             );
         }
-        $defaultImage = '<image src="'.(string)$defaultUrlImage.'" style="max-width:80px;"/>';
+        $defaultImage = '<image src="'.(string)$defaultUrlImage.'"/>';
 
         $this->fields_form = array(
             'submit' => array(
@@ -692,40 +679,6 @@ class AdminEverPsSeoPageMetaController extends ModuleAdminController
             );
 
             if (!$everPageMeta->save()) {
-                $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
-            }
-        }
-    }
-
-    protected function processBulkIndexNow()
-    {
-        foreach (Tools::getValue($this->table.'Box') as $idEverPageMeta) {
-            $seoMeta = new EverPsSeoPageMeta(
-                (int)$idEverPageMeta
-            );
-            $meta = new Meta(
-                $seoMeta->id_seo_pagemeta,
-                $seoMeta->id_seo_lang,
-                $this->context->shop->id
-            );
-            $link = new Link();
-            $url = $link->getPageLink(
-                $meta->page,
-                null,
-                null,
-                null,
-                (int)$seoMeta->id_seo_lang,
-                (int)$this->context->shop->id
-            );
-            $httpCode = EverPsSeoTools::indexNow(
-                $url
-            );
-            $sql = 'UPDATE `'._DB_PREFIX_.'ever_seo_pagemeta`
-            SET status_code = '.(int)$httpCode.'
-            WHERE id_seo_lang = '.(int)$seoMeta->id_seo_lang.'
-            AND id_shop = '.(int)$this->context->shop->id.'
-            AND id_ever_seo_pagemeta = '.(int)$seoMeta->id;
-            if (!Db::getInstance()->execute($sql)) {
                 $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
             }
         }

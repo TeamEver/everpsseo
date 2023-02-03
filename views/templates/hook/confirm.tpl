@@ -26,18 +26,37 @@
 <script>
 var dataLayer  = window.dataLayer || [];
 dataLayer.push({
-   'transactionId': '{/literal}{$transaction_id|escape:'htmlall':'UTF-8'}{literal}',
-   'transactionAffiliation': '{/literal}{$shop_name|escape:'htmlall':'UTF-8'}{literal}',
-   'transactionTotal': {/literal}{$totalPaid|escape:'htmlall':'UTF-8'}{literal},
-   'transactionTax': {/literal}{$totalTaxFull|escape:'htmlall':'UTF-8'}{literal},
-   'transactionShipping': {/literal}{$totalShipping|escape:'htmlall':'UTF-8'}{literal},
-   'transactionProducts': [{/literal}{foreach from=$products item=product}{literal}{
-       'sku': '{/literal}{$product->reference|escape:'htmlall':'UTF-8'}{literal}',
-       'name': '{/literal}{$product->name|escape:'htmlall':'UTF-8'}{literal} | {/literal}{$product->combination_selected|escape:'htmlall':'UTF-8'}{literal}',
-       'category': '{/literal}{$product->category_name|escape:'htmlall':'UTF-8'}{literal}',
-       'price': {/literal}{$product->unit_price_tax_excl|escape:'htmlall':'UTF-8'}{literal},
-       'quantity': {/literal}{$product->qty_ordered|escape:'htmlall':'UTF-8'}{literal}
-   },{/literal}{/foreach}{literal}]
+  'event': 'transaction',
+  'ecommerce': {
+    'purchase': {
+      'actionField': {
+        'id': '{/literal}{$transaction_id|escape:'htmlall':'UTF-8'}{literal}',
+        'affiliation': '{/literal}{$shop_name|escape:'htmlall':'UTF-8'}{literal}',
+        'revenue': '{/literal}{$totalPaid|escape:'htmlall':'UTF-8'}{literal}',
+        'tax':'{/literal}{$totalTaxFull|escape:'htmlall':'UTF-8'}{literal}',
+        'shipping': '{/literal}{$totalShipping|escape:'htmlall':'UTF-8'}{literal}',
+        'coupon': '{/literal}{if isset($voucherCode) && $voucherCode}{$voucherCode|escape:'htmlall':'UTF-8'}{/if}{literal}'
+      },
+      'products': [
+      {/literal}
+      {foreach from=$products item=product}
+      {literal}
+      {
+        'sku': '{/literal}{$product->reference|escape:'htmlall':'UTF-8'}{literal}',
+        'name': '{/literal}{$product->name|escape:'htmlall':'UTF-8'}{literal}',
+        'id': '{/literal}{$product->id|escape:'htmlall':'UTF-8'}{literal}',
+        'price': '{/literal}{$product->unit_price_tax_excl|escape:'htmlall':'UTF-8'}{literal}',
+        'brand': '{/literal}{$product->manufacturer_name|escape:'htmlall':'UTF-8'}{literal}',
+        'category': '{/literal}{$product->category_name|escape:'htmlall':'UTF-8'}{literal}',
+        'variant': '{/literal}{$product->combination_selected|escape:'htmlall':'UTF-8'}{literal}',
+        'quantity': {/literal}{$product->qty_ordered|escape:'htmlall':'UTF-8'}{literal}
+       },
+      {/literal}
+      {/foreach}
+      {literal}
+       ]
+    }
+  }
 });
 </script>
 {/literal}

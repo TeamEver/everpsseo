@@ -22,7 +22,6 @@ class EverPsSeoCms extends ObjectModel
     public $follow;
     public $allowed_sitemap;
     public $count;
-    public $status_code;
 
     public static $definition = array(
         'table' => 'ever_seo_cms',
@@ -32,18 +31,18 @@ class EverPsSeoCms extends ObjectModel
             'id_seo_cms' => array(
                 'type' => self::TYPE_INT,
                 'lang' => false,
-                'validate' => 'isUnsignedInt',
+                'validate' => 'isunsignedInt',
                 'required' => true
             ),
             'id_shop' => array(
                 'type' => self::TYPE_INT,
                 'lang' => false,
-                'validate' => 'isUnsignedInt'
+                'validate' => 'isunsignedInt'
             ),
             'id_seo_lang' => array(
                 'type' => self::TYPE_INT,
                 'lang' => false,
-                'validate' => 'isUnsignedInt'
+                'validate' => 'isunsignedInt'
             ),
             'meta_title' => array(
                 'type' => self::TYPE_STRING,
@@ -93,12 +92,7 @@ class EverPsSeoCms extends ObjectModel
             'count' => array(
                 'type' => self::TYPE_INT,
                 'lang' => false,
-                'validate' => 'isUnsignedInt'
-            ),
-            'status_code' => array(
-                'type' => self::TYPE_INT,
-                'lang' => false,
-                'validate' => 'isUnsignedInt'
+                'validate' => 'isunsignedInt'
             ),
         )
     );

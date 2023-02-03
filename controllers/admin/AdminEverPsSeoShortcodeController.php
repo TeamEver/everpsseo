@@ -248,7 +248,7 @@ class AdminEverPsSeoShortcodeController extends ModuleAdminController
                             );
                             if (!count($this->errors) && $shortcode->delete()) {
                             } else {
-                                $this->errors[] = $this->l('Errors on deleting object ').$id_ever_seo_shortcode;
+                                $this->errors[] = $this->l('Errors on deleting object '.$id_ever_seo_shortcode);
                             }
                         }
                     }

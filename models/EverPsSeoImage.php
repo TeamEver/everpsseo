@@ -16,7 +16,6 @@ class EverPsSeoImage extends ObjectModel
     public $id_seo_lang;
     public $alt;
     public $allowed_sitemap;
-    public $status_code;
 
     public static $definition = array(
         'table' => 'ever_seo_image',
@@ -26,23 +25,23 @@ class EverPsSeoImage extends ObjectModel
             'id_seo_img' => array(
                 'type' => self::TYPE_INT,
                 'lang' => false,
-                'validate' => 'isUnsignedInt',
+                'validate' => 'isunsignedInt',
                 'required' => true
             ),
             'id_seo_product' => array(
                 'type' => self::TYPE_INT,
                 'lang' => false,
-                'validate' => 'isUnsignedInt'
+                'validate' => 'isunsignedInt'
             ),
             'id_shop' => array(
                 'type' => self::TYPE_INT,
                 'lang' => false,
-                'validate' => 'isUnsignedInt'
+                'validate' => 'isunsignedInt'
             ),
             'id_seo_lang' => array(
                 'type' => self::TYPE_INT,
                 'lang' => false,
-                'validate' => 'isUnsignedInt'
+                'validate' => 'isunsignedInt'
             ),
             'alt' => array(
                 'type' => self::TYPE_STRING,
@@ -53,11 +52,6 @@ class EverPsSeoImage extends ObjectModel
                 'type' => self::TYPE_INT,
                 'lang' => false,
                 'validate' => 'isBool'
-            ),
-            'status_code' => array(
-                'type' => self::TYPE_INT,
-                'lang' => false,
-                'validate' => 'isUnsignedInt'
             ),
         )
     );

@@ -263,6 +263,7 @@ $sql[] =
         1
     FROM `'._DB_PREFIX_.'cms_category_lang`';
 
+// ukoo_lea
 $sql[] =
     'INSERT INTO `'._DB_PREFIX_.'ever_seo_cms` (
         id_seo_cms,
@@ -278,8 +279,8 @@ $sql[] =
         cl.id_cms,
         cl.id_shop,
         cl.id_lang,
-        null,
-        null,
+        cl.meta_title,
+        cl.meta_description,
         c.indexation,
         1,
         1
