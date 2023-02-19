@@ -239,7 +239,7 @@ class EverPsSeoProduct extends ObjectModel
             (int)$product->id_supplier,
             (int)$id_seo_lang
         );
-        $message = Configuration::getInt(
+        $message = Configuration::getConfigInMultipleLangs(
             'EVERSEO_PRODUCT_TITLE_AUTO'
         );
         $shortcodes = array(
@@ -324,7 +324,7 @@ class EverPsSeoProduct extends ObjectModel
             (int)$id_seo_lang,
             (int)$id_shop
         );
-        $message = Configuration::getInt(
+        $message = Configuration::getConfigInMultipleLangs(
             'EVERSEO_PRODUCT_METADESC_AUTO'
         );
         $shortcodes = array(
@@ -408,7 +408,7 @@ class EverPsSeoProduct extends ObjectModel
             (int)$id_seo_lang,
             (int)$id_shop
         );
-        $message = Configuration::getInt(
+        $message = Configuration::getConfigInMultipleLangs(
             'PRODUCT_DESC_GENERATE'
         );
 
@@ -491,7 +491,7 @@ class EverPsSeoProduct extends ObjectModel
             (int)$id_seo_lang,
             (int)$id_shop
         );
-        $message = Configuration::getInt(
+        $message = Configuration::getConfigInMultipleLangs(
             'PRODUCT_SHORT_DESC_GENERATE'
         );
 
@@ -574,7 +574,7 @@ class EverPsSeoProduct extends ObjectModel
             (int)$id_seo_lang,
             (int)$id_shop
         );
-        $message = Configuration::getInt(
+        $message = Configuration::getConfigInMultipleLangs(
             'PRODUCT_BOTTOM_GENERATE'
         );
 

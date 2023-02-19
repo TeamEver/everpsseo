@@ -198,7 +198,7 @@ class EverPsSeoCategory extends ObjectModel
             );
             $parent_name = $parent->name;
         }
-        $message = Configuration::getInt(
+        $message = Configuration::getConfigInMultipleLangs(
             'EVERSEO_CATEGORY_TITLE_AUTO'
         );
         $shortcodes = array(
@@ -241,7 +241,7 @@ class EverPsSeoCategory extends ObjectModel
             );
             $parent_name = $parent->name;
         }
-        $message = Configuration::getInt(
+        $message = Configuration::getConfigInMultipleLangs(
             'EVERSEO_CATEGORY_METADESC_AUTO'
         );
         $shortcodes = array(
@@ -300,7 +300,7 @@ class EverPsSeoCategory extends ObjectModel
             );
             $parent_name = $parent->name;
         }
-        $message = Configuration::getInt(
+        $message = Configuration::getConfigInMultipleLangs(
             'CATEGORY_DESC_GENERATE'
         );
         $shortcodes = array(
