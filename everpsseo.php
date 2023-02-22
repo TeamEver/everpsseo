@@ -38,7 +38,7 @@ class EverPsSeo extends Module
     {
         $this->name = 'everpsseo';
         $this->tab = 'seo';
-        $this->version = '8.5.14';
+        $this->version = '8.6.2';
         $this->author = 'Team Ever';
         $this->need_instance = 0;
         $this->module_key = '5ddabba8ec414cd5bd646fad24368472';
@@ -7447,7 +7447,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             }
             $seo_product->link_rewrite = $product->link_rewrite;
             if ((bool)$product->active === false
-                && empty($product->redirect_type)
+                && (empty($product->redirect_type) || $product->redirect_type == '404')
             ) {
                 EverPsSeoProduct::inactiveRedirect(
                     (int)$seo_product->id_seo_product,
@@ -11220,17 +11220,24 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         // );
         $attributes = Db::getInstance()->executeS($sql);
         foreach ($attributes as $attr) {
-            $attribute = new Attribute(
-                (int)$attr['id_attribute'],
-                (int)$id_lang,
-                (int)$id_shop
-            );
+            if ($this->isHeight) {
+                $attribute = new Attribute(
+                    (int)$attr['id_attribute'],
+                    (int)$id_lang,
+                    (int)$id_shop
+                );
+            } else {
+                $attribute = new ProductAttribute(
+                    (int)$attr['id_attribute'],
+                    (int)$id_lang,
+                    (int)$id_shop
+                );
+            }
             $attribute_group = new AttributeGroup(
                 (int)$attribute->id_attribute_group,
                 (int)$id_lang,
                 (int)$id_shop
             );
-            // die(var_dump($attribute_group));
 
             $obj = new stdClass;
             $obj->id = (int)$attribute->id;
