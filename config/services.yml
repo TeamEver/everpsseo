@@ -39,3 +39,10 @@ services:
         tags:
             - { name: 'console.command' }
 
+    everpsseo.seo.execute_action:
+        class: Everpsseo\Seo\Command\ExecuteAction
+        public: true
+        tags:
+            - { name: 'console.command' }
+
+

@@ -646,6 +646,18 @@ class EverPsSeoProduct extends ObjectModel
         }
     }
 
+    public static function getDesabledProduct()
+    {
+        $sql = '
+            SELECT `id_product` 
+            FROM `mhd_product` 
+            WHERE `active` = 0 
+            AND `redirect_type` = "404"
+        ';
+        
+        return Db::getInstance()->ExecuteS($sql);
+    }
+
     /**
      * @return bool
      */

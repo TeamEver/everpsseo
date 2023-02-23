@@ -38,7 +38,7 @@ class EverPsSeo extends Module
     {
         $this->name = 'everpsseo';
         $this->tab = 'seo';
-        $this->version = '8.6.2';
+        $this->version = '8.6.3';
         $this->author = 'Team Ever';
         $this->need_instance = 0;
         $this->module_key = '5ddabba8ec414cd5bd646fad24368472';
@@ -259,6 +259,7 @@ class EverPsSeo extends Module
             && Configuration::updateValue('EVERSEO_404_SEARCH', true)
             && Configuration::updateValue('EVERSEO_REDIRECT', '302')
             && Configuration::updateValue('EVERSEO_NOT_FOUND', false)
+            && Configuration::updateValue('EVERSEO_FORCE_PRODUCT_REDIRECT', false)
             && Configuration::updateValue('EVERSEO_QUALITY_LEVEL', '7')
             && Configuration::updateValue('EVERSEO_KNOWLEDGE', 'Organization')
             && Configuration::updateValue('EVERSEO_CANONICAL', false)
@@ -401,6 +402,7 @@ class EverPsSeo extends Module
             && Configuration::deleteByName('EVERSEO_404_SEARCH')
             && Configuration::deleteByName('EVERSEO_REDIRECT')
             && Configuration::deleteByName('EVERSEO_NOT_FOUND')
+            && Configuration::deleteByName('EVERSEO_FORCE_PRODUCT_REDIRECT')
             && Configuration::deleteByName('EVERSEO_QUALITY_LEVEL')
             && Configuration::deleteByName('EVERSEO_INDEX_ARGS')
             && Configuration::deleteByName('EVERSEO_CANONICAL')
@@ -2650,6 +2652,25 @@ class EverPsSeo extends Module
                         'desc' => $this->l('Will redirect to home if not found'),
                         'hint' => $this->l('Do not redirect a lot of 404 to homepage !'),
                         'name' => 'EVERSEO_NOT_FOUND',
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled')
+                            )
+                        ),
+                    ),
+                    array(
+                        'type' => 'switch',
+                        'label' => $this->l('allowed forcing redirect product'),
+                        'desc' => $this->l('Allow command for force redirect produit 404 to category parent'),
+                        'name' => 'EVERSEO_FORCE_PRODUCT_REDIRECT',
                         'is_bool' => true,
                         'values' => array(
                             array(
@@ -5141,6 +5162,9 @@ class EverPsSeo extends Module
             'EVERSEO_NOT_FOUND' => Configuration::get(
                 'EVERSEO_NOT_FOUND'
             ),
+            'EVERSEO_FORCE_PRODUCT_REDIRECT' => Configuration::get(
+                'EVERSEO_FORCE_PRODUCT_REDIRECT'
+            ),
             'EVERSEO_QUALITY_LEVEL' => Configuration::get(
                 'EVERSEO_QUALITY_LEVEL'
             ),
@@ -5811,6 +5835,12 @@ class EverPsSeo extends Module
                 || !Validate::isBool(Tools::getValue('EVERSEO_NOT_FOUND'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "What if is not found" is not valid');
+            }
+
+            if (!Tools::getIsset('EVERSEO_FORCE_PRODUCT_REDIRECT')
+                || !Validate::isBool(Tools::getValue('EVERSEO_FORCE_PRODUCT_REDIRECT'))
+            ) {
+                $this->postErrors[] = $this->l('Error : The field "forcing redrect product" is not valid');
             }
 
             if (!Tools::getIsset('EVERSEO_ORDER_BY')
