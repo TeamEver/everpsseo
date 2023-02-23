@@ -646,11 +646,11 @@ class EverPsSeoProduct extends ObjectModel
         }
     }
 
-    public static function getDesabledProduct()
+    public static function getDisabledProduct()
     {
         $sql = '
             SELECT `id_product` 
-            FROM `mhd_product` 
+            FROM `'._DB_PREFIX_.'product` 
             WHERE `active` = 0 
             AND `redirect_type` = "404"
         ';

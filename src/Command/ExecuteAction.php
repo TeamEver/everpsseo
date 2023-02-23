@@ -78,10 +78,7 @@ class ExecuteAction extends Command
                 return self::ABORTED;
             }
 
-            
-
-            $products = \EverPsSeoProduct::getDesabledProduct();
-
+            $products = \EverPsSeoProduct::getDisabledProduct();
 
             if ($products && count($products) > 0) {
                 $output->writeln(sprintf(
