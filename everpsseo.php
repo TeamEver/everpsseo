@@ -8473,11 +8473,6 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             $product->manufacturer_name = $manufacturer->name;
             $product->unit_price_tax_incl = $prod['unit_price_tax_incl'];
             $product->unit_price_tax_excl = $prod['unit_price_tax_excl'];
-            $product->combination_selected = $this->getCombinationsNames(
-                (int)$prod['product_attribute_id'],
-                (int)$this->context->language->id,
-                (int)$this->context->shop->id
-            );
             $products[] = $product;
         }
         $cartRules = $order->getCartRules();
@@ -11232,62 +11227,6 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
     }
 #################### END SETTERS ####################
 #################### START GETTERS ####################
-
-    public function getCombinationsNames($id_product_attribute, $id_lang, $id_shop)
-    {
-        $return = array();
-        $sql = new DbQuery;
-        $sql->select('id_attribute');
-        $sql->from(
-            'product_attribute_combination',
-            'pac'
-        );
-        $sql->where(
-            'pac.id_product_attribute = '.(int)$id_product_attribute
-        );
-        // $sql->where(
-        //     'pac.id_shop = '.(int)$id_shop
-        // );
-        $attributes = Db::getInstance()->executeS($sql);
-        foreach ($attributes as $attr) {
-            if ($this->isHeight) {
-                $attribute = new Attribute(
-                    (int)$attr['id_attribute'],
-                    (int)$id_lang,
-                    (int)$id_shop
-                );
-            } else {
-                $attribute = new ProductAttribute(
-                    (int)$attr['id_attribute'],
-                    (int)$id_lang,
-                    (int)$id_shop
-                );
-            }
-            $attribute_group = new AttributeGroup(
-                (int)$attribute->id_attribute_group,
-                (int)$id_lang,
-                (int)$id_shop
-            );
-
-            $obj = new stdClass;
-            $obj->id = (int)$attribute->id;
-            $obj->name = $attribute_group->name;
-            $obj->value = $attribute->name;
-            $obj->description = $attribute_group->name.' : '.$attribute->name;
-            $obj->price = false;
-            $return[] = $obj;
-        }
-        if (isset($return) && is_array($return)) {
-            $names = '';
-            foreach ($return as $ret) {
-                $names .= $ret->description;
-                $names .= ' ';
-            }
-            return $names;
-        } else {
-            return false;
-        }
-    }
 
     protected function getAllowedSitemapLangs()
     {

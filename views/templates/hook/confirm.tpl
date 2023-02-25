@@ -33,7 +33,7 @@ dataLayer.push({
    'transactionShipping': {/literal}{$totalShipping|escape:'htmlall':'UTF-8'}{literal},
    'transactionProducts': [{/literal}{foreach from=$products item=product}{literal}{
        'sku': '{/literal}{$product->reference|escape:'htmlall':'UTF-8'}{literal}',
-       'name': '{/literal}{$product->name|escape:'htmlall':'UTF-8'}{literal} | {/literal}{$product->combination_selected|escape:'htmlall':'UTF-8'}{literal}',
+       'name': '{/literal}{$product->name|escape:'htmlall':'UTF-8'}{literal}',
        'category': '{/literal}{$product->category_name|escape:'htmlall':'UTF-8'}{literal}',
        'price': {/literal}{$product->unit_price_tax_excl|escape:'htmlall':'UTF-8'}{literal},
        'quantity': {/literal}{$product->qty_ordered|escape:'htmlall':'UTF-8'}{literal}
