@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{everpsseo}prestashop>everpsseo_a3ce62a5f9c1930b082faeefd1c31350'] = 'Ever SEO';
-$_MODULE['<{everpsseo}prestashop>everpsseo_9b4f1ada6c1ac04fc1994f6d9da6a1c3'] = '🙂 Optimisez de manière globale l\'intégralité du SEO de votre boutique 🙂';
+$_MODULE['<{everpsseo}prestashop>everpsseo_9b4f1ada6c1ac04fc1994f6d9da6a1c3'] = 'Optimisez de manière globale l\'intégralité du SEO de votre boutique';
 $_MODULE['<{everpsseo}prestashop>everpsseo_647297aab1ed9ff462060d2fd7b6dd67'] = 'Êtes-vous certain de vouloir retirer tout votre SEO ?';
 $_MODULE['<{everpsseo}prestashop>everpsseo_93c14ee2aec26a24cab6758ba103a88e'] = 'Vous devez avoir a minima PHP 7.2 pour utiliser ce module';
 $_MODULE['<{everpsseo}prestashop>everpsseo_92d4773a9f32fc3333cb8238471cf763'] = 'Vous devez activer l\'extension PHP cURL pur utiliser ce module';

@@ -44,5 +44,3 @@ services:
         public: true
         tags:
             - { name: 'console.command' }
-
-
