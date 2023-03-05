@@ -5,6 +5,6 @@
 $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
-return array(
-    'Everpsseo\\Seo\\' => array($baseDir . '/src'),
-);
+return [
+    'Everpsseo\\Seo\\' => [$baseDir . '/src'],
+];
