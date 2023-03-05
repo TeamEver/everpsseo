@@ -6,7 +6,6 @@
  * @license   Tous droits réservés / Le droit d'auteur s'applique (All rights reserved / French copyright law applies)
  * @see https://www.team-ever.com
  */
-
 require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoCategory.php';
 require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoCmsCategory.php';
 require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoCms.php';
@@ -47,7 +46,7 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
                     (int) $id_shop,
                     (int) $id_shop
                 );
-                $content = $product->name.' '.$product->description_short.' '.$product->description;
+                $content = $product->name . ' ' . $product->description_short . ' ' . $product->description;
                 break;
 
             case 'category':
@@ -61,7 +60,7 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
                     (int) $id_shop,
                     (int) $id_shop
                 );
-                $content = $category->name.' '.$category->description;
+                $content = $category->name . ' ' . $category->description;
                 break;
 
             case 'cms':
@@ -75,7 +74,7 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
                     (int) $id_shop,
                     (int) $id_shop
                 );
-                $content = $cms->meta_title.' '.$cms->content;
+                $content = $cms->meta_title . ' ' . $cms->content;
                 break;
 
             case 'manufacturer':
@@ -88,7 +87,7 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
                     (int) $id_shop,
                     (int) $id_shop
                 );
-                $content = $manufacturer->name.' '.$manufacturer->short_description.' '.$manufacturer->description;
+                $content = $manufacturer->name . ' ' . $manufacturer->short_description . ' ' . $manufacturer->description;
                 break;
 
             case 'supplier':
@@ -101,7 +100,7 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
                     (int) $id_shop,
                     (int) $id_shop
                 );
-                $content = $supplier->name.' '.$supplier->description;
+                $content = $supplier->name . ' ' . $supplier->description;
                 break;
 
             case 'meta':
@@ -115,7 +114,7 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
                     (int) $id_shop,
                     (int) $id_shop
                 );
-                $content = $meta->title.' '.$meta->description;
+                $content = $meta->title . ' ' . $meta->description;
                 break;
         }
 
@@ -214,7 +213,13 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
                 $keywords = 0;
                 break;
         }
-        $qualityLevel = array($words, $anchors, $hn, $strong, $keywords);
+        $qualityLevel = [
+            $words,
+            $anchors,
+            $hn,
+            $strong,
+            $keywords,
+        ];
         return $qualityLevel;
     }
 
@@ -336,10 +341,10 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
         if ((int) $note > 100) {
             $note = 100;
         }
-        $return = array(
+        $return = [
             'note' => (int) $note,
-            'errors' => $errors
-        );
+            'errors' => $errors,
+        ];
         return $return;
     }
 
@@ -546,10 +551,10 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
         if ((int) $note > 100) {
             $note = 100;
         }
-        $return = array(
+        $return = [
             'note' => (int) $note,
-            'errors' => $errors
-        );
+            'errors' => $errors,
+        ];
         return $return;
     }
 
@@ -667,10 +672,10 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
         if ((int) $note > 100) {
             $note = 100;
         }
-        $return = array(
+        $return = [
             'note' => (int) $note,
-            'errors' => $errors
-        );
+            'errors' => $errors,
+        ];
         return $return;
     }
 
@@ -788,10 +793,10 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
         if ((int) $note > 100) {
             $note = 100;
         }
-        $return = array(
+        $return = [
             'note' => (int) $note,
-            'errors' => $errors
-        );
+            'errors' => $errors,
+        ];
         return $return;
     }
 
@@ -902,10 +907,10 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
         if ((int) $note > 100) {
             $note = 100;
         }
-        $return = array(
+        $return = [
             'note' => (int) $note,
-            'errors' => $errors
-        );
+            'errors' => $errors,
+        ];
         return $return;
     }
 
@@ -1024,10 +1029,10 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
         if ((int) $note > 100) {
             $note = 100;
         }
-        $return = array(
+        $return = [
             'note' => (int) $note,
-            'errors' => $errors
-        );
+            'errors' => $errors,
+        ];
         return $return;
     }
 
@@ -1146,10 +1151,10 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
         if ((int) $note > 100) {
             $note = 100;
         }
-        $return = array(
+        $return = [
             'note' => (int) $note,
-            'errors' => $errors
-        );
+            'errors' => $errors,
+        ];
         return $return;
     }
 
