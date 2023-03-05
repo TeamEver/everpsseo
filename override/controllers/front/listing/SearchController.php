@@ -45,10 +45,10 @@ class SearchController extends SearchControllerCore
         
         $this->search_tag = Tools::getValue('tag');
         $this->context->smarty->assign(
-            array(
+            [
                 'search_string' => $this->search_string,
                 'search_tag' => $this->search_tag,
-            )
+            ]
         );
     }
     

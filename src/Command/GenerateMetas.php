@@ -766,7 +766,7 @@ class GenerateMetas extends Command
             )
         );
         if (!$allowedLangs) {
-            $allowedLangs = array((int)\Configuration::get('PS_LANG_DEFAULT'));
+            $allowedLangs = [(int)\Configuration::get('PS_LANG_DEFAULT')];
         }
         return $allowedLangs;
     }

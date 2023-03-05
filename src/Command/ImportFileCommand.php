@@ -237,24 +237,24 @@ class ImportFileCommand extends ContainerAwareCommand
         if (\Validate::isUrl($redirectExits)) {
             \Db::getInstance()->update(
                 'ever_seo_redirect',
-                array(
+                [
                     'id_shop' => (int) $line['id_shop'],
                     'redirection' => \Db::getInstance()->escape($line['redirection']),
                     'code' => (int) $line['code'],
                     'active' => (int) $line['active'],
-                ),
-                'not_found = '.\Db::getInstance()->escape($line['not_found'])
+                ],
+                'not_found = ' . \Db::getInstance()->escape($line['not_found'])
             );
         } else {
             \Db::getInstance()->insert(
                 'ever_seo_redirect',
-                array(
+                [
                     'id_shop' => (int) $line['id_shop'],
                     'not_found' => \Db::getInstance()->escape($line['not_found']),
                     'redirection' => \Db::getInstance()->escape($line['redirection']),
                     'code' => (int) $line['code'],
                     'active' => (int) $line['active'],
-                )
+                ]
             );
         }
     }

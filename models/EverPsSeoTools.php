@@ -330,7 +330,10 @@ class EverPsSeoTools extends ObjectModel
         if (php_sapi_name() == 'cli') {
             return true;
         }
-        $controllerTypes = array('admin', 'moduleadmin');
+        $controllerTypes = [
+            'admin',
+            'moduleadmin',
+        ];
         if (!in_array(Context::getContext()->controller->controller_type, $controllerTypes)) {
             return false;
         }

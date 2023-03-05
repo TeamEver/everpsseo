@@ -16,37 +16,37 @@ class EverPsSeoShortcode extends ObjectModel
     public $title;
     public $content;
 
-    public static $definition = array(
+    public static $definition = [
         'table' => 'ever_seo_shortcode',
         'primary' => 'id_ever_seo_shortcode',
         'multilang' => true,
-        'fields' => array(
-            'id_shop' => array(
+        'fields' => [
+            'id_shop' => [
                 'type' => self::TYPE_INT,
                 'lang' => false,
-                'validate' => 'isunsignedInt'
-            ),
-            'shortcode' => array(
+                'validate' => 'isUnsignedInt',
+            ],
+            'shortcode' => [
                 'type' => self::TYPE_STRING,
                 'lang' => false,
                 'validate' => 'isString',
-                'required' => true
-            ),
+                'required' => true,
+            ],
             // lang fields
-            'title' => array(
+            'title' => [
                 'type' => self::TYPE_STRING,
                 'lang' => true,
                 'validate' => 'isString',
-                'required' => true
-            ),
-            'content' => array(
+                'required' => true,
+            ],
+            'content' => [
                 'type' => self::TYPE_HTML,
                 'lang' => true,
                 'validate' => 'isCleanHtml',
-                'required' => false
-            ),
-        )
-    );
+                'required' => false,
+            ],
+        ],
+    ];
 
     public static function getAllSeoShortcodes($id_shop, $id_lang)
     {

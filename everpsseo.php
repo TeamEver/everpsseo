@@ -51,7 +51,7 @@ class Everpsseo extends Module
     {
         $this->name = 'everpsseo';
         $this->tab = 'seo';
-        $this->version = '9.0.0';
+        $this->version = '9.1.0';
         $this->author = 'Team Ever';
         $this->need_instance = false;
         $this->module_key = '5ddabba8ec414cd5bd646fad24368472';

@@ -215,7 +215,7 @@ class GenerateObjectsContent extends Command
             )
         );
         if (!$allowedLangs) {
-            $allowedLangs = array((int)\Configuration::get('PS_LANG_DEFAULT'));
+            $allowedLangs = [(int)\Configuration::get('PS_LANG_DEFAULT')];
         }
         return $allowedLangs;
     }
@@ -458,7 +458,7 @@ class GenerateObjectsContent extends Command
             );
         }
         if (!is_array($categories)) {
-            $categories = array($categories);
+            $categories = [$categories];
         }
         return $categories;
     }
