@@ -1396,9 +1396,9 @@ class Everpsseo extends Module
                         ],
                     ),
                 ),
-                'submit' => array(
+                'submit' => [
                     'title' => $this->l('Save'),
-                ),
+                ],
             ),
         );
 
@@ -1605,9 +1605,9 @@ class Everpsseo extends Module
                         ],
                     ),
                 ),
-                'submit' => array(
+                'submit' => [
                     'title' => $this->l('Save'),
-                ),
+                ],
             ),
         );
 
@@ -1837,9 +1837,9 @@ class Everpsseo extends Module
                         'autoload_rte' => true,
                     ),
                 ),
-                'submit' => array(
+                'submit' => [
                     'title' => $this->l('Save'),
-                ),
+                ],
             ),
         );
 
@@ -1882,9 +1882,9 @@ class Everpsseo extends Module
                         'lang' => false,
                     ),
                 ),
-                'submit' => array(
+                'submit' => [
                     'title' => $this->l('Save'),
-                ),
+                ],
             ),
         );
 
@@ -2124,9 +2124,9 @@ class Everpsseo extends Module
                         'title' => $this->l('Replace all meta on products'),
                     ),
                 ),
-                'submit' => array(
+                'submit' => [
                     'title' => $this->l('Save'),
-                ),
+                ],
             ),
         );
 
@@ -2177,9 +2177,9 @@ class Everpsseo extends Module
                         'title' => $this->l('Replace all alt on images'),
                     ),
                 ),
-                'submit' => array(
+                'submit' => [
                     'title' => $this->l('Save'),
-                ),
+                ],
             ),
         );
 
@@ -2235,9 +2235,9 @@ class Everpsseo extends Module
                         'title' => $this->l('Replace all metas on categories'),
                     ),
                 ),
-                'submit' => array(
+                'submit' => [
                     'title' => $this->l('Save'),
-                ),
+                ],
             ),
         );
 
@@ -2292,9 +2292,9 @@ class Everpsseo extends Module
                         'title' => $this->l('Replace all metas on manufacturers'),
                     ),
                 ),
-                'submit' => array(
+                'submit' => [
                     'title' => $this->l('Save'),
-                ),
+                ],
             ),
         );
 
@@ -2349,9 +2349,9 @@ class Everpsseo extends Module
                         'title' => $this->l('Replace all metas on suppliers')
                     ),
                 ),
-                'submit' => array(
+                'submit' => [
                     'title' => $this->l('Save'),
-                ),
+                ],
             ),
         );
 
@@ -2406,9 +2406,9 @@ class Everpsseo extends Module
                         'title' => $this->l('Replace all metas on CMS')
                     ),
                 ),
-                'submit' => array(
+                'submit' => [
                     'title' => $this->l('Save'),
-                ),
+                ],
             ),
         );
 
@@ -2463,9 +2463,9 @@ class Everpsseo extends Module
                         'title' => $this->l('Replace all metas on Page metas')
                     ),
                 ),
-                'submit' => array(
+                'submit' => [
                     'title' => $this->l('Save'),
-                ),
+                ],
             ),
         );
         // Product content generator settings
@@ -2576,9 +2576,9 @@ class Everpsseo extends Module
                         'autoload_rte' => true
                     ),
                 ),
-                'submit' => array(
+                'submit' => [
                     'title' => $this->l('Save'),
-                ),
+                ],
                 'buttons' => array(
                     'generateProductsContent' => array(
                         'name' => 'submitGenerateProductsContent',
@@ -2679,9 +2679,9 @@ class Everpsseo extends Module
                         'autoload_rte' => true
                     ),
                 ),
-                'submit' => array(
+                'submit' => [
                     'title' => $this->l('Save'),
-                ),
+                ],
                 'buttons' => array(
                     'generateCategorysContent' => array(
                         'name' => 'submitGenerateCategoriesContent',
@@ -2758,9 +2758,9 @@ class Everpsseo extends Module
                         'autoload_rte' => true
                     ),
                 ),
-                'submit' => array(
+                'submit' => [
                     'title' => $this->l('Save'),
-                ),
+                ],
                 'buttons' => array(
                     'generateManufacturersContent' => array(
                         'name' => 'submitGeneratemanufacturersContent',
@@ -2837,9 +2837,9 @@ class Everpsseo extends Module
                         'autoload_rte' => true
                     ),
                 ),
-                'submit' => array(
+                'submit' => [
                     'title' => $this->l('Save'),
-                ),
+                ],
                 'buttons' => array(
                     'generateSuppliersContent' => array(
                         'name' => 'submitGenerateSuppliersContent',
@@ -2910,9 +2910,9 @@ class Everpsseo extends Module
                         'title' => $this->l('Generate categories sitemap')
                     ),
                 ),
-                'submit' => array(
+                'submit' => [
                     'title' => $this->l('Save'),
-                ),
+                ],
             ),
         );
 
@@ -2974,9 +2974,9 @@ class Everpsseo extends Module
                         'title' => $this->l('Generate Products sitemap')
                     ),
                 ),
-                'submit' => array(
+                'submit' => [
                     'title' => $this->l('Save'),
-                ),
+                ],
             ),
         );
 
@@ -3038,9 +3038,9 @@ class Everpsseo extends Module
                         'title' => $this->l('Generate Products sitemap')
                     ),
                 ),
-                'submit' => array(
+                'submit' => [
                     'title' => $this->l('Save'),
-                ),
+                ],
             ),
         );
 
@@ -3102,9 +3102,9 @@ class Everpsseo extends Module
                         'title' => $this->l('Generate Cms sitemap')
                     ),
                 ),
-                'submit' => array(
+                'submit' => [
                     'title' => $this->l('Save'),
-                ),
+                ],
             ),
         );
 
@@ -3165,9 +3165,9 @@ class Everpsseo extends Module
                         'title' => $this->l('Generate Page Meta sitemap')
                     ),
                 ),
-                'submit' => array(
+                'submit' => [
                     'title' => $this->l('Save'),
-                ),
+                ],
             ),
         );
 
@@ -3228,9 +3228,9 @@ class Everpsseo extends Module
                         'title' => $this->l('Generate Manufacturers sitemap')
                     ),
                 ),
-                'submit' => array(
+                'submit' => [
                     'title' => $this->l('Save'),
-                ),
+                ],
             ),
         );
 
@@ -3291,9 +3291,9 @@ class Everpsseo extends Module
                         'title' => $this->l('Generate Suppliers sitemap')
                     ),
                 ),
-                'submit' => array(
+                'submit' => [
                     'title' => $this->l('Save'),
-                ),
+                ],
             ),
         );
 
@@ -3439,9 +3439,9 @@ class Everpsseo extends Module
                         ],
                     ),
                 ),
-                'submit' => array(
+                'submit' => [
                     'title' => $this->l('Save'),
-                ),
+                ],
             ),
         );
 
@@ -3588,9 +3588,9 @@ class Everpsseo extends Module
                         ],
                     ),
                 ),
-                'submit' => array(
+                'submit' => [
                     'title' => $this->l('Save'),
-                ),
+                ],
             ),
         );
 
@@ -3613,9 +3613,9 @@ class Everpsseo extends Module
                         'rows' => 4,
                     ),
                 ),
-                'submit' => array(
+                'submit' => [
                     'title' => $this->l('Save'),
-                ),
+                ],
             ),
         );
 
@@ -3660,110 +3660,109 @@ class Everpsseo extends Module
                         )
                     ),
                 ),
-                'submit' => array(
+                'submit' => [
                     'title' => $this->l('Save'),
-                ),
+                ],
             ),
         );
 
         // Store commander check
         $form_fields[] = array(
             'form' => array(
-                'legend' => array(
+                'legend' => [
                     'title' => $this->l('Useful buttons :-)'),
                     'icon' => 'icon-cogs',
-                ),
-                'buttons' => array(
-                    'multishopSitemapIndex' => array(
+                ],
+                'buttons' => [
+                    'multishopSitemapIndex' => [
                         'name' => 'submitMultishopSitemapIndex',
                         'type' => 'submit',
                         'class' => 'btn btn-default pull-right',
                         'icon' => 'process-icon-refresh',
-                        'title' => $this->l('Check multishop index and sitemaps')
-                    ),
-                    'deleteDuplicate' => array(
+                        'title' => $this->l('Check multishop index and sitemaps'),
+                    ],
+                    'deleteDuplicate' => [
                         'name' => 'submitDeleteDuplicate',
                         'type' => 'submit',
                         'class' => 'btn btn-default pull-right',
                         'icon' => 'process-icon-refresh',
-                        'title' => $this->l('Delete duplicate entries')
-                    ),
-                    'updateSeoProducts' => array(
+                        'title' => $this->l('Delete duplicate entries'),
+                    ],
+                    'updateSeoProducts' => [
                         'name' => 'submitUpdateSeoProducts',
                         'type' => 'submit',
                         'class' => 'btn btn-default pull-right',
                         'icon' => 'process-icon-refresh',
-                        'title' => $this->l('Check for products updates')
-                    ),
-                    'updateSeoCategories' => array(
+                        'title' => $this->l('Check for products updates'),
+                    ],
+                    'updateSeoCategories' => [
                         'name' => 'submitUpdateSeoCategories',
                         'type' => 'submit',
                         'class' => 'btn btn-default pull-right',
                         'icon' => 'process-icon-refresh',
-                        'title' => $this->l('Check for categories updates')
-                    ),
-                    'updateSeoManufacturers' => array(
+                        'title' => $this->l('Check for categories updates'),
+                    ],
+                    'updateSeoManufacturers' => [
                         'name' => 'submitUpdateSeoManufacturers',
                         'type' => 'submit',
                         'class' => 'btn btn-default pull-right',
                         'icon' => 'process-icon-refresh',
-                        'title' => $this->l('Check for manufacturers updates')
-                    ),
-                    'updateSeoSuppliers' => array(
+                        'title' => $this->l('Check for manufacturers updates'),
+                    ],
+                    'updateSeoSuppliers' => [
                         'name' => 'submitUpdateSeoSuppliers',
                         'type' => 'submit',
                         'class' => 'btn btn-default pull-right',
                         'icon' => 'process-icon-refresh',
-                        'title' => $this->l('Check for suppliers updates')
-                    ),
-                    'updateSeoCms' => array(
+                        'title' => $this->l('Check for suppliers updates'),
+                    ],
+                    'updateSeoCms' => [
                         'name' => 'submitUpdateSeoCms',
                         'type' => 'submit',
                         'class' => 'btn btn-default pull-right',
                         'icon' => 'process-icon-refresh',
-                        'title' => $this->l('Check for CMS updates')
-                    ),
-                    'updateSeoImages' => array(
+                        'title' => $this->l('Check for CMS updates'),
+                    ],
+                    'updateSeoImages' => [
                         'name' => 'submitUpdateSeoImages',
                         'type' => 'submit',
                         'class' => 'btn btn-default pull-right',
                         'icon' => 'process-icon-refresh',
-                        'title' => $this->l('Check for images updates')
-                    ),
-                    'updateSeoPageMetas' => array(
+                        'title' => $this->l('Check for images updates'),
+                    ],
+                    'updateSeoPageMetas' => [
                         'name' => 'submitUpdateSeoPageMetas',
                         'type' => 'submit',
                         'class' => 'btn btn-default pull-right',
                         'icon' => 'process-icon-refresh',
-                        'title' => $this->l('Check for page metas updates')
-                    ),
-                    'truncateStatsData' => array(
+                        'title' => $this->l('Check for page metas updates'),
+                    ],
+                    'truncateStatsData' => [
                         'name' => 'submitTruncateStatsData',
                         'type' => 'submit',
                         'class' => 'btn btn-default pull-right',
                         'icon' => 'process-icon-uninstall',
-                        'title' => $this->l('Truncate Prestashop Stats Data')
-                    ),
-                    'truncateSeo404' => array(
+                        'title' => $this->l('Truncate Prestashop Stats Data'),
+                    ],
+                    'truncateSeo404' => [
                         'name' => 'submitTruncateSeo404',
                         'type' => 'submit',
                         'class' => 'btn btn-default pull-right',
                         'icon' => 'process-icon-uninstall',
-                        'title' => $this->l('Truncate Ever SEO registered 404')
-                    ),
-                ),
+                        'title' => $this->l('Truncate Ever SEO registered 404'),
+                    ],
+                ],
             ),
         );
 
         // Lang noindex, nofollow, no sitemap
         $form_fields[] = array(
             'form' => array(
-                'legend' => array(
+                'legend' => [
                     'title' => $this->l('Bulk per language'),
                     'icon' => 'icon-cogs',
-                ),
-                'input' => array(
-                    array(
+                ],
+                'input' => array([
                         'type' => 'select',
                         'label' => 'Selected languages',
                         'desc' => 'Choose allowed langs for bulk actions',
@@ -3773,75 +3772,75 @@ class Everpsseo extends Module
                         'identifier' => 'name',
                         'multiple' => true,
                         'required' => true,
-                        'options' => array(
+                        'options' => [
                             'query' => Language::getLanguages(false),
                             'id' => 'id_lang',
                             'name' => 'name',
-                        ),
-                    ),
+                        ],
+                ],
                 ),
                 'buttons' => array(
-                    'unused_langs' => array(
+                    'unused_langs' => [
                         'name' => 'submitDeleteUnusedObjects',
                         'type' => 'submit',
                         'class' => 'btn btn-default pull-right',
                         'icon' => 'process-icon-delete',
-                        'title' => $this->l('Delete unused langs on database')
-                    ),
-                    'noindexLang' => array(
+                        'title' => $this->l('Delete unused langs on database'),
+                    ],
+                    'noindexLang' => [
                         'name' => 'submitNoindexLang',
                         'type' => 'submit',
                         'class' => 'btn btn-default pull-right',
                         'icon' => 'process-icon-refresh',
-                        'title' => $this->l('Noindex all selected langs')
-                    ),
+                        'title' => $this->l('Noindex all selected langs'),
+                    ],
                     'nofollowLang' => array(
                         'name' => 'submitNofollowLang',
                         'type' => 'submit',
                         'class' => 'btn btn-default pull-right',
                         'icon' => 'process-icon-refresh',
-                        'title' => $this->l('Nofollow all selected langs')
+                        'title' => $this->l('Nofollow all selected langs'),
                     ),
-                    'nositemapLang' => array(
+                    'nositemapLang' => [
                         'name' => 'submitNositemapLang',
                         'type' => 'submit',
                         'class' => 'btn btn-default pull-right',
                         'icon' => 'process-icon-refresh',
-                        'title' => $this->l('No sitemap all selected langs')
-                    ),
-                    'indexLang' => array(
+                        'title' => $this->l('No sitemap all selected langs'),
+                    ],
+                    'indexLang' => [
                         'name' => 'submitIndexLang',
                         'type' => 'submit',
                         'class' => 'btn btn-default pull-right',
                         'icon' => 'process-icon-refresh',
-                        'title' => $this->l('Index all selected langs')
-                    ),
-                    'followLang' => array(
+                        'title' => $this->l('Index all selected langs'),
+                    ],
+                    'followLang' => [
                         'name' => 'submitFollowLang',
                         'type' => 'submit',
                         'class' => 'btn btn-default pull-right',
                         'icon' => 'process-icon-refresh',
-                        'title' => $this->l('Follow all selected langs')
-                    ),
-                    'sitemapLang' => array(
+                        'title' => $this->l('Follow all selected langs'),
+                    ],
+                    'sitemapLang' => [
                         'name' => 'submitSitemapLang',
                         'type' => 'submit',
                         'class' => 'btn btn-default pull-right',
                         'icon' => 'process-icon-refresh',
-                        'title' => $this->l('Sitemap all selected langs')
-                    ),
+                        'title' => $this->l('Sitemap all selected langs'),
+                    ],
                 ),
             ),
         );
         // Security options
         $form_fields[] = array(
             'form' => array(
-                'legend' => array(
+                'legend' => [
                     'title' => $this->l('Security options'),
                     'icon' => 'icon-cogs',
-                ),
+                ],
                 'input' => array(
-                    array(
+                    [
                         'type' => 'switch',
                         'label' => $this->l('Block right click and shortcuts'),
                         'desc' => $this->l('Will block right click and some shortcuts'),
@@ -3860,8 +3859,8 @@ class Everpsseo extends Module
                                 'label' => $this->l('Disabled'),
                             ],
                         ],
-                    ),
-                    array(
+                    ],
+                    [
                         'type' => 'switch',
                         'label' => $this->l('Prevent hotlinking using htaccess'),
                         'desc' => $this->l('You must regenerate htaccess file after this'),
@@ -3880,8 +3879,8 @@ class Everpsseo extends Module
                                 'label' => $this->l('Disabled'),
                             ],
                         ],
-                    ),
-                    array(
+                    ],
+                    [
                         'type' => 'switch',
                         'label' => $this->l('Prevent clickjacking'),
                         'desc' => $this->l('Will add rules on your htaccess file'),
@@ -3900,52 +3899,52 @@ class Everpsseo extends Module
                                 'label' => $this->l('Disabled'),
                             ],
                         ],
-                    ),
-                    array(
+                    ],
+                    [
                         'type' => 'text',
                         'label' => $this->l('Google Captcha V3 Site Key'),
                         'desc' => $this->l('Will add Google Recaptcha V3'),
                         'hint' => $this->l('Will secure your shop'),
                         'name' => 'EVERPSCAPTCHA_SITE_KEY',
-                        'required' => false
-                    ),
-                    array(
+                        'required' => false,
+                    ],
+                    [
                         'type' => 'text',
                         'label' => $this->l('Google Captcha V3 Secret Key'),
                         'desc' => $this->l('Will add Google Recaptcha V3'),
                         'hint' => $this->l('Will secure your shop'),
                         'name' => 'EVERPSCAPTCHA_SECRET_KEY',
-                        'required' => false
-                    ),
+                        'required' => false,
+                    ],
                 ),
-                'submit' => array(
+                'submit' => [
                     'title' => $this->l('Save'),
-                ),
+                ],
             ),
         );
         // Htacccess custom rules
-        $form_fields[] = array(
-            'form' => array(
-                'legend' => array(
+        $form_fields[] = [
+            'form' => [
+                'legend' => [
                     'title' => $this->l('Custom htaccess rules'),
                     'icon' => 'icon-cogs',
-                ),
-                'input' => array(
-                    array(
+                ],
+                'input' => [
+                    [
                         'type' => 'textarea',
                         'label' => $this->l('Appended custom htaccess rules'),
                         'desc' => $this->l('Don\'t forget to regenerate htaccess file'),
                         'hint' => $this->l('Htaccess rules MUST be made by professionnals'),
                         'name' => 'EVERHTACCESS',
-                    ),
-                    array(
+                    ],
+                    [
                         'type' => 'textarea',
                         'label' => $this->l('Prepended custom htaccess rules'),
                         'desc' => $this->l('Don\'t forget to regenerate htaccess file'),
                         'hint' => $this->l('Htaccess rules MUST be made by professionnals'),
                         'name' => 'EVERHTACCESS_PREPEND',
-                    ),
-                    array(
+                    ],
+                    [
                         'type' => 'switch',
                         'label' => $this->l('Add Ever SEO 404 redirections to htaccess file'),
                         'desc' => $this->l('Will add your registered redirects to on htaccess file beginning'),
@@ -3964,22 +3963,22 @@ class Everpsseo extends Module
                                 'label' => $this->l('Disabled'),
                             ],
                         ],
-                    ),
-                ),
-                'submit' => array(
+                    ],
+                ],
+                'submit' => [
                     'title' => $this->l('Save'),
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
         // Google translate API
-        $form_fields[] = array(
-            'form' => array(
-                'legend' => array(
+        $form_fields[] = [
+            'form' => [
+                'legend' => [
                     'title' => $this->l('Google Translate widget'),
                     'icon' => 'icon-cogs',
-                ),
-                'input' => array(
-                    array(
+                ],
+                'input' => [
+                    [
                         'type' => 'switch',
                         'label' => $this->l('Show Google Translate on top'),
                         'desc' => $this->l('Will show Google Translate widget on top'),
@@ -3998,8 +3997,8 @@ class Everpsseo extends Module
                                 'label' => $this->l('Disabled'),
                             ],
                         ],
-                    ),
-                    array(
+                    ],
+                    [
                         'type' => 'switch',
                         'label' => $this->l('Show Google Translate on columns'),
                         'desc' => $this->l('Will show Google Translate widget on columns'),
@@ -4018,13 +4017,13 @@ class Everpsseo extends Module
                                 'label' => $this->l('Disabled'),
                             ],
                         ],
-                    ),
-                ),
-                'submit' => array(
+                    ],
+                ],
+                'submit' => [
                     'title' => $this->l('Save'),
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
         return $form_fields;
     }
 
@@ -4119,7 +4118,7 @@ class Everpsseo extends Module
             $product_title[$lang['id_lang']] = (Tools::getValue('EVERSEO_PRODUCT_TITLE_AUTO_'.$lang['id_lang']))
             ? Tools::getValue('EVERSEO_PRODUCT_TITLE_AUTO_'.$lang['id_lang']) : '';
         }
-        return array(
+        return [
             'product_shortcodes' => '<p class="form-control-static">Products shortcodes</p>
             <p><code>[product_title]</code> for product name</p>
             <p><code>[product_combinations]</code> for product combination names</p>
@@ -4733,7 +4732,7 @@ class Everpsseo extends Module
             'EVERSEO_DELETE_CATEGORY_CONTENT' => Configuration::get(
                 'EVERSEO_DELETE_CATEGORY_CONTENT'
             )
-        );
+        ];
     }
 
     public function postValidation()
@@ -5578,12 +5577,12 @@ class Everpsseo extends Module
             !empty($imagesize) &&
             in_array(
                 Tools::strtolower(Tools::substr(strrchr($imagesize['mime'], '/'), 1)),
-                array(
+                [
                     'jpg',
                     'gif',
                     'jpeg',
-                    'png'
-                )
+                    'png',
+                ]
             ) &&
             in_array($type, array('jpg', 'gif', 'jpeg', 'png'))
         ) {
@@ -5913,12 +5912,12 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         $id_seo_lang = (int) $params['object']->id;
         $seoAddLang = Db::getInstance()->insert(
             'ever_seo_lang',
-            array(
+            [
                 'id_seo_lang' => (int) $id_seo_lang,
                 'id_shop' => (int) $id_shop,
                 'iso_code' => (string) $params['object']->iso_code,
                 'language_code' => (string) $params['object']->language_code,
-            )
+            ]
         );
         if ($seoAddLang) {
             $this->updateSeoTables((int) $id_shop, (int) $id_seo_lang);
@@ -6490,11 +6489,11 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
     {
         return Db::getInstance()->insert(
             $table,
-            array(
+            [
                 $object => (int) $id_element,
                 'id_shop' => (int) $id_shop,
-                'id_seo_lang' => (int) $id_lang
-            )
+                'id_seo_lang' => (int) $id_lang,
+            ]
         );
     }
 
@@ -7098,7 +7097,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             (int) Context::getContext()->shop->id,
             (int) Context::getContext()->language->id
         );
-        $this->context->smarty->assign(array(
+        $this->context->smarty->assign([
             'seo_product' => $seo_product,
             'everlink' => $link->getAdminLink(
                 'AdminEverPsSeoProduct',
@@ -7106,18 +7105,18 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 [],
                 ['updateever_seo_product' => true, 'id_ever_seo_product' => $seo_product->id]
             ),
-        ));
+        ]);
         return $this->context->smarty->fetch($this->local_path.'views/templates/admin/seo_product.tpl');
     }
 
     public function hookDisplayContentWrapperBottom()
     {
-        $allowed_controllers = array(
+        $allowed_controllers = [
             'manufacturer',
             'supplier',
             'category',
-            'product'
-        );
+            'product',
+        ];
         if (!in_array(Tools::getValue('controller'), $allowed_controllers)) {
             return;
         }
@@ -7165,11 +7164,11 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         if (Validate::isLoadedObject($obj)
             && !empty($obj->bottom_content)
         ) {
-            $this->context->smarty->assign(array(
+            $this->context->smarty->assign([
                 'everseo_controller' => Tools::getValue('controller'),
                 'bottom_content_id' => $obj->id,
                 'bottom_content' => $obj->bottom_content,
-            ));
+            ]);
             return $this->display(__FILE__, 'views/templates/hook/bottom_content.tpl');
         }
     }
@@ -7195,9 +7194,9 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     (int) $product->id_manufacturer,
                     (int) $this->context->language->id
                 );
-                $this->context->smarty->assign(array(
+                $this->context->smarty->assign([
                     'manufacturer' => $manufacturer,
-                ));
+                ]);
             }
             if ((int) $product->id_supplier
                 && (bool) Configuration::get('EVERSEO_SUPPLIER_REASSURANCE')
@@ -7206,9 +7205,9 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     (int) $product->id_supplier,
                     (int) $this->context->language->id
                 );
-                $this->context->smarty->assign(array(
+                $this->context->smarty->assign([
                     'supplier' => $supplier,
-                ));
+                ]);
             }
         }
         return $this->display(__FILE__, 'views/templates/hook/reassurance.tpl', $cacheId);
@@ -7267,7 +7266,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         $total_ws = $totalPaidTaxExcl - $totalShipTaxExcl;
         $totalTaxFull = $order->total_paid_tax_incl - $order->total_paid_tax_excl;
         $totalTaxes = Tools::ps_round($totalTaxFull, 2);
-        $this->context->smarty->assign(array(
+        $this->context->smarty->assign([
             'everorder' => $order,
             'controller_name' => Tools::getValue('controller'),
             'deliveryMethod' => $carrier->name,
@@ -7291,8 +7290,8 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             ),
             'shop_name' => Configuration::get('PS_SHOP_NAME'),
             'currency_iso_code' => $currency->iso_code,
-            'transaction_id' => $order->id
-        ));
+            'transaction_id' => $order->id,
+        ]);
         return $this->display(__FILE__, 'views/templates/hook/confirm.tpl');
     }
 
@@ -7371,16 +7370,16 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             $this->context->controller->registerJavascript(
                 'remote-google-recaptcha',
                 $captcha_content,
-                array(
+                [
                     'server' => 'remote',
                     'position' => 'bottom',
                     'priority' => 20,
-                    'defer' => 'defer'
-                )
+                    'defer' => 'defer',
+                ]
             );
-            $this->context->smarty->assign(array(
+            $this->context->smarty->assign([
                 'ever_ps_captcha_site_key' => Configuration::get('EVERPSCAPTCHA_SITE_KEY'),
-            ));
+            ]);
         }
         // Google tag manager, for Analytics
         if (Configuration::get('EVERSEO_ANALYTICS')) {
@@ -7513,9 +7512,9 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     '',
                     $product->description_short
                 );
-                $this->context->smarty->assign(array(
+                $this->context->smarty->assign([
                     'everproduct' => $product,
-                ));
+                ]);
                 $seo = EverPsSeoTools::getSeoIndexFollow(
                     pSQL($controller_name),
                     (int) $id_shop,
@@ -7823,11 +7822,11 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     );
                 }
             }
-            $this->context->smarty->assign(array(
+            $this->context->smarty->assign([
                 'social_title' => $social_title,
                 'social_description' => $social_description,
                 'social_img_url' => $social_img_url,
-            ));
+            ]);
         }
 
         if ((bool)EverPsSeoTools::pageHasBannedArgs() === true) {
@@ -7859,7 +7858,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             'PS_SHOP_DOMAIN_SSL'
         );
         $yearEnd = date('Y-m-d', strtotime('Dec 31'));
-        $this->context->smarty->assign(array(
+        $this->context->smarty->assign([
             'ever_customer' => $customer,
             'controller_name' => pSQL($controller_name),
             'sitename' => (string) Configuration::get('PS_SHOP_NAME'),
@@ -7939,7 +7938,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             'richsnippet' => Configuration::get(
                 'EVERSEO_RSNIPPETS'
             ),
-        ));
+        ]);
 
         return $this->display(__FILE__, 'views/templates/front/header.tpl');
     }
@@ -7986,7 +7985,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 'PS_LANG_DEFAULT'
             );
             $language = new Language((int) $default_lang);
-            $this->context->smarty->assign(array(
+            $this->context->smarty->assign([
                 'gtag_manager' => Configuration::get(
                     'EVERSEO_GTAG'
                 ),
@@ -7997,7 +7996,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 'translate_column' => Configuration::get(
                     'EVERSEO_GCOLUMN'
                 ),
-            ));
+            ]);
         }
         return $this->display(__FILE__, 'views/templates/hook/displaytop.tpl', $cacheId);
     }
@@ -8065,7 +8064,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                             (int) $id_shop
                         );
                         $yearEnd = date('Y-m-d', strtotime('Dec 31'));
-                        $this->context->smarty->assign(array(
+                        $this->context->smarty->assign([
                             'controller' => pSQL($controller_name),
                             'shop_name' => (string) $shop_name,
                             'shop_logo' => $shop_logo,
@@ -8085,7 +8084,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                             'imgUrl' => (string) $imgUrl,
                             'manufacturer' => Manufacturer::getNameById((int) $product->id_manufacturer),
                             'priceValidUntil' => $yearEnd,
-                        ));
+                        ]);
                         $return = true;
                         break;
 
@@ -8104,13 +8103,13 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                             null,
                             (int) $id_shop
                         );
-                        $this->context->smarty->assign(array(
+                        $this->context->smarty->assign([
                             'controller' => pSQL($controller_name),
                             'shop_name' => (string) $shop_name,
                             'shop_logo' => (string) $shop_logo,
                             'homepage' => (string) $homepage,
                             'currentUrl' => (string) $currentUrl,
-                        ));
+                        ]);
                         $return = true;
                         break;
 
@@ -8129,13 +8128,13 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                             (int) $id_lang,
                             (int) $id_shop
                         );
-                        $this->context->smarty->assign(array(
+                        $this->context->smarty->assign([
                             'controller' => pSQL($controller_name),
                             'shop_name' => (string) $shop_name,
                             'shop_logo' => (string) $shop_logo,
                             'homepage' => (string) $homepage,
                             'currentUrl' => (string) $currentUrl,
-                        ));
+                        ]);
                         $return = true;
                         break;
 
@@ -8152,13 +8151,13 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                             (int) $id_lang,
                             (int) $id_shop
                         );
-                        $this->context->smarty->assign(array(
+                        $this->context->smarty->assign([
                             'controller' => pSQL($controller_name),
                             'shop_name' => (string) $shop_name,
                             'shop_logo' => (string) $shop_logo,
                             'homepage' => (string) $homepage,
                             'currentUrl' => (string) $currentUrl,
-                        ));
+                        ]);
                         $return = true;
                         break;
 
@@ -8175,26 +8174,26 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                             (int) $id_lang,
                             (int) $id_shop
                         );
-                        $this->context->smarty->assign(array(
+                        $this->context->smarty->assign([
                             'controller' => pSQL($controller_name),
                             'shop_name' => (string) $shop_name,
                             'shop_logo' => (string) $shop_logo,
                             'homepage' => (string) $homepage,
                             'currentUrl' => (string) $currentUrl,
-                        ));
+                        ]);
                         $return = true;
                         break;
 
                     default:
                         $link = new Link();
                         $currentUrl = $link->getPageLink(pSQL($controller_name));
-                        $this->context->smarty->assign(array(
+                        $this->context->smarty->assign([
                             'controller' => pSQL($controller_name),
                             'shop_name' => (string) $shop_name,
                             'shop_logo' => (string) $shop_logo,
                             'homepage' => $homepage,
                             'currentUrl' => (string) $currentUrl,
-                        ));
+                        ]);
                         $return = true;
                         break;
                 }
@@ -9288,7 +9287,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             )
         );
         if (!$allowedLangs) {
-            $allowedLangs = array((int) Configuration::get('PS_LANG_DEFAULT'));
+            $allowedLangs = [(int) Configuration::get('PS_LANG_DEFAULT')];
         }
         return $allowedLangs;
     }
