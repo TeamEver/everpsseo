@@ -4,7 +4,7 @@
  * @author Team Ever
  * @copyright Team Ever
  * @license   Tous droits réservés / Le droit d'auteur s'applique (All rights reserved / French copyright law applies)
- * @link https://www.team-ever.com
+ * @see https://www.team-ever.com
  */
 
 class EverPsSeoProduct extends ObjectModel
@@ -623,7 +623,7 @@ class EverPsSeoProduct extends ObjectModel
             $top_category = Category::getTopCategory();
             $id_type_redirected = (int)$top_category->id;
         }
-        $sql = array();
+        $sql = [];
         $sql[] = 'UPDATE `'._DB_PREFIX_.'product`
         SET `redirect_type` = "301-category"
         WHERE `id_product` = '.(int)$id_seo_product.';';

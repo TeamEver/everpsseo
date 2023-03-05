@@ -6,7 +6,7 @@
         'reference' => NULL,
         'type' => 'prestashop-module',
         'install_path' => __DIR__ . '/../../',
-        'aliases' => array(),
+        'aliases' => [],
         'dev' => true,
     ),
     'versions' => array(
@@ -16,7 +16,7 @@
             'reference' => NULL,
             'type' => 'prestashop-module',
             'install_path' => __DIR__ . '/../../',
-            'aliases' => array(),
+            'aliases' => [],
             'dev_requirement' => false,
         ),
     ),

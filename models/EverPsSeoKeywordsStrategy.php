@@ -4,7 +4,7 @@
  * @author Team Ever
  * @copyright Team Ever
  * @license   Tous droits réservés / Le droit d'auteur s'applique (All rights reserved / French copyright law applies)
- * @link https://www.team-ever.com
+ * @see https://www.team-ever.com
  */
 
 require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoCategory.php';
@@ -222,7 +222,7 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
     {
         $link = new Link();
         $module = Module::getInstanceByName('everpsseo');
-        $errors = array();
+        $errors = [];
         if (!Configuration::get('PS_SHOP_ENABLE')) {
             return false;
         }
@@ -347,7 +347,7 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
     {
         $link = new Link();
         $module = Module::getInstanceByName('everpsseo');
-        $errors = array();
+        $errors = [];
         if (!Configuration::get('PS_SHOP_ENABLE')) {
             return false;
         }
@@ -557,7 +557,7 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
     {
         $link = new Link();
         $module = Module::getInstanceByName('everpsseo');
-        $errors = array();
+        $errors = [];
         if (!Configuration::get('PS_SHOP_ENABLE')) {
             return false;
         }
@@ -678,7 +678,7 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
     {
         $link = new Link();
         $module = Module::getInstanceByName('everpsseo');
-        $errors = array();
+        $errors = [];
         if (!Configuration::get('PS_SHOP_ENABLE')) {
             return false;
         }
@@ -799,7 +799,7 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
     {
         $link = new Link();
         $module = Module::getInstanceByName('everpsseo');
-        $errors = array();
+        $errors = [];
         if (!Configuration::get('PS_SHOP_ENABLE')) {
             return false;
         }
@@ -913,7 +913,7 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
     {
         $link = new Link();
         $module = Module::getInstanceByName('everpsseo');
-        $errors = array();
+        $errors = [];
         if (!Configuration::get('PS_SHOP_ENABLE')) {
             return false;
         }
@@ -1035,7 +1035,7 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
     {
         $link = new Link();
         $module = Module::getInstanceByName('everpsseo');
-        $errors = array();
+        $errors = [];
         if (!Configuration::get('PS_SHOP_ENABLE')
             || $seoCmsCategory->id_seo_cms_category == 1
         ) {
@@ -1175,7 +1175,7 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
             curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
         }
         if ($debug == true) {
-            $result = array();
+            $result = [];
             $result['contents'] = curl_exec($ch);
             $result['info'] = curl_getinfo($ch);
         } else {

@@ -4,7 +4,7 @@
  * @author Team Ever
  * @copyright Team Ever
  * @license   Tous droits réservés / Le droit d'auteur s'applique (All rights reserved / French copyright law applies)
- * @link https://www.team-ever.com
+ * @see https://www.team-ever.com
  */
 
 require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoCategory.php';
@@ -134,7 +134,7 @@ class EverPsSeoTools extends ObjectModel
     public static function getLanguagesIds($active = true, $id_shop = false)
     {
         if (_PS_VERSION_ <= '1.6.1.7') {
-            $id_langs = array();
+            $id_langs = [];
             $langs = Language::getLanguages($active, $id_shop, true);
             foreach ($langs as $lang) {
                 $id_langs[] = (int)$lang;
@@ -317,7 +317,7 @@ class EverPsSeoTools extends ObjectModel
     */
     public static function updateMultishopSitemapIndex()
     {
-        $sql = array();
+        $sql = [];
 
         $sql[] = '
             UPDATE '._DB_PREFIX_.'ever_seo_product

@@ -4,7 +4,7 @@
  * @author Team Ever
  * @copyright Team Ever
  * @license   Tous droits réservés / Le droit d'auteur s'applique (All rights reserved / French copyright law applies)
- * @link https://www.team-ever.com
+ * @see https://www.team-ever.com
  */
 
 namespace Everpsseo\Seo\Service;
@@ -18,7 +18,7 @@ class ImportFile
 
     public function __construct($file_name)
     {
-        $this->lines = array();
+        $this->lines = [];
 
         $reader = new Xlsx();
         $spreadsheet = $reader->load($file_name);
@@ -78,7 +78,7 @@ class ImportFile
      */
     protected function convertLine($line): array
     {
-        $result = array();
+        $result = [];
         foreach ($this->getHeaders() as $k => $header) {
             if (isset($result[$header])) {
                 continue;

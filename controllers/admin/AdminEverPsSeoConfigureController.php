@@ -4,7 +4,7 @@
  * @author Team Ever
  * @copyright Team Ever
  * @license   Tous droits réservés / Le droit d'auteur s'applique (All rights reserved / French copyright law applies)
- * @link https://www.team-ever.com
+ * @see https://www.team-ever.com
  */
 
 if (!defined('_PS_VERSION_')) {
@@ -26,8 +26,8 @@ require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoKeywordsStrategy.php';
 class AdminEverPsSeoConfigureController extends ModuleAdminController
 {
     private $html;
-    private $postErrors = array();
-    private $postSuccess = array();
+    private $postErrors = [];
+    private $postSuccess = [];
 
     public function __construct()
     {
@@ -764,8 +764,8 @@ class AdminEverPsSeoConfigureController extends ModuleAdminController
      */
     protected function getConfigFormValues()
     {
-        $everseo_404_top = array();
-        $everseo_404_bottom = array();
+        $everseo_404_top = [];
+        $everseo_404_bottom = [];
         foreach (Language::getLanguages(false) as $lang) {
             $everseo_404_top[$lang['id_lang']] = (Tools::getValue('EVERSEO_404_TOP_'.$lang['id_lang']))
             ? Tools::getValue('EVERSEO_404_TOP_'.$lang['id_lang']) : '';
@@ -1092,8 +1092,8 @@ class AdminEverPsSeoConfigureController extends ModuleAdminController
     {
         if (Tools::isSubmit('submitAddconfiguration')) {
             $form_values = $this->getConfigFormValues();
-            $everseo_404_top = array();
-            $everseo_404_bottom = array();
+            $everseo_404_top = [];
+            $everseo_404_bottom = [];
             foreach (Language::getLanguages(false) as $lang) {
                 $everseo_404_top[$lang['id_lang']] = (Tools::getValue('EVERSEO_404_TOP_'.$lang['id_lang']))
                 ? Tools::getValue('EVERSEO_404_TOP_'.$lang['id_lang']) : '';
@@ -1188,7 +1188,7 @@ class AdminEverPsSeoConfigureController extends ModuleAdminController
                 $where = '1 = 1';
                 break;
         }
-        $sql = array();
+        $sql = [];
         // Set indexable
         $sql[] = 'UPDATE '._DB_PREFIX_.pSQL((string)$seo_table).'
         SET indexable = 1

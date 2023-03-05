@@ -4,7 +4,7 @@
  * @author Team Ever
  * @copyright Team Ever
  * @license   Tous droits réservés / Le droit d'auteur s'applique (All rights reserved / French copyright law applies)
- * @link https://www.team-ever.com
+ * @see https://www.team-ever.com
  */
 
 if (!defined('_PS_VERSION_')) {
@@ -16,7 +16,7 @@ function upgrade_module_7_7_9()
     Configuration::updateValue('EVERHTACCESS_PREPEND', '');
     set_time_limit(0);
     $result = true;
-    $sql = array();
+    $sql = [];
     // Update SEO categories
     $sql[] =
         'ALTER TABLE `'._DB_PREFIX_.'ever_seo_product`

@@ -4,7 +4,7 @@
  * @author Team Ever
  * @copyright Team Ever
  * @license   Tous droits réservés / Le droit d'auteur s'applique (All rights reserved / French copyright law applies)
- * @link https://www.team-ever.com
+ * @see https://www.team-ever.com
  */
 
 if (!defined('_PS_VERSION_')) {
@@ -41,7 +41,7 @@ class EverpsseoEversitemapsModuleFrontController extends ModuleFrontController
         /* Check if the requested shop exists */
         $shops = Db::getInstance()->ExecuteS('SELECT id_shop FROM `'._DB_PREFIX_.'shop`');
 
-        $list_id_shop = array();
+        $list_id_shop = [];
         foreach ($shops as $shop) {
             $list_id_shop[] = (int)$shop['id_shop'];
         }

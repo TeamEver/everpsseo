@@ -4,7 +4,7 @@
  * @author Team Ever
  * @copyright Team Ever
  * @license   Tous droits réservés / Le droit d'auteur s'applique (All rights reserved / French copyright law applies)
- * @link https://www.team-ever.com
+ * @see https://www.team-ever.com
  */
 
 if (!defined('_PS_VERSION_')) {
@@ -217,7 +217,7 @@ class EverPsSeoRedirect extends ObjectModel
             $orderby = 'DESC';
         }
 
-        $searchedTerms = array();
+        $searchedTerms = [];
         $keyword = explode('-', $urls);
         foreach ($keyword as $word) {
             if (Tools::strlen($word) > 3) {
@@ -226,7 +226,7 @@ class EverPsSeoRedirect extends ObjectModel
         }
 
         $priorities = (int)Configuration::get('EVERSEO_PRIORITY');
-        $redirection = array();
+        $redirection = [];
         foreach ($searchedTerms as $term) {
             if (isset($term)) {
                 switch ($priorities) {

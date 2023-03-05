@@ -4,7 +4,7 @@
  * @author Team Ever
  * @copyright Team Ever
  * @license   Tous droits réservés / Le droit d'auteur s'applique (All rights reserved / French copyright law applies)
- * @link https://www.team-ever.com
+ * @see https://www.team-ever.com
  */
 
 class EverPsSeoStats extends ObjectModel
@@ -12,7 +12,7 @@ class EverPsSeoStats extends ObjectModel
     public static function getBestViewedProducts()
     {
         $link = new Link();
-        $return = array();
+        $return = [];
         $sql = new DbQuery();
         $sql->select('id_seo_product, count');
         $sql->from('ever_seo_product');
@@ -46,7 +46,7 @@ class EverPsSeoStats extends ObjectModel
     public static function getBestViewedCategories()
     {
         $link = new Link();
-        $return = array();
+        $return = [];
         $sql = new DbQuery();
         $sql->select('id_seo_category, count');
         $sql->from('ever_seo_category');
@@ -77,7 +77,7 @@ class EverPsSeoStats extends ObjectModel
 
     public static function getBestViewed404()
     {
-        $return = array();
+        $return = [];
         $sql = new DbQuery();
         $sql->select('id_ever_seo_redirect');
         $sql->from('ever_seo_redirect');
@@ -98,7 +98,7 @@ class EverPsSeoStats extends ObjectModel
 
     public static function getBestViewedReferals()
     {
-        $return = array();
+        $return = [];
         $sql = new DbQuery();
         $sql->select('id_ever_seo_backlink');
         $sql->from('ever_seo_backlink');

@@ -1,7 +1,7 @@
 <?php
 
 global $_MODULE;
-$_MODULE = array();
+$_MODULE = [];
 $_MODULE['<{everpsseo}prestashop>everpsseo_a3ce62a5f9c1930b082faeefd1c31350'] = 'Ever SEO';
 $_MODULE['<{everpsseo}prestashop>everpsseo_d3e113e6422b36d01c7431e00478d7e8'] = 'Optimisez de manière globale le SEO de votre boutique';
 $_MODULE['<{everpsseo}prestashop>everpsseo_647297aab1ed9ff462060d2fd7b6dd67'] = 'Êtes-vous certain de vouloir retirer tout votre SEO ?';

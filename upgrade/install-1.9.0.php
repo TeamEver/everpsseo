@@ -4,7 +4,7 @@
  * @author Team Ever
  * @copyright Team Ever
  * @license   Tous droits réservés / Le droit d'auteur s'applique (All rights reserved / French copyright law applies)
- * @link https://www.team-ever.com
+ * @see https://www.team-ever.com
  */
 
 if (!defined('_PS_VERSION_')) {
@@ -14,7 +14,7 @@ if (!defined('_PS_VERSION_')) {
 function upgrade_module_1_9_0()
 {
     $result = false;
-    $sql = array();
+    $sql = [];
     $sql[] =
         'ALTER TABLE '._DB_PREFIX_.'ever_seo_redirect
          ADD `from` VARCHAR(255) NULL DEFAULT NULL

@@ -4,7 +4,7 @@
  * @author Team Ever
  * @copyright Team Ever
  * @license   Tous droits réservés / Le droit d'auteur s'applique (All rights reserved / French copyright law applies)
- * @link https://www.team-ever.com
+ * @see https://www.team-ever.com
  */
 
 class EverPsSeoShortcode extends ObjectModel
@@ -59,7 +59,7 @@ class EverPsSeoShortcode extends ObjectModel
             $sql->select('*');
             $sql->from('ever_seo_shortcode');
             $shortcodes = Db::getInstance()->executeS($sql);
-            $return = array();
+            $return = [];
             foreach ($shortcodes as $short_array) {
                 $shortcode = new self(
                     (int)$short_array['id_ever_seo_shortcode'],

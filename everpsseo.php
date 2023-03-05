@@ -4,27 +4,26 @@
  * @author Team Ever
  * @copyright Team Ever
  * @license   Tous droits réservés / Le droit d'auteur s'applique (All rights reserved / French copyright law applies)
- * @link https://www.team-ever.com
+ * @see https://www.team-ever.com
  */
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoCategory.php';
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoCms.php';
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoImage.php';
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoManufacturer.php';
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoPageMeta.php';
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoProduct.php';
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoRedirect.php';
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoSupplier.php';
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoSitemap.php';
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoBacklink.php';
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoKeywordsStrategy.php';
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoStats.php';
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoShortcode.php';
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoTools.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoCategory.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoCms.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoImage.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoManufacturer.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoPageMeta.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoProduct.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoRedirect.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoSupplier.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoSitemap.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoBacklink.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoKeywordsStrategy.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoStats.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoShortcode.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoTools.php';
 
 class Everpsseo extends Module
 {
@@ -32,20 +31,20 @@ class Everpsseo extends Module
     private $postErrors = [];
     private $postSuccess = [];
     private $objectsList = [
-        _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoCategory.php',
-        _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoCms.php',
-        _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoImage.php',
-        _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoManufacturer.php',
-        _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoPageMeta.php',
-        _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoProduct.php',
-        _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoRedirect.php',
-        _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoSupplier.php',
-        _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoSitemap.php',
-        _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoBacklink.php',
-        _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoKeywordsStrategy.php',
-        _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoStats.php',
-        _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoShortcode.php',
-        _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoTools.php'
+        _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoCategory.php',
+        _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoCms.php',
+        _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoImage.php',
+        _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoManufacturer.php',
+        _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoPageMeta.php',
+        _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoProduct.php',
+        _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoRedirect.php',
+        _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoSupplier.php',
+        _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoSitemap.php',
+        _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoBacklink.php',
+        _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoKeywordsStrategy.php',
+        _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoStats.php',
+        _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoShortcode.php',
+        _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoTools.php'
     ];
 
     public function __construct()
@@ -63,7 +62,7 @@ class Everpsseo extends Module
         $this->confirmUninstall = $this->l('Are you really sure to remove all seo settings ?');
         $this->ps_versions_compliancy = [
             'min' => '1.7',
-            'max' => _PS_VERSION_
+            'max' => _PS_VERSION_,
         ];
         $this->siteUrl = Tools::getHttpHost(true).__PS_BASE_URI__;
         $this->imageType = ImageType::getFormattedName('large');
@@ -80,7 +79,7 @@ class Everpsseo extends Module
                 'eversitemaps',
                 [
                     'token' => $everToken,
-                    'id_shop' => (int)Context::getContext()->shop->id
+                    'id_shop' => (int) Context::getContext()->shop->id,
                 ],
                 true
             );
@@ -89,12 +88,12 @@ class Everpsseo extends Module
                 'everobjects',
                 [
                     'token' => $everToken,
-                    'id_shop' => (int)Context::getContext()->shop->id
+                    'id_shop' => (int) Context::getContext()->shop->id,
                 ],
                 true
             );
             $searchconsole = str_replace('://', '%3A%2F%2F', (string)$this->siteUrl);
-            if ((bool)Configuration::get('PS_REWRITING_SETTINGS') === false) {
+            if ((bool) Configuration::get('PS_REWRITING_SETTINGS') === false) {
                 $rewrite_enabled = false;
             } else {
                 $rewrite_enabled = true;
@@ -110,13 +109,13 @@ class Everpsseo extends Module
                 $canonical = true;
             }
             $this->context->smarty->assign([
-                'image_dir' => $this->_path.'views/img',
-                'input_dir' => $this->siteUrl.'modules/everpsseo/output/',
+                'image_dir' => $this->_path . 'views/img',
+                'input_dir' => $this->siteUrl . 'modules/everpsseo/output/',
                 'everpsseo_cron' => $sitemaps_cron_url,
                 'everpsseo_objects' => $objects_cron_url,
                 'indexes' => EverPsSeoSitemap::getSitemapIndexes(),
                 'sitemaps' => EverPsSeoSitemap::getSitemaps(),
-                'searchconsole' => (string)$searchconsole,
+                'searchconsole' => (string) $searchconsole,
                 'rewrite_enabled' => $rewrite_enabled,
                 'ssl_enabled' => $ssl_enabled,
                 'canonical' => $canonical,
@@ -134,9 +133,9 @@ class Everpsseo extends Module
             return false;
         }
         // Install SQL
-        include(dirname(__FILE__).'/sql/install.php');
+        include dirname(__FILE__).'/sql/install.php';
         // Insert SQL
-        include(dirname(__FILE__).'/sql/insert.php');
+        include dirname(__FILE__).'/sql/insert.php';
         EverPsSeoTools::registerEverConfiguration();
         return parent::install()
             && $this->createSeoHook()
@@ -160,7 +159,7 @@ class Everpsseo extends Module
         $tab = new Tab();
         $tab->active = 1;
         $tab->class_name = $tabClass;
-        $tab->id_parent = (int)Tab::getIdFromClassName($parent);
+        $tab->id_parent = (int) Tab::getIdFromClassName($parent);
         $tab->position = Tab::getNewLastPosition($tab->id_parent);
         $tab->module = $this->name;
         if ($tabClass == 'AdminEverPsSeo') {
@@ -227,7 +226,7 @@ class Everpsseo extends Module
 
     public function uninstall()
     {
-        include(dirname(__FILE__).'/sql/uninstall.php');
+        include dirname(__FILE__) . '/sql/uninstall.php';
 
         return parent::uninstall()
             && $this->uninstallModuleTab('AdminEverPsSeoConfigure')
@@ -246,7 +245,7 @@ class Everpsseo extends Module
 
     protected function uninstallModuleTab($tabClass)
     {
-        $tab = new Tab((int)Tab::getIdFromClassName($tabClass));
+        $tab = new Tab((int) Tab::getIdFromClassName($tabClass));
 
         return $tab->delete();
     }
@@ -262,7 +261,6 @@ class Everpsseo extends Module
         // XLSX files upload
         if (Tools::isSubmit('submitUploadRedirectionFile')) {
             $this->postValidation();
-
             if (!count($this->postErrors)) {
                 $this->postProcess();
                 $this->uploadRedirectionFile();
@@ -270,7 +268,6 @@ class Everpsseo extends Module
         }
         if (Tools::isSubmit('submitUploadProductsFile')) {
             $this->postValidation();
-
             if (!count($this->postErrors)) {
                 $this->postProcess();
                 $this->uploadProductsFile();
@@ -278,7 +275,6 @@ class Everpsseo extends Module
         }
         if (Tools::isSubmit('submitUploadCategoriesFile')) {
             $this->postValidation();
-
             if (!count($this->postErrors)) {
                 $this->uploadCategoriesFile();
             }
@@ -294,7 +290,6 @@ class Everpsseo extends Module
         // Main form submition
         if (Tools::isSubmit('submiteverpsseoModule')) {
             $this->postValidation();
-
             if (!count($this->postErrors)) {
                 $this->postProcess();
             }
@@ -308,22 +303,21 @@ class Everpsseo extends Module
                     'EVERSEO_PGENERATOR_LANGS'
                 );
                 $seoArray = EverPsSeoProduct::getAllSeoProductsIds(
-                    (int)$this->context->shop->id,
+                    (int) $this->context->shop->id,
                     $allowedLangs
                 );
-
                 foreach ($seoArray as $seo) {
                     $this->autoSetContentShortDesc(
                         'id_seo_product',
-                        (int)$seo['id_seo_product'],
-                        (int)$this->context->shop->id,
-                        (int)$seo['id_seo_lang']
+                        (int) $seo['id_seo_product'],
+                        (int) $this->context->shop->id,
+                        (int) $seo['id_seo_lang']
                     );
                     $this->autoSetContentDesc(
                         'id_seo_product',
-                        (int)$seo['id_seo_product'],
-                        (int)$this->context->shop->id,
-                        (int)$seo['id_seo_lang']
+                        (int) $seo['id_seo_product'],
+                        (int) $this->context->shop->id,
+                        (int) $seo['id_seo_lang']
                     );
                 }
             }
@@ -334,7 +328,7 @@ class Everpsseo extends Module
             $this->postValidation();
             if (!count($this->postErrors)) {
                 $seoArray = EverPsSeoCategory::getAllSeoCategoriesIds(
-                    (int)$this->context->shop->id
+                    (int) $this->context->shop->id
                 );
                 $allowedLangs = $this->getAllowedShortcodesLangs(
                     'EVERSEO_AUTO_CATEGORY_LANGS'
@@ -343,9 +337,9 @@ class Everpsseo extends Module
                     if (in_array((int)$seo['id_seo_lang'], $allowedLangs)) {
                         $this->autoSetContentDesc(
                             'id_seo_category',
-                            (int)$seo['id_seo_category'],
-                            (int)$this->context->shop->id,
-                            (int)$seo['id_seo_lang']
+                            (int) $seo['id_seo_category'],
+                            (int) $this->context->shop->id,
+                            (int) $seo['id_seo_lang']
                         );
                     }
                 }
@@ -357,18 +351,18 @@ class Everpsseo extends Module
             $this->postValidation();
             if (!count($this->postErrors)) {
                 $seoArray = EverPsSeoManufacturer::getAllSeoManufacturersIds(
-                    (int)$this->context->shop->id
+                    (int) $this->context->shop->id
                 );
                 $allowedLangs = $this->getAllowedShortcodesLangs(
                     'EVERSEO_AUTO_MANUFACTURER_LANGS'
                 );
                 foreach ($seoArray as $seo) {
-                    if (in_array((int)$seo['id_seo_lang'], $allowedLangs)) {
+                    if (in_array((int) $seo['id_seo_lang'], $allowedLangs)) {
                         $this->autoSetContentDesc(
                             'id_seo_manufacturer',
-                            (int)$seo['id_seo_manufacturer'],
-                            (int)$this->context->shop->id,
-                            (int)$seo['id_seo_lang']
+                            (int) $seo['id_seo_manufacturer'],
+                            (int) $this->context->shop->id,
+                            (int) $seo['id_seo_lang']
                         );
                     }
                 }
@@ -380,18 +374,18 @@ class Everpsseo extends Module
             $this->postValidation();
             if (!count($this->postErrors)) {
                 $seoArray = EverPsSeoSupplier::getAllSeoSuppliersIds(
-                    (int)$this->context->shop->id
+                    (int) $this->context->shop->id
                 );
                 $allowedLangs = $this->getAllowedShortcodesLangs(
                     'EVERSEO_AUTO_SUPPLIER_LANGS'
                 );
                 foreach ($seoArray as $seo) {
-                    if (in_array((int)$seo['id_seo_lang'], $allowedLangs)) {
+                    if (in_array((int) $seo['id_seo_lang'], $allowedLangs)) {
                         $this->autoSetContentDesc(
                             'id_seo_supplier',
-                            (int)$seo['id_seo_supplier'],
-                            (int)$this->context->shop->id,
-                            (int)$seo['id_seo_lang']
+                            (int) $seo['id_seo_supplier'],
+                            (int) $this->context->shop->id,
+                            (int) $seo['id_seo_lang']
                         );
                     }
                 }
@@ -406,22 +400,22 @@ class Everpsseo extends Module
                     'EVERSEO_AUTO_PRODUCT_LANGS'
                 );
                 $seoArray = EverPsSeoProduct::getAllSeoProductsIds(
-                    (int)$this->context->shop->id,
+                    (int) $this->context->shop->id,
                     $allowedLangs
                 );
 
                 foreach ($seoArray as $seo) {
                     $this->autoSetTitle(
                         'id_seo_product',
-                        (int)$seo['id_seo_product'],
-                        (int)$this->context->shop->id,
-                        (int)$seo['id_seo_lang']
+                        (int) $seo['id_seo_product'],
+                        (int) $this->context->shop->id,
+                        (int) $seo['id_seo_lang']
                     );
                     $this->autoSetDescription(
                         'id_seo_product',
-                        (int)$seo['id_seo_product'],
-                        (int)$this->context->shop->id,
-                        (int)$seo['id_seo_lang']
+                        (int) $seo['id_seo_product'],
+                        (int) $this->context->shop->id,
+                        (int) $seo['id_seo_lang']
                     );
                 }
             }
@@ -431,24 +425,24 @@ class Everpsseo extends Module
             $this->postValidation();
             if (!count($this->postErrors)) {
                 $seoArray = EverPsSeoPageMeta::getAllSeoPagemetasIds(
-                    (int)$this->context->shop->id
+                    (int) $this->context->shop->id
                 );
                 $allowedLangs = $this->getAllowedShortcodesLangs(
                     'EVERSEO_AUTO_PAGEMETA_LANGS'
                 );
                 foreach ($seoArray as $seo) {
-                    if (in_array((int)$seo['id_seo_lang'], $allowedLangs)) {
+                    if (in_array((int) $seo['id_seo_lang'], $allowedLangs)) {
                         $this->autoSetTitle(
                             'id_seo_pagemeta',
-                            (int)$seo['id_seo_pagemeta'],
-                            (int)$this->context->shop->id,
-                            (int)$seo['id_seo_lang']
+                            (int) $seo['id_seo_pagemeta'],
+                            (int) $this->context->shop->id,
+                            (int) $seo['id_seo_lang']
                         );
                         $this->autoSetDescription(
                             'id_seo_pagemeta',
-                            (int)$seo['id_seo_pagemeta'],
-                            (int)$this->context->shop->id,
-                            (int)$seo['id_seo_lang']
+                            (int) $seo['id_seo_pagemeta'],
+                            (int) $this->context->shop->id,
+                            (int) $seo['id_seo_lang']
                         );
                     }
                 }
@@ -459,24 +453,24 @@ class Everpsseo extends Module
             $this->postValidation();
             if (!count($this->postErrors)) {
                 $seoArray = EverPsSeoCms::getAllSeoCmsIds(
-                    (int)$this->context->shop->id
+                    (int) $this->context->shop->id
                 );
                 $allowedLangs = $this->getAllowedShortcodesLangs(
                     'EVERSEO_AUTO_CMS_LANGS'
                 );
                 foreach ($seoArray as $seo) {
-                    if (in_array((int)$seo['id_seo_lang'], $allowedLangs)) {
+                    if (in_array((int) $seo['id_seo_lang'], $allowedLangs)) {
                         $this->autoSetTitle(
                             'id_seo_cms',
-                            (int)$seo['id_seo_cms'],
-                            (int)$this->context->shop->id,
-                            (int)$seo['id_seo_lang']
+                            (int) $seo['id_seo_cms'],
+                            (int) $this->context->shop->id,
+                            (int) $seo['id_seo_lang']
                         );
                         $this->autoSetDescription(
                             'id_seo_cms',
-                            (int)$seo['id_seo_cms'],
-                            (int)$this->context->shop->id,
-                            (int)$seo['id_seo_lang']
+                            (int) $seo['id_seo_cms'],
+                            (int) $this->context->shop->id,
+                            (int) $seo['id_seo_lang']
                         );
                     }
                 }
@@ -487,24 +481,24 @@ class Everpsseo extends Module
             $this->postValidation();
             if (!count($this->postErrors)) {
                 $seoArray = EverPsSeoSupplier::getAllSeoSuppliersIds(
-                    (int)$this->context->shop->id
+                    (int) $this->context->shop->id
                 );
                 $allowedLangs = $this->getAllowedShortcodesLangs(
                     'EVERSEO_AUTO_SUPPLIER_LANGS'
                 );
                 foreach ($seoArray as $seo) {
-                    if (in_array((int)$seo['id_seo_lang'], $allowedLangs)) {
+                    if (in_array((int) $seo['id_seo_lang'], $allowedLangs)) {
                         $this->autoSetTitle(
                             'id_seo_supplier',
-                            (int)$seo['id_seo_supplier'],
-                            (int)$this->context->shop->id,
-                            (int)$seo['id_seo_lang']
+                            (int) $seo['id_seo_supplier'],
+                            (int) $this->context->shop->id,
+                            (int) $seo['id_seo_lang']
                         );
                         $this->autoSetDescription(
                             'id_seo_supplier',
-                            (int)$seo['id_seo_supplier'],
-                            (int)$this->context->shop->id,
-                            (int)$seo['id_seo_lang']
+                            (int) $seo['id_seo_supplier'],
+                            (int) $this->context->shop->id,
+                            (int) $seo['id_seo_lang']
                         );
                     }
                 }
@@ -515,24 +509,24 @@ class Everpsseo extends Module
             $this->postValidation();
             if (!count($this->postErrors)) {
                 $seoArray = EverPsSeoManufacturer::getAllSeoManufacturersIds(
-                    (int)$this->context->shop->id
+                    (int) $this->context->shop->id
                 );
                 $allowedLangs = $this->getAllowedShortcodesLangs(
                     'EVERSEO_AUTO_MANUFACTURER_LANGS'
                 );
                 foreach ($seoArray as $seo) {
-                    if (in_array((int)$seo['id_seo_lang'], $allowedLangs)) {
+                    if (in_array((int) $seo['id_seo_lang'], $allowedLangs)) {
                         $this->autoSetTitle(
                             'id_seo_manufacturer',
-                            (int)$seo['id_seo_manufacturer'],
-                            (int)$this->context->shop->id,
-                            (int)$seo['id_seo_lang']
+                            (int) $seo['id_seo_manufacturer'],
+                            (int) $this->context->shop->id,
+                            (int) $seo['id_seo_lang']
                         );
                         $this->autoSetDescription(
                             'id_seo_manufacturer',
-                            (int)$seo['id_seo_manufacturer'],
-                            (int)$this->context->shop->id,
-                            (int)$seo['id_seo_lang']
+                            (int) $seo['id_seo_manufacturer'],
+                            (int) $this->context->shop->id,
+                            (int) $seo['id_seo_lang']
                         );
                     }
                 }
@@ -543,7 +537,7 @@ class Everpsseo extends Module
             $this->postValidation();
             if (!count($this->postErrors)) {
                 $seoArray = EverPsSeoCategory::getAllSeoCategoriesIds(
-                    (int)$this->context->shop->id
+                    (int) $this->context->shop->id
                 );
                 $allowedLangs = $this->getAllowedShortcodesLangs(
                     'EVERSEO_AUTO_CATEGORY_LANGS'
@@ -552,15 +546,15 @@ class Everpsseo extends Module
                     if (in_array((int)$seo['id_seo_lang'], $allowedLangs)) {
                         $this->autoSetTitle(
                             'id_seo_category',
-                            (int)$seo['id_seo_category'],
-                            (int)$this->context->shop->id,
-                            (int)$seo['id_seo_lang']
+                            (int) $seo['id_seo_category'],
+                            (int) $this->context->shop->id,
+                            (int) $seo['id_seo_lang']
                         );
                         $this->autoSetDescription(
                             'id_seo_category',
-                            (int)$seo['id_seo_category'],
-                            (int)$this->context->shop->id,
-                            (int)$seo['id_seo_lang']
+                            (int) $seo['id_seo_category'],
+                            (int) $this->context->shop->id,
+                            (int) $seo['id_seo_lang']
                         );
                     }
                 }
@@ -571,23 +565,23 @@ class Everpsseo extends Module
             $this->postValidation();
             if (!count($this->postErrors)) {
                 $seoArray = EverPsSeoImage::getAllSeoImagesIds(
-                    (int)$this->context->shop->id
+                    (int) $this->context->shop->id
                 );
                 $allowedLangs = $this->getAllowedShortcodesLangs(
                     'EVERSEO_AUTO_IMAGE_LANGS'
                 );
                 foreach ($seoArray as $seo) {
-                    if (in_array((int)$seo['id_seo_lang'], $allowedLangs)) {
+                    if (in_array((int) $seo['id_seo_lang'], $allowedLangs)) {
                         $this->autoSetAlt(
-                            (int)$seo['id_seo_img'],
-                            (int)$this->context->shop->id,
-                            (int)$seo['id_seo_lang']
+                            (int) $seo['id_seo_img'],
+                            (int) $this->context->shop->id,
+                            (int) $seo['id_seo_lang']
                         );
                         $this->autoSetAltSeoImage(
-                            (int)$seo['id_ever_seo_image'],
-                            (int)$seo['id_seo_img'],
-                            (int)$this->context->shop->id,
-                            (int)$seo['id_seo_lang']
+                            (int) $seo['id_ever_seo_image'],
+                            (int) $seo['id_seo_img'],
+                            (int) $this->context->shop->id,
+                            (int) $seo['id_seo_lang']
                         );
                     }
                 }
@@ -634,56 +628,56 @@ class Everpsseo extends Module
         // Sitemaps generation
         if (Tools::isSubmit('submitSitemapCategory')) {
             foreach ($languages as $id_lang) {
-                if (in_array((int)$id_lang, $allowedLangs)) {
-                    $this->processSitemapCategory((int)$this->context->shop->id, (int)$id_lang);
+                if (in_array((int) $id_lang, $allowedLangs)) {
+                    $this->processSitemapCategory((int) $this->context->shop->id, (int) $id_lang);
                 }
             }
         }
 
         if (Tools::isSubmit('submitSitemapProduct')) {
             foreach ($languages as $id_lang) {
-                if (in_array((int)$id_lang, $allowedLangs)) {
-                    $this->processSitemapProduct((int)$this->context->shop->id, (int)$id_lang);
+                if (in_array((int) $id_lang, $allowedLangs)) {
+                    $this->processSitemapProduct((int) $this->context->shop->id, (int) $id_lang);
                 }
             }
         }
 
         if (Tools::isSubmit('submitSitemapCms')) {
             foreach ($languages as $id_lang) {
-                if (in_array((int)$id_lang, $allowedLangs)) {
-                    $this->processSitemapCms((int)$this->context->shop->id, (int)$id_lang);
+                if (in_array((int) $id_lang, $allowedLangs)) {
+                    $this->processSitemapCms((int)$this->context->shop->id, (int) $id_lang);
                 }
             }
         }
 
         if (Tools::isSubmit('submitSitemapManufacturer')) {
             foreach ($languages as $id_lang) {
-                if (in_array((int)$id_lang, $allowedLangs)) {
-                    $this->processSitemapManufacturer((int)$this->context->shop->id, (int)$id_lang);
+                if (in_array((int) $id_lang, $allowedLangs)) {
+                    $this->processSitemapManufacturer((int) $this->context->shop->id, (int) $id_lang);
                 }
             }
         }
 
         if (Tools::isSubmit('submitSitemapSupplier')) {
             foreach ($languages as $id_lang) {
-                if (in_array((int)$id_lang, $allowedLangs)) {
-                    $this->processSitemapSupplier((int)$this->context->shop->id, (int)$id_lang);
+                if (in_array((int) $id_lang, $allowedLangs)) {
+                    $this->processSitemapSupplier((int) $this->context->shop->id, (int) $id_lang);
                 }
             }
         }
 
         if (Tools::isSubmit('submitSitemapImage')) {
             foreach ($languages as $id_lang) {
-                if (in_array((int)$id_lang, $allowedLangs)) {
-                    $this->processSitemapImage((int)$this->context->shop->id, (int)$id_lang);
+                if (in_array((int) $id_lang, $allowedLangs)) {
+                    $this->processSitemapImage((int) $this->context->shop->id, (int) $id_lang);
                 }
             }
         }
 
         if (Tools::isSubmit('submitSitemapPageMeta')) {
             foreach ($languages as $id_lang) {
-                if (in_array((int)$id_lang, $allowedLangs)) {
-                    $this->processSitemapPageMeta((int)$this->context->shop->id, (int)$id_lang);
+                if (in_array((int) $id_lang, $allowedLangs)) {
+                    $this->processSitemapPageMeta((int) $this->context->shop->id, (int) $id_lang);
                 }
             }
         }
@@ -719,7 +713,7 @@ class Everpsseo extends Module
         if (Tools::isSubmit('submitInternalLinking')) {
             $this->postValidation();
             if (!count($this->postErrors)) {
-                $this->processInternalLinking((int)$this->context->shop->id);
+                $this->processInternalLinking((int) $this->context->shop->id);
             }
         }
 
@@ -730,7 +724,7 @@ class Everpsseo extends Module
                 $this->postProcess();
                 foreach ($this->getBannedLangs() as $id_lang) {
                     EverPsSeoTools::noIndexLang(
-                        (int)$id_lang
+                        (int) $id_lang
                     );
                 }
             }
@@ -743,7 +737,7 @@ class Everpsseo extends Module
                 $this->postProcess();
                 foreach ($this->getBannedLangs() as $id_lang) {
                     EverPsSeoTools::noFollowLang(
-                        (int)$id_lang
+                        (int) $id_lang
                     );
                 }
             }
@@ -756,7 +750,7 @@ class Everpsseo extends Module
                 $this->postProcess();
                 foreach ($this->getBannedLangs() as $id_lang) {
                     EverPsSeoTools::noSitemapLang(
-                        (int)$id_lang
+                        (int) $id_lang
                     );
                 }
             }
@@ -769,7 +763,7 @@ class Everpsseo extends Module
                 $this->postProcess();
                 foreach ($this->getBannedLangs() as $id_lang) {
                    EverPsSeoTools::indexLang(
-                        (int)$id_lang
+                        (int) $id_lang
                     );
                 }
             }
@@ -782,7 +776,7 @@ class Everpsseo extends Module
                 $this->postProcess();
                 foreach ($this->getBannedLangs() as $id_lang) {
                     EverPsSeoTools::followLang(
-                        (int)$id_lang
+                        (int) $id_lang
                     );
                 }
             }
@@ -795,7 +789,7 @@ class Everpsseo extends Module
                 $this->postProcess();
                 foreach ($this->getBannedLangs() as $id_lang) {
                     EverPsSeoTools::sitemapLang(
-                        (int)$id_lang
+                        (int) $id_lang
                     );
                 }
             }
@@ -815,9 +809,13 @@ class Everpsseo extends Module
             }
         }
 
-        $this->html .= $this->context->smarty->fetch($this->local_path.'views/templates/admin/header.tpl');
+        $this->html .= $this->context->smarty->fetch(
+            $this->local_path . 'views/templates/admin/header.tpl'
+        );
         $this->html .= $this->renderForm();
-        $this->html .= $this->context->smarty->fetch($this->local_path.'views/templates/admin/footer.tpl');
+        $this->html .= $this->context->smarty->fetch(
+            $this->local_path . 'views/templates/admin/footer.tpl'
+        );
         return $this->html;
     }
 
@@ -833,17 +831,15 @@ class Everpsseo extends Module
         $helper->module = $this;
         $helper->default_form_language = $this->context->language->id;
         $helper->allow_employee_form_lang = Configuration::get('PS_BO_ALLOW_EMPLOYEE_FORM_LANG', 0);
-
         $helper->identifier = $this->identifier;
         $helper->submit_action = 'submiteverpsseoModule';
-        $helper->currentIndex = $this->context->link->getAdminLink('AdminModules', false)
-            .'&configure='.$this->name.'&tab_module='.$this->tab.'&module_name='.$this->name;
+        $helper->currentIndex = $this->context->link->getAdminLink('AdminModules', false) . '&configure=' . $this->name . '&tab_module=' . $this->tab . '&module_name=' . $this->name;
         $helper->token = Tools::getAdminTokenLite('AdminModules');
 
         $helper->tpl_vars = array(
             'fields_value' => $this->getConfigFormValues(),
             'languages' => $this->context->controller->getLanguages(),
-            'id_language' => (int)$this->context->language->id,
+            'id_language' => (int) $this->context->language->id,
         );
 
         return $helper->generateForm($this->getConfigForm());
@@ -862,14 +858,14 @@ class Everpsseo extends Module
             )
         );
         if (!is_array($pg_cat)) {
-            $pg_cat = array($pg_cat);
+            $pg_cat = [$pg_cat];
         }
-        $pg_tree = array(
+        $pg_tree = [
             'selected_categories' => $pg_cat,
             'use_search' => true,
             'use_checkbox' => true,
             'id' => 'id_pcategory_tree',
-        );
+        ];
         // Allowed categories for categories content generator
         $cg_cat = json_decode(
             Configuration::get(
@@ -877,27 +873,27 @@ class Everpsseo extends Module
             )
         );
         if (!is_array($cg_cat)) {
-            $cg_cat = array($cg_cat);
+            $cg_cat = [$cg_cat];
         }
-        $cg_tree = array(
+        $cg_tree = [
             'selected_categories' => $cg_cat,
             'use_search' => true,
             'use_checkbox' => true,
             'id' => 'id_ccategory_tree',
-        );
+        ];
 
-        $orderby = array(
-            array(
+        $orderby = [
+            [
                 'id_orderby' => 0,
-                'name' => $this->l('Oldest value found')
-            ),
-            array(
+                'name' => $this->l('Oldest value found'),
+            ],
+            [
                 'id_orderby' => 1,
-                'name' => $this->l('Most recent value found')
-            ),
-        );
+                'name' => $this->l('Most recent value found'),
+            ],
+        ];
 
-        $priority = array(
+        $priority = [
             array(
                 'id_priority' => 1,
                 'name' => $this->l('Products, categories, tags')
@@ -922,9 +918,9 @@ class Everpsseo extends Module
                 'id_priority' => 6,
                 'name' => $this->l('Tags, categories, products')
             ),
-        );
+        ];
 
-        $qualityRiskLevel = array(
+        $qualityRiskLevel = [
             array(
                 'id_quality_risk_level' => 0,
                 'name' => $this->l('"I am Iron Man" quality risk')
@@ -961,9 +957,9 @@ class Everpsseo extends Module
                 'id_quality_risk_level' => 8,
                 'name' => $this->l('Low quality risk')
             ),
-        );
+        ];
 
-        $redirectCodes = array(
+        $redirectCodes = [
             array(
                 'id_redirect' => '301',// 301 Moved Permanently
                 'name' => '301'
@@ -980,9 +976,9 @@ class Everpsseo extends Module
                 'id_redirect' => '307',// 307 Temporary Redirect
                 'name' => '307'
             ),
-        );
+        ];
 
-        $frequency = array(
+        $frequency = [
             array(
                 'id_frequency' => 'daily',
                 'name' => 'daily'
@@ -999,9 +995,9 @@ class Everpsseo extends Module
                 'id_frequency' => 'yearly',
                 'name' => 'yearly'
             ),
-        );
+        ];
 
-        $sitemapPriority = array(
+        $sitemapPriority = [
             array(
                 'id_sitemap_priority' => '0',
                 'name' => '0'
@@ -1046,19 +1042,18 @@ class Everpsseo extends Module
                 'id_sitemap_priority' => '1',
                 'name' => '1'
             ),
-        );
+        ];
 
-        if (file_exists(_PS_MODULE_DIR_.'everpsseo/views/img/everpsseo.jpg')) {
-            $defaultUrlImage = $this->_path.'views/img/everpsseo.jpg';
+        if (file_exists(_PS_MODULE_DIR_ . 'everpsseo/views/img/everpsseo.jpg')) {
+            $defaultUrlImage = $this->_path . 'views/img/everpsseo.jpg';
         } else {
-            $defaultUrlImage = Tools::getHttpHost(true).__PS_BASE_URI__.'img/'.Configuration::get(
+            $defaultUrlImage = Tools::getHttpHost(true) . __PS_BASE_URI__ . 'img/' . Configuration::get(
                 'PS_LOGO'
             );
         }
-        // die(var_dump($defaultUrlImage));
-        $defaultImage = '<image src="'.(string)$defaultUrlImage.'" style="max-width:80px;" />';
+        $defaultImage = '<image src="' . (string)$defaultUrlImage . '" style="max-width:80px;" />';
 
-        $knowledgegraph_type = array(
+        $knowledgegraph_type = [
             array(
                 'id_knowledgegraph' => 'Organization',
                 'name' => 'Organization'
@@ -1067,9 +1062,9 @@ class Everpsseo extends Module
                 'id_knowledgegraph' => 'Person',
                 'name' => 'Person'
             ),
-        );
+        ];
 
-        $form_fields = array();
+        $form_fields = [];
 
         //General SEO parameters
         $form_fields[] = array(
@@ -1735,7 +1730,7 @@ class Everpsseo extends Module
                         'options' => array(
                             'query' => $redirectCodes,
                             'id' => 'id_redirect',
-                            'name' => 'name'
+                            'name' => 'name',
                         )
                     ),
                     array(
@@ -1749,12 +1744,12 @@ class Everpsseo extends Module
                             array(
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
+                                'label' => $this->l('Enabled'),
                             ),
                             array(
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
+                                'label' => $this->l('Disabled'),
                             )
                         ),
                     ),
@@ -1768,12 +1763,12 @@ class Everpsseo extends Module
                             array(
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
+                                'label' => $this->l('Enabled'),
                             ),
                             array(
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
+                                'label' => $this->l('Disabled'),
                             )
                         ),
                     ),
@@ -1786,7 +1781,7 @@ class Everpsseo extends Module
                         'options' => array(
                             'query' => $orderby,
                             'id' => 'id_orderby',
-                            'name' => 'name'
+                            'name' => 'name',
                         )
                     ),
                     array(
@@ -1800,12 +1795,12 @@ class Everpsseo extends Module
                             array(
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
+                                'label' => $this->l('Enabled'),
                             ),
                             array(
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
+                                'label' => $this->l('Disabled'),
                             )
                         ),
                     ),
@@ -1820,13 +1815,13 @@ class Everpsseo extends Module
                             array(
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
+                                'label' => $this->l('Enabled'),
                             ),
                             array(
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
+                                'label' => $this->l('Disabled'),
+                            ),
                         ),
                     ),
                     array(
@@ -1837,7 +1832,7 @@ class Everpsseo extends Module
                         'required' => false,
                         'name' => 'EVERSEO_404_TOP',
                         'lang' => true,
-                        'autoload_rte' => true
+                        'autoload_rte' => true,
                     ),
                     array(
                         'type' => 'textarea',
@@ -1847,7 +1842,7 @@ class Everpsseo extends Module
                         'required' => false,
                         'name' => 'EVERSEO_404_BOTTOM',
                         'lang' => true,
-                        'autoload_rte' => true
+                        'autoload_rte' => true,
                     ),
                 ),
                 'submit' => array(
@@ -1875,13 +1870,13 @@ class Everpsseo extends Module
                             array(
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
+                                'label' => $this->l('Enabled'),
                             ),
                             array(
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
+                                'label' => $this->l('Disabled'),
+                            ),
                         ),
                     ),
                     array(
@@ -1945,7 +1940,7 @@ class Everpsseo extends Module
                         'options' => array(
                             'query' => Language::getLanguages(false),
                             'id' => 'id_lang',
-                            'name' => 'name'
+                            'name' => 'name',
                         )
                     ),
                     array(
@@ -1959,13 +1954,13 @@ class Everpsseo extends Module
                             array(
                                 'id' => 'active_on',
                                 'value' => true,
-                                'label' => $this->l('Yes')
+                                'label' => $this->l('Yes'),
                             ),
                             array(
                                 'id' => 'active_off',
                                 'value' => false,
-                                'label' => $this->l('No')
-                            )
+                                'label' => $this->l('No'),
+                            ),
                         ),
                     ),
                     array(
@@ -1979,13 +1974,13 @@ class Everpsseo extends Module
                             array(
                                 'id' => 'active_on',
                                 'value' => true,
-                                'label' => $this->l('Yes')
+                                'label' => $this->l('Yes'),
                             ),
                             array(
                                 'id' => 'active_off',
                                 'value' => false,
-                                'label' => $this->l('No')
-                            )
+                                'label' => $this->l('No'),
+                            ),
                         ),
                     ),
                     array(
@@ -1999,13 +1994,13 @@ class Everpsseo extends Module
                             array(
                                 'id' => 'active_on',
                                 'value' => true,
-                                'label' => $this->l('Yes')
+                                'label' => $this->l('Yes'),
                             ),
                             array(
                                 'id' => 'active_off',
                                 'value' => false,
-                                'label' => $this->l('No')
-                            )
+                                'label' => $this->l('No'),
+                            ),
                         ),
                     ),
                     array(
@@ -2019,13 +2014,13 @@ class Everpsseo extends Module
                             array(
                                 'id' => 'active_on',
                                 'value' => true,
-                                'label' => $this->l('Yes')
+                                'label' => $this->l('Yes'),
                             ),
                             array(
                                 'id' => 'active_off',
                                 'value' => false,
-                                'label' => $this->l('No')
-                            )
+                                'label' => $this->l('No'),
+                            ),
                         ),
                     ),
                     array(
@@ -2039,13 +2034,13 @@ class Everpsseo extends Module
                             array(
                                 'id' => 'active_on',
                                 'value' => true,
-                                'label' => $this->l('Yes')
+                                'label' => $this->l('Yes'),
                             ),
                             array(
                                 'id' => 'active_off',
                                 'value' => false,
-                                'label' => $this->l('No')
-                            )
+                                'label' => $this->l('No'),
+                            ),
                         ),
                     ),
                     array(
@@ -2059,13 +2054,13 @@ class Everpsseo extends Module
                             array(
                                 'id' => 'active_on',
                                 'value' => true,
-                                'label' => $this->l('Yes')
+                                'label' => $this->l('Yes'),
                             ),
                             array(
                                 'id' => 'active_off',
                                 'value' => false,
-                                'label' => $this->l('No')
-                            )
+                                'label' => $this->l('No'),
+                            ),
                         ),
                     ),
                 ),
@@ -2075,7 +2070,7 @@ class Everpsseo extends Module
                         'type' => 'submit',
                         'class' => 'btn btn-default pull-right',
                         'icon' => 'process-icon-refresh',
-                        'title' => $this->l('Replace and add internal linking')
+                        'title' => $this->l('Replace and add internal linking'),
                     ),
                 ),
             ),
@@ -2092,7 +2087,7 @@ class Everpsseo extends Module
                     array(
                         'type' => 'free',
                         'label' =>  $this->l('Product meta shortcodes'),
-                        'name' => 'product_shortcodes'
+                        'name' => 'product_shortcodes',
                     ),
                     array(
                         'type' => 'text',
@@ -2134,7 +2129,7 @@ class Everpsseo extends Module
                         'type' => 'submit',
                         'class' => 'btn btn-default pull-right',
                         'icon' => 'process-icon-refresh',
-                        'title' => $this->l('Replace all meta on products')
+                        'title' => $this->l('Replace all meta on products'),
                     ),
                 ),
                 'submit' => array(
@@ -2154,7 +2149,7 @@ class Everpsseo extends Module
                     array(
                         'type' => 'free',
                         'label' =>  $this->l('Product image meta shortcodes'),
-                        'name' => 'image_shortcodes'
+                        'name' => 'image_shortcodes',
                     ),
                     array(
                         'type' => 'text',
@@ -2187,7 +2182,7 @@ class Everpsseo extends Module
                         'type' => 'submit',
                         'class' => 'btn btn-default pull-right',
                         'icon' => 'process-icon-refresh',
-                        'title' => $this->l('Replace all alt on images')
+                        'title' => $this->l('Replace all alt on images'),
                     ),
                 ),
                 'submit' => array(
@@ -2245,7 +2240,7 @@ class Everpsseo extends Module
                         'type' => 'submit',
                         'class' => 'btn btn-default pull-right',
                         'icon' => 'process-icon-refresh',
-                        'title' => $this->l('Replace all metas on categories')
+                        'title' => $this->l('Replace all metas on categories'),
                     ),
                 ),
                 'submit' => array(
@@ -2265,7 +2260,7 @@ class Everpsseo extends Module
                     array(
                         'type' => 'free',
                         'label' =>  $this->l('Manufacturer meta shortcodes'),
-                        'name' => 'manufacturer_shortcodes'
+                        'name' => 'manufacturer_shortcodes',
                     ),
                     array(
                         'type' => 'text',
@@ -2302,7 +2297,7 @@ class Everpsseo extends Module
                         'type' => 'submit',
                         'class' => 'btn btn-default pull-right',
                         'icon' => 'process-icon-refresh',
-                        'title' => $this->l('Replace all metas on manufacturers')
+                        'title' => $this->l('Replace all metas on manufacturers'),
                     ),
                 ),
                 'submit' => array(
@@ -4046,28 +4041,28 @@ class Everpsseo extends Module
      */
     protected function getConfigFormValues()
     {
-        $everseo_404_top = array();
-        $everseo_404_bottom = array();
-        $product_shortdesc = array();
-        $product_desc = array();
-        $product_bttm = array();
-        $category_desc = array();
-        $manufacturer_desc = array();
-        $supplier_desc = array();
+        $everseo_404_top = [];
+        $everseo_404_bottom = [];
+        $product_shortdesc = [];
+        $product_desc = [];
+        $product_bttm = [];
+        $category_desc = [];
+        $manufacturer_desc = [];
+        $supplier_desc = [];
         // Title and meta generation
-        $pagemeta_metadesc = array();
-        $pagemeta_title = array();
-        $cms_metadesc = array();
-        $cms_title = array();
-        $supplier_metadesc = array();
-        $supplier_title = array();
-        $m_metadesc = array();
-        $m_title = array();
-        $category_metadesc = array();
-        $category_title = array();
-        $image_alt = array();
-        $product_metadesc = array();
-        $product_title = array();
+        $pagemeta_metadesc = [];
+        $pagemeta_title = [];
+        $cms_metadesc = [];
+        $cms_title = [];
+        $supplier_metadesc = [];
+        $supplier_title = [];
+        $m_metadesc = [];
+        $m_title = [];
+        $category_metadesc = [];
+        $category_title = [];
+        $image_alt = [];
+        $product_metadesc = [];
+        $product_title = [];
         foreach (Language::getLanguages(false) as $lang) {
             $everseo_404_top[$lang['id_lang']] = (Tools::getValue('EVERSEO_404_TOP_'.$lang['id_lang']))
             ? Tools::getValue('EVERSEO_404_TOP_'.$lang['id_lang']) : '';
@@ -5371,28 +5366,28 @@ class Everpsseo extends Module
     {
         // Save configuration
         $form_values = $this->getConfigFormValues();
-        $everseo_404_top = array();
-        $everseo_404_bottom = array();
-        $product_shortdesc = array();
-        $product_desc = array();
-        $product_bttm = array();
-        $category_desc = array();
-        $manufacturer_desc = array();
-        $supplier_desc = array();
+        $everseo_404_top = [];
+        $everseo_404_bottom = [];
+        $product_shortdesc = [];
+        $product_desc = [];
+        $product_bttm = [];
+        $category_desc = [];
+        $manufacturer_desc = [];
+        $supplier_desc = [];
         // Title and meta generation
-        $pagemeta_metadesc = array();
-        $pagemeta_title = array();
-        $cms_metadesc = array();
-        $cms_title = array();
-        $supplier_metadesc = array();
-        $supplier_title = array();
-        $m_metadesc = array();
-        $m_title = array();
-        $category_metadesc = array();
-        $category_title = array();
-        $image_alt = array();
-        $product_metadesc = array();
-        $product_title = array();
+        $pagemeta_metadesc = [];
+        $pagemeta_title = [];
+        $cms_metadesc = [];
+        $cms_title = [];
+        $supplier_metadesc = [];
+        $supplier_title = [];
+        $m_metadesc = [];
+        $m_title = [];
+        $category_metadesc = [];
+        $category_title = [];
+        $image_alt = [];
+        $product_metadesc = [];
+        $product_title = [];
         foreach (Language::getLanguages(false) as $lang) {
             $everseo_404_top[$lang['id_lang']] = (Tools::getValue('EVERSEO_404_TOP_'.$lang['id_lang']))
             ? Tools::getValue('EVERSEO_404_TOP_'.$lang['id_lang']) : '';
@@ -5557,13 +5552,13 @@ class Everpsseo extends Module
             } elseif ($key == 'EVERSEO_PGENERATOR_LANGS[]') {
                 Configuration::updateValue(
                     'EVERSEO_PGENERATOR_LANGS',
-                    json_encode(Tools::getValue($key)),
+                    json_encode(Tools::getValue('EVERSEO_PGENERATOR_LANGS')),
                     true
                 );
             } elseif ($key == 'EVERSEO_CGENERATOR_LANGS[]') {
                 Configuration::updateValue(
                     'EVERSEO_CGENERATOR_LANGS',
-                    json_encode(Tools::getValue($key)),
+                    json_encode(Tools::getValue('EVERSEO_CGENERATOR_LANGS')),
                     true
                 );
             } elseif ($key == 'EVERSEO_PGENERATOR_CATEGORIES') {
@@ -7242,7 +7237,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         $address = new Address((int)$order->id_address_delivery);
         $carrier = new Carrier((int)$order->id_carrier);
         $currency = $this->context->currency;
-        $products = array();
+        $products = [];
         foreach ($order->getProducts() as $prod) {
             $product = new Product(
                 (int)$prod['id_product'],
@@ -8684,7 +8679,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
     public function pingbots()
     {
         $siteUrl = Tools::getHttpHost(true).__PS_BASE_URI__;
-        $pingbots = array();
+        $pingbots = [];
         $pingbots[] = 'https://google.com/ping?sitemap=';
         $pingbots[] = 'https://www.bing.com/webmaster/ping.aspx?siteMap=';
         $indexes = glob(_PS_ROOT_DIR_.'/*');
@@ -9150,7 +9145,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
     protected function deleteDuplicate()
     {
-        $sql = array();
+        $sql = [];
 
         // SEO products
         $sql[] = 'DELETE esp
@@ -9217,7 +9212,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
     protected function deleteShopDuplicate()
     {
-        $sql = array();
+        $sql = [];
 
         // SEO products
         $sql[] = 'DELETE esp
@@ -9317,7 +9312,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
     protected function getEverSeoTables()
     {
-        $seotable = array();
+        $seotable = [];
         $seotable[] = 'ever_seo_category';
         $seotable[] = 'ever_seo_product';
         $seotable[] = 'ever_seo_image';

@@ -4,7 +4,7 @@
  * @author Team Ever
  * @copyright Team Ever
  * @license   Tous droits réservés / Le droit d'auteur s'applique (All rights reserved / French copyright law applies)
- * @link https://www.team-ever.com
+ * @see https://www.team-ever.com
  */
 
 if (!defined('_PS_VERSION_')) {
@@ -15,7 +15,7 @@ function upgrade_module_1_1_10()
 {
     $isSeven = Tools::version_compare(_PS_VERSION_, '1.7', '>=') ? true : false;
     $result = false;
-    $sql = array();
+    $sql = [];
     // First update Ever SEO tables
     $sql[] =
         'UPDATE '._DB_PREFIX_.'ever_seo_category esc
