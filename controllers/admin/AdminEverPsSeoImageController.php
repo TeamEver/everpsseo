@@ -11,8 +11,8 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoImage.php';
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoKeywordsStrategy.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoImage.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoKeywordsStrategy.php';
 
 class AdminEverPsSeoImageController extends ModuleAdminController
 {
@@ -29,43 +29,43 @@ class AdminEverPsSeoImageController extends ModuleAdminController
         $this->isSeven = Tools::version_compare(_PS_VERSION_, '1.7', '>=') ? true : false;
         $this->imageType = 'jpg';
         $this->max_file_size = (int)(Configuration::get('PS_LIMIT_UPLOAD_FILE_VALUE') * 1000000);
-        $this->max_image_size = (int)Configuration::get('PS_PRODUCT_PICTURE_MAX_SIZE');
+        $this->max_image_size = (int) Configuration::get('PS_PRODUCT_PICTURE_MAX_SIZE');
         $this->allow_export = true;
         $moduleConfUrl  = 'index.php?controller=AdminModules&configure=everpsseo&token=';
         $moduleConfUrl .= Tools::getAdminTokenLite('AdminModules');
 
         $this->context->smarty->assign(array(
-            'moduleConfUrl' => (string)$moduleConfUrl,
+            'moduleConfUrl' => (string) $moduleConfUrl,
             'image_dir' => _PS_BASE_URL_.__PS_BASE_URI__ . '/modules/everpsseo/views/img/'
         ));
 
         $this->_select = 'l.iso_code, il.legend, il.id_image, pl.name, cl.name AS category_name';
 
         $this->_join =
-            'LEFT JOIN `'._DB_PREFIX_.'ever_seo_lang` l
+            'LEFT JOIN `' . _DB_PREFIX_ . 'ever_seo_lang` l
                 ON (
                     l.`id_seo_lang` = a.`id_seo_lang`
                 )
-            LEFT JOIN `'._DB_PREFIX_.'image_lang` il
+            LEFT JOIN `' . _DB_PREFIX_ . 'image_lang` il
                 ON (
                     il.`id_lang` = a.`id_seo_lang`
                     AND il.id_image = a.id_seo_img
                 )
-            LEFT JOIN `'._DB_PREFIX_.'product_lang` pl
+            LEFT JOIN `' . _DB_PREFIX_ . 'product_lang` pl
                 ON (
                     pl.id_product = a.id_seo_product
                 )
-            LEFT JOIN `'._DB_PREFIX_.'product` p
+            LEFT JOIN `' . _DB_PREFIX_ . 'product` p
                 ON (
                     p.id_product = a.id_seo_product
                 )
-            LEFT JOIN `'._DB_PREFIX_.'category_lang` cl
+            LEFT JOIN `' . _DB_PREFIX_ . 'category_lang` cl
                 ON (
                     cl.`id_lang` = a.`id_seo_lang`
                     AND p.id_category_default = cl.id_category
                 )';
 
-        $this->_where = 'AND a.id_shop ='.(int)$this->context->shop->id;
+        $this->_where = 'AND a.id_shop ='.(int) $this->context->shop->id;
 
         $this->_group = 'GROUP BY a.id_ever_seo_image';
 
@@ -131,32 +131,32 @@ class AdminEverPsSeoImageController extends ModuleAdminController
 
         $imageType = ImageType::getFormattedName('large');
 
-        $id_shop = (int)$this->context->shop->id;
-        $id_lang = (int)$this->context->language->id;
+        $id_shop = (int) $this->context->shop->id;
+        $id_lang = (int) $this->context->language->id;
 
         if (Tools::getValue('id_ever_seo_image')) {
             $seoImage = new EverPsSeoImage(
-                (int)Tools::getValue('id_ever_seo_image')
+                (int) Tools::getValue('id_ever_seo_image')
             );
             $seoProduct = new EverPsSeoProduct(
-                (int)$seoImage->id_seo_product
+                (int) $seoImage->id_seo_product
             );
             $link = new Link();
             $product = new Product(
-                (int)$seoImage->id_seo_product,
+                (int) $seoImage->id_seo_product,
                 false,
-                (int)$id_lang,
-                (int)$id_shop
+                (int) $id_lang,
+                (int) $id_shop
             );
             $richImage = $product->getCover(
-                (int)$product->id
+                (int) $product->id
             );
             $objectUrl = Tools::getShopProtocol().$link->getImageLink(
                 $product->link_rewrite,
                 $product->id.'-'.$richImage['id_image'],
                 $imageType
             );
-            $editUrl  = 'index.php?controller=AdminProducts&id_product='.(int)$product->id.'';
+            $editUrl  = 'index.php?controller=AdminProducts&id_product='.(int) $product->id.'';
             $editUrl .= '&updateproduct&token='.Tools::getAdminTokenLite('AdminProducts');
             $objectGSearch = str_replace(' ', '+', $product->name);
 
@@ -165,19 +165,19 @@ class AdminEverPsSeoImageController extends ModuleAdminController
                 $product
             );
             switch (true) {
-                case ((int)$keywordsQlty['note'] <= 25):
+                case ((int) $keywordsQlty['note'] <= 25):
                     $color = 'ever-danger';
                     break;
 
-                case ((int)$keywordsQlty['note'] <= 50):
+                case ((int) $keywordsQlty['note'] <= 50):
                     $color = 'ever-alert';
                     break;
 
-                case ((int)$keywordsQlty['note'] <= 75):
+                case ((int) $keywordsQlty['note'] <= 75):
                     $color = 'ever-warning';
                     break;
 
-                case ((int)$keywordsQlty['note'] <= 100):
+                case ((int) $keywordsQlty['note'] <= 100):
                     $color = 'ever-success';
                     break;
 
@@ -347,7 +347,7 @@ class AdminEverPsSeoImageController extends ModuleAdminController
             'buttons' => array(
                 'save-and-stay' => array(
                     'title' => $this->l('Save and stay'),
-                    'name' => 'submitAdd'.$this->table.'AndStay',
+                    'name' => 'submitAdd' . $this->table . 'AndStay',
                     'type' => 'submit',
                     'class' => 'btn btn-default pull-right',
                     'icon' => 'process-icon-save'
@@ -399,7 +399,7 @@ class AdminEverPsSeoImageController extends ModuleAdminController
     public function processSitemap()
     {
         $everImg = new EverPsSeoImage(
-            (int)Tools::getValue('id_ever_seo_image')
+            (int) Tools::getValue('id_ever_seo_image')
         );
 
         $everImg->allowed_sitemap = !$everImg->allowed_sitemap;
@@ -426,12 +426,12 @@ class AdminEverPsSeoImageController extends ModuleAdminController
             }
             if (!count($this->errors)) {
                 $everImg = new EverPsSeoImage(
-                    (int)Tools::getValue('id_ever_seo_image')
+                    (int) Tools::getValue('id_ever_seo_image')
                 );
                 $image = new Image(
-                    (int)$everImg->id_seo_img,
-                    (int)$everImg->id_seo_lang,
-                    (int)$this->context->shop->id
+                    (int) $everImg->id_seo_img,
+                    (int) $everImg->id_seo_lang,
+                    (int) $this->context->shop->id
                 );
                 $image->id_product = $everImg->id_seo_product;
                 $image->legend = Tools::substr(Tools::getValue('alt'), 0, 125);
@@ -451,7 +451,7 @@ class AdminEverPsSeoImageController extends ModuleAdminController
     {
         foreach (Tools::getValue($this->table.'Box') as $idEverImg) {
             $everImg = new EverPsSeoImage(
-                (int)$idEverImg
+                (int) $idEverImg
             );
 
             $everImg->allowed_sitemap = !$everImg->allowed_sitemap;
@@ -466,16 +466,16 @@ class AdminEverPsSeoImageController extends ModuleAdminController
     {
         foreach (Tools::getValue($this->table.'Box') as $idEverImg) {
             $everImg = new EverPsSeoImage(
-                (int)$idEverImg
+                (int) $idEverImg
             );
             $image = new Image(
-                (int)$everImg->id_seo_img,
-                (int)$everImg->id_seo_lang,
-                (int)$this->context->shop->id
+                (int) $everImg->id_seo_img,
+                (int) $everImg->id_seo_lang,
+                (int) $this->context->shop->id
             );
 
             $description = Db::getInstance()->getValue(
-                'SELECT description_short FROM `'._DB_PREFIX_.'product_lang`
+                'SELECT description_short FROM `' . _DB_PREFIX_ . 'product_lang`
                 WHERE id_product = '.pSQL($everImg->id_seo_product).'
                 AND id_lang = '.pSQL($everImg->id_seo_lang)
             );
@@ -497,12 +497,12 @@ class AdminEverPsSeoImageController extends ModuleAdminController
     {
         foreach (Tools::getValue($this->table.'Box') as $idEverImg) {
             $everImg = new EverPsSeoImage(
-                (int)$idEverImg
+                (int) $idEverImg
             );
             $image = new Image(
-                (int)$everImg->id_seo_img,
-                (int)$everImg->id_seo_lang,
-                (int)$this->context->shop->id
+                (int) $everImg->id_seo_img,
+                (int) $everImg->id_seo_lang,
+                (int) $this->context->shop->id
             );
 
             $everImg->alt = strip_tags(Tools::substr($image->legend, 0, 125).'');
@@ -517,16 +517,16 @@ class AdminEverPsSeoImageController extends ModuleAdminController
     {
         foreach (Tools::getValue($this->table.'Box') as $idEverImg) {
             $everImg = new EverPsSeoImage(
-                (int)$idEverImg
+                (int) $idEverImg
             );
             $image = new Image(
                 $everImg->id_seo_img,
-                (int)$everImg->id_seo_lang,
-                (int)$this->context->shop->id
+                (int) $everImg->id_seo_lang,
+                (int) $this->context->shop->id
             );
 
             $name = Db::getInstance()->getValue(
-                'SELECT name FROM `'._DB_PREFIX_.'product_lang`
+                'SELECT name FROM `' . _DB_PREFIX_ . 'product_lang`
                 WHERE id_product = '.pSQL($everImg->id_seo_product).'
                 AND id_lang = '.pSQL($everImg->id_seo_lang)
             );
@@ -548,16 +548,16 @@ class AdminEverPsSeoImageController extends ModuleAdminController
     {
         foreach (Tools::getValue($this->table.'Box') as $idEverImg) {
             $everImg = new EverPsSeoImage(
-                (int)$idEverImg
+                (int) $idEverImg
             );
             $image = new Image(
-                (int)$everImg->id_seo_img,
-                (int)$everImg->id_seo_lang,
-                (int)$this->context->shop->id
+                (int) $everImg->id_seo_img,
+                (int) $everImg->id_seo_lang,
+                (int) $this->context->shop->id
             );
 
             $description = Db::getInstance()->getValue(
-                'SELECT description FROM `'._DB_PREFIX_.'product_lang`
+                'SELECT description FROM `' . _DB_PREFIX_ . 'product_lang`
                 WHERE id_product = '.pSQL($everImg->id_seo_product).'
                 AND id_lang = '.pSQL($everImg->id_seo_lang)
             );
@@ -579,27 +579,27 @@ class AdminEverPsSeoImageController extends ModuleAdminController
     {
         foreach (Tools::getValue($this->table.'Box') as $idEverImg) {
             $everImg = new EverPsSeoImage(
-                (int)$idEverImg
+                (int) $idEverImg
             );
             $image = new Image(
-                (int)$everImg->id_seo_img,
-                (int)$everImg->id_seo_lang,
-                (int)$this->context->shop->id
+                (int) $everImg->id_seo_img,
+                (int) $everImg->id_seo_lang,
+                (int) $this->context->shop->id
             );
 
             $description = Db::getInstance()->getValue(
-                'SELECT meta_title FROM `'._DB_PREFIX_.'ever_seo_product`
-                WHERE id_seo_product = '.(int)$everImg->id_seo_product.'
-                AND id_seo_lang = '.(int)$everImg->id_seo_lang
+                'SELECT meta_title FROM `' . _DB_PREFIX_ . 'ever_seo_product`
+                WHERE id_seo_product = '.(int) $everImg->id_seo_product.'
+                AND id_seo_lang = '.(int) $everImg->id_seo_lang
             );
             if (!$description) {
                 continue;
             }
             $sql =
-                'UPDATE `'._DB_PREFIX_.'ever_seo_image`
+                'UPDATE `' . _DB_PREFIX_ . 'ever_seo_image`
                 SET alt = '.pSQl($description).'
-                WHERE id_seo_product = '.(int)$everImg->id_seo_product.'
-                AND id_seo_lang = '.(int)$everImg->id_seo_lang;
+                WHERE id_seo_product = '.(int) $everImg->id_seo_product.'
+                AND id_seo_lang = '.(int) $everImg->id_seo_lang;
                 Db::getInstance()->execute($sql);
             $everImg->alt = $description;
             $image->legend = strip_tags(Tools::substr($description, 0, 125).'');
@@ -614,16 +614,16 @@ class AdminEverPsSeoImageController extends ModuleAdminController
     {
         foreach (Tools::getValue($this->table.'Box') as $idEverImg) {
             $everImg = new EverPsSeoImage(
-                (int)$idEverImg
+                (int) $idEverImg
             );
             $image = new Image(
-                (int)$everImg->id_seo_img,
-                (int)$everImg->id_seo_lang,
-                (int)$this->context->shop->id
+                (int) $everImg->id_seo_img,
+                (int) $everImg->id_seo_lang,
+                (int) $this->context->shop->id
             );
 
             $description = Db::getInstance()->getValue(
-                'SELECT meta_description FROM `'._DB_PREFIX_.'ever_seo_product`
+                'SELECT meta_description FROM `' . _DB_PREFIX_ . 'ever_seo_product`
                 WHERE id_seo_product = '.pSQL($everImg->id_seo_product).'
                 AND id_seo_lang = '.pSQL($everImg->id_seo_lang)
             );
@@ -645,12 +645,12 @@ class AdminEverPsSeoImageController extends ModuleAdminController
     {
         foreach (Tools::getValue($this->table.'Box') as $idEverImg) {
             $everImg = new EverPsSeoImage(
-                (int)$idEverImg
+                (int) $idEverImg
             );
             $image = new Image(
-                (int)$everImg->id_seo_img,
-                (int)$everImg->id_seo_lang,
-                (int)$this->context->shop->id
+                (int) $everImg->id_seo_img,
+                (int) $everImg->id_seo_lang,
+                (int) $this->context->shop->id
             );
 
             if (!Validate::isLoadedObject($image)) {
@@ -658,9 +658,9 @@ class AdminEverPsSeoImageController extends ModuleAdminController
             }
 
             $legend = EverPsSeoImage::changeImageAltShortcodes(
-                (int)$everImg->id_seo_img,
-                (int)$everImg->id_seo_lang,
-                (int)$this->context->shop->id
+                (int) $everImg->id_seo_img,
+                (int) $everImg->id_seo_lang,
+                (int) $this->context->shop->id
             );
 
             $everImg->alt = $legend;
@@ -676,28 +676,28 @@ class AdminEverPsSeoImageController extends ModuleAdminController
     {
         foreach (Tools::getValue($this->table.'Box') as $idEverImg) {
             $everImg = new EverPsSeoImage(
-                (int)$idEverImg
+                (int) $idEverImg
             );
             $image = new Image(
-                (int)$everImg->id_seo_img,
-                (int)$everImg->id_seo_lang,
-                (int)$this->context->shop->id
+                (int) $everImg->id_seo_img,
+                (int) $everImg->id_seo_lang,
+                (int) $this->context->shop->id
             );
             if (!Validate::isLoadedObject($image)) {
                 continue;
             }
             $link = new Link();
             $product = new Product(
-                (int)$everImg->id_seo_product,
+                (int) $everImg->id_seo_product,
                 false,
-                (int)$everImg->id_seo_lang,
-                (int)$this->context->shop->id
+                (int) $everImg->id_seo_lang,
+                (int) $this->context->shop->id
             );
             if (!Validate::isLoadedObject($product)) {
                 continue;
             }
             $richImage = $product->getCover(
-                (int)$product->id
+                (int) $product->id
             );
             $imageType = ImageType::getFormattedName('large');
             $url = Tools::getShopProtocol().$link->getImageLink(
@@ -708,11 +708,11 @@ class AdminEverPsSeoImageController extends ModuleAdminController
             $httpCode = EverPsSeoTools::indexNow(
                 $url
             );
-            $sql = 'UPDATE `'._DB_PREFIX_.'ever_seo_image`
-            SET status_code = "'.(int)$httpCode.'"
-            WHERE id_seo_lang = '.(int)$everImg->id_seo_lang.'
-            AND id_shop = '.(int)$this->context->shop->id.'
-            AND id_ever_seo_image = '.(int)$everImg->id;
+            $sql = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_image`
+            SET status_code = "'.(int) $httpCode.'"
+            WHERE id_seo_lang = '.(int) $everImg->id_seo_lang.'
+            AND id_shop = '.(int) $this->context->shop->id.'
+            AND id_ever_seo_image = '.(int) $everImg->id;
             if (!Db::getInstance()->execute($sql)) {
                 $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
             }

@@ -63,7 +63,7 @@ class IndexNow extends Command
         $context->employee = new \Employee(1);
         if ($action === 'idshop') {
             $shop = new \Shop(
-                (int)$idShop
+                (int) $idShop
             );
             if (!\Validate::isLoadedObject($shop)) {
                 $output->writeln('<comment>Shop not found</comment>');
@@ -86,7 +86,7 @@ class IndexNow extends Command
         $dayCounter = (int)\Configuration::get('EVERSEO_INDEXNOW_DAY');
         $dayOfWeek = date('N');
         if ($dayCounter <= 0) {
-            \Configuration::updateValue('EVERSEO_INDEXNOW_DAY', (int)$dayOfWeek);
+            \Configuration::updateValue('EVERSEO_INDEXNOW_DAY', (int) $dayOfWeek);
         }
         // Reset counter every day
         if ($dayCounter != $dayOfWeek) {
@@ -105,7 +105,7 @@ class IndexNow extends Command
             '<info>Index now : max limit is : '.$maxLimit.'</info>'
         ));
         $links = $this->getIndexNowUrls(
-            (int)$shop->id
+            (int) $shop->id
         );
         foreach ($links as $url) {
             if ($dailyCount >= $maxLimit) {
@@ -133,8 +133,8 @@ class IndexNow extends Command
             $product = new \Product(
                 $arr['id_product'],
                 false,
-                (int)$arr['id_lang'],
-                (int)$idShop
+                (int) $arr['id_lang'],
+                (int) $idShop
             );
             if (!\Validate::isLoadedObject($product)) {
                 continue;
@@ -156,8 +156,8 @@ class IndexNow extends Command
         foreach ($allCategoriesIds as $arr) {
             $category = new \Category(
                 $arr['id_category'],
-                (int)$arr['id_lang'],
-                (int)$idShop
+                (int) $arr['id_lang'],
+                (int) $idShop
             );
             if (!\Validate::isLoadedObject($category)) {
                 continue;
@@ -179,7 +179,7 @@ class IndexNow extends Command
         foreach ($allManufacturersIds as $arr) {
             $manufacturer = new \Manufacturer(
                 $arr['id_manufacturer'],
-                (int)$arr['id_lang']
+                (int) $arr['id_lang']
             );
             if (!\Validate::isLoadedObject($manufacturer)) {
                 continue;
@@ -206,21 +206,21 @@ class IndexNow extends Command
         $sql->leftJoin(
             'product',
             'ps',
-            'ps.id_product = pl.id_product AND ps.id_shop_default = '.(int)$idShop
+            'ps.id_product = pl.id_product AND ps.id_shop_default = '.(int) $idShop
         );
         $sql->leftJoin(
             'ever_seo_product',
             'esp',
-            'esp.id_seo_product = pl.id_product AND esp.id_shop = '.(int)$idShop
+            'esp.id_seo_product = pl.id_product AND esp.id_shop = '.(int) $idShop
         );
-        if ((int)$idLang > 0) {
-            $sql->where('pl.id_lang = '.(int)$idLang);
+        if ((int) $idLang > 0) {
+            $sql->where('pl.id_lang = '.(int) $idLang);
         }
-        if ((int)$idCategory > 0) {
-            $sql->where('ps.id_category_default = '.(int)$idCategory);
+        if ((int) $idCategory > 0) {
+            $sql->where('ps.id_category_default = '.(int) $idCategory);
         }
-        if ((int)$limit > 0) {
-            $sql->limit((int)$limit);
+        if ((int) $limit > 0) {
+            $sql->limit((int) $limit);
         }
         $sql->where('esp.status_code = 0');
         $allProductIds = \Db::getInstance()->executeS($sql);
@@ -235,19 +235,19 @@ class IndexNow extends Command
         $sql->leftJoin(
             'category_shop',
             'ps',
-            'ps.id_category = pl.id_category AND ps.id_shop = '.(int)$idShop
+            'ps.id_category = pl.id_category AND ps.id_shop = '.(int) $idShop
         );
         $sql->leftJoin(
             'ever_seo_category',
             'esc',
-            'esc.id_seo_category = pl.id_category AND esc.id_shop = '.(int)$idShop
+            'esc.id_seo_category = pl.id_category AND esc.id_shop = '.(int) $idShop
         );
-        $sql->where('pl.id_shop = '.(int)$idShop);
-        if ((int)$idLang > 0) {
-            $sql->where('pl.id_lang = '.(int)$idLang);
+        $sql->where('pl.id_shop = '.(int) $idShop);
+        if ((int) $idLang > 0) {
+            $sql->where('pl.id_lang = '.(int) $idLang);
         }
-        if ((int)$idCategory > 0) {
-            $sql->where('pl.id_category = '.(int)$idCategory);
+        if ((int) $idCategory > 0) {
+            $sql->where('pl.id_category = '.(int) $idCategory);
         }
         $sql->where('esc.status_code = 0');
         $allCategoriesIds = \Db::getInstance()->executeS($sql);
@@ -262,19 +262,19 @@ class IndexNow extends Command
         $sql->leftJoin(
             'manufacturer_shop',
             'ms',
-            'ms.id_manufacturer = ml.id_manufacturer AND ms.id_shop = '.(int)$idShop
+            'ms.id_manufacturer = ml.id_manufacturer AND ms.id_shop = '.(int) $idShop
         );
         $sql->leftJoin(
             'ever_seo_manufacturer',
             'esm',
-            'esm.id_seo_manufacturer = ml.id_manufacturer AND esm.id_shop = '.(int)$idShop
+            'esm.id_seo_manufacturer = ml.id_manufacturer AND esm.id_shop = '.(int) $idShop
         );
-        $sql->where('ms.id_shop = '.(int)$idShop);
-        if ((int)$idLang > 0) {
-            $sql->where('ml.id_lang = '.(int)$idLang);
+        $sql->where('ms.id_shop = '.(int) $idShop);
+        if ((int) $idLang > 0) {
+            $sql->where('ml.id_lang = '.(int) $idLang);
         }
-        if ((int)$idManufacturer > 0) {
-            $sql->where('pl.id_manufacturer = '.(int)$idManufacturer);
+        if ((int) $idManufacturer > 0) {
+            $sql->where('pl.id_manufacturer = '.(int) $idManufacturer);
         }
         $sql->where('esm.status_code = 0');
         $allManufacturersIds = \Db::getInstance()->executeS($sql);

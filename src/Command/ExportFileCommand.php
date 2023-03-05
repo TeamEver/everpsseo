@@ -72,7 +72,7 @@ class ExportFileCommand extends Command
         $context->employee = new \Employee(1);
         if (\Validate::isInt($idShop)) {
             $shop = new \Shop(
-                (int)$idShop
+                (int) $idShop
             );
             if (!\Validate::isLoadedObject($shop)) {
                 $output->writeln('<comment>Shop not found</comment>');
@@ -102,10 +102,10 @@ class ExportFileCommand extends Command
         $reportName = $action;
         if ($action === 'categories') {
             $dataSet = $this->getAllCategories(
-                (int)$idShop,
-                (int)$idLang,
-                (int)$categoryId,
-                (int)$limit
+                (int) $idShop,
+                (int) $idLang,
+                (int) $categoryId,
+                (int) $limit
             );
             $spreadsheet = new Spreadsheet();
             // Set properties
@@ -240,10 +240,10 @@ class ExportFileCommand extends Command
         }
         if ($action === 'products') {
             $dataSet = $this->getAllProducts(
-                (int)$idShop,
-                (int)$idLang,
-                (int)$categoryId,
-                (int)$limit
+                (int) $idShop,
+                (int) $idLang,
+                (int) $categoryId,
+                (int) $limit
             );
             $spreadsheet = new Spreadsheet();
             // Set properties
@@ -384,9 +384,9 @@ class ExportFileCommand extends Command
         }
         if ($action === 'features') {
             $dataSet = $this->getAllFeatures(
-                (int)$idShop,
-                (int)$idLang,
-                (int)$limit
+                (int) $idShop,
+                (int) $idLang,
+                (int) $limit
             );
             $spreadsheet = new Spreadsheet();
             // Set properties
@@ -492,13 +492,13 @@ class ExportFileCommand extends Command
         $sql->leftJoin(
             'feature_shop',
             'fs',
-            'fs.id_feature = fl.id_feature AND fs.id_shop = '.(int)$idShop
+            'fs.id_feature = fl.id_feature AND fs.id_shop = '.(int) $idShop
         );
-        if ((int)$idLang > 0) {
-            $sql->where('fl.id_lang = '.(int)$idLang);
+        if ((int) $idLang > 0) {
+            $sql->where('fl.id_lang = '.(int) $idLang);
         }
-        if ((int)$limit > 0) {
-            $sql->limit((int)$limit);
+        if ((int) $limit > 0) {
+            $sql->limit((int) $limit);
         }
         $allFeaturesIds = \Db::getInstance()->executeS($sql);
         return $allFeaturesIds;
@@ -509,11 +509,11 @@ class ExportFileCommand extends Command
         $sql = new \DbQuery();
         $sql->select('*');
         $sql->from('feature_value_lang', 'fvl');
-        if ((int)$idLang > 0) {
-            $sql->where('fvl.id_lang = '.(int)$idLang);
+        if ((int) $idLang > 0) {
+            $sql->where('fvl.id_lang = '.(int) $idLang);
         }
-        if ((int)$limit > 0) {
-            $sql->limit((int)$limit);
+        if ((int) $limit > 0) {
+            $sql->limit((int) $limit);
         }
         $allFeaturesIds = \Db::getInstance()->executeS($sql);
         return $allFeaturesIds;
@@ -527,21 +527,21 @@ class ExportFileCommand extends Command
         $sql->leftJoin(
             'product',
             'ps',
-            'ps.id_product = pl.id_product AND ps.id_shop_default = '.(int)$idShop
+            'ps.id_product = pl.id_product AND ps.id_shop_default = '.(int) $idShop
         );
         $sql->leftJoin(
             'ever_seo_product',
             'esp',
-            'esp.id_seo_product = pl.id_product AND esp.id_shop = '.(int)$idShop
+            'esp.id_seo_product = pl.id_product AND esp.id_shop = '.(int) $idShop
         );
-        if ((int)$idLang > 0) {
-            $sql->where('pl.id_lang = '.(int)$idLang);
+        if ((int) $idLang > 0) {
+            $sql->where('pl.id_lang = '.(int) $idLang);
         }
-        if ((int)$idCategory > 0) {
-            $sql->where('ps.id_category_default = '.(int)$idCategory);
+        if ((int) $idCategory > 0) {
+            $sql->where('ps.id_category_default = '.(int) $idCategory);
         }
-        if ((int)$limit > 0) {
-            $sql->limit((int)$limit);
+        if ((int) $limit > 0) {
+            $sql->limit((int) $limit);
         }
         $allProductIds = \Db::getInstance()->executeS($sql);
         return $allProductIds;
@@ -555,19 +555,19 @@ class ExportFileCommand extends Command
         $sql->leftJoin(
             'category_shop',
             'ps',
-            'ps.id_category = pl.id_category AND ps.id_shop = '.(int)$idShop
+            'ps.id_category = pl.id_category AND ps.id_shop = '.(int) $idShop
         );
         $sql->leftJoin(
             'ever_seo_category',
             'esc',
-            'esc.id_seo_category = pl.id_category AND esc.id_shop = '.(int)$idShop
+            'esc.id_seo_category = pl.id_category AND esc.id_shop = '.(int) $idShop
         );
-        $sql->where('pl.id_shop = '.(int)$idShop);
-        if ((int)$idLang > 0) {
-            $sql->where('pl.id_lang = '.(int)$idLang);
+        $sql->where('pl.id_shop = '.(int) $idShop);
+        if ((int) $idLang > 0) {
+            $sql->where('pl.id_lang = '.(int) $idLang);
         }
-        if ((int)$idCategory > 0) {
-            $sql->where('pl.id_category = '.(int)$idCategory);
+        if ((int) $idCategory > 0) {
+            $sql->where('pl.id_category = '.(int) $idCategory);
         }
         $allCategoriesIds = \Db::getInstance()->executeS($sql);
         return $allCategoriesIds;

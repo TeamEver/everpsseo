@@ -7,17 +7,17 @@
  * @see https://www.team-ever.com
  */
 
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoCategory.php';
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoCmsCategory.php';
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoCms.php';
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoImage.php';
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoManufacturer.php';
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoPageMeta.php';
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoProduct.php';
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoRedirect.php';
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoSupplier.php';
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoSitemap.php';
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoBacklink.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoCategory.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoCmsCategory.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoCms.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoImage.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoManufacturer.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoPageMeta.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoProduct.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoRedirect.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoSupplier.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoSitemap.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoBacklink.php';
 
 class EverPsSeoKeywordsStrategy extends ObjectModel
 {
@@ -37,83 +37,83 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
         switch ($controller_name) {
             case 'product':
                 $product = new Product(
-                    (int)$id_object,
+                    (int) $id_object,
                     false,
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
                 $seo_obj = EverPsSeoProduct::getSeoProduct(
-                    (int)$id_object,
-                    (int)$id_shop,
-                    (int)$id_shop
+                    (int) $id_object,
+                    (int) $id_shop,
+                    (int) $id_shop
                 );
                 $content = $product->name.' '.$product->description_short.' '.$product->description;
                 break;
 
             case 'category':
                 $category = new Category(
-                    (int)$id_object,
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_object,
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
                 $seo_obj = EverPsSeoCategory::getSeoCategory(
-                    (int)$id_object,
-                    (int)$id_shop,
-                    (int)$id_shop
+                    (int) $id_object,
+                    (int) $id_shop,
+                    (int) $id_shop
                 );
                 $content = $category->name.' '.$category->description;
                 break;
 
             case 'cms':
                 $cms = new Cms(
-                    (int)$id_object,
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_object,
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
                 $seo_obj = EverPsSeoCms::getSeoCms(
-                    (int)$id_object,
-                    (int)$id_shop,
-                    (int)$id_shop
+                    (int) $id_object,
+                    (int) $id_shop,
+                    (int) $id_shop
                 );
                 $content = $cms->meta_title.' '.$cms->content;
                 break;
 
             case 'manufacturer':
                 $manufacturer = new Manufacturer(
-                    (int)$id_object,
-                    (int)$id_lang
+                    (int) $id_object,
+                    (int) $id_lang
                 );
                 $seo_obj = EverPsSeoManufacturer::getSeoManufacturer(
-                    (int)$id_object,
-                    (int)$id_shop,
-                    (int)$id_shop
+                    (int) $id_object,
+                    (int) $id_shop,
+                    (int) $id_shop
                 );
                 $content = $manufacturer->name.' '.$manufacturer->short_description.' '.$manufacturer->description;
                 break;
 
             case 'supplier':
                 $supplier = new Supplier(
-                    (int)$id_object,
-                    (int)$id_lang
+                    (int) $id_object,
+                    (int) $id_lang
                 );
                 $seo_obj = EverPsSeoSupplier::getSeoSupplier(
-                    (int)$id_object,
-                    (int)$id_shop,
-                    (int)$id_shop
+                    (int) $id_object,
+                    (int) $id_shop,
+                    (int) $id_shop
                 );
                 $content = $supplier->name.' '.$supplier->description;
                 break;
 
             case 'meta':
                 $meta = new Meta(
-                    (int)$id_object,
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_object,
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
                 $seo_obj = EverPsSeoPageMeta::getSeoPageMeta(
-                    (int)$id_object,
-                    (int)$id_shop,
-                    (int)$id_shop
+                    (int) $id_object,
+                    (int) $id_shop,
+                    (int) $id_shop
                 );
                 $content = $meta->title.' '.$meta->description;
                 break;
@@ -125,7 +125,7 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
         if ($keywords) {
             foreach ($keywords as $keyword) {
                 $keyword = mb_strtolower($keyword, 'UTF-8');
-                $count += substr_count((string)$onlyWords, (string)$keyword);
+                $count += substr_count((string) $onlyWords, (string) $keyword);
             }
             return $count;
         }
@@ -133,7 +133,7 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
 
     public static function getEverSeoQltyLvl()
     {
-        switch ((int)Configuration::get('EVERSEO_QUALITY_LEVEL')) {
+        switch ((int) Configuration::get('EVERSEO_QUALITY_LEVEL')) {
             case 0:
                 $words = 20000;
                 $anchors = 1000;
@@ -227,10 +227,10 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
             return false;
         }
         $product = new Product(
-            (int)$seoProduct->id_seo_product,
+            (int) $seoProduct->id_seo_product,
             false,
-            (int)$seoProduct->id_seo_lang,
-            (int)$seoProduct->id_shop
+            (int) $seoProduct->id_seo_lang,
+            (int) $seoProduct->id_shop
         );
         libxml_use_internal_errors(true);
         $url = $link->getProductLink(
@@ -238,8 +238,8 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
             null,
             null,
             null,
-            (int)$seoProduct->id_seo_lang,
-            (int)$seoProduct->id_shop
+            (int) $seoProduct->id_seo_lang,
+            (int) $seoProduct->id_shop
         );
         $content = self::urlGetContents($url);
         $dom = new DOMDocument;
@@ -264,54 +264,54 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
         $metaDescLength = Tools::strlen($seoProduct->meta_description);
         $hn = 0;
         if ($firstH > 1) {
-            $hn -= (int)$firstH;
+            $hn -= (int) $firstH;
             $errors[] = $module->l('You have too much h1 tag', 'everpsseo');
         }
         if ($firstH == 1 && $secondtH >= 2) {
-            $hn += (int)$secondtH;
+            $hn += (int) $secondtH;
         } else {
             $errors[] = $module->l('Leaping or missing h2 tag', 'everpsseo');
         }
         if ($secondtH >= 2 && $thirdH >= 2) {
-            $hn += (int)$thirdH;
+            $hn += (int) $thirdH;
         } else {
             $errors[] = $module->l('Leaping or missing h3 tag', 'everpsseo');
         }
         if ($thirdH >= 2 && $fourthH >= 2) {
-            $hn += (int)$fourthH;
+            $hn += (int) $fourthH;
         } else {
             $errors[] = $module->l('Leaping or missing h4 tag', 'everpsseo');
         }
         if ($fourthH >= 2 && $fifthH >= 2) {
-            $hn += (int)$fifthH;
+            $hn += (int) $fifthH;
         } else {
             $errors[] = $module->l('Leaping or missing h5 tag', 'everpsseo');
         }
         if ($fifthH >= 2 && $six >= 2) {
-            $hn += (int)$six;
+            $hn += (int) $six;
         } else {
             $errors[] = $module->l('Leaping or missing h6 tag', 'everpsseo');
         }
-        $hnNote = $hn * 100 / (int)$qualityLevel[2];
+        $hnNote = $hn * 100 / (int) $qualityLevel[2];
         if (!$anchor) {
-            $anchorNote = (int)$anchor * 100 / (int)$qualityLevel[1];
+            $anchorNote = (int) $anchor * 100 / (int) $qualityLevel[1];
             $errors[] = $module->l('Missing anchor tags', 'everpsseo');
         } else {
-            $anchorNote = (int)$anchor * 100 / (int)$qualityLevel[1];
+            $anchorNote = (int) $anchor * 100 / (int) $qualityLevel[1];
         }
         if (!$strong) {
-            $strongNote = (int)$strong * 100 / (int)$qualityLevel[3];
+            $strongNote = (int) $strong * 100 / (int) $qualityLevel[3];
             $errors[] = $module->l('Missing strong tags', 'everpsseo');
         } else {
-            $strongNote = (int)$strong * 100 / (int)$qualityLevel[3];
+            $strongNote = (int) $strong * 100 / (int) $qualityLevel[3];
         }
-        if (!$keywordsCount || (int)$keywordsCount <= 0) {
-            $keywordsNote = (int)$keywordsCount * 100 / (int)$qualityLevel[4];
+        if (!$keywordsCount || (int) $keywordsCount <= 0) {
+            $keywordsNote = (int) $keywordsCount * 100 / (int) $qualityLevel[4];
             $errors[] = $module->l('Missing keywords', 'everpsseo');
         } else {
-            $keywordsNote = (int)$keywordsCount * 100 / (int)$qualityLevel[4];
+            $keywordsNote = (int) $keywordsCount * 100 / (int) $qualityLevel[4];
         }
-        $wordsNote = $wordCount * 100 / (int)$qualityLevel[0];
+        $wordsNote = $wordCount * 100 / (int) $qualityLevel[0];
         if ($titleLength < 65 && $titleLength > 30) {
             $titleNote = $titleLength * 100 / 65;
         } else {
@@ -333,11 +333,11 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
             }
         }
         $note = ($hnNote + $anchorNote + $strongNote + $keywordsNote + $wordsNote + $titleNote + $metadescNote) / 8;
-        if ((int)$note > 100) {
+        if ((int) $note > 100) {
             $note = 100;
         }
         $return = array(
-            'note' => (int)$note,
+            'note' => (int) $note,
             'errors' => $errors
         );
         return $return;
@@ -353,99 +353,99 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
         }
         libxml_use_internal_errors(true);
         $url = $link->getCategoryLink(
-            (int)$seoCategory->id_seo_category,
+            (int) $seoCategory->id_seo_category,
             null,
-            (int)$seoCategory->id_seo_lang,
+            (int) $seoCategory->id_seo_lang,
             null,
-            (int)$seoCategory->id_shop
+            (int) $seoCategory->id_shop
         );
         $content = self::urlGetContents($url);
         $url = $link->getCategoryLink(
-            (int)$seoCategory->id_seo_category,
+            (int) $seoCategory->id_seo_category,
             null,
-            (int)$seoCategory->id_seo_lang,
+            (int) $seoCategory->id_seo_lang,
             null,
-            (int)$seoCategory->id_shop
+            (int) $seoCategory->id_shop
         );
         $content = self::urlGetContents($url);
         $url = $link->getCategoryLink(
-            (int)$seoCategory->id_seo_category,
+            (int) $seoCategory->id_seo_category,
             null,
-            (int)$seoCategory->id_seo_lang,
+            (int) $seoCategory->id_seo_lang,
             null,
-            (int)$seoCategory->id_shop
+            (int) $seoCategory->id_shop
         );
         $content = self::urlGetContents($url);
         $url = $link->getCategoryLink(
-            (int)$seoCategory->id_seo_category,
+            (int) $seoCategory->id_seo_category,
             null,
-            (int)$seoCategory->id_seo_lang,
+            (int) $seoCategory->id_seo_lang,
             null,
-            (int)$seoCategory->id_shop
+            (int) $seoCategory->id_shop
         );
         $content = self::urlGetContents($url);
         $url = $link->getCategoryLink(
-            (int)$seoCategory->id_seo_category,
+            (int) $seoCategory->id_seo_category,
             null,
-            (int)$seoCategory->id_seo_lang,
+            (int) $seoCategory->id_seo_lang,
             null,
-            (int)$seoCategory->id_shop
+            (int) $seoCategory->id_shop
         );
         $content = self::urlGetContents($url);
         $url = $link->getCategoryLink(
-            (int)$seoCategory->id_seo_category,
+            (int) $seoCategory->id_seo_category,
             null,
-            (int)$seoCategory->id_seo_lang,
+            (int) $seoCategory->id_seo_lang,
             null,
-            (int)$seoCategory->id_shop
+            (int) $seoCategory->id_shop
         );
         $content = self::urlGetContents($url);
         $url = $link->getCategoryLink(
-            (int)$seoCategory->id_seo_category,
+            (int) $seoCategory->id_seo_category,
             null,
-            (int)$seoCategory->id_seo_lang,
+            (int) $seoCategory->id_seo_lang,
             null,
-            (int)$seoCategory->id_shop
+            (int) $seoCategory->id_shop
         );
         $content = self::urlGetContents($url);
         $url = $link->getCategoryLink(
-            (int)$seoCategory->id_seo_category,
+            (int) $seoCategory->id_seo_category,
             null,
-            (int)$seoCategory->id_seo_lang,
+            (int) $seoCategory->id_seo_lang,
             null,
-            (int)$seoCategory->id_shop
+            (int) $seoCategory->id_shop
         );
         $content = self::urlGetContents($url);
         $url = $link->getCategoryLink(
-            (int)$seoCategory->id_seo_category,
+            (int) $seoCategory->id_seo_category,
             null,
-            (int)$seoCategory->id_seo_lang,
+            (int) $seoCategory->id_seo_lang,
             null,
-            (int)$seoCategory->id_shop
+            (int) $seoCategory->id_shop
         );
         $content = self::urlGetContents($url);
         $url = $link->getCategoryLink(
-            (int)$seoCategory->id_seo_category,
+            (int) $seoCategory->id_seo_category,
             null,
-            (int)$seoCategory->id_seo_lang,
+            (int) $seoCategory->id_seo_lang,
             null,
-            (int)$seoCategory->id_shop
+            (int) $seoCategory->id_shop
         );
         $content = self::urlGetContents($url);
         $url = $link->getCategoryLink(
-            (int)$seoCategory->id_seo_category,
+            (int) $seoCategory->id_seo_category,
             null,
-            (int)$seoCategory->id_seo_lang,
+            (int) $seoCategory->id_seo_lang,
             null,
-            (int)$seoCategory->id_shop
+            (int) $seoCategory->id_shop
         );
         $content = self::urlGetContents($url);
         $url = $link->getCategoryLink(
-            (int)$seoCategory->id_seo_category,
+            (int) $seoCategory->id_seo_category,
             null,
-            (int)$seoCategory->id_seo_lang,
+            (int) $seoCategory->id_seo_lang,
             null,
-            (int)$seoCategory->id_shop
+            (int) $seoCategory->id_shop
         );
         $content = self::urlGetContents($url);
         if (empty($content)) {
@@ -473,55 +473,55 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
         $metaDescLength = Tools::strlen($seoCategory->meta_description);
         $hn = 0;
         if ($firstH > 1) {
-            $hn -= (int)$firstH;
+            $hn -= (int) $firstH;
             $errors[] = $module->l('You have too much h1 tag', 'everpsseo');
         }
         if ($firstH == 1 && $secondtH >= 2) {
-            $hn += (int)$secondtH;
+            $hn += (int) $secondtH;
         } else {
             $errors[] = $module->l('Leaping or missing h2 tag', 'everpsseo');
         }
         if ($secondtH >= 2 && $thirdH >= 2) {
-            $hn += (int)$thirdH;
+            $hn += (int) $thirdH;
         } else {
             $errors[] = $module->l('Leaping or missing h3 tag', 'everpsseo');
         }
         if ($thirdH >= 2 && $fourthH >= 2) {
-            $hn += (int)$fourthH;
+            $hn += (int) $fourthH;
         } else {
             $errors[] = $module->l('Leaping or missing h4 tag', 'everpsseo');
         }
         if ($fourthH >= 2 && $fifthH >= 2) {
-            $hn += (int)$fifthH;
+            $hn += (int) $fifthH;
         } else {
             $errors[] = $module->l('Leaping or missing h5 tag', 'everpsseo');
         }
         if ($fifthH >= 2 && $six >= 2) {
-            $hn += (int)$six;
+            $hn += (int) $six;
         } else {
             $errors[] = $module->l('Leaping or missing h6 tag', 'everpsseo');
         }
-        $hnNote = $hn * 100 / (int)$qualityLevel[2];
-        $hnNote = $hn * 100 / (int)$qualityLevel[2];
+        $hnNote = $hn * 100 / (int) $qualityLevel[2];
+        $hnNote = $hn * 100 / (int) $qualityLevel[2];
         if (!$anchor) {
-            $anchorNote = (int)$anchor * 100 / (int)$qualityLevel[1];
+            $anchorNote = (int) $anchor * 100 / (int) $qualityLevel[1];
             $errors[] = $module->l('Missing anchor tags', 'everpsseo');
         } else {
-            $anchorNote = (int)$anchor * 100 / (int)$qualityLevel[1];
+            $anchorNote = (int) $anchor * 100 / (int) $qualityLevel[1];
         }
         if (!$strong) {
-            $strongNote = (int)$strong * 100 / (int)$qualityLevel[3];
+            $strongNote = (int) $strong * 100 / (int) $qualityLevel[3];
             $errors[] = $module->l('Missing strong tags', 'everpsseo');
         } else {
-            $strongNote = (int)$strong * 100 / (int)$qualityLevel[3];
+            $strongNote = (int) $strong * 100 / (int) $qualityLevel[3];
         }
-        if (!$keywordsCount || (int)$keywordsCount <= 0) {
-            $keywordsNote = (int)$keywordsCount * 100 / (int)$qualityLevel[4];
+        if (!$keywordsCount || (int) $keywordsCount <= 0) {
+            $keywordsNote = (int) $keywordsCount * 100 / (int) $qualityLevel[4];
             $errors[] = $module->l('Missing keywords', 'everpsseo');
         } else {
-            $keywordsNote = (int)$keywordsCount * 100 / (int)$qualityLevel[4];
+            $keywordsNote = (int) $keywordsCount * 100 / (int) $qualityLevel[4];
         }
-        $wordsNote = $wordCount * 100 / (int)$qualityLevel[0];
+        $wordsNote = $wordCount * 100 / (int) $qualityLevel[0];
         if ($titleLength < 65 && $titleLength > 30) {
             $titleNote = $titleLength * 100 / 65;
         } else {
@@ -543,11 +543,11 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
             }
         }
         $note = ($hnNote + $anchorNote + $strongNote + $keywordsNote + $wordsNote + $titleNote + $metadescNote) / 8;
-        if ((int)$note > 100) {
+        if ((int) $note > 100) {
             $note = 100;
         }
         $return = array(
-            'note' => (int)$note,
+            'note' => (int) $note,
             'errors' => $errors
         );
         return $return;
@@ -563,10 +563,10 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
         }
         libxml_use_internal_errors(true);
         $url = $link->getManufacturerLink(
-            (int)$seoManufacturer->id_seo_manufacturer,
+            (int) $seoManufacturer->id_seo_manufacturer,
             null,
-            (int)$seoManufacturer->id_seo_lang,
-            (int)$seoManufacturer->id_shop
+            (int) $seoManufacturer->id_seo_lang,
+            (int) $seoManufacturer->id_shop
         );
         $content = self::urlGetContents($url);
         if (empty($content)) {
@@ -594,55 +594,55 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
         $metaDescLength = Tools::strlen($seoManufacturer->meta_description);
         $hn = 0;
         if ($firstH > 1) {
-            $hn -= (int)$firstH;
+            $hn -= (int) $firstH;
             $errors[] = $module->l('You have too much h1 tag', 'everpsseo');
         }
         if ($firstH == 1 && $secondtH >= 2) {
-            $hn += (int)$secondtH;
+            $hn += (int) $secondtH;
         } else {
             $errors[] = $module->l('Leaping or missing h2 tag', 'everpsseo');
         }
         if ($secondtH >= 2 && $thirdH >= 2) {
-            $hn += (int)$thirdH;
+            $hn += (int) $thirdH;
         } else {
             $errors[] = $module->l('Leaping or missing h3 tag', 'everpsseo');
         }
         if ($thirdH >= 2 && $fourthH >= 2) {
-            $hn += (int)$fourthH;
+            $hn += (int) $fourthH;
         } else {
             $errors[] = $module->l('Leaping or missing h4 tag', 'everpsseo');
         }
         if ($fourthH >= 2 && $fifthH >= 2) {
-            $hn += (int)$fifthH;
+            $hn += (int) $fifthH;
         } else {
             $errors[] = $module->l('Leaping or missing h5 tag', 'everpsseo');
         }
         if ($fifthH >= 2 && $six >= 2) {
-            $hn += (int)$six;
+            $hn += (int) $six;
         } else {
             $errors[] = $module->l('Leaping or missing h6 tag', 'everpsseo');
         }
-        $hnNote = $hn * 100 / (int)$qualityLevel[2];
-        $hnNote = $hn * 100 / (int)$qualityLevel[2];
+        $hnNote = $hn * 100 / (int) $qualityLevel[2];
+        $hnNote = $hn * 100 / (int) $qualityLevel[2];
         if (!$anchor) {
-            $anchorNote = (int)$anchor * 100 / (int)$qualityLevel[1];
+            $anchorNote = (int) $anchor * 100 / (int) $qualityLevel[1];
             $errors[] = $module->l('Missing anchor tags', 'everpsseo');
         } else {
-            $anchorNote = (int)$anchor * 100 / (int)$qualityLevel[1];
+            $anchorNote = (int) $anchor * 100 / (int) $qualityLevel[1];
         }
         if (!$strong) {
-            $strongNote = (int)$strong * 100 / (int)$qualityLevel[3];
+            $strongNote = (int) $strong * 100 / (int) $qualityLevel[3];
             $errors[] = $module->l('Missing strong tags', 'everpsseo');
         } else {
-            $strongNote = (int)$strong * 100 / (int)$qualityLevel[3];
+            $strongNote = (int) $strong * 100 / (int) $qualityLevel[3];
         }
-        if (!$keywordsCount || (int)$keywordsCount <= 0) {
-            $keywordsNote = (int)$keywordsCount * 100 / (int)$qualityLevel[4];
+        if (!$keywordsCount || (int) $keywordsCount <= 0) {
+            $keywordsNote = (int) $keywordsCount * 100 / (int) $qualityLevel[4];
             $errors[] = $module->l('Missing keywords', 'everpsseo');
         } else {
-            $keywordsNote = (int)$keywordsCount * 100 / (int)$qualityLevel[4];
+            $keywordsNote = (int) $keywordsCount * 100 / (int) $qualityLevel[4];
         }
-        $wordsNote = $wordCount * 100 / (int)$qualityLevel[0];
+        $wordsNote = $wordCount * 100 / (int) $qualityLevel[0];
         if ($titleLength < 65 && $titleLength > 30) {
             $titleNote = $titleLength * 100 / 65;
         } else {
@@ -664,11 +664,11 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
             }
         }
         $note = ($hnNote + $anchorNote + $strongNote + $keywordsNote + $wordsNote + $titleNote + $metadescNote) / 8;
-        if ((int)$note > 100) {
+        if ((int) $note > 100) {
             $note = 100;
         }
         $return = array(
-            'note' => (int)$note,
+            'note' => (int) $note,
             'errors' => $errors
         );
         return $return;
@@ -684,10 +684,10 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
         }
         libxml_use_internal_errors(true);
         $url = $link->getSupplierLink(
-            (int)$seoSupplier->id_seo_supplier,
+            (int) $seoSupplier->id_seo_supplier,
             null,
-            (int)$seoSupplier->id_seo_lang,
-            (int)$seoSupplier->id_shop
+            (int) $seoSupplier->id_seo_lang,
+            (int) $seoSupplier->id_shop
         );
         $content = self::urlGetContents($url);
         if (empty($content)) {
@@ -715,55 +715,55 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
         $metaDescLength = Tools::strlen($seoSupplier->meta_description);
         $hn = 0;
         if ($firstH > 1) {
-            $hn -= (int)$firstH;
+            $hn -= (int) $firstH;
             $errors[] = $module->l('You have too much h1 tag', 'everpsseo');
         }
         if ($firstH == 1 && $secondtH >= 2) {
-            $hn += (int)$secondtH;
+            $hn += (int) $secondtH;
         } else {
             $errors[] = $module->l('Leaping or missing h2 tag', 'everpsseo');
         }
         if ($secondtH >= 2 && $thirdH >= 2) {
-            $hn += (int)$thirdH;
+            $hn += (int) $thirdH;
         } else {
             $errors[] = $module->l('Leaping or missing h3 tag', 'everpsseo');
         }
         if ($thirdH >= 2 && $fourthH >= 2) {
-            $hn += (int)$fourthH;
+            $hn += (int) $fourthH;
         } else {
             $errors[] = $module->l('Leaping or missing h4 tag', 'everpsseo');
         }
         if ($fourthH >= 2 && $fifthH >= 2) {
-            $hn += (int)$fifthH;
+            $hn += (int) $fifthH;
         } else {
             $errors[] = $module->l('Leaping or missing h5 tag', 'everpsseo');
         }
         if ($fifthH >= 2 && $six >= 2) {
-            $hn += (int)$six;
+            $hn += (int) $six;
         } else {
             $errors[] = $module->l('Leaping or missing h6 tag', 'everpsseo');
         }
-        $hnNote = $hn * 100 / (int)$qualityLevel[2];
-        $hnNote = $hn * 100 / (int)$qualityLevel[2];
+        $hnNote = $hn * 100 / (int) $qualityLevel[2];
+        $hnNote = $hn * 100 / (int) $qualityLevel[2];
         if (!$anchor) {
-            $anchorNote = (int)$anchor * 100 / (int)$qualityLevel[1];
+            $anchorNote = (int) $anchor * 100 / (int) $qualityLevel[1];
             $errors[] = $module->l('Missing anchor tags', 'everpsseo');
         } else {
-            $anchorNote = (int)$anchor * 100 / (int)$qualityLevel[1];
+            $anchorNote = (int) $anchor * 100 / (int) $qualityLevel[1];
         }
         if (!$strong) {
-            $strongNote = (int)$strong * 100 / (int)$qualityLevel[3];
+            $strongNote = (int) $strong * 100 / (int) $qualityLevel[3];
             $errors[] = $module->l('Missing strong tags', 'everpsseo');
         } else {
-            $strongNote = (int)$strong * 100 / (int)$qualityLevel[3];
+            $strongNote = (int) $strong * 100 / (int) $qualityLevel[3];
         }
-        if (!$keywordsCount || (int)$keywordsCount <= 0) {
-            $keywordsNote = (int)$keywordsCount * 100 / (int)$qualityLevel[4];
+        if (!$keywordsCount || (int) $keywordsCount <= 0) {
+            $keywordsNote = (int) $keywordsCount * 100 / (int) $qualityLevel[4];
             $errors[] = $module->l('Missing keywords', 'everpsseo');
         } else {
-            $keywordsNote = (int)$keywordsCount * 100 / (int)$qualityLevel[4];
+            $keywordsNote = (int) $keywordsCount * 100 / (int) $qualityLevel[4];
         }
-        $wordsNote = $wordCount * 100 / (int)$qualityLevel[0];
+        $wordsNote = $wordCount * 100 / (int) $qualityLevel[0];
         if ($titleLength < 65 && $titleLength > 30) {
             $titleNote = $titleLength * 100 / 65;
         } else {
@@ -785,11 +785,11 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
             }
         }
         $note = ($hnNote + $anchorNote + $strongNote + $keywordsNote + $wordsNote + $titleNote + $metadescNote) / 8;
-        if ((int)$note > 100) {
+        if ((int) $note > 100) {
             $note = 100;
         }
         $return = array(
-            'note' => (int)$note,
+            'note' => (int) $note,
             'errors' => $errors
         );
         return $return;
@@ -806,7 +806,7 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
         libxml_use_internal_errors(true);
         $link = new Link();
         $dom = new DOMDocument;
-        $url = $link->getPageLink((string)$meta->page);
+        $url = $link->getPageLink((string) $meta->page);
         $content = self::urlGetContents($url);
         if (empty($content)) {
             return 0;
@@ -833,49 +833,49 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
         $metaDescLength = Tools::strlen($seoMeta->meta_description);
         $note = 0;
         if ($firstH > 1) {
-            $note -= (int)$firstH;
+            $note -= (int) $firstH;
             $errors[] = $module->l('You have too much h1 tag', 'everpsseo');
         }
         if ($firstH = 1 && $secondtH >= 2) {
-            $note += (int)$secondtH;
+            $note += (int) $secondtH;
         } else {
             $errors[] = $module->l('Leaping or missing h2 tag', 'everpsseo');
         }
         if ($secondtH >= 2 && $thirdH >= 2) {
-            $note += (int)$thirdH;
+            $note += (int) $thirdH;
         } else {
             $errors[] = $module->l('Leaping or missing h3 tag', 'everpsseo');
         }
         if ($thirdH >= 2 && $fourthH >= 2) {
-            $note += (int)$fourthH;
+            $note += (int) $fourthH;
         } else {
             $errors[] = $module->l('Leaping or missing h4 tag', 'everpsseo');
         }
         if ($fourthH >= 2 && $fifthH >= 2) {
-            $note += (int)$fifthH;
+            $note += (int) $fifthH;
         } else {
             $errors[] = $module->l('Leaping or missing h5 tag', 'everpsseo');
         }
         if ($fifthH >= 2 && $six >= 2) {
-            $note += (int)$six;
+            $note += (int) $six;
         } else {
             $errors[] = $module->l('Leaping or missing h6 tag', 'everpsseo');
         }
         if ($anchor >= 1) {
-            $anchorNote = (int)$anchor * 100 / (int)$qualityLevel[1];
+            $anchorNote = (int) $anchor * 100 / (int) $qualityLevel[1];
             $note += $anchorNote;
         } else {
-            $anchorNote = (int)$anchor * 100 / (int)$qualityLevel[1];
+            $anchorNote = (int) $anchor * 100 / (int) $qualityLevel[1];
             $note += $anchorNote;
             $errors[] = $module->l('Missing anchor tags', 'everpsseo');
         }
         if ($strong >= 1) {
-            $note += (int)$strong;
+            $note += (int) $strong;
         } else {
             $errors[] = $module->l('Missing anchor tags', 'everpsseo');
         }
-        $note += (int)$keywordsCount;
-        // if ($wordCount > (int)$qualityLevel[0]) {
+        $note += (int) $keywordsCount;
+        // if ($wordCount > (int) $qualityLevel[0]) {
         //     $note += $wordCount;
         // } else {
         //     $note -= $wordCount;
@@ -891,19 +891,19 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
             $note += 65 - $titleLength;
         }
         if ($metaDescLength > 165) {
-            $note -= 165 + ($metaDescLength + ((int)$qualityLevel[0] / 10));
+            $note -= 165 + ($metaDescLength + ((int) $qualityLevel[0] / 10));
             $errors[] = $module->l('Meta description tag too long', 'everpsseo');
         } elseif ($metaDescLength < 90) {
-            $note -= 90 + ($metaDescLength + ((int)$qualityLevel[0] / 10));
+            $note -= 90 + ($metaDescLength + ((int) $qualityLevel[0] / 10));
             $errors[] = $module->l('Meta description tag too short', 'everpsseo');
         } else {
-            $note += 165 - ($metaDescLength + ((int)$qualityLevel[0] / 10));
+            $note += 165 - ($metaDescLength + ((int) $qualityLevel[0] / 10));
         }
-        if ((int)$note > 100) {
+        if ((int) $note > 100) {
             $note = 100;
         }
         $return = array(
-            'note' => (int)$note,
+            'note' => (int) $note,
             'errors' => $errors
         );
         return $return;
@@ -919,11 +919,11 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
         }
         libxml_use_internal_errors(true);
         $url = $link->getCMSLink(
-            (int)$seoCms->id_seo_cms,
+            (int) $seoCms->id_seo_cms,
             null,
             null,
-            (int)$seoCms->id_seo_lang,
-            (int)$seoCms->id_shop
+            (int) $seoCms->id_seo_lang,
+            (int) $seoCms->id_shop
         );
         $content = self::urlGetContents($url);
         if (empty($content)) {
@@ -951,55 +951,55 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
         $metaDescLength = Tools::strlen($seoCms->meta_description);
         $hn = 0;
         if ($firstH) {
-            $hn -= (int)$firstH;
+            $hn -= (int) $firstH;
             $errors[] = $module->l('You have too much h1 tag', 'everpsseo');
         }
         if ($firstH == 1 && $secondtH >= 2) {
-            $hn += (int)$secondtH;
+            $hn += (int) $secondtH;
         } else {
             $errors[] = $module->l('Leaping or missing h2 tag', 'everpsseo');
         }
         if ($secondtH >= 2 && $thirdH >= 2) {
-            $hn += (int)$thirdH;
+            $hn += (int) $thirdH;
         } else {
             $errors[] = $module->l('Leaping or missing h3 tag', 'everpsseo');
         }
         if ($thirdH >= 2 && $fourthH >= 2) {
-            $hn += (int)$fourthH;
+            $hn += (int) $fourthH;
         } else {
             $errors[] = $module->l('Leaping or missing h4 tag', 'everpsseo');
         }
         if ($fourthH >= 2 && $fifthH >= 2) {
-            $hn += (int)$fifthH;
+            $hn += (int) $fifthH;
         } else {
             $errors[] = $module->l('Leaping or missing h5 tag', 'everpsseo');
         }
         if ($fifthH >= 2 && $six >= 2) {
-            $hn += (int)$six;
+            $hn += (int) $six;
         } else {
             $errors[] = $module->l('Leaping or missing h6 tag', 'everpsseo');
         }
-        $hnNote = $hn * 100 / (int)$qualityLevel[2];
-        $hnNote = $hn * 100 / (int)$qualityLevel[2];
+        $hnNote = $hn * 100 / (int) $qualityLevel[2];
+        $hnNote = $hn * 100 / (int) $qualityLevel[2];
         if (!$anchor) {
-            $anchorNote = (int)$anchor * 100 / (int)$qualityLevel[1];
+            $anchorNote = (int) $anchor * 100 / (int) $qualityLevel[1];
             $errors[] = $module->l('Missing anchor tags', 'everpsseo');
         } else {
-            $anchorNote = (int)$anchor * 100 / (int)$qualityLevel[1];
+            $anchorNote = (int) $anchor * 100 / (int) $qualityLevel[1];
         }
         if (!$strong) {
-            $strongNote = (int)$strong * 100 / (int)$qualityLevel[3];
+            $strongNote = (int) $strong * 100 / (int) $qualityLevel[3];
             $errors[] = $module->l('Missing strong tags', 'everpsseo');
         } else {
-            $strongNote = (int)$strong * 100 / (int)$qualityLevel[3];
+            $strongNote = (int) $strong * 100 / (int) $qualityLevel[3];
         }
-        if (!$keywordsCount || (int)$keywordsCount <= 0) {
-            $keywordsNote = (int)$keywordsCount * 100 / (int)$qualityLevel[4];
+        if (!$keywordsCount || (int) $keywordsCount <= 0) {
+            $keywordsNote = (int) $keywordsCount * 100 / (int) $qualityLevel[4];
             $errors[] = $module->l('Missing keywords', 'everpsseo');
         } else {
-            $keywordsNote = (int)$keywordsCount * 100 / (int)$qualityLevel[4];
+            $keywordsNote = (int) $keywordsCount * 100 / (int) $qualityLevel[4];
         }
-        $wordsNote = $wordCount * 100 / (int)$qualityLevel[0];
+        $wordsNote = $wordCount * 100 / (int) $qualityLevel[0];
         if ($titleLength < 65 && $titleLength > 30) {
             $titleNote = $titleLength * 100 / 65;
         } else {
@@ -1021,11 +1021,11 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
             }
         }
         $note = ($hnNote + $anchorNote + $strongNote + $keywordsNote + $wordsNote + $titleNote + $metadescNote) / 8;
-        if ((int)$note > 100) {
+        if ((int) $note > 100) {
             $note = 100;
         }
         $return = array(
-            'note' => (int)$note,
+            'note' => (int) $note,
             'errors' => $errors
         );
         return $return;
@@ -1044,11 +1044,11 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
         }
         libxml_use_internal_errors(true);
         $url = $link->getCMSCategoryLink(
-            (int)$seoCmsCategory->id_seo_cms_category,
+            (int) $seoCmsCategory->id_seo_cms_category,
             null,
-            (int)$seoCmsCategory->id_seo_lang,
+            (int) $seoCmsCategory->id_seo_lang,
             null,
-            (int)$seoCmsCategory->id_shop
+            (int) $seoCmsCategory->id_shop
         );
         $content = self::urlGetContents($url);
         if ($cms_category->id_seo_cms_category == 1) {
@@ -1080,46 +1080,46 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
         $metaDescLength = Tools::strlen($seoCmsCategory->meta_description);
         $note = 0;
         if ($firstH) {
-            $note -= (int)$firstH;
+            $note -= (int) $firstH;
             $errors[] = $module->l('You have too much h1 tag', 'everpsseo');
         }
         if ($firstH == 1 && $secondtH >= 2) {
-            $note += (int)$secondtH;
+            $note += (int) $secondtH;
         } else {
             $errors[] = $module->l('Leaping or missing h2 tag', 'everpsseo');
         }
         if ($secondtH >= 2 && $thirdH >= 2) {
-            $note += (int)$thirdH;
+            $note += (int) $thirdH;
         } else {
             $errors[] = $module->l('Leaping or missing h3 tag', 'everpsseo');
         }
         if ($thirdH >= 2 && $fourthH >= 2) {
-            $note += (int)$fourthH;
+            $note += (int) $fourthH;
         } else {
             $errors[] = $module->l('Leaping or missing h4 tag', 'everpsseo');
         }
         if ($fourthH >= 2 && $fifthH >= 2) {
-            $note += (int)$fifthH;
+            $note += (int) $fifthH;
         } else {
             $errors[] = $module->l('Leaping or missing h5 tag', 'everpsseo');
         }
         if ($fifthH >= 2 && $six >= 2) {
-            $note += (int)$six;
+            $note += (int) $six;
         } else {
             $errors[] = $module->l('Leaping or missing h6 tag', 'everpsseo');
         }
         if ($anchor >= 1) {
-            $note += (int)$anchor;
+            $note += (int) $anchor;
         } else {
             $errors[] = $module->l('Missing anchors tags', 'everpsseo');
         }
         if ($strong >= 1) {
-            $note += (int)$strong;
+            $note += (int) $strong;
         } else {
             $errors[] = $module->l('Missing strong tags', 'everpsseo');
         }
-        $note += (int)$keywordsCount;
-        if ($wordCount > (int)$qualityLevel[0]) {
+        $note += (int) $keywordsCount;
+        if ($wordCount > (int) $qualityLevel[0]) {
             $note += $wordCount;
         } else {
             $note -= $wordCount;
@@ -1135,19 +1135,19 @@ class EverPsSeoKeywordsStrategy extends ObjectModel
             $note += 65 - $titleLength;
         }
         if ($metaDescLength > 165) {
-            $note -= 165 + ($metaDescLength + ((int)$qualityLevel[0] / 10));
+            $note -= 165 + ($metaDescLength + ((int) $qualityLevel[0] / 10));
             $errors[] = $module->l('Meta description too long', 'everpsseo');
         } elseif ($metaDescLength < 90) {
-            $note -= 90 + ($metaDescLength + ((int)$qualityLevel[0] / 10));
+            $note -= 90 + ($metaDescLength + ((int) $qualityLevel[0] / 10));
             $errors[] = $module->l('Meta description too short', 'everpsseo');
         } else {
-            $note += 165 - ($metaDescLength + ((int)$qualityLevel[0] / 10));
+            $note += 165 - ($metaDescLength + ((int) $qualityLevel[0] / 10));
         }
-        if ((int)$note > 100) {
+        if ((int) $note > 100) {
             $note = 100;
         }
         $return = array(
-            'note' => (int)$note,
+            'note' => (int) $note,
             'errors' => $errors
         );
         return $return;

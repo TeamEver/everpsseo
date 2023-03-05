@@ -106,12 +106,12 @@ class EverPsSeoPageMeta extends ObjectModel
     public static function getAllSeoPagemetasIds($id_shop)
     {
         $cache_id = 'EverPsSeoPageMeta::getAllSeoPagemetasIds_'
-        .(int)$id_shop;
+        .(int) $id_shop;
         if (!Cache::isStored($cache_id)) {
             $sql = new DbQuery();
             $sql->select('*');
             $sql->from('ever_seo_pagemeta');
-            $sql->where('id_shop = '.(int)$id_shop);
+            $sql->where('id_shop = '.(int) $id_shop);
             $return = Db::getInstance()->executeS($sql);
             Cache::store($cache_id, $return);
             return $return;
@@ -122,14 +122,14 @@ class EverPsSeoPageMeta extends ObjectModel
     public static function getPageNameBySeoId($id_seo_pagemeta, $id_lang)
     {
         $cache_id = 'EverPsSeoPageMeta::getPageNameBySeoId_'
-        .(int)$id_seo_pagemeta
+        .(int) $id_seo_pagemeta
         .'_'
-        .(int)$id_lang;
+        .(int) $id_lang;
         if (!Cache::isStored($cache_id)) {
             $sql = 'SELECT title
-            FROM '._DB_PREFIX_.'meta_lang
-            WHERE id_meta = '.(int)$id_seo_pagemeta.'
-            AND id_lang = '.(int)$id_lang.'';
+            FROM ' . _DB_PREFIX_ . 'meta_lang
+            WHERE id_meta = '.(int) $id_seo_pagemeta.'
+            AND id_lang = '.(int) $id_lang.'';
             $return = Db::getInstance()->getValue($sql);
             Cache::store($cache_id, $return);
             return $return;
@@ -140,23 +140,23 @@ class EverPsSeoPageMeta extends ObjectModel
     public static function getSeoPageMeta($id_seo_pagemeta, $id_shop, $id_seo_lang)
     {
         $cache_id = 'EverPsSeoPageMeta::getSeoPageMeta_'
-        .(int)$id_seo_pagemeta
+        .(int) $id_seo_pagemeta
         .'_'
-        .(int)$id_shop
+        .(int) $id_shop
         .'_'
-        .(int)$id_seo_lang;
+        .(int) $id_seo_lang;
         if (!Cache::isStored($cache_id)) {
             $sql = new DbQuery();
             $sql->select('*');
             $sql->from('ever_seo_pagemeta');
             $sql->where(
-                'id_seo_pagemeta = '.(int)$id_seo_pagemeta
+                'id_seo_pagemeta = '.(int) $id_seo_pagemeta
             );
             $sql->where(
-                'id_seo_lang = '.(int)$id_seo_lang
+                'id_seo_lang = '.(int) $id_seo_lang
             );
             $sql->where(
-                'id_shop = '.(int)$id_shop
+                'id_shop = '.(int) $id_shop
             );
             $return = new self(Db::getInstance()->getValue($sql));
             Cache::store($cache_id, $return);
@@ -168,9 +168,9 @@ class EverPsSeoPageMeta extends ObjectModel
     public static function changePagemetaTitleShortcodes($id_seo_pagemeta, $id_seo_lang, $id_shop)
     {
         $pagemeta = new Meta(
-            (int)$id_seo_pagemeta,
-            (int)$id_seo_lang,
-            (int)$id_shop
+            (int) $id_seo_pagemeta,
+            (int) $id_seo_lang,
+            (int) $id_shop
         );
         $message = Configuration::getConfigInMultipleLangs(
             'EVERSEO_PAGEMETA_TITLE_AUTO'
@@ -179,31 +179,31 @@ class EverPsSeoPageMeta extends ObjectModel
             '[pagemeta_title]' => $pagemeta->title ? $pagemeta->title : '',
             '[pagemeta_desc]' => $pagemeta->description ? $pagemeta->description : '',
             '[pagemeta_tags]' => $pagemeta->keywords ? $pagemeta->keywords : '',
-            '[shop_name]' => (string)Configuration::get('PS_SHOP_NAME'),
+            '[shop_name]' => (string) Configuration::get('PS_SHOP_NAME'),
             'NULL' => '', // Useful : remove empty strings in case of NULL
             'null' => '', // Useful : remove empty strings in case of null
         );
         foreach ($shortcodes as $key => $value) {
-            $message[(int)$id_seo_lang] = str_replace(
-                (string)$key,
-                (string)$value,
-                (string)$message[(int)$id_seo_lang]
+            $message[(int) $id_seo_lang] = str_replace(
+                (string) $key,
+                (string) $value,
+                (string) $message[(int) $id_seo_lang]
             );
-            $message[(int)$id_seo_lang] = Hook::exec('actionChangeSeoShortcodes', array(
-                'content' => $message[(int)$id_seo_lang]
+            $message[(int) $id_seo_lang] = Hook::exec('actionChangeSeoShortcodes', array(
+                'content' => $message[(int) $id_seo_lang]
             ));
         }
-        if (!empty($message[(int)$id_seo_lang])) {
-            return $message[(int)$id_seo_lang];
+        if (!empty($message[(int) $id_seo_lang])) {
+            return $message[(int) $id_seo_lang];
         }
     }
 
     public static function changePagemetaMetadescShortcodes($id_seo_pagemeta, $id_seo_lang, $id_shop)
     {
         $pagemeta = new Meta(
-            (int)$id_seo_pagemeta,
-            (int)$id_seo_lang,
-            (int)$id_shop
+            (int) $id_seo_pagemeta,
+            (int) $id_seo_lang,
+            (int) $id_shop
         );
         $message = Configuration::getConfigInMultipleLangs(
             'EVERSEO_PAGEMETA_METADESC_AUTO'
@@ -212,22 +212,22 @@ class EverPsSeoPageMeta extends ObjectModel
             '[pagemeta_title]' => $pagemeta->title ? $pagemeta->title : '',
             '[pagemeta_desc]' => $pagemeta->description ? $pagemeta->description : '',
             '[pagemeta_tags]' => $pagemeta->keywords ? $pagemeta->keywords : '',
-            '[shop_name]' => (string)Configuration::get('PS_SHOP_NAME'),
+            '[shop_name]' => (string) Configuration::get('PS_SHOP_NAME'),
             'NULL' => '', // Useful : remove empty strings in case of NULL
             'null' => '', // Useful : remove empty strings in case of null
         );
         foreach ($shortcodes as $key => $value) {
-            $message[(int)$id_seo_lang] = str_replace(
-                (string)$key,
-                (string)$value,
-                (string)$message[(int)$id_seo_lang]
+            $message[(int) $id_seo_lang] = str_replace(
+                (string) $key,
+                (string) $value,
+                (string) $message[(int) $id_seo_lang]
             );
-            $message[(int)$id_seo_lang] = Hook::exec('actionChangeSeoShortcodes', array(
-                'content' => $message[(int)$id_seo_lang]
+            $message[(int) $id_seo_lang] = Hook::exec('actionChangeSeoShortcodes', array(
+                'content' => $message[(int) $id_seo_lang]
             ));
         }
-        if (!empty($message[(int)$id_seo_lang])) {
-            return $message[(int)$id_seo_lang];
+        if (!empty($message[(int) $id_seo_lang])) {
+            return $message[(int) $id_seo_lang];
         }
     }
 
@@ -241,7 +241,7 @@ class EverPsSeoPageMeta extends ObjectModel
         foreach ($metas as $m) {
             Db::getInstance()->delete(
                 'ever_seo_pagemeta',
-                'id_seo_pagemeta = '.(int)$m['id_meta']
+                'id_seo_pagemeta = '.(int) $m['id_meta']
             );
         }
     }

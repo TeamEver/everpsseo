@@ -6,7 +6,6 @@
  * @license   Tous droits réservés / Le droit d'auteur s'applique (All rights reserved / French copyright law applies)
  * @see https://www.team-ever.com
  */
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -79,10 +78,10 @@ class EverPsSeoRedirect extends ObjectModel
     {
         $notfound =
             'SELECT redirection
-            FROM `'._DB_PREFIX_.'ever_seo_redirect`
+            FROM `' . _DB_PREFIX_ . 'ever_seo_redirect`
             WHERE not_found = "'.pSQL($urlNotFound).'"
                 AND active = 1
-                AND id_shop = '.(int)$id_shop;
+                AND id_shop = '.(int) $id_shop;
 
         return Db::getInstance()->getValue($notfound);
     }
@@ -91,18 +90,18 @@ class EverPsSeoRedirect extends ObjectModel
     {
         $notfound =
             'SELECT id_ever_seo_redirect
-            FROM `'._DB_PREFIX_.'ever_seo_redirect`
+            FROM `' . _DB_PREFIX_ . 'ever_seo_redirect`
             WHERE not_found = "'.pSQL($urlNotFound, true).'"
-            AND id_shop = '.(int)$id_shop;
+            AND id_shop = '.(int) $id_shop;
 
         $id_redirect = Db::getInstance()->getValue($notfound);
         if ($id_redirect) {
             $notFound = new self(
-                (int)$id_redirect
+                (int) $id_redirect
             );
         } else {
             $notFound = new self();
-            $notFound->code = (int)Configuration::get('EVERSEO_REDIRECT');
+            $notFound->code = (int) Configuration::get('EVERSEO_REDIRECT');
         }
         if ($from) {
             $notFound->everfrom = pSQL($from, true);
@@ -115,8 +114,8 @@ class EverPsSeoRedirect extends ObjectModel
         } else {
             $notFound->redirection = self::getRedirectUrl(
                 pSQL($urlNotFound, true),
-                (int)$id_shop,
-                (int)Context::getContext()->language->id
+                (int) $id_shop,
+                (int) Context::getContext()->language->id
             );
         }
         $notFound->active = 1;
@@ -128,20 +127,20 @@ class EverPsSeoRedirect extends ObjectModel
     {
         $notfound =
             'SELECT id_ever_seo_redirect
-            FROM `'._DB_PREFIX_.'ever_seo_redirect`
+            FROM `' . _DB_PREFIX_ . 'ever_seo_redirect`
             WHERE not_found = "'.pSQL($urlNotFound).'"
-            AND id_shop = '.(int)$id_shop;
+            AND id_shop = '.(int) $id_shop;
 
         $id_redirect = Db::getInstance()->getValue($notfound);
         if ($id_redirect) {
-            if ((bool)$incrementCounter === true) {
+            if ((bool) $incrementCounter === true) {
                 self::incrementCounter(
-                    (int)$id_redirect,
-                    (int)$id_shop
+                    (int) $id_redirect,
+                    (int) $id_shop
                 );
             }
             $notFound = new self(
-                (int)$id_redirect
+                (int) $id_redirect
             );
             return $notFound;
         } else {
@@ -153,9 +152,9 @@ class EverPsSeoRedirect extends ObjectModel
     {
         $count =
             'SELECT count
-            FROM `'._DB_PREFIX_.'ever_seo_redirect`
-            WHERE id_ever_seo_redirect = "'.(int)$id_redirect.'"
-                AND id_shop = '.(int)$id_shop;
+            FROM `' . _DB_PREFIX_ . 'ever_seo_redirect`
+            WHERE id_ever_seo_redirect = "'.(int) $id_redirect.'"
+                AND id_shop = '.(int) $id_shop;
 
         $currentCount = Db::getInstance()->getValue($count);
 
@@ -163,10 +162,10 @@ class EverPsSeoRedirect extends ObjectModel
         $update = Db::getInstance()->update(
             'ever_seo_redirect',
             array(
-                'count' => (int)$currentCount + 1,
+                'count' => (int) $currentCount + 1,
                 'everfrom' => pSQL($from, true)
             ),
-            'id_ever_seo_redirect = '.(int)$id_redirect
+            'id_ever_seo_redirect = '.(int) $id_redirect
         );
 
         return $update;
@@ -200,8 +199,8 @@ class EverPsSeoRedirect extends ObjectModel
         $urls = preg_split("#/#", parse_url($url, PHP_URL_PATH));
         $sql =
             'SELECT DISTINCT physical_uri
-                FROM `'._DB_PREFIX_.'shop_url`
-                WHERE id_shop = '.(int)$id_shop;
+                FROM `' . _DB_PREFIX_ . 'shop_url`
+                WHERE id_shop = '.(int) $id_shop;
 
         $pu =  Db::getInstance()->getValue($sql);
 
@@ -211,7 +210,7 @@ class EverPsSeoRedirect extends ObjectModel
         $urls = str_replace('_', '-', $urls);
         $urls = implode('-', $urls);
 
-        if ((int)Configuration::get('EVERSEO_ORDER_BY') == 1) {
+        if ((int) Configuration::get('EVERSEO_ORDER_BY') == 1) {
             $orderby = 'ASC';
         } else {
             $orderby = 'DESC';
@@ -225,51 +224,51 @@ class EverPsSeoRedirect extends ObjectModel
             }
         }
 
-        $priorities = (int)Configuration::get('EVERSEO_PRIORITY');
+        $priorities = (int) Configuration::get('EVERSEO_PRIORITY');
         $redirection = [];
         foreach ($searchedTerms as $term) {
             if (isset($term)) {
                 switch ($priorities) {
                     case 1:
-                        $redirection[] = self::searchProduct($term, (int)$id_shop, (int)$id_lang, $orderby);
-                        $redirection[] = self::searchCategory($term, (int)$id_shop, (int)$id_lang, $orderby);
-                        $redirection[] = self::searchTag($term, (int)$id_shop, (int)$id_lang, $orderby);
+                        $redirection[] = self::searchProduct($term, (int) $id_shop, (int) $id_lang, $orderby);
+                        $redirection[] = self::searchCategory($term, (int) $id_shop, (int) $id_lang, $orderby);
+                        $redirection[] = self::searchTag($term, (int) $id_shop, (int) $id_lang, $orderby);
                         break;
 
                     case 2:
-                        $redirection[] = self::searchProduct($term, (int)$id_shop, (int)$id_lang, $orderby);
-                        $redirection[] = self::searchTag($term, (int)$id_shop, (int)$id_lang, $orderby);
-                        $redirection[] = self::searchCategory($term, (int)$id_shop, (int)$id_lang, $orderby);
+                        $redirection[] = self::searchProduct($term, (int) $id_shop, (int) $id_lang, $orderby);
+                        $redirection[] = self::searchTag($term, (int) $id_shop, (int) $id_lang, $orderby);
+                        $redirection[] = self::searchCategory($term, (int) $id_shop, (int) $id_lang, $orderby);
                         break;
 
                     case 3:
-                        $redirection[] = self::searchCategory($term, (int)$id_shop, (int)$id_lang, $orderby);
-                        $redirection[] = self::searchProduct($term, (int)$id_shop, (int)$id_lang, $orderby);
-                        $redirection[] = self::searchTag($term, (int)$id_shop, (int)$id_lang, $orderby);
+                        $redirection[] = self::searchCategory($term, (int) $id_shop, (int) $id_lang, $orderby);
+                        $redirection[] = self::searchProduct($term, (int) $id_shop, (int) $id_lang, $orderby);
+                        $redirection[] = self::searchTag($term, (int) $id_shop, (int) $id_lang, $orderby);
                         break;
 
                     case 4:
-                        $redirection[] = self::searchCategory($term, (int)$id_shop, (int)$id_lang, $orderby);
-                        $redirection[] = self::searchTag($term, (int)$id_shop, (int)$id_lang, $orderby);
-                        $redirection[] = self::searchProduct($term, (int)$id_shop, (int)$id_lang, $orderby);
+                        $redirection[] = self::searchCategory($term, (int) $id_shop, (int) $id_lang, $orderby);
+                        $redirection[] = self::searchTag($term, (int) $id_shop, (int) $id_lang, $orderby);
+                        $redirection[] = self::searchProduct($term, (int) $id_shop, (int) $id_lang, $orderby);
                         break;
 
                     case 5:
-                        $redirection[] = self::searchProduct($term, (int)$id_shop, (int)$id_lang, $orderby);
-                        $redirection[] = self::searchCategory($term, (int)$id_shop, (int)$id_lang, $orderby);
-                        $redirection[] = self::searchTag($term, (int)$id_shop, (int)$id_lang, $orderby);
+                        $redirection[] = self::searchProduct($term, (int) $id_shop, (int) $id_lang, $orderby);
+                        $redirection[] = self::searchCategory($term, (int) $id_shop, (int) $id_lang, $orderby);
+                        $redirection[] = self::searchTag($term, (int) $id_shop, (int) $id_lang, $orderby);
                         break;
 
                     case 6:
-                        $redirection[] = self::searchTag($term, (int)$id_shop, (int)$id_lang, $orderby);
-                        $redirection[] = self::searchProduct($term, (int)$id_shop, (int)$id_lang, $orderby);
-                        $redirection[] = self::searchCategory($term, (int)$id_shop, $id_lang, $orderby);
+                        $redirection[] = self::searchTag($term, (int) $id_shop, (int) $id_lang, $orderby);
+                        $redirection[] = self::searchProduct($term, (int) $id_shop, (int) $id_lang, $orderby);
+                        $redirection[] = self::searchCategory($term, (int) $id_shop, $id_lang, $orderby);
                         break;
 
                     default:
-                        $redirection[] = self::searchTag($term, (int)$id_shop, (int)$id_lang, $orderby);
-                        $redirection[] = self::searchCategory($term, (int)$id_shop, (int)$id_lang, $orderby);
-                        $redirection[] = self::searchProduct($term, (int)$id_shop, (int)$id_lang, $orderby);
+                        $redirection[] = self::searchTag($term, (int) $id_shop, (int) $id_lang, $orderby);
+                        $redirection[] = self::searchCategory($term, (int) $id_shop, (int) $id_lang, $orderby);
+                        $redirection[] = self::searchProduct($term, (int) $id_shop, (int) $id_lang, $orderby);
                         break;
                 }
             }
@@ -280,35 +279,35 @@ class EverPsSeoRedirect extends ObjectModel
         }
         $notFound = self::ifNotFoundExists(
             $url,
-            (int)$id_shop,
+            (int) $id_shop,
             false
         );
         if (!Validate::isLoadedObject($notFound)) {
             $notFound = new self();
-            $notFound->code = (int)Configuration::get('EVERSEO_REDIRECT');
+            $notFound->code = (int) Configuration::get('EVERSEO_REDIRECT');
             $notFound->count = 1;
         } else {
-            $notFound->count = (int)$notFound->count + 1;
+            $notFound->count = (int) $notFound->count + 1;
         }
         $notFound->not_found = pSQL($url, true);
         $from = EverPsSeoTools::getReferrer();
         $notFound->everfrom = pSQL($from, true);
         $notFound->redirection = pSQL($return, true);
         $notFound->active = 1;
-        $notFound->id_shop = (int)$id_shop;
+        $notFound->id_shop = (int) $id_shop;
         $notFound->save();
         return $return;
     }
 
     public static function searchProduct($string, $id_shop, $id_lang, $orderby)
     {
-        if ((bool)Configuration::get('EVERSEO_PRODUCT') === true) {
+        if ((bool) Configuration::get('EVERSEO_PRODUCT') === true) {
             $sql = 'SELECT DISTINCT pl.id_product
-            FROM `'._DB_PREFIX_.'product_lang` pl
-            INNER JOIN `'._DB_PREFIX_.'product` p
+            FROM `' . _DB_PREFIX_ . 'product_lang` pl
+            INNER JOIN `' . _DB_PREFIX_ . 'product` p
             ON p.id_product = pl.id_product
-            WHERE pl.id_shop = '.(int)$id_shop.'
-            AND pl.id_lang = '.(int)$id_lang.'
+            WHERE pl.id_shop = '.(int) $id_shop.'
+            AND pl.id_lang = '.(int) $id_lang.'
             AND p.active = 1
             AND (
                 pl.name LIKE "%'.pSQL($string).'%"
@@ -325,9 +324,9 @@ class EverPsSeoRedirect extends ObjectModel
             )
             ORDER BY pl.id_product '.pSQL($orderby);
             $id_product = Db::getInstance()->getValue($sql);
-            if ((int)$id_product) {
+            if ((int) $id_product) {
                 $link = new Link();
-                $productUrl = $link->getProductLink((int)$id_product);
+                $productUrl = $link->getProductLink((int) $id_product);
                 return $productUrl;
             } else {
                 return false;
@@ -337,13 +336,13 @@ class EverPsSeoRedirect extends ObjectModel
 
     public static function searchCategory($string, $id_shop, $id_lang, $orderby)
     {
-        if ((bool)Configuration::get('EVERSEO_CATEGORY') === true) {
+        if ((bool) Configuration::get('EVERSEO_CATEGORY') === true) {
             $sql = 'SELECT DISTINCT cl.id_category
-            FROM `'._DB_PREFIX_.'category_lang` cl
-            INNER JOIN `'._DB_PREFIX_.'category` c
+            FROM `' . _DB_PREFIX_ . 'category_lang` cl
+            INNER JOIN `' . _DB_PREFIX_ . 'category` c
             ON c.id_category = cl.id_category
-            WHERE cl.id_shop = '.(int)$id_shop.'
-            AND cl.id_lang = '.(int)$id_lang.'
+            WHERE cl.id_shop = '.(int) $id_shop.'
+            AND cl.id_lang = '.(int) $id_lang.'
             AND c.active = 1
             AND (
                 cl.name LIKE "%'.pSQL($string).'%"
@@ -354,9 +353,9 @@ class EverPsSeoRedirect extends ObjectModel
             )
             ORDER BY cl.id_category '.pSQL($orderby);
             $id_category = Db::getInstance()->getValue($sql);
-            if ((int)$id_category) {
+            if ((int) $id_category) {
                 $link = new Link();
-                $categoryUrl = $link->getCategoryLink((int)$id_category);
+                $categoryUrl = $link->getCategoryLink((int) $id_category);
                 return $categoryUrl;
             } else {
                 return false;
@@ -366,21 +365,21 @@ class EverPsSeoRedirect extends ObjectModel
 
     public static function searchTag($string, $id_shop, $id_lang, $orderby)
     {
-        if ((bool)Configuration::get('EVERSEO_TAGS') === true) {
+        if ((bool) Configuration::get('EVERSEO_TAGS') === true) {
             $sql = 'SELECT DISTINCT pt.id_product
-            FROM `'._DB_PREFIX_.'product_tag` pt
-            INNER JOIN `'._DB_PREFIX_.'tag` t
+            FROM `' . _DB_PREFIX_ . 'product_tag` pt
+            INNER JOIN `' . _DB_PREFIX_ . 'tag` t
             ON pt.id_tag = t.id_tag
-            INNER JOIN `'._DB_PREFIX_.'tag_count` tc
+            INNER JOIN `' . _DB_PREFIX_ . 'tag_count` tc
             ON tc.id_tag = t.id_tag
-            WHERE tc.id_shop = '.(int)$id_shop.'
-            AND tc.id_lang = '.(int)$id_lang.'
+            WHERE tc.id_shop = '.(int) $id_shop.'
+            AND tc.id_lang = '.(int) $id_lang.'
             AND t.name LIKE "%'.pSQL($string).'%"
             ORDER BY t.id_tag '.pSQL($orderby);
             $id_product = Db::getInstance()->getValue($sql);
-            if ((int)$id_product) {
+            if ((int) $id_product) {
                 $link = new Link();
-                $productUrl = $link->getProductLink((int)$id_product);
+                $productUrl = $link->getProductLink((int) $id_product);
                 return $productUrl;
             } else {
                 return false;
@@ -390,15 +389,15 @@ class EverPsSeoRedirect extends ObjectModel
 
     public static function getRedirects($id_shop, $active = true)
     {
-        $siteUrl = Tools::getHttpHost(true).__PS_BASE_URI__;
+        $siteUrl = Tools::getHttpHost(true) . __PS_BASE_URI__;
         $return = [];
-        $query = 'SELECT * FROM '._DB_PREFIX_.'ever_seo_redirect
-        WHERE active = '.(bool)$active.'
-        AND id_shop = '.(int)$id_shop;
+        $query = 'SELECT * FROM ' . _DB_PREFIX_ . 'ever_seo_redirect
+        WHERE active = '.(bool) $active.'
+        AND id_shop = '.(int) $id_shop;
         $redirects = Db::getInstance()->ExecuteS($query);
         foreach ($redirects as $redirect) {
             $redirect_obj = new self(
-                (int)$redirect['id_ever_seo_redirect']
+                (int) $redirect['id_ever_seo_redirect']
             );
             $redirect_obj->not_found = '/'.str_replace($siteUrl, '', $redirect_obj->not_found);
             $redirect_obj->not_found = str_replace('//', '/', $redirect_obj->not_found);

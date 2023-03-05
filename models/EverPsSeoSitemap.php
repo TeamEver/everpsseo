@@ -197,7 +197,7 @@ class EverPsSeoSitemap extends ObjectModel
         if (empty(Configuration::get('EVERSEO_SITEMAP_QTY_ELEMENTS'))) {
             Configuration::updateValue('EVERSEO_SITEMAP_QTY_ELEMENTS', 5000);
         }
-        if (((int)$this->getCurrentItem() % (int)Configuration::get('EVERSEO_SITEMAP_QTY_ELEMENTS')) == 0) {
+        if (((int) $this->getCurrentItem() % (int) Configuration::get('EVERSEO_SITEMAP_QTY_ELEMENTS')) == 0) {
             if ($this->getWriter() instanceof \XMLWriter) {
                 $this->endSitemap();
             }
@@ -288,7 +288,7 @@ class EverPsSeoSitemap extends ObjectModel
 
     public static function getSitemapIndexes()
     {
-        $siteUrl = Tools::getHttpHost(true).__PS_BASE_URI__;
+        $siteUrl = Tools::getHttpHost(true) . __PS_BASE_URI__;
         $indexes = [];
         $sitemap_indexes_dir = glob(_PS_ROOT_DIR_.'/*');
         foreach ($sitemap_indexes_dir as $index) {
@@ -304,7 +304,7 @@ class EverPsSeoSitemap extends ObjectModel
 
     public static function getSitemaps()
     {
-        $siteUrl = Tools::getHttpHost(true).__PS_BASE_URI__;
+        $siteUrl = Tools::getHttpHost(true) . __PS_BASE_URI__;
         $sitemaps = [];
         $sitemap_dir = glob(_PS_ROOT_DIR_.'/*');
         foreach ($sitemap_dir as $sitemap) {

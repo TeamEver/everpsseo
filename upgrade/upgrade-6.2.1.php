@@ -19,74 +19,74 @@ function upgrade_module_6_2_1()
     $sql = [];
     // Update SEO products
     $sql[] =
-        'ALTER TABLE `'._DB_PREFIX_.'ever_seo_product`
+        'ALTER TABLE `' . _DB_PREFIX_ . 'ever_seo_product`
          ADD `canonical` VARCHAR(255) NULL DEFAULT NULL
          AFTER `link_rewrite`
     ';
     $sql[] =
-        'ALTER TABLE `'._DB_PREFIX_.'ever_seo_product`
+        'ALTER TABLE `' . _DB_PREFIX_ . 'ever_seo_product`
          ADD `keywords` VARCHAR(255) NULL DEFAULT NULL
          AFTER `canonical`
     ';
     // Update SEO categories
     $sql[] =
-        'ALTER TABLE `'._DB_PREFIX_.'ever_seo_category`
+        'ALTER TABLE `' . _DB_PREFIX_ . 'ever_seo_category`
          ADD `canonical` VARCHAR(255) NULL DEFAULT NULL
          AFTER `link_rewrite`
     ';
     $sql[] =
-        'ALTER TABLE `'._DB_PREFIX_.'ever_seo_category`
+        'ALTER TABLE `' . _DB_PREFIX_ . 'ever_seo_category`
          ADD `keywords` VARCHAR(255) NULL DEFAULT NULL
          AFTER `canonical`
     ';
     // Update SEO Manufacturers
     $sql[] =
-        'ALTER TABLE `'._DB_PREFIX_.'ever_seo_manufacturer`
+        'ALTER TABLE `' . _DB_PREFIX_ . 'ever_seo_manufacturer`
          ADD `keywords` VARCHAR(255) NULL DEFAULT NULL
          AFTER `social_img_url`
     ';
     // Update SEO Suppliers
     $sql[] =
-        'ALTER TABLE `'._DB_PREFIX_.'ever_seo_supplier`
+        'ALTER TABLE `' . _DB_PREFIX_ . 'ever_seo_supplier`
          ADD `keywords` VARCHAR(255) NULL DEFAULT NULL
          AFTER `social_img_url`
     ';
     // Update SEO Page metas
     $sql[] =
-        'ALTER TABLE `'._DB_PREFIX_.'ever_seo_pagemeta`
+        'ALTER TABLE `' . _DB_PREFIX_ . 'ever_seo_pagemeta`
          ADD `keywords` VARCHAR(255) NULL DEFAULT NULL
          AFTER `social_img_url`
     ';
     // Update SEO CMS Category
     $sql[] =
-        'ALTER TABLE `'._DB_PREFIX_.'ever_seo_cms_category`
+        'ALTER TABLE `' . _DB_PREFIX_ . 'ever_seo_cms_category`
          ADD `keywords` VARCHAR(255) NULL DEFAULT NULL
          AFTER `social_img_url`
     ';
     // Update SEO CMS
     $sql[] =
-        'ALTER TABLE `'._DB_PREFIX_.'ever_seo_cms`
+        'ALTER TABLE `' . _DB_PREFIX_ . 'ever_seo_cms`
          ADD `keywords` VARCHAR(255) NULL DEFAULT NULL
          AFTER `social_img_url`
     ';
     // Insert product canonical
     $sql[] =
-    'UPDATE '._DB_PREFIX_.'ever_seo_product
+    'UPDATE ' . _DB_PREFIX_ . 'ever_seo_product
         SET canonical = (
             SELECT link_rewrite
-            FROM '._DB_PREFIX_.'product_lang
-            WHERE '._DB_PREFIX_.'ever_seo_product.id_seo_product = '._DB_PREFIX_.'product_lang.id_product
-            AND '._DB_PREFIX_.'ever_seo_product.id_seo_lang = '._DB_PREFIX_.'product_lang.id_lang
+            FROM ' . _DB_PREFIX_ . 'product_lang
+            WHERE ' . _DB_PREFIX_ . 'ever_seo_product.id_seo_product = ' . _DB_PREFIX_ . 'product_lang.id_product
+            AND ' . _DB_PREFIX_ . 'ever_seo_product.id_seo_lang = ' . _DB_PREFIX_ . 'product_lang.id_lang
         );
     ';
     // Insert category canonical
     $sql[] =
-    'UPDATE '._DB_PREFIX_.'ever_seo_category
+    'UPDATE ' . _DB_PREFIX_ . 'ever_seo_category
         SET canonical = (
             SELECT link_rewrite
-            FROM '._DB_PREFIX_.'category_lang
-            WHERE '._DB_PREFIX_.'ever_seo_category.id_seo_category = '._DB_PREFIX_.'category_lang.id_category
-            AND '._DB_PREFIX_.'ever_seo_category.id_seo_lang = '._DB_PREFIX_.'category_lang.id_lang
+            FROM ' . _DB_PREFIX_ . 'category_lang
+            WHERE ' . _DB_PREFIX_ . 'ever_seo_category.id_seo_category = ' . _DB_PREFIX_ . 'category_lang.id_category
+            AND ' . _DB_PREFIX_ . 'ever_seo_category.id_seo_lang = ' . _DB_PREFIX_ . 'category_lang.id_lang
         );
     ';
     foreach ($sql as $s) {

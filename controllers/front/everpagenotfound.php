@@ -30,11 +30,11 @@ class EverpsseoEverpagenotfoundModuleFrontController extends ModuleFrontControll
         $bottom_text = Configuration::getConfigInMultipleLangs('EVERSEO_404_BOTTOM');
         $this->context->smarty->assign(array(
             'use_search' => Configuration::get('EVERSEO_404_SEARCH'),
-            'top_text' => $top_text[(int)$this->context->language->id],
-            'bottom_text' => $bottom_text[(int)$this->context->language->id],
+            'top_text' => $top_text[(int) $this->context->language->id],
+            'bottom_text' => $bottom_text[(int) $this->context->language->id],
         ));
         // If custom 404 not allowed
-        if (!(int)Configuration::get('EVERSEO_CUSTOM_404')) {
+        if (!(int) Configuration::get('EVERSEO_CUSTOM_404')) {
             $this->setTemplate('errors/404');
         }
         if (_PS_VERSION_ >= '1.7') {

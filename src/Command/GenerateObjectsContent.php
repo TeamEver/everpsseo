@@ -63,7 +63,7 @@ class GenerateObjectsContent extends Command
         $context->employee = new \Employee(1);
         if ($action === 'idshop') {
             $shop = new \Shop(
-                (int)$idShop
+                (int) $idShop
             );
             if (!\Validate::isLoadedObject($shop)) {
                 $output->writeln('<comment>Shop not found</comment>');
@@ -91,28 +91,28 @@ class GenerateObjectsContent extends Command
             'EVERSEO_PGENERATOR_LANGS'
         );
         $seoArray = \EverPsSeoProduct::getAllSeoProductsIds(
-            (int)$shop->id,
+            (int) $shop->id,
             $allowedLangs
         );
 
         foreach ($seoArray as $seo) {
             $this->autoSetContentShortDesc(
                 'id_seo_product',
-                (int)$seo['id_seo_product'],
-                (int)$shop->id,
-                (int)$seo['id_seo_lang']
+                (int) $seo['id_seo_product'],
+                (int) $shop->id,
+                (int) $seo['id_seo_lang']
             );
             $output->writeln(sprintf(
-                '<info>Short description for id product '.(int)$seo['id_seo_product'].' has been set</info>'
+                '<info>Short description for id product '.(int) $seo['id_seo_product'].' has been set</info>'
             ));
             $this->autoSetContentDesc(
                 'id_seo_product',
-                (int)$seo['id_seo_product'],
-                (int)$shop->id,
-                (int)$seo['id_seo_lang']
+                (int) $seo['id_seo_product'],
+                (int) $shop->id,
+                (int) $seo['id_seo_lang']
             );
             $output->writeln(sprintf(
-                '<info>Description for id product '.(int)$seo['id_seo_product'].' has been set</info>'
+                '<info>Description for id product '.(int) $seo['id_seo_product'].' has been set</info>'
             ));
         }
         $output->writeln(sprintf(
@@ -123,21 +123,21 @@ class GenerateObjectsContent extends Command
             '<info>Start categories content spinning : datetime : '.date('Y-m-d H:i:s').'</info>'
         ));
         $seoArray = \EverPsSeoCategory::getAllSeoCategoriesIds(
-            (int)$shop->id
+            (int) $shop->id
         );
         $allowedLangs = $this->getAllowedShortcodesLangs(
             'EVERSEO_AUTO_CATEGORY_LANGS'
         );
         foreach ($seoArray as $seo) {
-            if (in_array((int)$seo['id_seo_lang'], $allowedLangs)) {
+            if (in_array((int) $seo['id_seo_lang'], $allowedLangs)) {
                 $this->autoSetContentDesc(
                     'id_seo_category',
-                    (int)$seo['id_seo_category'],
-                    (int)$shop->id,
-                    (int)$seo['id_seo_lang']
+                    (int) $seo['id_seo_category'],
+                    (int) $shop->id,
+                    (int) $seo['id_seo_lang']
                 );
                 $output->writeln(sprintf(
-                    '<info>Description for id category '.(int)$seo['id_seo_category'].' has been set</info>'
+                    '<info>Description for id category '.(int) $seo['id_seo_category'].' has been set</info>'
                 ));
             }
         }
@@ -149,18 +149,18 @@ class GenerateObjectsContent extends Command
             '<info>Start manufacturers content spinning : datetime : '.date('Y-m-d H:i:s').'</info>'
         ));
         $seoArray = \EverPsSeoManufacturer::getAllSeoManufacturersIds(
-            (int)$shop->id
+            (int) $shop->id
         );
         $allowedLangs = $this->getAllowedShortcodesLangs(
             'EVERSEO_AUTO_MANUFACTURER_LANGS'
         );
         foreach ($seoArray as $seo) {
-            if (in_array((int)$seo['id_seo_lang'], $allowedLangs)) {
+            if (in_array((int) $seo['id_seo_lang'], $allowedLangs)) {
                 $this->autoSetContentDesc(
                     'id_seo_manufacturer',
-                    (int)$seo['id_seo_manufacturer'],
-                    (int)$shop->id,
-                    (int)$seo['id_seo_lang']
+                    (int) $seo['id_seo_manufacturer'],
+                    (int) $shop->id,
+                    (int) $seo['id_seo_lang']
                 );
             }
         }
@@ -172,18 +172,18 @@ class GenerateObjectsContent extends Command
             '<info>Start suppliers content spinning : datetime : '.date('Y-m-d H:i:s').'</info>'
         ));
         $seoArray = \EverPsSeoSupplier::getAllSeoSuppliersIds(
-            (int)$shop->id
+            (int) $shop->id
         );
         $allowedLangs = $this->getAllowedShortcodesLangs(
             'EVERSEO_AUTO_SUPPLIER_LANGS'
         );
         foreach ($seoArray as $seo) {
-            if (in_array((int)$seo['id_seo_lang'], $allowedLangs)) {
+            if (in_array((int) $seo['id_seo_lang'], $allowedLangs)) {
                 $this->autoSetContentDesc(
                     'id_seo_supplier',
-                    (int)$seo['id_seo_supplier'],
-                    (int)$shop->id,
-                    (int)$seo['id_seo_lang']
+                    (int) $seo['id_seo_supplier'],
+                    (int) $shop->id,
+                    (int) $seo['id_seo_lang']
                 );
             }
         }
@@ -211,7 +211,7 @@ class GenerateObjectsContent extends Command
     {
         $allowedLangs = json_decode(
             \Configuration::get(
-                (string)$getter
+                (string) $getter
             )
         );
         if (!$allowedLangs) {
@@ -225,33 +225,33 @@ class GenerateObjectsContent extends Command
         switch ($object) {
             case 'id_seo_product':
                 $description_short = \EverPsSeoProduct::changeProductShortDescShortcodes(
-                    (int)$id_element,
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_element,
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
                 if (empty($description_short)) {
                     return;
                 }
                 $product = new Product(
-                    (int)$id_element,
+                    (int) $id_element,
                     false,
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
                 if (!in_array($product->id_category_default, $this->getAllowedGeneratorCategories(true))) {
                     return;
                 }
-                if ((bool)Configuration::get('EVERSEO_DELETE_PRODUCT_CONTENT')) {
+                if ((bool) Configuration::get('EVERSEO_DELETE_PRODUCT_CONTENT')) {
                     $product->description_short = $description_short;
                 } else {
                     $product->description_short .= $description_short;
                 }
 
-                $sql_desc_short = 'UPDATE `'._DB_PREFIX_.'product_lang`
+                $sql_desc_short = 'UPDATE `' . _DB_PREFIX_ . 'product_lang`
                     SET description_short = "'.pSQL($product->description_short, true).'"
-                    WHERE id_lang = '.(int)$id_lang.'
-                    AND id_shop = '.(int)$id_shop.'
-                    AND id_product = '.(int)$id_element;
+                    WHERE id_lang = '.(int) $id_lang.'
+                    AND id_shop = '.(int) $id_shop.'
+                    AND id_product = '.(int) $id_element;
 
                 if (\Db::getInstance()->execute($sql_desc_short)) {
                     return true;
@@ -266,25 +266,25 @@ class GenerateObjectsContent extends Command
             case 'id_seo_product':
                 if ((bool)\Configuration::get('EVERSEO_BOTTOM_PRODUCT_CONTENT') === false) {
                     $description = \EverPsSeoProduct::changeProductDescShortcodes(
-                        (int)$id_element,
-                        (int)$id_lang,
-                        (int)$id_shop
+                        (int) $id_element,
+                        (int) $id_lang,
+                        (int) $id_shop
                     );
                 } else {
                     $description = \EverPsSeoProduct::changeProductBottomShortcodes(
-                        (int)$id_element,
-                        (int)$id_lang,
-                        (int)$id_shop
+                        (int) $id_element,
+                        (int) $id_lang,
+                        (int) $id_shop
                     );
                 }
                 if (empty($description)) {
                     return;
                 }
                 $product = new \Product(
-                    (int)$id_element,
+                    (int) $id_element,
                     false,
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
                 if (!in_array($product->id_category_default, $this->getAllowedGeneratorCategories(true))) {
                     return;
@@ -297,31 +297,31 @@ class GenerateObjectsContent extends Command
                     }
                     $meta_title = \Tools::substr($meta_title, 0, 128);
 
-                    $sql_desc = 'UPDATE `'._DB_PREFIX_.'product_lang`
+                    $sql_desc = 'UPDATE `' . _DB_PREFIX_ . 'product_lang`
                         SET description = "'.pSQL($product->description, true).'"
-                        WHERE id_lang = '.(int)$id_lang.'
-                        AND id_shop = '.(int)$id_shop.'
-                        AND id_product = '.(int)$id_element;
+                        WHERE id_lang = '.(int) $id_lang.'
+                        AND id_shop = '.(int) $id_shop.'
+                        AND id_product = '.(int) $id_element;
 
                     if (\Db::getInstance()->execute($sql_desc)) {
                         return true;
                     }
                 } else {
                     $obj = \EverPsSeoProduct::getSeoProduct(
-                        (int)$id_element,
-                        (int)$id_lang,
-                        (int)$id_shop
+                        (int) $id_element,
+                        (int) $id_lang,
+                        (int) $id_shop
                     );
                     if ((bool)\Configuration::get('EVERSEO_DELETE_PRODUCT_CONTENT') === false) {
                         $obj->bottom_content = $obj->bottom_content.' '.$description;
                     } else {
                         $obj->bottom_content = $description;
                     }
-                    $sql_ever_desc = 'UPDATE `'._DB_PREFIX_.'ever_seo_product`
+                    $sql_ever_desc = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_product`
                         SET bottom_content = "'.pSQL($obj->bottom_content, true).'"
-                        WHERE id_seo_lang = '.(int)$id_lang.'
-                        AND id_shop = '.(int)$id_shop.'
-                        AND id_seo_product = '.(int)$id_element;
+                        WHERE id_seo_lang = '.(int) $id_lang.'
+                        AND id_shop = '.(int) $id_shop.'
+                        AND id_seo_product = '.(int) $id_element;
 
                     if (\Db::getInstance()->execute($sql_ever_desc)) {
                         return true;
@@ -332,17 +332,17 @@ class GenerateObjectsContent extends Command
 
             case 'id_seo_category':
                 $description = \EverPsSeoCategory::changeCategoryDescShortcodes(
-                    (int)$id_element,
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_element,
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
                 if (empty($description)) {
                     return;
                 }
                 $category = new \Category(
-                    (int)$id_element,
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_element,
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
                 if (!in_array($category->id, $this->getAllowedGeneratorCategories())) {
                     return;
@@ -361,9 +361,9 @@ class GenerateObjectsContent extends Command
                     }
                 } else {
                     $obj = \EverPsSeoCategory::getSeoCategory(
-                        (int)$id_element,
-                        (int)$id_lang,
-                        (int)$id_shop
+                        (int) $id_element,
+                        (int) $id_lang,
+                        (int) $id_shop
                     );
                     if ((bool)\Configuration::get('EVERSEO_DELETE_CATEGORY_CONTENT') === false) {
                         $obj->bottom_content = $obj->bottom_content.' '.$description;
@@ -376,16 +376,16 @@ class GenerateObjectsContent extends Command
 
             case 'id_seo_manufacturer':
                 $description = \EverPsSeoManufacturer::changeManufacturerDescShortcodes(
-                    (int)$id_element,
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_element,
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
                 if (empty($description)) {
                     return;
                 }
                 $manufacturer = new \Manufacturer(
-                    (int)$id_element,
-                    (int)$id_lang
+                    (int) $id_element,
+                    (int) $id_lang
                 );
                 if ((bool)\Configuration::get('EVERSEO_BOTTOM_MANUFACTURER_CONTENT') === false) {
                     $manufacturer->description = Tools::substr(pSQL($description), 0, 250);
@@ -394,9 +394,9 @@ class GenerateObjectsContent extends Command
                     }
                 } else {
                     $obj = \EverPsSeoManufacturer::getSeoManufacturer(
-                        (int)$id_element,
-                        (int)$id_lang,
-                        (int)$id_shop
+                        (int) $id_element,
+                        (int) $id_lang,
+                        (int) $id_shop
                     );
                     if ((bool)\Configuration::get('EVERSEO_DELETE_MANUFACTURER_CONTENT') === false) {
                         $obj->bottom_content = $obj->bottom_content.' '.$description;
@@ -409,16 +409,16 @@ class GenerateObjectsContent extends Command
 
             case 'id_seo_supplier':
                 $description = \EverPsSeoSupplier::changeSupplierDescShortcodes(
-                    (int)$id_element,
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_element,
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
                 if (empty($description)) {
                     return;
                 }
                 $supplier = new \Supplier(
-                    (int)$id_element,
-                    (int)$id_lang
+                    (int) $id_element,
+                    (int) $id_lang
                 );
                 if ((bool)\Configuration::get('EVERSEO_BOTTOM_SUPPLIER_CONTENT') === false) {
                     $supplier->description = Tools::substr(pSQL($description), 0, 250);
@@ -427,9 +427,9 @@ class GenerateObjectsContent extends Command
                     }
                 } else {
                     $obj = \EverPsSeoSupplier::getSeoSupplier(
-                        (int)$id_element,
-                        (int)$id_lang,
-                        (int)$id_shop
+                        (int) $id_element,
+                        (int) $id_lang,
+                        (int) $id_shop
                     );
                     if ((bool)\Configuration::get('EVERSEO_DELETE_SUPPLIER_CONTENT') === false) {
                         $obj->bottom_content = $obj->bottom_content.' '.$description;
@@ -444,7 +444,7 @@ class GenerateObjectsContent extends Command
 
     protected function getAllowedGeneratorCategories($isProduct = false)
     {
-        if ((bool)$isProduct === true) {
+        if ((bool) $isProduct === true) {
             $categories = json_decode(
                 \Configuration::get(
                     'EVERSEO_PGENERATOR_CATEGORIES'

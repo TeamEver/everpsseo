@@ -11,8 +11,8 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoCms.php';
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoKeywordsStrategy.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoCms.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoKeywordsStrategy.php';
 
 class AdminEverPsSeoCmsController extends ModuleAdminController
 {
@@ -31,21 +31,21 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
         $moduleConfUrl  = 'index.php?controller=AdminModules&configure=everpsseo&token=';
         $moduleConfUrl .= Tools::getAdminTokenLite('AdminModules');
         $this->img_folder = _PS_MODULE_DIR_.'everpsseo/views/img/cms/';
-        $this->img_url = Tools::getHttpHost(true).__PS_BASE_URI__.'/modules/everpsseo/views/img/cms/';
+        $this->img_url = Tools::getHttpHost(true) . __PS_BASE_URI__.'/modules/everpsseo/views/img/cms/';
         $this->context->smarty->assign(array(
-            'moduleConfUrl' => (string)$moduleConfUrl,
+            'moduleConfUrl' => (string) $moduleConfUrl,
             'image_dir' => _PS_BASE_URL_ . '/modules/everpsseo/views/img/'
         ));
 
         $this->_select = 'l.iso_code';
 
         $this->_join =
-            'LEFT JOIN `'._DB_PREFIX_.'ever_seo_lang` l
+            'LEFT JOIN `' . _DB_PREFIX_ . 'ever_seo_lang` l
                 ON (
                     l.`id_seo_lang` = a.`id_seo_lang`
                 )';
 
-        $this->_where = 'AND a.id_shop = '.(int)$this->context->shop->id;
+        $this->_where = 'AND a.id_shop = '.(int) $this->context->shop->id;
 
         $this->_group = 'GROUP BY a.id_ever_seo_cms';
 
@@ -110,15 +110,15 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
 
         $this->colorOnBackground = true;
 
-        $id_shop = (int)$this->context->shop->id;
-        $id_lang = (int)$this->context->language->id;
+        $id_shop = (int) $this->context->shop->id;
+        $id_lang = (int) $this->context->language->id;
 
         if (Tools::getValue('id_ever_seo_cms')) {
             $seoCMS = new EverPsSeoCMS(Tools::getValue('id_ever_seo_cms'));
             $cms = new CMS(
-                (int)$seoCMS->id_seo_cms,
-                (int)$id_lang,
-                (int)$id_shop
+                (int) $seoCMS->id_seo_cms,
+                (int) $id_lang,
+                (int) $id_shop
             );
             $link = new Link();
             $objectUrl = $link->getCMSLink(
@@ -126,10 +126,10 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
                 null,
                 null,
                 null,
-                (int)$this->context->language->id,
-                (int)$this->context->shop->id
+                (int) $this->context->language->id,
+                (int) $this->context->shop->id
             );
-            $editUrl  = 'index.php?controller=AdminCMS&id_cms='.(int)$cms->id.'';
+            $editUrl  = 'index.php?controller=AdminCMS&id_cms='.(int) $cms->id.'';
             $editUrl .= '&updatecms&token='.Tools::getAdminTokenLite('AdminCMS');
             $objectGSearch = str_replace(' ', '+', $cms->meta_title);
 
@@ -138,19 +138,19 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
                 $cms
             );
             switch (true) {
-                case ((int)$keywordsQlty['note'] <= 25):
+                case ((int) $keywordsQlty['note'] <= 25):
                     $color = 'ever-danger';
                     break;
 
-                case ((int)$keywordsQlty['note'] <= 50):
+                case ((int) $keywordsQlty['note'] <= 50):
                     $color = 'ever-alert';
                     break;
 
-                case ((int)$keywordsQlty['note'] <= 75):
+                case ((int) $keywordsQlty['note'] <= 75):
                     $color = 'ever-warning';
                     break;
 
-                case ((int)$keywordsQlty['note'] > 75):
+                case ((int) $keywordsQlty['note'] > 75):
                     $color = 'ever-success';
                     break;
 
@@ -302,7 +302,7 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
 
         if (Tools::getValue('id_ever_seo_cms')) {
             $seoCMS = new EverPsSeoCms(
-                (int)Tools::getValue('id_ever_seo_cms')
+                (int) Tools::getValue('id_ever_seo_cms')
             );
             if (file_exists($this->img_folder.$seoCMS->id_seo_cms.'.jpg')) {
                 $defaultUrlImage = $this->img_url.$seoCMS->id_seo_cms.'.jpg';
@@ -316,7 +316,7 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
                 'PS_LOGO'
             );
         }
-        $defaultImage = '<image src="'.(string)$defaultUrlImage.'" style="max-width:80px;"/>';
+        $defaultImage = '<image src="'.(string) $defaultUrlImage.'" style="max-width:80px;"/>';
 
         $this->fields_form = array(
             'submit' => array(
@@ -327,7 +327,7 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
             'buttons' => array(
                 'save-and-stay' => array(
                     'title' => $this->l('Save and stay'),
-                    'name' => 'submitAdd'.$this->table.'AndStay',
+                    'name' => 'submitAdd' . $this->table . 'AndStay',
                     'type' => 'submit',
                     'class' => 'btn btn-default pull-right',
                     'icon' => 'process-icon-save'
@@ -459,7 +459,7 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
     public function processIndexable()
     {
         $everCms = new EverPsSeoCms(
-            (int)Tools::getValue('id_ever_seo_cms')
+            (int) Tools::getValue('id_ever_seo_cms')
         );
 
         $everCms->indexable = !$everCms->indexable;
@@ -472,7 +472,7 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
     public function processFollow()
     {
         $everCms = new EverPsSeoCms(
-            (int)Tools::getValue('id_ever_seo_cms')
+            (int) Tools::getValue('id_ever_seo_cms')
         );
 
         $everCms->follow = !$everCms->follow;
@@ -485,7 +485,7 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
     public function processSitemap()
     {
         $everCms = new EverPsSeoCms(
-            (int)Tools::getValue('id_ever_seo_cms')
+            (int) Tools::getValue('id_ever_seo_cms')
         );
 
         $everCms->allowed_sitemap = !$everCms->allowed_sitemap;
@@ -545,9 +545,9 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
                     Tools::getValue('id_ever_seo_cms')
                 );
                 $cms = new CMS(
-                    (int)$everCms->id_seo_cms,
-                    (int)$everCms->id_seo_lang,
-                    (int)$this->context->shop->id
+                    (int) $everCms->id_seo_cms,
+                    (int) $everCms->id_seo_lang,
+                    (int) $this->context->shop->id
                 );
                 // SEO Object
                 $everCms->meta_title = Tools::getValue('meta_title');
@@ -568,8 +568,8 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
                     && !empty($_FILES['social_media']['tmp_name'])
                 ) {
                     Configuration::set('PS_IMAGE_GENERATION_METHOD', 1);
-                    if (file_exists($this->img_folder.(int)$everCms->id_seo_cms.'.jpg')) {
-                        unlink($this->img_folder.(int)$everCms->id_seo_cms.'.jpg');
+                    if (file_exists($this->img_folder.(int) $everCms->id_seo_cms.'.jpg')) {
+                        unlink($this->img_folder.(int) $everCms->id_seo_cms.'.jpg');
                     }
                     if ($error = ImageManager::validateUpload($_FILES['social_media'])) {
                         $this->errors[] = $error;
@@ -579,7 +579,7 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
                         return false;
                     } elseif (!ImageManager::resize(
                         $tmp_name,
-                        $this->img_folder.(int)$everCms->id_seo_cms.'.jpg'
+                        $this->img_folder.(int) $everCms->id_seo_cms.'.jpg'
                     )) {
                         $this->errors[] = $this->l('An error occurred while attempting to upload the image.');
                     }
@@ -587,7 +587,7 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
                         unlink($tmp_name);
                     }
                     $everCms->social_img_url = $this->img_url
-                    .(int)$everCms->id_seo_cms
+                    .(int) $everCms->id_seo_cms
                     .'.jpg';
                 }
                 $everCms->save();
@@ -609,7 +609,7 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
     {
         foreach (Tools::getValue($this->table.'Box') as $idEverCms) {
             $everCms = new EverPsSeoCms(
-                (int)$idEverCms
+                (int) $idEverCms
             );
 
             $everCms->indexable = !$everCms->indexable;
@@ -624,7 +624,7 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
     {
         foreach (Tools::getValue($this->table.'Box') as $idEverCms) {
             $everCms = new EverPsSeoCms(
-                (int)$idEverCms
+                (int) $idEverCms
             );
 
             $everCms->follow = !$everCms->follow;
@@ -638,7 +638,7 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
     protected function processBulkSitemap()
     {
         foreach (Tools::getValue($this->table.'Box') as $idEverCms) {
-            $everCms = new EverPsSeoCms((int)$idEverCms);
+            $everCms = new EverPsSeoCms((int) $idEverCms);
 
             $everCms->allowed_sitemap = !$everCms->allowed_sitemap;
 
@@ -652,13 +652,13 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
     {
         foreach (Tools::getValue($this->table.'Box') as $idEverCms) {
             $everCms = new EverPsSeoCms(
-                (int)$idEverCms
+                (int) $idEverCms
             );
 
             $meta_title = Db::getInstance()->getValue(
-                'SELECT meta_title FROM `'._DB_PREFIX_.'cms_lang`
-                WHERE id_cms = '.(int)$everCms->id_seo_cms.'
-                AND id_lang = '.(int)$everCms->id_seo_lang
+                'SELECT meta_title FROM `' . _DB_PREFIX_ . 'cms_lang`
+                WHERE id_cms = '.(int) $everCms->id_seo_cms.'
+                AND id_lang = '.(int) $everCms->id_seo_lang
             );
 
             if (!$meta_title) {
@@ -677,18 +677,18 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
     {
         foreach (Tools::getValue($this->table.'Box') as $idEverCms) {
             $everCms = new EverPsSeoCms(
-                (int)$idEverCms
+                (int) $idEverCms
             );
             $cms = new CMS(
-                (int)$everCms->id_seo_cms,
-                (int)$everCms->id_seo_lang,
-                (int)$this->context->shop->id
+                (int) $everCms->id_seo_cms,
+                (int) $everCms->id_seo_lang,
+                (int) $this->context->shop->id
             );
 
             $meta_description = Db::getInstance()->getValue(
-                'SELECT meta_description FROM `'._DB_PREFIX_.'cms_lang`
-                WHERE id_cms = '.(int)$everCms->id_seo_cms.'
-                AND id_lang = '.(int)$everCms->id_seo_lang
+                'SELECT meta_description FROM `' . _DB_PREFIX_ . 'cms_lang`
+                WHERE id_cms = '.(int) $everCms->id_seo_cms.'
+                AND id_lang = '.(int) $everCms->id_seo_lang
             );
 
             if (!$meta_description) {
@@ -707,18 +707,18 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
     {
         foreach (Tools::getValue($this->table.'Box') as $idEverCms) {
             $everCms = new EverPsSeoCms(
-                (int)$idEverCms
+                (int) $idEverCms
             );
             $cms = new CMS(
-                (int)$everCms->id_seo_cms,
-                (int)$everCms->id_seo_lang,
-                (int)$this->context->shop->id
+                (int) $everCms->id_seo_cms,
+                (int) $everCms->id_seo_lang,
+                (int) $this->context->shop->id
             );
 
             $content = Db::getInstance()->getValue(
-                'SELECT content FROM `'._DB_PREFIX_.'cms_lang`
-                WHERE id_cms = '.(int)$everCms->id_seo_cms.'
-                AND id_lang = '.(int)$everCms->id_seo_lang
+                'SELECT content FROM `' . _DB_PREFIX_ . 'cms_lang`
+                WHERE id_cms = '.(int) $everCms->id_seo_cms.'
+                AND id_lang = '.(int) $everCms->id_seo_lang
             );
 
             if (!$content) {
@@ -741,12 +741,12 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
     {
         foreach (Tools::getValue($this->table.'Box') as $idEverCms) {
             $everCms = new EverPsSeoCms(
-                (int)$idEverCms
+                (int) $idEverCms
             );
             $cms = new CMS(
-                (int)$everCms->id_seo_cms,
-                (int)$everCms->id_seo_lang,
-                (int)$this->context->shop->id
+                (int) $everCms->id_seo_cms,
+                (int) $everCms->id_seo_lang,
+                (int) $this->context->shop->id
             );
 
             if (!Validate::isLoadedObject($cms)) {
@@ -758,17 +758,17 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
                 null,
                 null,
                 null,
-                (int)$everCms->id_seo_lang,
-                (int)$this->context->shop->id
+                (int) $everCms->id_seo_lang,
+                (int) $this->context->shop->id
             );
             $httpCode = EverPsSeoTools::indexNow(
                 $url
             );
-            $sql = 'UPDATE `'._DB_PREFIX_.'ever_seo_cms`
-            SET status_code = '.(int)$httpCode.'
-            WHERE id_seo_lang = '.(int)$everCms->id_seo_lang.'
-            AND id_shop = '.(int)$this->context->shop->id.'
-            AND id_ever_seo_cms = '.(int)$cms->id;
+            $sql = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_cms`
+            SET status_code = '.(int) $httpCode.'
+            WHERE id_seo_lang = '.(int) $everCms->id_seo_lang.'
+            AND id_shop = '.(int) $this->context->shop->id.'
+            AND id_ever_seo_cms = '.(int) $cms->id;
             if (!Db::getInstance()->execute($sql)) {
                 $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
             }

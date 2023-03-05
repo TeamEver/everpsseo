@@ -19,7 +19,7 @@ function upgrade_module_7_7_9()
     $sql = [];
     // Update SEO categories
     $sql[] =
-        'ALTER TABLE `'._DB_PREFIX_.'ever_seo_product`
+        'ALTER TABLE `' . _DB_PREFIX_ . 'ever_seo_product`
          ADD `bottom_content` text DEFAULT NULL
          AFTER `social_img_url`
     ';

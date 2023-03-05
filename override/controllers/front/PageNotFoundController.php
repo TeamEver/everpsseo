@@ -15,9 +15,9 @@ class PageNotFoundController extends PageNotFoundControllerCore
     */
     public function initContent()
     {
-        require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoRedirect.php';
-        if ((bool)Configuration::get('EVERSEO_REWRITE') === true) {
-            $redirectionCode = (int)Configuration::get('EVERSEO_REDIRECT');
+        require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoRedirect.php';
+        if ((bool) Configuration::get('EVERSEO_REWRITE') === true) {
+            $redirectionCode = (int) Configuration::get('EVERSEO_REDIRECT');
             switch ($redirectionCode) {
                 case 301:
                     $redirectionCode = 'Status: 301 Moved Permanently, false, 301';
@@ -38,21 +38,21 @@ class PageNotFoundController extends PageNotFoundControllerCore
             $url = "https://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
             $notFoundRedirection = EverPsSeoRedirect::ifNotFoundExists(
                 $url,
-                (int)$this->context->shop->id
+                (int) $this->context->shop->id
             );
             if (Validate::isLoadedObject($notFoundRedirection)
                 && Validate::isUrl($notFoundRedirection->redirection)
-                && (bool)$notFoundRedirection->active === true
+                && (bool) $notFoundRedirection->active === true
             ) {
                 $redirectExists = $notFoundRedirection->redirection;
                 $redirectionCode = $notFoundRedirection->getRedirectionStatusCode(
-                    (int)$notFoundRedirection->code
+                    (int) $notFoundRedirection->code
                 );
             } else {
                 $redirectExists = EverPsSeoRedirect::getRedirectUrl(
                     $url,
-                    (int)$this->context->shop->id,
-                    (int)$this->context->language->id
+                    (int) $this->context->shop->id,
+                    (int) $this->context->language->id
                 );
             }
             if (Validate::isUrl($redirectExists)) {
@@ -63,10 +63,10 @@ class PageNotFoundController extends PageNotFoundControllerCore
                     $redirectionCode
                 );
             } else {
-                if ((bool)Configuration::get('EVERSEO_NOT_FOUND') === true) {
+                if ((bool) Configuration::get('EVERSEO_NOT_FOUND') === true) {
                     Tools::redirect('index.php');
                 } else {
-                    if ((bool)Configuration::get('EVERSEO_CUSTOM_404') === true) {
+                    if ((bool) Configuration::get('EVERSEO_CUSTOM_404') === true) {
                         Tools::redirect(
                             $this->context->link->getModuleLink(
                                 'everpsseo',
@@ -83,7 +83,7 @@ class PageNotFoundController extends PageNotFoundControllerCore
                 }
             }
         } else {
-            if ((bool)Configuration::get('EVERSEO_CUSTOM_404') === true) {
+            if ((bool) Configuration::get('EVERSEO_CUSTOM_404') === true) {
                 Tools::redirect(
                     $this->context->link->getModuleLink(
                         'everpsseo',

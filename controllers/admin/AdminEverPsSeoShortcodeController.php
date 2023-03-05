@@ -6,12 +6,11 @@
  * @license   Tous droits réservés / Le droit d'auteur s'applique (All rights reserved / French copyright law applies)
  * @see https://www.team-ever.com
  */
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoShortcode.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoShortcode.php';
 
 class AdminEverPsSeoShortcodeController extends ModuleAdminController
 {
@@ -31,7 +30,7 @@ class AdminEverPsSeoShortcodeController extends ModuleAdminController
         $moduleConfUrl .= Tools::getAdminTokenLite('AdminModules');
 
         $this->context->smarty->assign(array(
-            'moduleConfUrl' => (string)$moduleConfUrl,
+            'moduleConfUrl' => (string) $moduleConfUrl,
             'image_dir' => _PS_BASE_URL_ . '/modules/everpsseo/views/img/'
         ));
 
@@ -142,7 +141,7 @@ class AdminEverPsSeoShortcodeController extends ModuleAdminController
             'buttons' => array(
                 'save-and-stay' => array(
                     'title' => $this->l('Save and stay'),
-                    'name' => 'submitAdd'.$this->table.'AndStay',
+                    'name' => 'submitAdd' . $this->table . 'AndStay',
                     'type' => 'submit',
                     'class' => 'btn btn-default pull-right',
                     'icon' => 'process-icon-save'
@@ -185,17 +184,17 @@ class AdminEverPsSeoShortcodeController extends ModuleAdminController
     public function postProcess()
     {
         parent::postProcess();
-        if (Tools::isSubmit('save') || Tools::isSubmit('submitAdd'.$this->table.'AndStay')) {
+        if (Tools::isSubmit('save') || Tools::isSubmit('submitAdd' . $this->table . 'AndStay')) {
             if (!Tools::getValue('title')
                 || !Validate::isGenericName(Tools::getValue('title'))
             ) {
                  $this->errors[] = $this->l('Title is not valid or missing');
             }
             $everblock_obj = new EverPsSeoShortcode(
-                (int)Tools::getValue('id_seo_shortcode')
+                (int) Tools::getValue('id_seo_shortcode')
             );
             $everblock_obj->shortcode = Tools::getValue('name');
-            $everblock_obj->id_shop = (int)Context::getContext()->shop->id;
+            $everblock_obj->id_shop = (int) Context::getContext()->shop->id;
             foreach (Language::getLanguages(false) as $language) {
                 if (!Tools::getValue('content_'.$language['id_lang'])
                 ) {
@@ -218,7 +217,7 @@ class AdminEverPsSeoShortcodeController extends ModuleAdminController
 
         if (Tools::isSubmit('deleteever_shortcodes')) {
             $shortcode = new EverPsSeoShortcode(
-                (int)Tools::getValue('id_ever_seo_shortcode')
+                (int) Tools::getValue('id_ever_seo_shortcode')
             );
 
             if (!$shortcode->delete()) {
@@ -244,7 +243,7 @@ class AdminEverPsSeoShortcodeController extends ModuleAdminController
                     if (is_array($shortcode)) {
                         foreach ($shortcode as $id_ever_seo_shortcode) {
                             $shortcode = new EverPsSeoShortcode(
-                                (int)$id_ever_seo_shortcode
+                                (int) $id_ever_seo_shortcode
                             );
                             if (!count($this->errors) && $shortcode->delete()) {
                             } else {

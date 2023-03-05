@@ -129,15 +129,15 @@ class EverPsSeoProduct extends ObjectModel
     public static function getAllSeoProductsIds($id_shop, $allowedLangs = false)
     {
         $cache_id = 'EverPsSeoProduct::getAllSeoProductsIds_'
-        .(int)$id_shop;
+        .(int) $id_shop;
         if (!Cache::isStored($cache_id)) {
             $sql = new DbQuery();
             $sql->select('*');
             $sql->from('ever_seo_product');
             if ($allowedLangs) {
-                $sql->where('id_shop = '.(int)$id_shop.' AND id_seo_lang IN ('.implode(',', $allowedLangs).')');
+                $sql->where('id_shop = '.(int) $id_shop.' AND id_seo_lang IN ('.implode(',', $allowedLangs).')');
             } else {
-                $sql->where('id_shop = '.(int)$id_shop);
+                $sql->where('id_shop = '.(int) $id_shop);
             }
             $return = Db::getInstance()->executeS($sql);
             Cache::store($cache_id, $return);
@@ -149,12 +149,12 @@ class EverPsSeoProduct extends ObjectModel
     public static function getProductNameBySeoId($id_seo_product)
     {
         $cache_id = 'EverPsSeoProduct::getProductNameBySeoId_'
-        .(int)$id_seo_product;
+        .(int) $id_seo_product;
         if (!Cache::isStored($cache_id)) {
             $sql = new DbQuery();
             $sql->select('name');
             $sql->from('product_lang');
-            $sql->where('id_product = '.(int)$id_seo_product);
+            $sql->where('id_product = '.(int) $id_seo_product);
             $return = Db::getInstance()->getValue($sql);
             Cache::store($cache_id, $return);
             return $return;
@@ -165,23 +165,23 @@ class EverPsSeoProduct extends ObjectModel
     public static function getSeoProduct($id_seo_product, $id_shop, $id_seo_lang)
     {
         $cache_id = 'EverPsSeoProduct::getSeoProduct_'
-        .(int)$id_seo_product
+        .(int) $id_seo_product
         .'_'
-        .(int)$id_shop
+        .(int) $id_shop
         .'_'
-        .(int)$id_seo_lang;
+        .(int) $id_seo_lang;
         if (!Cache::isStored($cache_id)) {
             $sql = new DbQuery();
             $sql->select('*');
             $sql->from('ever_seo_product');
             $sql->where(
-                'id_seo_product = '.(int)$id_seo_product
+                'id_seo_product = '.(int) $id_seo_product
             );
             $sql->where(
-                'id_seo_lang = '.(int)$id_seo_lang
+                'id_seo_lang = '.(int) $id_seo_lang
             );
             $sql->where(
-                'id_shop = '.(int)$id_shop
+                'id_shop = '.(int) $id_shop
             );
             $return = new self(Db::getInstance()->getValue($sql));
             Cache::store($cache_id, $return);
@@ -193,15 +193,15 @@ class EverPsSeoProduct extends ObjectModel
     public static function changeProductTitleShortcodes($id_seo_product, $id_seo_lang, $id_shop)
     {
         $product = new Product(
-            (int)$id_seo_product,
+            (int) $id_seo_product,
             false,
-            (int)$id_seo_lang,
-            (int)$id_shop
+            (int) $id_seo_lang,
+            (int) $id_shop
         );
         $combination_names = '';
-        if (self::hasEverCombinations((int)$product->id)) {
+        if (self::hasEverCombinations((int) $product->id)) {
             $attr_resumes = $product->getAttributesResume(
-                (int)$id_seo_lang
+                (int) $id_seo_lang
             );
             foreach ($attr_resumes as $key => $attr_resume) {
                 if ($key == 0) {
@@ -214,30 +214,30 @@ class EverPsSeoProduct extends ObjectModel
         $feature_names = '';
         // foreach ($product->getFeatures() as $key => $value) {
         //     $feature = Feature::getFeature(
-        //         (int)$id_seo_lang,
-        //         (int)$value['id_feature']
+        //         (int) $id_seo_lang,
+        //         (int) $value['id_feature']
         //     );
         //     $feature_value = new FeatureValue(
-        //         (int)$value['id_feature_value']
+        //         (int) $value['id_feature_value']
         //     );
         //     if ($key == 0) {
-        //         $feature_names .= $feature['name'].': '.$feature_value->value[(int)$id_seo_lang];
+        //         $feature_names .= $feature['name'].': '.$feature_value->value[(int) $id_seo_lang];
         //     } else {
-        //         $feature_names .= $feature['name'].': '.$feature_value->value[(int)$id_seo_lang].', ';
+        //         $feature_names .= $feature['name'].': '.$feature_value->value[(int) $id_seo_lang].', ';
         //     }
         // }
         $category = new Category(
-            (int)$product->id_category_default,
-            (int)$id_seo_lang,
-            (int)$id_shop
+            (int) $product->id_category_default,
+            (int) $id_seo_lang,
+            (int) $id_shop
         );
         $manufacturer = new Manufacturer(
-            (int)$product->id_manufacturer,
-            (int)$id_seo_lang
+            (int) $product->id_manufacturer,
+            (int) $id_seo_lang
         );
         $supplier = new Supplier(
-            (int)$product->id_supplier,
-            (int)$id_seo_lang
+            (int) $product->id_supplier,
+            (int) $id_seo_lang
         );
         $message = Configuration::getConfigInMultipleLangs(
             'EVERSEO_PRODUCT_TITLE_AUTO'
@@ -256,37 +256,37 @@ class EverPsSeoProduct extends ObjectModel
             '[product_supplier]' => $supplier->name ? $supplier->name : '',
             '[category_desc]' => $category->description,
             '[category_meta_desc]' => $category->meta_description,
-            '[shop_name]' => (string)Configuration::get('PS_SHOP_NAME'),
+            '[shop_name]' => (string) Configuration::get('PS_SHOP_NAME'),
             'NULL' => '', // Useful : remove empty strings in case of NULL
             'null' => '', // Useful : remove empty strings in case of null
         );
         foreach ($shortcodes as $key => $value) {
-            $message[(int)$id_seo_lang] = str_replace(
-                (string)$key,
-                (string)$value,
-                (string)$message[(int)$id_seo_lang]
+            $message[(int) $id_seo_lang] = str_replace(
+                (string) $key,
+                (string) $value,
+                (string) $message[(int) $id_seo_lang]
             );
-            $message[(int)$id_seo_lang] = Hook::exec('actionChangeSeoShortcodes', array(
-                'content' => $message[(int)$id_seo_lang]
+            $message[(int) $id_seo_lang] = Hook::exec('actionChangeSeoShortcodes', array(
+                'content' => $message[(int) $id_seo_lang]
             ));
         }
-        if (!empty($message[(int)$id_seo_lang])) {
-            return $message[(int)$id_seo_lang];
+        if (!empty($message[(int) $id_seo_lang])) {
+            return $message[(int) $id_seo_lang];
         }
     }
 
     public static function changeProductMetadescShortcodes($id_seo_product, $id_seo_lang, $id_shop)
     {
         $product = new Product(
-            (int)$id_seo_product,
+            (int) $id_seo_product,
             false,
-            (int)$id_seo_lang,
-            (int)$id_shop
+            (int) $id_seo_lang,
+            (int) $id_shop
         );
         $combination_names = '';
-        if (self::hasEverCombinations((int)$product->id)) {
+        if (self::hasEverCombinations((int) $product->id)) {
             $attr_resumes = $product->getAttributesResume(
-                (int)$id_seo_lang
+                (int) $id_seo_lang
             );
             foreach ($attr_resumes as $key => $attr_resume) {
                 if ($key == 0) {
@@ -299,30 +299,30 @@ class EverPsSeoProduct extends ObjectModel
         $feature_names = '';
         // foreach ($product->getFeatures() as $key => $value) {
         //     $feature = Feature::getFeature(
-        //         (int)$id_seo_lang,
-        //         (int)$value['id_feature']
+        //         (int) $id_seo_lang,
+        //         (int) $value['id_feature']
         //     );
         //     $feature_value = new FeatureValue(
-        //         (int)$value['id_feature_value']
+        //         (int) $value['id_feature_value']
         //     );
         //     if ($key == 0) {
-        //         $feature_names .= $feature['name'].': '.$feature_value->value[(int)$id_seo_lang];
+        //         $feature_names .= $feature['name'].': '.$feature_value->value[(int) $id_seo_lang];
         //     } else {
-        //         $feature_names .= $feature['name'].': '.$feature_value->value[(int)$id_seo_lang].', ';
+        //         $feature_names .= $feature['name'].': '.$feature_value->value[(int) $id_seo_lang].', ';
         //     }
         // }
         $manufacturer = new Manufacturer(
-            (int)$product->id_manufacturer,
-            (int)$id_seo_lang
+            (int) $product->id_manufacturer,
+            (int) $id_seo_lang
         );
         $supplier = new Supplier(
-            (int)$product->id_supplier,
-            (int)$id_seo_lang
+            (int) $product->id_supplier,
+            (int) $id_seo_lang
         );
         $category = new Category(
-            (int)$product->id_category_default,
-            (int)$id_seo_lang,
-            (int)$id_shop
+            (int) $product->id_category_default,
+            (int) $id_seo_lang,
+            (int) $id_shop
         );
         $message = Configuration::getConfigInMultipleLangs(
             'EVERSEO_PRODUCT_METADESC_AUTO'
@@ -340,37 +340,37 @@ class EverPsSeoProduct extends ObjectModel
             '[product_combinations]' => $combination_names,
             '[product_features]' => $feature_names,
             '[product_tags]' => $product->meta_keywords ? $product->meta_keywords : '',
-            '[shop_name]' => (string)Configuration::get('PS_SHOP_NAME'),
+            '[shop_name]' => (string) Configuration::get('PS_SHOP_NAME'),
             'NULL' => '', // Useful : remove empty strings in case of NULL
             'null' => '', // Useful : remove empty strings in case of null
         );
         foreach ($shortcodes as $key => $value) {
-            $message[(int)$id_seo_lang] = str_replace(
-                (string)$key,
-                (string)$value,
-                (string)$message[(int)$id_seo_lang]
+            $message[(int) $id_seo_lang] = str_replace(
+                (string) $key,
+                (string) $value,
+                (string) $message[(int) $id_seo_lang]
             );
-            $message[(int)$id_seo_lang] = Hook::exec('actionChangeSeoShortcodes', array(
-                'content' => $message[(int)$id_seo_lang]
+            $message[(int) $id_seo_lang] = Hook::exec('actionChangeSeoShortcodes', array(
+                'content' => $message[(int) $id_seo_lang]
             ));
         }
-        if (!empty($message[(int)$id_seo_lang])) {
-            return $message[(int)$id_seo_lang];
+        if (!empty($message[(int) $id_seo_lang])) {
+            return $message[(int) $id_seo_lang];
         }
     }
 
     public static function changeProductDescShortcodes($id_seo_product, $id_seo_lang, $id_shop)
     {
         $product = new Product(
-            (int)$id_seo_product,
+            (int) $id_seo_product,
             false,
-            (int)$id_seo_lang,
-            (int)$id_shop
+            (int) $id_seo_lang,
+            (int) $id_shop
         );
         $combination_names = '';
-        if (self::hasEverCombinations((int)$product->id)) {
+        if (self::hasEverCombinations((int) $product->id)) {
             $attr_resumes = $product->getAttributesResume(
-                (int)$id_seo_lang
+                (int) $id_seo_lang
             );
             foreach ($attr_resumes as $key => $attr_resume) {
                 if ($key == 0) {
@@ -383,30 +383,30 @@ class EverPsSeoProduct extends ObjectModel
         $feature_names = '';
         foreach ($product->getFeatures() as $key => $value) {
             $feature = Feature::getFeature(
-                (int)$id_seo_lang,
-                (int)$value['id_feature']
+                (int) $id_seo_lang,
+                (int) $value['id_feature']
             );
             $feature_value = new FeatureValue(
-                (int)$value['id_feature_value']
+                (int) $value['id_feature_value']
             );
             if ($key == 0) {
-                $feature_names .= $feature['name'].': '.$feature_value->value[(int)$id_seo_lang];
+                $feature_names .= $feature['name'].': '.$feature_value->value[(int) $id_seo_lang];
             } else {
-                $feature_names .= $feature['name'].': '.$feature_value->value[(int)$id_seo_lang].', ';
+                $feature_names .= $feature['name'].': '.$feature_value->value[(int) $id_seo_lang].', ';
             }
         }
         $manufacturer = new Manufacturer(
-            (int)$product->id_manufacturer,
-            (int)$id_seo_lang
+            (int) $product->id_manufacturer,
+            (int) $id_seo_lang
         );
         $supplier = new Supplier(
-            (int)$product->id_supplier,
-            (int)$id_seo_lang
+            (int) $product->id_supplier,
+            (int) $id_seo_lang
         );
         $category = new Category(
-            (int)$product->id_category_default,
-            (int)$id_seo_lang,
-            (int)$id_shop
+            (int) $product->id_category_default,
+            (int) $id_seo_lang,
+            (int) $id_shop
         );
         $message = Configuration::getConfigInMultipleLangs(
             'PRODUCT_DESC_GENERATE'
@@ -423,37 +423,37 @@ class EverPsSeoProduct extends ObjectModel
             '[product_combinations]' => $combination_names,
             '[product_features]' => $feature_names,
             '[product_tags]' => $product->meta_keywords ? $product->meta_keywords : '',
-            '[shop_name]' => (string)Configuration::get('PS_SHOP_NAME'),
+            '[shop_name]' => (string) Configuration::get('PS_SHOP_NAME'),
             'NULL' => '', // Useful : remove empty strings in case of NULL
             'null' => '', // Useful : remove empty strings in case of null
         );
         foreach ($shortcodes as $key => $value) {
-            $message[(int)$id_seo_lang] = str_replace(
-                (string)$key,
-                (string)$value,
-                (string)$message[(int)$id_seo_lang]
+            $message[(int) $id_seo_lang] = str_replace(
+                (string) $key,
+                (string) $value,
+                (string) $message[(int) $id_seo_lang]
             );
-            $message[(int)$id_seo_lang] = Hook::exec('actionChangeSeoShortcodes', array(
-                'content' => $message[(int)$id_seo_lang]
+            $message[(int) $id_seo_lang] = Hook::exec('actionChangeSeoShortcodes', array(
+                'content' => $message[(int) $id_seo_lang]
             ));
         }
-        if (!empty($message[(int)$id_seo_lang])) {
-            return $message[(int)$id_seo_lang];
+        if (!empty($message[(int) $id_seo_lang])) {
+            return $message[(int) $id_seo_lang];
         }
     }
 
     public static function changeProductShortDescShortcodes($id_seo_product, $id_seo_lang, $id_shop)
     {
         $product = new Product(
-            (int)$id_seo_product,
+            (int) $id_seo_product,
             false,
-            (int)$id_seo_lang,
-            (int)$id_shop
+            (int) $id_seo_lang,
+            (int) $id_shop
         );
         $combination_names = '';
-        if (self::hasEverCombinations((int)$product->id)) {
+        if (self::hasEverCombinations((int) $product->id)) {
             $attr_resumes = $product->getAttributesResume(
-                (int)$id_seo_lang
+                (int) $id_seo_lang
             );
             foreach ($attr_resumes as $key => $attr_resume) {
                 if ($key == 0) {
@@ -466,30 +466,30 @@ class EverPsSeoProduct extends ObjectModel
         $feature_names = '';
         foreach ($product->getFeatures() as $key => $value) {
             $feature = Feature::getFeature(
-                (int)$id_seo_lang,
-                (int)$value['id_feature']
+                (int) $id_seo_lang,
+                (int) $value['id_feature']
             );
             $feature_value = new FeatureValue(
-                (int)$value['id_feature_value']
+                (int) $value['id_feature_value']
             );
             if ($key == 0) {
-                $feature_names .= $feature['name'].': '.$feature_value->value[(int)$id_seo_lang];
+                $feature_names .= $feature['name'].': '.$feature_value->value[(int) $id_seo_lang];
             } else {
-                $feature_names .= $feature['name'].': '.$feature_value->value[(int)$id_seo_lang].', ';
+                $feature_names .= $feature['name'].': '.$feature_value->value[(int) $id_seo_lang].', ';
             }
         }
         $manufacturer = new Manufacturer(
-            (int)$product->id_manufacturer,
-            (int)$id_seo_lang
+            (int) $product->id_manufacturer,
+            (int) $id_seo_lang
         );
         $supplier = new Supplier(
-            (int)$product->id_supplier,
-            (int)$id_seo_lang
+            (int) $product->id_supplier,
+            (int) $id_seo_lang
         );
         $category = new Category(
-            (int)$product->id_category_default,
-            (int)$id_seo_lang,
-            (int)$id_shop
+            (int) $product->id_category_default,
+            (int) $id_seo_lang,
+            (int) $id_shop
         );
         $message = Configuration::getConfigInMultipleLangs(
             'PRODUCT_SHORT_DESC_GENERATE'
@@ -506,37 +506,37 @@ class EverPsSeoProduct extends ObjectModel
             '[product_combinations]' => $combination_names,
             '[product_features]' => $feature_names,
             '[product_tags]' => $product->meta_keywords ? $product->meta_keywords : '',
-            '[shop_name]' => (string)Configuration::get('PS_SHOP_NAME'),
+            '[shop_name]' => (string) Configuration::get('PS_SHOP_NAME'),
             'NULL' => '', // Useful : remove empty strings in case of NULL
             'null' => '', // Useful : remove empty strings in case of null
         );
         foreach ($shortcodes as $key => $value) {
-            $message[(int)$id_seo_lang] = str_replace(
-                (string)$key,
-                (string)$value,
-                (string)$message[(int)$id_seo_lang]
+            $message[(int) $id_seo_lang] = str_replace(
+                (string) $key,
+                (string) $value,
+                (string) $message[(int) $id_seo_lang]
             );
-            $message[(int)$id_seo_lang] = Hook::exec('actionChangeSeoShortcodes', array(
-                'content' => $message[(int)$id_seo_lang]
+            $message[(int) $id_seo_lang] = Hook::exec('actionChangeSeoShortcodes', array(
+                'content' => $message[(int) $id_seo_lang]
             ));
         }
-        if (!empty($message[(int)$id_seo_lang])) {
-            return $message[(int)$id_seo_lang];
+        if (!empty($message[(int) $id_seo_lang])) {
+            return $message[(int) $id_seo_lang];
         }
     }
 
     public static function changeProductBottomShortcodes($id_seo_product, $id_seo_lang, $id_shop)
     {
         $product = new Product(
-            (int)$id_seo_product,
+            (int) $id_seo_product,
             false,
-            (int)$id_seo_lang,
-            (int)$id_shop
+            (int) $id_seo_lang,
+            (int) $id_shop
         );
         $combination_names = '';
-        if (self::hasEverCombinations((int)$product->id)) {
+        if (self::hasEverCombinations((int) $product->id)) {
             $attr_resumes = $product->getAttributesResume(
-                (int)$id_seo_lang
+                (int) $id_seo_lang
             );
             foreach ($attr_resumes as $key => $attr_resume) {
                 if ($key == 0) {
@@ -549,30 +549,30 @@ class EverPsSeoProduct extends ObjectModel
         $feature_names = '';
         foreach ($product->getFeatures() as $key => $value) {
             $feature = Feature::getFeature(
-                (int)$id_seo_lang,
-                (int)$value['id_feature']
+                (int) $id_seo_lang,
+                (int) $value['id_feature']
             );
             $feature_value = new FeatureValue(
-                (int)$value['id_feature_value']
+                (int) $value['id_feature_value']
             );
             if ($key == 0) {
-                $feature_names .= $feature['name'].': '.$feature_value->value[(int)$id_seo_lang];
+                $feature_names .= $feature['name'].': '.$feature_value->value[(int) $id_seo_lang];
             } else {
-                $feature_names .= $feature['name'].': '.$feature_value->value[(int)$id_seo_lang].', ';
+                $feature_names .= $feature['name'].': '.$feature_value->value[(int) $id_seo_lang].', ';
             }
         }
         $manufacturer = new Manufacturer(
-            (int)$product->id_manufacturer,
-            (int)$id_seo_lang
+            (int) $product->id_manufacturer,
+            (int) $id_seo_lang
         );
         $supplier = new Supplier(
-            (int)$product->id_supplier,
-            (int)$id_seo_lang
+            (int) $product->id_supplier,
+            (int) $id_seo_lang
         );
         $category = new Category(
-            (int)$product->id_category_default,
-            (int)$id_seo_lang,
-            (int)$id_shop
+            (int) $product->id_category_default,
+            (int) $id_seo_lang,
+            (int) $id_shop
         );
         $message = Configuration::getConfigInMultipleLangs(
             'PRODUCT_BOTTOM_GENERATE'
@@ -589,57 +589,57 @@ class EverPsSeoProduct extends ObjectModel
             '[product_combinations]' => $combination_names,
             '[product_features]' => $feature_names,
             '[product_tags]' => $product->meta_keywords ? $product->meta_keywords : '',
-            '[shop_name]' => (string)Configuration::get('PS_SHOP_NAME'),
+            '[shop_name]' => (string) Configuration::get('PS_SHOP_NAME'),
             'NULL' => '', // Useful : remove empty strings in case of NULL
             'null' => '', // Useful : remove empty strings in case of null
         );
         foreach ($shortcodes as $key => $value) {
-            $message[(int)$id_seo_lang] = str_replace(
-                (string)$key,
-                (string)$value,
-                (string)$message[(int)$id_seo_lang]
+            $message[(int) $id_seo_lang] = str_replace(
+                (string) $key,
+                (string) $value,
+                (string) $message[(int) $id_seo_lang]
             );
-            $message[(int)$id_seo_lang] = Hook::exec('actionChangeSeoShortcodes', array(
-                'content' => $message[(int)$id_seo_lang],
+            $message[(int) $id_seo_lang] = Hook::exec('actionChangeSeoShortcodes', array(
+                'content' => $message[(int) $id_seo_lang],
                 'ps_obj' => $product
             ));
         }
-        if (!empty($message[(int)$id_seo_lang])) {
-            return $message[(int)$id_seo_lang];
+        if (!empty($message[(int) $id_seo_lang])) {
+            return $message[(int) $id_seo_lang];
         }
     }
 
     public static function inactiveRedirect($id_seo_product, $id_shop)
     {
         $product = new Product(
-            (int)$id_seo_product
+            (int) $id_seo_product
         );
         $category = new Category(
-            (int)$product->id_category_default
+            (int) $product->id_category_default
         );
-        if ((bool)$category->active === true) {
-            $id_type_redirected = (int)$product->id_category_default;
+        if ((bool) $category->active === true) {
+            $id_type_redirected = (int) $product->id_category_default;
         } else {
             $top_category = Category::getTopCategory();
-            $id_type_redirected = (int)$top_category->id;
+            $id_type_redirected = (int) $top_category->id;
         }
         $sql = [];
-        $sql[] = 'UPDATE `'._DB_PREFIX_.'product`
+        $sql[] = 'UPDATE `' . _DB_PREFIX_ . 'product`
         SET `redirect_type` = "301-category"
-        WHERE `id_product` = '.(int)$id_seo_product.';';
+        WHERE `id_product` = '.(int) $id_seo_product.';';
 
-        $sql[] = 'UPDATE `'._DB_PREFIX_.'product`
-        SET `id_type_redirected` = '.(int)$id_type_redirected.'
-        WHERE `id_product` = '.(int)$id_seo_product.';';
+        $sql[] = 'UPDATE `' . _DB_PREFIX_ . 'product`
+        SET `id_type_redirected` = '.(int) $id_type_redirected.'
+        WHERE `id_product` = '.(int) $id_seo_product.';';
 
-        $sql[] = 'UPDATE `'._DB_PREFIX_.'product_shop`
+        $sql[] = 'UPDATE `' . _DB_PREFIX_ . 'product_shop`
         SET `redirect_type` = "301-category"
-        WHERE `id_product` = '.(int)$id_seo_product.'
-        AND `id_shop` = '.(int)$id_shop.';';
+        WHERE `id_product` = '.(int) $id_seo_product.'
+        AND `id_shop` = '.(int) $id_shop.';';
 
-        $sql[] = 'UPDATE `'._DB_PREFIX_.'product_shop`
-        SET `id_type_redirected` = '.(int)$id_type_redirected.'
-        WHERE `id_product` = '.(int)$id_seo_product.';';
+        $sql[] = 'UPDATE `' . _DB_PREFIX_ . 'product_shop`
+        SET `id_type_redirected` = '.(int) $id_type_redirected.'
+        WHERE `id_product` = '.(int) $id_seo_product.';';
 
         foreach ($sql as $s) {
             Db::getInstance()->Execute($s);
@@ -650,7 +650,7 @@ class EverPsSeoProduct extends ObjectModel
     {
         $sql = '
             SELECT `id_product` 
-            FROM `'._DB_PREFIX_.'product` 
+            FROM `' . _DB_PREFIX_ . 'product` 
             WHERE `active` = 0 
             AND `redirect_type` = "404"
         ';
@@ -667,7 +667,7 @@ class EverPsSeoProduct extends ObjectModel
             return false;
         }
         $attributes = Product::getAttributesInformationsByProduct(
-            (int)$id_product
+            (int) $id_product
         );
 
         return !empty($attributes);

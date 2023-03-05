@@ -17,42 +17,42 @@ function upgrade_module_8_4_2()
     $result = true;
     $sql = [];
     $sql[] =
-        'ALTER TABLE `'._DB_PREFIX_.'ever_seo_product`
+        'ALTER TABLE `' . _DB_PREFIX_ . 'ever_seo_product`
          ADD `status_code` varchar(255) DEFAULT 0
          AFTER `note`
     ';
     $sql[] =
-        'ALTER TABLE `'._DB_PREFIX_.'ever_seo_image`
+        'ALTER TABLE `' . _DB_PREFIX_ . 'ever_seo_image`
          ADD `status_code` varchar(255) DEFAULT 0
          AFTER `allowed_sitemap`
     ';
     $sql[] =
-        'ALTER TABLE `'._DB_PREFIX_.'ever_seo_category`
+        'ALTER TABLE `' . _DB_PREFIX_ . 'ever_seo_category`
          ADD `status_code` varchar(255) DEFAULT 0
          AFTER `note`
     ';
     $sql[] =
-        'ALTER TABLE `'._DB_PREFIX_.'ever_seo_manufacturer`
+        'ALTER TABLE `' . _DB_PREFIX_ . 'ever_seo_manufacturer`
          ADD `status_code` varchar(255) DEFAULT 0
          AFTER `note`
     ';
     $sql[] =
-        'ALTER TABLE `'._DB_PREFIX_.'ever_seo_supplier`
+        'ALTER TABLE `' . _DB_PREFIX_ . 'ever_seo_supplier`
          ADD `status_code` varchar(255) DEFAULT 0
          AFTER `note`
     ';
     $sql[] =
-        'ALTER TABLE `'._DB_PREFIX_.'ever_seo_pagemeta`
+        'ALTER TABLE `' . _DB_PREFIX_ . 'ever_seo_pagemeta`
          ADD `status_code` varchar(255) DEFAULT 0
          AFTER `note`
     ';
     $sql[] =
-        'ALTER TABLE `'._DB_PREFIX_.'ever_seo_cms_category`
+        'ALTER TABLE `' . _DB_PREFIX_ . 'ever_seo_cms_category`
          ADD `status_code` varchar(255) DEFAULT 0
          AFTER `note`
     ';
     $sql[] =
-        'ALTER TABLE `'._DB_PREFIX_.'ever_seo_cms`
+        'ALTER TABLE `' . _DB_PREFIX_ . 'ever_seo_cms`
          ADD `status_code` varchar(255) DEFAULT 0
          AFTER `note`
     ';

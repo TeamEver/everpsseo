@@ -15,7 +15,7 @@ $sql = [];
 
 // Redirect 404
 $sql[] =
-    'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ever_seo_redirect` (
+    'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'ever_seo_redirect` (
         `id_ever_seo_redirect` int(10) unsigned NOT NULL auto_increment,
         `not_found` text NOT NULL,
         `everfrom` text DEFAULT NULL,
@@ -29,7 +29,7 @@ $sql[] =
 
 // Backlinks
 $sql[] =
-    'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ever_seo_backlink` (
+    'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'ever_seo_backlink` (
         `id_ever_seo_backlink` int(10) unsigned NOT NULL auto_increment,
         `everfrom` text NOT NULL,
         `everto` text DEFAULT NULL,
@@ -40,7 +40,7 @@ $sql[] =
 
 // Products SEO
 $sql[] =
-    'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ever_seo_lang` (
+    'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'ever_seo_lang` (
         `id_ever_lang` int(10) unsigned NOT NULL auto_increment,
         `id_seo_lang` int(10) unsigned NOT NULL,
         `id_shop` int(10) unsigned NOT NULL,
@@ -51,7 +51,7 @@ $sql[] =
 
 // Products lang SEO
 $sql[] =
-    'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ever_seo_product` (
+    'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'ever_seo_product` (
         `id_ever_seo_product` int(10) unsigned NOT NULL auto_increment,
         `id_seo_product` int(10) unsigned NOT NULL,
         `id_shop` int(10) unsigned NOT NULL,
@@ -76,7 +76,7 @@ $sql[] =
 
 // Images lang SEO
 $sql[] =
-    'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ever_seo_image` (
+    'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'ever_seo_image` (
         `id_ever_seo_image` int(10) unsigned NOT NULL auto_increment,
         `id_seo_img` int(10) unsigned NOT NULL,
         `id_seo_product` int(10) unsigned NOT NULL,
@@ -90,7 +90,7 @@ $sql[] =
 
 // Category lang SEO
 $sql[] =
-    'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ever_seo_category` (
+    'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'ever_seo_category` (
         `id_ever_seo_category` int(10) unsigned NOT NULL auto_increment,
         `id_seo_category` int(10) unsigned NOT NULL,
         `id_shop` int(10) unsigned NOT NULL,
@@ -115,7 +115,7 @@ $sql[] =
 
 // Manufacturer SEO
 $sql[] =
-    'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ever_seo_manufacturer` (
+    'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'ever_seo_manufacturer` (
         `id_ever_seo_manufacturer` int(10) unsigned NOT NULL auto_increment,
         `id_seo_manufacturer` int(10) unsigned NOT NULL,
         `id_shop` int(10) unsigned NOT NULL,
@@ -138,7 +138,7 @@ $sql[] =
 
 // Suppliers lang SEO
 $sql[] =
-    'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ever_seo_supplier` (
+    'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'ever_seo_supplier` (
         `id_ever_seo_supplier` int(10) unsigned NOT NULL auto_increment,
         `id_seo_supplier` int(10) unsigned NOT NULL,
         `id_shop` int(10) unsigned NOT NULL,
@@ -161,7 +161,7 @@ $sql[] =
 
 // Page metas lang SEO
 $sql[] =
-    'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ever_seo_pagemeta` (
+    'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'ever_seo_pagemeta` (
         `id_ever_seo_pagemeta` int(10) unsigned NOT NULL auto_increment,
         `id_seo_pagemeta` int(10) unsigned NOT NULL,
         `id_shop` int(10) unsigned NOT NULL,
@@ -183,7 +183,7 @@ $sql[] =
 
 // CMS category lang SEO
 $sql[] =
-    'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ever_seo_cms_category` (
+    'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'ever_seo_cms_category` (
         `id_ever_seo_cms_category` int(10) unsigned NOT NULL auto_increment,
         `id_seo_cms_category` int(10) unsigned NOT NULL,
         `id_shop` int(10) unsigned NOT NULL,
@@ -205,7 +205,7 @@ $sql[] =
 
 // CMS lang SEO
 $sql[] =
-    'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ever_seo_cms` (
+    'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'ever_seo_cms` (
         `id_ever_seo_cms` int(10) unsigned NOT NULL auto_increment,
         `id_seo_cms` int(10) unsigned NOT NULL,
         `id_shop` int(10) unsigned NOT NULL,
@@ -226,14 +226,14 @@ $sql[] =
     ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8';
 
 // Shortcodes
-$sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ever_seo_shortcode` (
+$sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'ever_seo_shortcode` (
         `id_ever_seo_shortcode` int(10) unsigned NOT NULL auto_increment,
         `shortcode` text DEFAULT NULL,
         `id_shop` int(10) unsigned NOT NULL,
         PRIMARY KEY (`id_ever_seo_shortcode`)
     ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8';
 
-$sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ever_seo_shortcode_lang` (
+$sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'ever_seo_shortcode_lang` (
         `id_ever_seo_shortcode` int(10) unsigned NOT NULL,
         `id_lang` int(10) unsigned NOT NULL,
         `title` text DEFAULT NULL,

@@ -57,18 +57,18 @@ class EverPsSeoBacklink extends ObjectModel
     public static function ifBacklinkExists($everfrom, $everto, $id_shop)
     {
         $cache_id = 'EverPsSeoBacklink::ifBacklinkExists_'
-        .(string)$everfrom
+        .(string) $everfrom
         .'_'
-        .(string)$everto
+        .(string) $everto
         .'_'
-        .(int)$id_shop;
+        .(int) $id_shop;
         if (!Cache::isStored($cache_id)) {
             $backlink =
                 'SELECT id_ever_seo_backlink
-                FROM `'._DB_PREFIX_.'ever_seo_backlink`
+                FROM `' . _DB_PREFIX_ . 'ever_seo_backlink`
                 WHERE everfrom = "'.pSQL($everfrom).'"
                     AND everto = "'.pSQL($everto).'"
-                    AND id_shop = '.(int)$id_shop;
+                    AND id_shop = '.(int) $id_shop;
             $return = Db::getInstance()->getValue($backlink);
             Cache::store($cache_id, $return);
             return $return;
@@ -80,18 +80,18 @@ class EverPsSeoBacklink extends ObjectModel
     {
         $count =
             'SELECT count
-            FROM `'._DB_PREFIX_.'ever_seo_backlink`
-            WHERE id_ever_seo_backlink = "'.(int)$id_ever_seo_backlink.'"
-                AND id_shop = '.(int)$id_shop;
+            FROM `' . _DB_PREFIX_ . 'ever_seo_backlink`
+            WHERE id_ever_seo_backlink = "'.(int) $id_ever_seo_backlink.'"
+                AND id_shop = '.(int) $id_shop;
 
         $currentCount = Db::getInstance()->getValue($count);
 
         $update = Db::getInstance()->update(
             'ever_seo_backlink',
             array(
-                'count'=>(int)$currentCount + 1,
+                'count'=>(int) $currentCount + 1,
             ),
-            'id_ever_seo_backlink = '.(int)$id_ever_seo_backlink
+            'id_ever_seo_backlink = '.(int) $id_ever_seo_backlink
         );
 
         return $update;

@@ -100,14 +100,14 @@ class EverPsSeoCmsCategory extends ObjectModel
     public static function getCmsCategoryNameBySeoId($id_seo_cms_category, $id_lang)
     {
         $cache_id = 'EverPsSeoCmsCategory::getCmsCategoryNameBySeoId_'
-        .(int)$id_seo_cms_category
+        .(int) $id_seo_cms_category
         .'_'
-        .(int)$id_lang;
+        .(int) $id_lang;
         if (!Cache::isStored($cache_id)) {
             $sql = 'SELECT name
-            FROM '._DB_PREFIX_.'cms_category_lang
-            WHERE id_cms_category = '.(int)$id_seo_cms_category.'
-            AND id_lang = '.(int)$id_lang.'';
+            FROM ' . _DB_PREFIX_ . 'cms_category_lang
+            WHERE id_cms_category = '.(int) $id_seo_cms_category.'
+            AND id_lang = '.(int) $id_lang.'';
             $return = Db::getInstance()->getValue($sql);
             Cache::store($cache_id, $return);
             return $return;
@@ -118,23 +118,23 @@ class EverPsSeoCmsCategory extends ObjectModel
     public static function getSeoCmsCategory($id_seo_cms_category, $id_shop, $id_seo_lang)
     {
         $cache_id = 'EverPsSeoCmsCategory::getSeoCmsCategory_'
-        .(int)$id_seo_cms_category
+        .(int) $id_seo_cms_category
         .'_'
-        .(int)$id_shop
+        .(int) $id_shop
         .'_'
-        .(int)$id_seo_lang;
+        .(int) $id_seo_lang;
         if (!Cache::isStored($cache_id)) {
             $sql = new DbQuery();
             $sql->select('*');
             $sql->from('ever_seo_cms_category');
             $sql->where(
-                'id_seo_cms_category = '.(int)$id_seo_cms_category
+                'id_seo_cms_category = '.(int) $id_seo_cms_category
             );
             $sql->where(
-                'id_seo_lang = '.(int)$id_seo_lang
+                'id_seo_lang = '.(int) $id_seo_lang
             );
             $sql->where(
-                'id_shop = '.(int)$id_shop
+                'id_shop = '.(int) $id_shop
             );
             $return = new self(Db::getInstance()->getValue($sql));
             Cache::store($cache_id, $return);

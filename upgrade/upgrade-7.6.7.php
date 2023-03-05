@@ -18,19 +18,19 @@ function upgrade_module_7_6_7()
     $sql = [];
     // Update SEO categories
     $sql[] =
-        'ALTER TABLE `'._DB_PREFIX_.'ever_seo_category`
+        'ALTER TABLE `' . _DB_PREFIX_ . 'ever_seo_category`
          ADD `bottom_content` text DEFAULT NULL
          AFTER `social_img_url`
     ';
     // Update SEO manufacturers
     $sql[] =
-        'ALTER TABLE `'._DB_PREFIX_.'ever_seo_manufacturer`
+        'ALTER TABLE `' . _DB_PREFIX_ . 'ever_seo_manufacturer`
          ADD `bottom_content` text DEFAULT NULL
          AFTER `social_img_url`
     ';
     // Update SEO manufacturers
     $sql[] =
-        'ALTER TABLE `'._DB_PREFIX_.'ever_seo_supplier`
+        'ALTER TABLE `' . _DB_PREFIX_ . 'ever_seo_supplier`
          ADD `bottom_content` text DEFAULT NULL
          AFTER `social_img_url`
     ';

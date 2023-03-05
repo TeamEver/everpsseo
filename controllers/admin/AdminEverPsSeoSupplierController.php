@@ -11,8 +11,8 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoSupplier.php';
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoKeywordsStrategy.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoSupplier.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoKeywordsStrategy.php';
 
 class AdminEverPsSeoSupplierController extends ModuleAdminController
 {
@@ -30,25 +30,25 @@ class AdminEverPsSeoSupplierController extends ModuleAdminController
         $moduleConfUrl  = 'index.php?controller=AdminModules&configure=everpsseo&token=';
         $moduleConfUrl .= Tools::getAdminTokenLite('AdminModules');
         $this->img_folder = _PS_MODULE_DIR_.'everpsseo/views/img/s/';
-        $this->img_url = Tools::getHttpHost(true).__PS_BASE_URI__.'/modules/everpsseo/views/img/s/';
+        $this->img_url = Tools::getHttpHost(true) . __PS_BASE_URI__.'/modules/everpsseo/views/img/s/';
         $this->context->smarty->assign(array(
-            'moduleConfUrl' => (string)$moduleConfUrl,
+            'moduleConfUrl' => (string) $moduleConfUrl,
             'image_dir' => _PS_BASE_URL_ . '/modules/everpsseo/views/img/'
         ));
 
         $this->_select = 'l.iso_code, s.name';
 
         $this->_join =
-            'LEFT JOIN `'._DB_PREFIX_.'ever_seo_lang` l
+            'LEFT JOIN `' . _DB_PREFIX_ . 'ever_seo_lang` l
                 ON (
                     l.`id_seo_lang` = a.`id_seo_lang`
                 )
-            LEFT JOIN `'._DB_PREFIX_.'supplier` s
+            LEFT JOIN `' . _DB_PREFIX_ . 'supplier` s
                 ON (
                     s.id_supplier = a.id_seo_supplier
                 )';
 
-        $this->_where = 'AND a.id_shop ='.(int)$this->context->shop->id;
+        $this->_where = 'AND a.id_shop ='.(int) $this->context->shop->id;
 
         $this->_group = 'GROUP BY a.id_ever_seo_supplier';
 
@@ -118,8 +118,8 @@ class AdminEverPsSeoSupplierController extends ModuleAdminController
 
         $this->colorOnBackground = true;
 
-        // $id_shop = (int)$this->context->shop->id;
-        $id_lang = (int)$this->context->language->id;
+        // $id_shop = (int) $this->context->shop->id;
+        $id_lang = (int) $this->context->language->id;
 
         if (Tools::getValue('id_ever_seo_supplier')) {
             $everSupplier = new EverPsSeoSupplier(
@@ -135,10 +135,10 @@ class AdminEverPsSeoSupplierController extends ModuleAdminController
                 null,
                 null,
                 null,
-                (int)$this->context->language->id,
-                (int)$this->context->shop->id
+                (int) $this->context->language->id,
+                (int) $this->context->shop->id
             );
-            $editUrl  = 'index.php?controller=AdminSuppliers&id_supplier='.(int)$supplier->id.'';
+            $editUrl  = 'index.php?controller=AdminSuppliers&id_supplier='.(int) $supplier->id.'';
             $editUrl .= '&updatesupplier&token='.Tools::getAdminTokenLite('AdminSuppliers');
             $objectGSearch = str_replace(' ', '+', $supplier->name);
 
@@ -147,19 +147,19 @@ class AdminEverPsSeoSupplierController extends ModuleAdminController
                 $supplier
             );
             switch (true) {
-                case ((int)$keywordsQlty['note'] <= 25):
+                case ((int) $keywordsQlty['note'] <= 25):
                     $color = 'ever-danger';
                     break;
 
-                case ((int)$keywordsQlty['note'] <= 50):
+                case ((int) $keywordsQlty['note'] <= 50):
                     $color = 'ever-alert';
                     break;
 
-                case ((int)$keywordsQlty['note'] <= 75):
+                case ((int) $keywordsQlty['note'] <= 75):
                     $color = 'ever-warning';
                     break;
 
-                case ((int)$keywordsQlty['note'] > 75):
+                case ((int) $keywordsQlty['note'] > 75):
                     $color = 'ever-success';
                     break;
 
@@ -335,7 +335,7 @@ class AdminEverPsSeoSupplierController extends ModuleAdminController
 
         if (Tools::getValue('id_ever_seo_supplier')) {
             $everSupplier = new EverPsSeoSupplier(
-                (int)Tools::getValue('id_ever_seo_supplier')
+                (int) Tools::getValue('id_ever_seo_supplier')
             );
             if (file_exists($this->img_folder.$everSupplier->id_seo_supplier.'.jpg')) {
                 $defaultUrlImage = $this->img_url.$everSupplier->id_seo_supplier.'.jpg';
@@ -349,7 +349,7 @@ class AdminEverPsSeoSupplierController extends ModuleAdminController
                 'PS_LOGO'
             );
         }
-        $defaultImage = '<image src="'.(string)$defaultUrlImage.'" style="max-width:80px;"/>';
+        $defaultImage = '<image src="'.(string) $defaultUrlImage.'" style="max-width:80px;"/>';
 
         $this->fields_form = array(
             'submit' => array(
@@ -360,7 +360,7 @@ class AdminEverPsSeoSupplierController extends ModuleAdminController
             'buttons' => array(
                 'save-and-stay' => array(
                     'title' => $this->l('Save and stay'),
-                    'name' => 'submitAdd'.$this->table.'AndStay',
+                    'name' => 'submitAdd' . $this->table . 'AndStay',
                     'type' => 'submit',
                     'class' => 'btn btn-default pull-right',
                     'icon' => 'process-icon-save'
@@ -498,7 +498,7 @@ class AdminEverPsSeoSupplierController extends ModuleAdminController
     public function processIndexable()
     {
         $everSupplier = new EverPsSeoSupplier(
-            (int)Tools::getValue('id_ever_seo_supplier')
+            (int) Tools::getValue('id_ever_seo_supplier')
         );
 
         $everSupplier->indexable = !$everSupplier->indexable;
@@ -511,7 +511,7 @@ class AdminEverPsSeoSupplierController extends ModuleAdminController
     public function processFollow()
     {
         $everSupplier = new EverPsSeoSupplier(
-            (int)Tools::getValue('id_ever_seo_supplier')
+            (int) Tools::getValue('id_ever_seo_supplier')
         );
 
         $everSupplier->follow = !$everSupplier->follow;
@@ -524,7 +524,7 @@ class AdminEverPsSeoSupplierController extends ModuleAdminController
     public function processSitemap()
     {
         $everSupplier = new EverPsSeoSupplier(
-            (int)Tools::getValue('id_ever_seo_supplier')
+            (int) Tools::getValue('id_ever_seo_supplier')
         );
 
         $everSupplier->allowed_sitemap = !$everSupplier->allowed_sitemap;
@@ -585,11 +585,11 @@ class AdminEverPsSeoSupplierController extends ModuleAdminController
             }
             if (!count($this->errors)) {
                 $everSupplier = new EverPsSeoSupplier(
-                    (int)Tools::getValue('id_ever_seo_supplier')
+                    (int) Tools::getValue('id_ever_seo_supplier')
                 );
                 $supplier = new Supplier(
-                    (int)$everSupplier->id_seo_category,
-                    (int)$everSupplier->id_seo_lang
+                    (int) $everSupplier->id_seo_category,
+                    (int) $everSupplier->id_seo_lang
                 );
                 // SEO object
                 $everSupplier->meta_title = Tools::getValue('meta_title');
@@ -610,8 +610,8 @@ class AdminEverPsSeoSupplierController extends ModuleAdminController
                     && !empty($_FILES['social_media']['tmp_name'])
                 ) {
                     Configuration::set('PS_IMAGE_GENERATION_METHOD', 1);
-                    if (file_exists($this->img_folder.(int)$everSupplier->id_seo_supplier.'.jpg')) {
-                        unlink($this->img_folder.(int)$everSupplier->id_seo_supplier.'.jpg');
+                    if (file_exists($this->img_folder.(int) $everSupplier->id_seo_supplier.'.jpg')) {
+                        unlink($this->img_folder.(int) $everSupplier->id_seo_supplier.'.jpg');
                     }
                     if ($error = ImageManager::validateUpload($_FILES['social_media'])) {
                         $this->errors[] = $error;
@@ -621,7 +621,7 @@ class AdminEverPsSeoSupplierController extends ModuleAdminController
                         return false;
                     } elseif (!ImageManager::resize(
                         $tmp_name,
-                        $this->img_folder.(int)$everSupplier->id_seo_supplier.'.jpg'
+                        $this->img_folder.(int) $everSupplier->id_seo_supplier.'.jpg'
                     )) {
                         $this->errors[] = $this->l('An error occurred while attempting to upload the image.');
                     }
@@ -629,7 +629,7 @@ class AdminEverPsSeoSupplierController extends ModuleAdminController
                         unlink($tmp_name);
                     }
                     $everSupplier->social_img_url = $this->img_url
-                    .(int)$everSupplier->id_seo_supplier
+                    .(int) $everSupplier->id_seo_supplier
                     .'.jpg';
                 }
                 // Update hook triggered
@@ -651,7 +651,7 @@ class AdminEverPsSeoSupplierController extends ModuleAdminController
     {
         foreach (Tools::getValue($this->table.'Box') as $idEverSupplier) {
             $everSupplier = new EverPsSeoSupplier(
-                (int)$idEverSupplier
+                (int) $idEverSupplier
             );
 
             $everSupplier->indexable = !$everSupplier->indexable;
@@ -666,7 +666,7 @@ class AdminEverPsSeoSupplierController extends ModuleAdminController
     {
         foreach (Tools::getValue($this->table.'Box') as $idEverSupplier) {
             $everSupplier = new EverPsSeoSupplier(
-                (int)$idEverSupplier
+                (int) $idEverSupplier
             );
 
             $everSupplier->follow = !$everSupplier->follow;
@@ -681,7 +681,7 @@ class AdminEverPsSeoSupplierController extends ModuleAdminController
     {
         foreach (Tools::getValue($this->table.'Box') as $idEverSupplier) {
             $everSupplier = new EverPsSeoSupplier(
-                (int)$idEverSupplier
+                (int) $idEverSupplier
             );
 
             $everSupplier->allowed_sitemap = !$everSupplier->allowed_sitemap;
@@ -696,15 +696,15 @@ class AdminEverPsSeoSupplierController extends ModuleAdminController
     {
         foreach (Tools::getValue($this->table.'Box') as $idEverSupplier) {
             $everSupplier = new EverPsSeoSupplier(
-                (int)$idEverSupplier
+                (int) $idEverSupplier
             );
             $supplier = new Supplier(
-                (int)$everSupplier->id_seo_category,
-                (int)$everSupplier->id_seo_lang
+                (int) $everSupplier->id_seo_category,
+                (int) $everSupplier->id_seo_lang
             );
 
             $meta_title = Db::getInstance()->getValue(
-                'SELECT meta_title FROM `'._DB_PREFIX_.'supplier_lang`
+                'SELECT meta_title FROM `' . _DB_PREFIX_ . 'supplier_lang`
                 WHERE id_supplier = '.pSQL($everSupplier->id_seo_supplier).'
                 AND id_lang = '.pSQL($everSupplier->id_seo_lang)
             );
@@ -725,17 +725,17 @@ class AdminEverPsSeoSupplierController extends ModuleAdminController
     {
         foreach (Tools::getValue($this->table.'Box') as $idEverSupplier) {
             $everSupplier = new EverPsSeoSupplier(
-                (int)$idEverSupplier
+                (int) $idEverSupplier
             );
             $supplier = new Supplier(
-                (int)$everSupplier->id_seo_category,
-                (int)$everSupplier->id_seo_lang
+                (int) $everSupplier->id_seo_category,
+                (int) $everSupplier->id_seo_lang
             );
 
             $meta_description = Db::getInstance()->getValue(
-                'SELECT meta_description FROM `'._DB_PREFIX_.'supplier_lang`
-                WHERE id_supplier = '.(int)$everSupplier->id_seo_supplier.'
-                AND id_lang = '.(int)$everSupplier->id_seo_lang
+                'SELECT meta_description FROM `' . _DB_PREFIX_ . 'supplier_lang`
+                WHERE id_supplier = '.(int) $everSupplier->id_seo_supplier.'
+                AND id_lang = '.(int) $everSupplier->id_seo_lang
             );
 
             if (!$meta_description) {
@@ -754,16 +754,16 @@ class AdminEverPsSeoSupplierController extends ModuleAdminController
     {
         foreach (Tools::getValue($this->table.'Box') as $idEverSupplier) {
             $everSupplier = new EverPsSeoSupplier(
-                (int)$idEverSupplier
+                (int) $idEverSupplier
             );
             $supplier = new Supplier(
-                (int)$everSupplier->id_seo_category,
-                (int)$everSupplier->id_seo_lang
+                (int) $everSupplier->id_seo_category,
+                (int) $everSupplier->id_seo_lang
             );
 
             $name = Db::getInstance()->getValue(
-                'SELECT name FROM `'._DB_PREFIX_.'supplier`
-                WHERE id_supplier = '.(int)$everSupplier->id_seo_supplier
+                'SELECT name FROM `' . _DB_PREFIX_ . 'supplier`
+                WHERE id_supplier = '.(int) $everSupplier->id_seo_supplier
             );
 
             if (!$name) {
@@ -782,17 +782,17 @@ class AdminEverPsSeoSupplierController extends ModuleAdminController
     {
         foreach (Tools::getValue($this->table.'Box') as $idEverSupplier) {
             $everSupplier = new EverPsSeoSupplier(
-                (int)$idEverSupplier
+                (int) $idEverSupplier
             );
             $supplier = new Supplier(
-                (int)$everSupplier->id_seo_category,
-                (int)$everSupplier->id_seo_lang
+                (int) $everSupplier->id_seo_category,
+                (int) $everSupplier->id_seo_lang
             );
 
             $description = Db::getInstance()->getValue(
-                'SELECT description FROM `'._DB_PREFIX_.'supplier_lang`
-                WHERE id_supplier = '.(int)$everSupplier->id_seo_supplier.'
-                AND id_lang = '.(int)$everSupplier->id_seo_lang
+                'SELECT description FROM `' . _DB_PREFIX_ . 'supplier_lang`
+                WHERE id_supplier = '.(int) $everSupplier->id_seo_supplier.'
+                AND id_lang = '.(int) $everSupplier->id_seo_lang
             );
 
             if (!$description) {
@@ -815,17 +815,17 @@ class AdminEverPsSeoSupplierController extends ModuleAdminController
     {
         foreach (Tools::getValue($this->table.'Box') as $idObj) {
             $everSupplier = new EverPsSeoSupplier(
-                (int)$idObj
+                (int) $idObj
             );
             $supplier = new Supplier(
-                (int)$everSupplier->id_seo_supplier,
-                (int)$everSupplier->id_seo_lang
+                (int) $everSupplier->id_seo_supplier,
+                (int) $everSupplier->id_seo_lang
             );
 
             $title = EverPsSeoProduct::changeSupplierTitleShortcodes(
-                (int)$everSupplier->id_seo_supplier,
-                (int)$everSupplier->id_seo_lang,
-                (int)$this->context->shop->id
+                (int) $everSupplier->id_seo_supplier,
+                (int) $everSupplier->id_seo_lang,
+                (int) $this->context->shop->id
             );
 
             if (!$title) {
@@ -838,16 +838,16 @@ class AdminEverPsSeoSupplierController extends ModuleAdminController
                 60
             );
 
-            $sql = 'UPDATE `'._DB_PREFIX_.'product_lang`
+            $sql = 'UPDATE `' . _DB_PREFIX_ . 'product_lang`
             SET meta_title = "'.pSQL($supplier->meta_title).'"
-            WHERE id_lang = '.(int)$everSupplier->id_seo_lang.'
-            AND id_supplier = '.(int)$supplier->id;
+            WHERE id_lang = '.(int) $everSupplier->id_seo_lang.'
+            AND id_supplier = '.(int) $supplier->id;
 
-            $sql2 = 'UPDATE `'._DB_PREFIX_.'ever_seo_product`
+            $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_product`
             SET meta_title = "'.pSQL($supplier->meta_title).'"
-            WHERE id_seo_lang = '.(int)$everSupplier->id_seo_lang.'
-            AND id_shop = '.(int)$this->context->shop->id.'
-            AND id_seo_supplier = '.(int)$supplier->id;
+            WHERE id_seo_lang = '.(int) $everSupplier->id_seo_lang.'
+            AND id_shop = '.(int) $this->context->shop->id.'
+            AND id_seo_supplier = '.(int) $supplier->id;
             if (!Db::getInstance()->execute($sql)) {
                 $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
             } else {
@@ -860,17 +860,17 @@ class AdminEverPsSeoSupplierController extends ModuleAdminController
     {
         foreach (Tools::getValue($this->table.'Box') as $idObj) {
             $everSupplier = new EverPsSeoSupplier(
-                (int)$idObj
+                (int) $idObj
             );
             $supplier = new Supplier(
-                (int)$everSupplier->id_seo_supplier,
-                (int)$everSupplier->id_seo_lang
+                (int) $everSupplier->id_seo_supplier,
+                (int) $everSupplier->id_seo_lang
             );
 
             $description = EverPsSeoSupplier::changeSupplierMetadescShortcodes(
-                (int)$everSupplier->id_seo_supplier,
-                (int)$everSupplier->id_seo_lang,
-                (int)$this->context->shop->id
+                (int) $everSupplier->id_seo_supplier,
+                (int) $everSupplier->id_seo_lang,
+                (int) $this->context->shop->id
             );
             if (!$description) {
                 continue;
@@ -882,16 +882,16 @@ class AdminEverPsSeoSupplierController extends ModuleAdminController
                 160
             );
 
-            $sql = 'UPDATE `'._DB_PREFIX_.'supplier_lang`
+            $sql = 'UPDATE `' . _DB_PREFIX_ . 'supplier_lang`
             SET meta_description = "'.pSQL($supplier->meta_description).'"
-            WHERE id_lang = '.(int)$everSupplier->id_seo_lang.'
-            AND id_supplier = '.(int)$supplier->id;
+            WHERE id_lang = '.(int) $everSupplier->id_seo_lang.'
+            AND id_supplier = '.(int) $supplier->id;
 
-            $sql2 = 'UPDATE `'._DB_PREFIX_.'ever_seo_supplier`
+            $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_supplier`
             SET meta_description = "'.pSQL($supplier->meta_description).'"
-            WHERE id_seo_lang = '.(int)$everSupplier->id_seo_lang.'
-            AND id_shop = '.(int)$this->context->shop->id.'
-            AND id_seo_supplier = '.(int)$supplier->id;
+            WHERE id_seo_lang = '.(int) $everSupplier->id_seo_lang.'
+            AND id_shop = '.(int) $this->context->shop->id.'
+            AND id_seo_supplier = '.(int) $supplier->id;
             // die(var_dump($sql2));
             if (!Db::getInstance()->execute($sql)) {
                 $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
@@ -905,11 +905,11 @@ class AdminEverPsSeoSupplierController extends ModuleAdminController
     {
         foreach (Tools::getValue($this->table.'Box') as $idObj) {
             $everSupplier = new EverPsSeoSupplier(
-                (int)$idObj
+                (int) $idObj
             );
             $supplier = new Supplier(
-                (int)$everSupplier->id_seo_supplier,
-                (int)$everSupplier->id_seo_lang
+                (int) $everSupplier->id_seo_supplier,
+                (int) $everSupplier->id_seo_lang
             );
             $link = new Link();
             $url = $link->getSupplierLink(
@@ -917,17 +917,17 @@ class AdminEverPsSeoSupplierController extends ModuleAdminController
                 null,
                 null,
                 null,
-                (int)$everSupplier->id_seo_lang,
-                (int)$this->context->shop->id
+                (int) $everSupplier->id_seo_lang,
+                (int) $this->context->shop->id
             );
             $httpCode = EverPsSeoTools::indexNow(
                 $url
             );
-            $sql = 'UPDATE `'._DB_PREFIX_.'ever_seo_supplier`
-            SET status_code = '.(int)$httpCode.'
-            WHERE id_seo_lang = '.(int)$everSupplier->id_seo_lang.'
-            AND id_shop = '.(int)$this->context->shop->id.'
-            AND id_ever_seo_supplier = '.(int)$everSupplier->id;
+            $sql = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_supplier`
+            SET status_code = '.(int) $httpCode.'
+            WHERE id_seo_lang = '.(int) $everSupplier->id_seo_lang.'
+            AND id_shop = '.(int) $this->context->shop->id.'
+            AND id_ever_seo_supplier = '.(int) $everSupplier->id;
             if (!Db::getInstance()->execute($sql)) {
                 $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
             }

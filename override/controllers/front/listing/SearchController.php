@@ -6,7 +6,6 @@
  * @license   Tous droits réservés / Le droit d'auteur s'applique (All rights reserved / French copyright law applies)
  * @see https://www.team-ever.com
  */
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -32,8 +31,8 @@ class SearchController extends SearchControllerCore
         
         $redirect = $this->redirectToObject(
             $this->search_string,
-            (int)$this->context->language->id,
-            (int)$this->context->shop->id
+            (int) $this->context->language->id,
+            (int) $this->context->shop->id
         );
         if (Validate::isUrl($redirect)) {
             Tools::redirect(
@@ -66,11 +65,11 @@ class SearchController extends SearchControllerCore
         $sql = new DbQuery;
         $search = Search::sanitize(
             $search_string,
-            (int)$id_lang,
+            (int) $id_lang,
             false,
             Context::getContext()->language->iso_code
         );
-        if ((bool)Configuration::get('EVER_SEARCH_CATEGORIES', null, null, $id_shop) === true) {
+        if ((bool) Configuration::get('EVER_SEARCH_CATEGORIES', null, null, $id_shop) === true) {
             $sql->select('cl.id_category');
             $sql->from('category_lang', 'cl');
             $sql->leftJoin(
@@ -84,36 +83,36 @@ class SearchController extends SearchControllerCore
                 'cl.id_category = c.id_category'
             );
             $sql->where('cl.name LIKE "'.pSQL($search).'"');
-            $sql->where('cs.id_shop = '.(int)$id_shop);
+            $sql->where('cs.id_shop = '.(int) $id_shop);
             $sql->where('c.active = 1');
-            $sql->where('cl.id_lang = '.(int)$id_lang);
+            $sql->where('cl.id_lang = '.(int) $id_lang);
             $result = Db::getInstance()->executeS($sql);
             if (count($result)) {
                 $obj = new Category(
-                    (int)$result[0]['id_category'],
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $result[0]['id_category'],
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
                 if (!Validate::isLoadedObject($obj)) {
                     return false;
                 }
-                if ($obj->checkAccess((int)Context::getContext()->customer->id) === false) {
+                if ($obj->checkAccess((int) Context::getContext()->customer->id) === false) {
                     return;
                 }
                 return Context::getContext()->link->getCategoryLink(
                     $obj,
                     null,
-                    (int)$id_lang,
+                    (int) $id_lang,
                     null,
-                    (int)$id_shop
+                    (int) $id_shop
                 );
             }
         }
-        if ((bool)Configuration::get('EVER_SEARCH_MANUFACTURERS', null, null, $id_shop) === true) {
+        if ((bool) Configuration::get('EVER_SEARCH_MANUFACTURERS', null, null, $id_shop) === true) {
             $id_obj = Manufacturer::getIdByName($search);
             $obj = new Manufacturer(
                 $id_obj,
-                (int)$id_lang
+                (int) $id_lang
             );
             if (!Validate::isLoadedObject($obj)
                 || !$obj->active
@@ -124,11 +123,11 @@ class SearchController extends SearchControllerCore
             return Context::getContext()->link->getManufacturerLink(
                 $obj,
                 null,
-                (int)$id_lang,
-                (int)$id_shop
+                (int) $id_lang,
+                (int) $id_shop
             );
         }
-        if ((bool)Configuration::get('EVER_SEARCH_SUPPLIERS', null, null, $id_shop) === true) {
+        if ((bool) Configuration::get('EVER_SEARCH_SUPPLIERS', null, null, $id_shop) === true) {
             $sql->select('s.id_supplier');
             $sql->from('supplier', 's');
             $sql->leftJoin(
@@ -137,13 +136,13 @@ class SearchController extends SearchControllerCore
                 's.id_supplier = ss.id_supplier'
             );
             $sql->where('s.active = 1');
-            $sql->where('ss.id_shop = '.(int)$id_shop);
+            $sql->where('ss.id_shop = '.(int) $id_shop);
             $sql->where('s.name LIKE "'.pSQL($search).'"');
             $result = Db::getInstance()->executeS($sql);
             if (count($result)) {
                 $obj = new Supplier(
                     $result[0]['id_supplier'],
-                    (int)$id_lang
+                    (int) $id_lang
                 );
                 if (!Validate::isLoadedObject($obj)) {
                     return false;
@@ -151,12 +150,12 @@ class SearchController extends SearchControllerCore
                 return Context::getContext()->link->getSupplierLink(
                     $obj,
                     null,
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
             }
         }
-        if ((bool)Configuration::get('EVER_SEARCH_PRODUCTS', null, null, $id_shop) === true) {
+        if ((bool) Configuration::get('EVER_SEARCH_PRODUCTS', null, null, $id_shop) === true) {
             $sql->select('pl.id_product');
             $sql->from('product_lang', 'pl');
             $sql->leftJoin(
@@ -164,23 +163,23 @@ class SearchController extends SearchControllerCore
                 'ps',
                 'pl.id_product = ps.id_product'
             );
-            $sql->where('pl.id_lang = '.(int)$id_lang);
+            $sql->where('pl.id_lang = '.(int) $id_lang);
             $sql->where('pl.name LIKE "'.pSQL($search).'"');
             $sql->where('ps.active = 1');
             $sql->where('ps.visibility = "both" OR visibility = "search"');
-            $sql->where('ps.id_shop = '.(int)$id_shop);
+            $sql->where('ps.id_shop = '.(int) $id_shop);
             $result = Db::getInstance()->executeS($sql);
             if (count($result)) {
                 $obj = new Product(
-                    (int)$result[0]['id_product'],
+                    (int) $result[0]['id_product'],
                     false,
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
                 if (!Validate::isLoadedObject($obj)) {
                     return false;
                 }
-                if ($obj->checkAccess((int)Context::getContext()->customer->id) === false) {
+                if ($obj->checkAccess((int) Context::getContext()->customer->id) === false) {
                     return;
                 }
                 return Context::getContext()->link->getProductLink(
@@ -188,8 +187,8 @@ class SearchController extends SearchControllerCore
                     null,
                     null,
                     null,
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
             }
         }

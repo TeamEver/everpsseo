@@ -63,7 +63,7 @@ class GenerateSitemaps extends Command
         $context->employee = new \Employee(1);
         if ($action === 'idshop') {
             $shop = new \Shop(
-                (int)$idShop
+                (int) $idShop
             );
             if (!\Validate::isLoadedObject($shop)) {
                 $output->writeln('<comment>Shop not found</comment>');
@@ -84,7 +84,7 @@ class GenerateSitemaps extends Command
         ));
 
         $this->module->everGenerateSitemaps(
-            (int)$shop->id
+            (int) $shop->id
         );
 
         $output->writeln(sprintf(

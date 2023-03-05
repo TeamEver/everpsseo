@@ -17,72 +17,72 @@ function upgrade_module_3_4_2()
     $result = false;
     $sql = [];
     $sql[] =
-        'ALTER TABLE '._DB_PREFIX_.'ever_seo_product
+        'ALTER TABLE ' . _DB_PREFIX_ . 'ever_seo_product
          ADD `social_title` VARCHAR(255) NULL DEFAULT NULL
          AFTER `meta_description`
     ';
     $sql[] =
-        'ALTER TABLE '._DB_PREFIX_.'ever_seo_product
+        'ALTER TABLE ' . _DB_PREFIX_ . 'ever_seo_product
          ADD `social_description` VARCHAR(255) NULL DEFAULT NULL
          AFTER `social_title`
     ';
     $sql[] =
-        'ALTER TABLE '._DB_PREFIX_.'ever_seo_category
+        'ALTER TABLE ' . _DB_PREFIX_ . 'ever_seo_category
          ADD `social_title` VARCHAR(255) NULL DEFAULT NULL
          AFTER `meta_description`
     ';
     $sql[] =
-        'ALTER TABLE '._DB_PREFIX_.'ever_seo_category
+        'ALTER TABLE ' . _DB_PREFIX_ . 'ever_seo_category
          ADD `social_description` VARCHAR(255) NULL DEFAULT NULL
          AFTER `social_title`
     ';
     $sql[] =
-        'ALTER TABLE '._DB_PREFIX_.'ever_seo_manufacturer
+        'ALTER TABLE ' . _DB_PREFIX_ . 'ever_seo_manufacturer
          ADD `social_title` VARCHAR(255) NULL DEFAULT NULL
          AFTER `meta_description`
     ';
     $sql[] =
-        'ALTER TABLE '._DB_PREFIX_.'ever_seo_manufacturer
+        'ALTER TABLE ' . _DB_PREFIX_ . 'ever_seo_manufacturer
          ADD `social_description` VARCHAR(255) NULL DEFAULT NULL
          AFTER `social_title`
     ';
     $sql[] =
-        'ALTER TABLE '._DB_PREFIX_.'ever_seo_supplier
+        'ALTER TABLE ' . _DB_PREFIX_ . 'ever_seo_supplier
          ADD `social_title` VARCHAR(255) NULL DEFAULT NULL
          AFTER `meta_description`
     ';
     $sql[] =
-        'ALTER TABLE '._DB_PREFIX_.'ever_seo_supplier
+        'ALTER TABLE ' . _DB_PREFIX_ . 'ever_seo_supplier
          ADD `social_description` VARCHAR(255) NULL DEFAULT NULL
          AFTER `social_title`
     ';
     $sql[] =
-        'ALTER TABLE '._DB_PREFIX_.'ever_seo_pagemeta
+        'ALTER TABLE ' . _DB_PREFIX_ . 'ever_seo_pagemeta
          ADD `social_title` VARCHAR(255) NULL DEFAULT NULL
          AFTER `meta_description`
     ';
     $sql[] =
-        'ALTER TABLE '._DB_PREFIX_.'ever_seo_pagemeta
+        'ALTER TABLE ' . _DB_PREFIX_ . 'ever_seo_pagemeta
          ADD `social_description` VARCHAR(255) NULL DEFAULT NULL
          AFTER `social_title`
     ';
     $sql[] =
-        'ALTER TABLE '._DB_PREFIX_.'ever_seo_cms_category
+        'ALTER TABLE ' . _DB_PREFIX_ . 'ever_seo_cms_category
          ADD `social_title` VARCHAR(255) NULL DEFAULT NULL
          AFTER `meta_description`
     ';
     $sql[] =
-        'ALTER TABLE '._DB_PREFIX_.'ever_seo_cms_category
+        'ALTER TABLE ' . _DB_PREFIX_ . 'ever_seo_cms_category
          ADD `social_description` VARCHAR(255) NULL DEFAULT NULL
          AFTER `social_title`
     ';
     $sql[] =
-        'ALTER TABLE '._DB_PREFIX_.'ever_seo_cms
+        'ALTER TABLE ' . _DB_PREFIX_ . 'ever_seo_cms
          ADD `social_title` VARCHAR(255) NULL DEFAULT NULL
          AFTER `meta_description`
     ';
     $sql[] =
-        'ALTER TABLE '._DB_PREFIX_.'ever_seo_cms
+        'ALTER TABLE ' . _DB_PREFIX_ . 'ever_seo_cms
          ADD `social_description` VARCHAR(255) NULL DEFAULT NULL
          AFTER `social_title`
     ';

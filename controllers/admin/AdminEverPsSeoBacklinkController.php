@@ -11,7 +11,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoBacklink.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoBacklink.php';
 
 class AdminEverPsSeoBacklinkController extends ModuleAdminController
 {
@@ -31,7 +31,7 @@ class AdminEverPsSeoBacklinkController extends ModuleAdminController
         $moduleConfUrl .= Tools::getAdminTokenLite('AdminModules');
 
         $this->context->smarty->assign(array(
-            'moduleConfUrl' => (string)$moduleConfUrl,
+            'moduleConfUrl' => (string) $moduleConfUrl,
             'image_dir' => _PS_BASE_URL_ . '/modules/everpsseo/views/img/'
         ));
 
@@ -42,7 +42,7 @@ class AdminEverPsSeoBacklinkController extends ModuleAdminController
             ),
         );
 
-        $this->_where = 'AND a.id_shop ='.(int)$this->context->shop->id;
+        $this->_where = 'AND a.id_shop ='.(int) $this->context->shop->id;
 
         $this->fields_list = array(
             'id_ever_seo_backlink' => array(
@@ -134,12 +134,12 @@ class AdminEverPsSeoBacklinkController extends ModuleAdminController
             'submit' => array(
                 'name' => 'save',
                 'title' => $this->l('Save'),
-                'class' => 'button pull-right'
+                'class' => 'button pull-right',
             ),
             'buttons' => array(
                 'save-and-stay' => array(
                     'title' => $this->l('Save and stay'),
-                    'name' => 'submitAdd'.$this->table.'AndStay',
+                    'name' => 'submitAdd' . $this->table . 'AndStay',
                     'type' => 'submit',
                     'class' => 'btn btn-default pull-right',
                     'icon' => 'process-icon-save'
@@ -183,12 +183,12 @@ class AdminEverPsSeoBacklinkController extends ModuleAdminController
             }
             if (!count($this->errors)) {
                 $newBacklink = new EverPsSeoBacklink(
-                    (int)Tools::getValue('id_ever_seo_backlink')
+                    (int) Tools::getValue('id_ever_seo_backlink')
                 );
 
                 $newBacklink->everfrom = Tools::getValue('from');
                 $newBacklink->everto = Tools::getValue('to');
-                $newBacklink->id_shop = (int)$this->context->shop->id;
+                $newBacklink->id_shop = (int) $this->context->shop->id;
 
                 if (!$newBacklink->save()) {
                     $this->errors[] = $this->l('An error has occurred: Can\'t save the current object');
@@ -200,7 +200,7 @@ class AdminEverPsSeoBacklinkController extends ModuleAdminController
 
         if (Tools::isSubmit('deleteever_backlinks')) {
             $backlink = new EverPsSeoBacklink(
-                (int)Tools::getValue('id_ever_seo_backlink')
+                (int) Tools::getValue('id_ever_seo_backlink')
             );
 
             if (!$backlink->delete()) {
@@ -225,7 +225,7 @@ class AdminEverPsSeoBacklinkController extends ModuleAdminController
                     $backlink = Tools::getValue($this->table.'Box');
                     if (is_array($backlink)) {
                         foreach ($backlink as $id_ever_seo_backlink) {
-                            $notFound = new EverPsSeoBacklink((int)$id_ever_seo_backlink);
+                            $notFound = new EverPsSeoBacklink((int) $id_ever_seo_backlink);
 
                             if (!count($this->errors)) {
                                 if ($notFound->delete()) {
@@ -234,9 +234,9 @@ class AdminEverPsSeoBacklinkController extends ModuleAdminController
                                         1,
                                         null,
                                         $this->className,
-                                        (int)$notFound->id,
+                                        (int) $notFound->id,
                                         true,
-                                        (int)$this->context->employee->id
+                                        (int) $this->context->employee->id
                                     );
                                 }
                             } else {

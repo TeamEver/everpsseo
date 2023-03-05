@@ -39,15 +39,15 @@ class EverpsseoEversitemapsModuleFrontController extends ModuleFrontController
             die('Sorry, the module EverPsSeo is not active 😬');
         }
         /* Check if the requested shop exists */
-        $shops = Db::getInstance()->ExecuteS('SELECT id_shop FROM `'._DB_PREFIX_.'shop`');
+        $shops = Db::getInstance()->ExecuteS('SELECT id_shop FROM `' . _DB_PREFIX_ . 'shop`');
 
         $list_id_shop = [];
         foreach ($shops as $shop) {
-            $list_id_shop[] = (int)$shop['id_shop'];
+            $list_id_shop[] = (int) $shop['id_shop'];
         }
 
         $id_shop = (Tools::getIsset('id_shop') && in_array(Tools::getValue('id_shop'), $list_id_shop))
-            ? (int)Tools::getValue('id_shop') : (int)Configuration::get('PS_SHOP_DEFAULT');
+            ? (int) Tools::getValue('id_shop') : (int) Configuration::get('PS_SHOP_DEFAULT');
 
         $everpsseo->cron = true;
         // Drop all sitemaps before regeneration
@@ -59,7 +59,7 @@ class EverpsseoEversitemapsModuleFrontController extends ModuleFrontController
             }
         }
 
-        $everpsseo->everGenerateSitemaps((int)$id_shop);
+        $everpsseo->everGenerateSitemaps((int) $id_shop);
 
         die('Sitemaps fully generated. Please submit Search Console if not already set 🙂');
     }

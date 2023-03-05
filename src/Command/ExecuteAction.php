@@ -60,7 +60,7 @@ class ExecuteAction extends Command
         if ($action === 'redirectDisabledProduct') {
             if ($idShop && $idShop >= 1) {
                 $shop = new \Shop(
-                    (int)$idShop
+                    (int) $idShop
                 );
                 if (!\Validate::isLoadedObject($shop)) {
                     $output->writeln('<comment>Shop not found</comment>');
@@ -88,7 +88,7 @@ class ExecuteAction extends Command
                 foreach ($products as $key => $value) {
                     \EverPsSeoProduct::inactiveRedirect($value["id_product"], $shop->id);
                     $output->writeln(sprintf(
-                        '<info>Forcing redirection for id product '.(int)$value["id_product"].' has been set</info>'
+                        '<info>Forcing redirection for id product '.(int) $value["id_product"].' has been set</info>'
                     ));
                 }
 

@@ -27,11 +27,11 @@ class Tools extends ToolsCore
 
         /* If language file not present, you must use default language file */
         if (!$cookie->id_lang || !Validate::isUnsignedId($cookie->id_lang)) {
-            $cookie->id_lang = (int)Configuration::get('PS_LANG_DEFAULT');
+            $cookie->id_lang = (int) Configuration::get('PS_LANG_DEFAULT');
             Context::getContext()->language = new Language($cookie->id_lang);
         }
 
-        $iso = Language::getIsoById((int)$cookie->id_lang);
+        $iso = Language::getIsoById((int) $cookie->id_lang);
         @include_once(_PS_THEME_DIR_.'lang/'.$iso.'.php');
 
         return $iso;

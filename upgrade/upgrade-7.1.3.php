@@ -17,14 +17,14 @@ function upgrade_module_7_1_3()
     $result = true;
     $sql = [];
     // Shortcodes
-    $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ever_seo_shortcode` (
+    $sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'ever_seo_shortcode` (
             `id_ever_seo_shortcode` int(10) unsigned NOT NULL auto_increment,
             `id_shop` int(10) unsigned NOT NULL,
             `shortcode` text NOT NULL,
             PRIMARY KEY (`id_ever_seo_shortcode`)
         ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8';
 
-    $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ever_seo_shortcode_lang` (
+    $sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'ever_seo_shortcode_lang` (
             `id_ever_seo_shortcode` int(10) unsigned NOT NULL,
             `id_lang` int(10) unsigned NOT NULL,
             `title` text NOT NULL,
@@ -42,7 +42,7 @@ function upgrade_module_7_1_3()
     $tab->position = Tab::getNewLastPosition($tab->id_parent);
     $tab->module = 'everpsseo';
     foreach (Language::getLanguages(false) as $lang) {
-        $tab->name[(int)$lang['id_lang']] = 'Shortcodes';
+        $tab->name[(int) $lang['id_lang']] = 'Shortcodes';
     }
     $result &= $tab->add();
     // Add shortcode hook

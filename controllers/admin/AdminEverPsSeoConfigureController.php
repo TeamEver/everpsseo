@@ -11,17 +11,17 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoCategory.php';
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoCms.php';
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoImage.php';
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoManufacturer.php';
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoPageMeta.php';
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoProduct.php';
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoRedirect.php';
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoSupplier.php';
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoSitemap.php';
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoBacklink.php';
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoKeywordsStrategy.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoCategory.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoCms.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoImage.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoManufacturer.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoPageMeta.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoProduct.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoRedirect.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoSupplier.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoSitemap.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoBacklink.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoKeywordsStrategy.php';
 
 class AdminEverPsSeoConfigureController extends ModuleAdminController
 {
@@ -1116,22 +1116,22 @@ class AdminEverPsSeoConfigureController extends ModuleAdminController
                     Configuration::updateValue($key, Tools::getValue($key));
                 }
             }
-            if ((bool)Configuration::get('EVERSEO_INDEX_PRODUCT')) {
+            if ((bool) Configuration::get('EVERSEO_INDEX_PRODUCT')) {
                 $this->indexObject('product');
             }
-            if ((bool)Configuration::get('EVERSEO_INDEX_CATEGORY')) {
+            if ((bool) Configuration::get('EVERSEO_INDEX_CATEGORY')) {
                 $this->indexObject('category');
             }
-            if ((bool)Configuration::get('EVERSEO_INDEX_CMS')) {
+            if ((bool) Configuration::get('EVERSEO_INDEX_CMS')) {
                 $this->indexObject('cms');
             }
-            if ((bool)Configuration::get('EVERSEO_INDEX_MANUFACTURER')) {
+            if ((bool) Configuration::get('EVERSEO_INDEX_MANUFACTURER')) {
                 $this->indexObject('manufacturer');
             }
-            if ((bool)Configuration::get('EVERSEO_INDEX_SUPPLIER')) {
+            if ((bool) Configuration::get('EVERSEO_INDEX_SUPPLIER')) {
                 $this->indexObject('supplier');
             }
-            if ((bool)Configuration::get('EVERSEO_INDEX_PAGE_META')) {
+            if ((bool) Configuration::get('EVERSEO_INDEX_PAGE_META')) {
                 $this->indexObject('pagemeta');
             }
         }
@@ -1190,22 +1190,22 @@ class AdminEverPsSeoConfigureController extends ModuleAdminController
         }
         $sql = [];
         // Set indexable
-        $sql[] = 'UPDATE '._DB_PREFIX_.pSQL((string)$seo_table).'
+        $sql[] = 'UPDATE '. _DB_PREFIX_ .pSQL((string) $seo_table).'
         SET indexable = 1
-        WHERE '.pSQL((string)$seo_element).' IN
+        WHERE '.pSQL((string) $seo_element).' IN
         (
-            SELECT '.pSQL((string)$ps_element).'
-            FROM '._DB_PREFIX_.pSQL((string)$ps_table).'
-            WHERE '.pSQL((string)$where).'
+            SELECT '.pSQL((string) $ps_element).'
+            FROM '. _DB_PREFIX_ .pSQL((string) $ps_table).'
+            WHERE '.pSQL((string) $where).'
         )';
         // Set allowed_sitemap
-        $sql[] = 'UPDATE '._DB_PREFIX_.pSQL((string)$seo_table).'
+        $sql[] = 'UPDATE '. _DB_PREFIX_ .pSQL((string) $seo_table).'
         SET allowed_sitemap = 1
         WHERE '.$seo_element.' IN
         (
-            SELECT '.pSQL((string)$ps_element).'
-            FROM '._DB_PREFIX_.pSQL((string)$ps_table).'
-            WHERE '.pSQL((string)$where).'
+            SELECT '.pSQL((string) $ps_element).'
+            FROM '. _DB_PREFIX_ .pSQL((string) $ps_table).'
+            WHERE '.pSQL((string) $where).'
         )';
         foreach ($sql as $s) {
             if (!Db::getInstance()->execute($s)) {

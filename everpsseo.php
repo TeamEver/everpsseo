@@ -64,7 +64,7 @@ class Everpsseo extends Module
             'min' => '1.7',
             'max' => _PS_VERSION_,
         ];
-        $this->siteUrl = Tools::getHttpHost(true).__PS_BASE_URI__;
+        $this->siteUrl = Tools::getHttpHost(true) . __PS_BASE_URI__;
         $this->imageType = ImageType::getFormattedName('large');
         $this->protocol_link = (Configuration::get('PS_SSL_ENABLED')
             || Tools::usingSecureMode()) ? 'https://' : 'http://';
@@ -92,18 +92,18 @@ class Everpsseo extends Module
                 ],
                 true
             );
-            $searchconsole = str_replace('://', '%3A%2F%2F', (string)$this->siteUrl);
+            $searchconsole = str_replace('://', '%3A%2F%2F', (string) $this->siteUrl);
             if ((bool) Configuration::get('PS_REWRITING_SETTINGS') === false) {
                 $rewrite_enabled = false;
             } else {
                 $rewrite_enabled = true;
             }
-            if ((bool)Configuration::get('PS_SSL_ENABLED') === false) {
+            if ((bool) Configuration::get('PS_SSL_ENABLED') === false) {
                 $ssl_enabled = false;
             } else {
                 $ssl_enabled = true;
             }
-            if ((int)Configuration::get('PS_CANONICAL_REDIRECT')) {
+            if ((int) Configuration::get('PS_CANONICAL_REDIRECT')) {
                 $canonical = false;
             } else {
                 $canonical = true;
@@ -166,7 +166,7 @@ class Everpsseo extends Module
             $tab->icon = 'icon-team-ever';
         }
         foreach (Language::getLanguages(false) as $lang) {
-            $tab->name[(int)$lang['id_lang']] = $tabName;
+            $tab->name[(int) $lang['id_lang']] = $tabName;
         }
         return $tab->add();
     }
@@ -334,7 +334,7 @@ class Everpsseo extends Module
                     'EVERSEO_AUTO_CATEGORY_LANGS'
                 );
                 foreach ($seoArray as $seo) {
-                    if (in_array((int)$seo['id_seo_lang'], $allowedLangs)) {
+                    if (in_array((int) $seo['id_seo_lang'], $allowedLangs)) {
                         $this->autoSetContentDesc(
                             'id_seo_category',
                             (int) $seo['id_seo_category'],
@@ -543,7 +543,7 @@ class Everpsseo extends Module
                     'EVERSEO_AUTO_CATEGORY_LANGS'
                 );
                 foreach ($seoArray as $seo) {
-                    if (in_array((int)$seo['id_seo_lang'], $allowedLangs)) {
+                    if (in_array((int) $seo['id_seo_lang'], $allowedLangs)) {
                         $this->autoSetTitle(
                             'id_seo_category',
                             (int) $seo['id_seo_category'],
@@ -645,7 +645,7 @@ class Everpsseo extends Module
         if (Tools::isSubmit('submitSitemapCms')) {
             foreach ($languages as $id_lang) {
                 if (in_array((int) $id_lang, $allowedLangs)) {
-                    $this->processSitemapCms((int)$this->context->shop->id, (int) $id_lang);
+                    $this->processSitemapCms((int) $this->context->shop->id, (int) $id_lang);
                 }
             }
         }
@@ -819,9 +819,6 @@ class Everpsseo extends Module
         return $this->html;
     }
 
-    /**
-     * Create the form that will be displayed in the configuration of your module.
-     */
     protected function renderForm()
     {
         $helper = new HelperForm();
@@ -835,19 +832,14 @@ class Everpsseo extends Module
         $helper->submit_action = 'submiteverpsseoModule';
         $helper->currentIndex = $this->context->link->getAdminLink('AdminModules', false) . '&configure=' . $this->name . '&tab_module=' . $this->tab . '&module_name=' . $this->name;
         $helper->token = Tools::getAdminTokenLite('AdminModules');
-
-        $helper->tpl_vars = array(
+        $helper->tpl_vars = [
             'fields_value' => $this->getConfigFormValues(),
             'languages' => $this->context->controller->getLanguages(),
             'id_language' => (int) $this->context->language->id,
-        );
-
+        ];
         return $helper->generateForm($this->getConfigForm());
     }
 
-    /**
-     * Create the structure of your form.
-     */
     protected function getConfigForm()
     {
         $employees = Employee::getEmployees();
@@ -894,154 +886,154 @@ class Everpsseo extends Module
         ];
 
         $priority = [
-            array(
+            [
                 'id_priority' => 1,
-                'name' => $this->l('Products, categories, tags')
-            ),
-            array(
+                'name' => $this->l('Products, categories, tags'),
+            ],
+            [
                 'id_priority' => 2,
-                'name' => $this->l('Products, tags, categories')
-            ),
-            array(
+                'name' => $this->l('Products, tags, categories'),
+            ],
+            [
                 'id_priority' => 3,
-                'name' => $this->l('Categories, products, tags')
-            ),
-            array(
+                'name' => $this->l('Categories, products, tags'),
+            ],
+            [
                 'id_priority' => 4,
-                'name' => $this->l('Categories, tags, products')
-            ),
-            array(
+                'name' => $this->l('Categories, tags, products'),
+            ],
+            [
                 'id_priority' => 5,
-                'name' => $this->l('Tags, products, categories')
-            ),
-            array(
+                'name' => $this->l('Tags, products, categories'),
+            ],
+            [
                 'id_priority' => 6,
-                'name' => $this->l('Tags, categories, products')
-            ),
+                'name' => $this->l('Tags, categories, products'),
+            ],
         ];
 
         $qualityRiskLevel = [
-            array(
+            [
                 'id_quality_risk_level' => 0,
-                'name' => $this->l('"I am Iron Man" quality risk')
-            ),
-            array(
+                'name' => $this->l('"I am Iron Man" quality risk'),
+            ],
+            [
                 'id_quality_risk_level' => 1,
-                'name' => $this->l('"I am ineluctable" quality risk')
-            ),
-            array(
+                'name' => $this->l('"I am ineluctable" quality risk'),
+            ],
+            [
                 'id_quality_risk_level' => 2,
-                'name' => $this->l('Shaggy quality risk')
-            ),
-            array(
+                'name' => $this->l('Shaggy quality risk'),
+            ],
+            [
                 'id_quality_risk_level' => 3,
-                'name' => $this->l('God quality risk')
-            ),
-            array(
+                'name' => $this->l('God quality risk'),
+            ],
+            [
                 'id_quality_risk_level' => 4,
-                'name' => $this->l('Expert quality risk')
-            ),
-            array(
+                'name' => $this->l('Expert quality risk'),
+            ],
+            [
                 'id_quality_risk_level' => 5,
-                'name' => $this->l('High quality risk')
-            ),
-            array(
+                'name' => $this->l('High quality risk'),
+            ],
+            [
                 'id_quality_risk_level' => 6,
-                'name' => $this->l('Advanced quality risk')
-            ),
-            array(
+                'name' => $this->l('Advanced quality risk'),
+            ],
+            [
                 'id_quality_risk_level' => 7,
-                'name' => $this->l('Normal quality risk')
-            ),
-            array(
+                'name' => $this->l('Normal quality risk'),
+            ],
+            [
                 'id_quality_risk_level' => 8,
-                'name' => $this->l('Low quality risk')
-            ),
+                'name' => $this->l('Low quality risk'),
+            ],
         ];
 
         $redirectCodes = [
-            array(
+            [
                 'id_redirect' => '301',// 301 Moved Permanently
-                'name' => '301'
-            ),
-            array(
+                'name' => '301',
+            ],
+            [
                 'id_redirect' => '302',// 302 Found
-                'name' => '302'
-            ),
-            array(
+                'name' => '302',
+            ],
+            [
                 'id_redirect' => '303',// 303 See Other
-                'name' => '303'
-            ),
-            array(
+                'name' => '303',
+            ],
+            [
                 'id_redirect' => '307',// 307 Temporary Redirect
-                'name' => '307'
-            ),
+                'name' => '307',
+            ],
         ];
 
         $frequency = [
-            array(
+            [
                 'id_frequency' => 'daily',
-                'name' => 'daily'
-            ),
-            array(
+                'name' => 'daily',
+            ],
+            [
                 'id_frequency' => 'weekly',
-                'name' => 'weekly'
-            ),
-            array(
+                'name' => 'weekly',
+            ],
+            [
                 'id_frequency' => 'monthly',
-                'name' => 'monthly'
-            ),
-            array(
+                'name' => 'monthly',
+            ],
+            
                 'id_frequency' => 'yearly',
-                'name' => 'yearly'
-            ),
+                'name' => 'yearly',[
+            ],
         ];
 
         $sitemapPriority = [
-            array(
+            [
                 'id_sitemap_priority' => '0',
-                'name' => '0'
-            ),
-            array(
+                'name' => '0',
+            ],
+            [
                 'id_sitemap_priority' => '0.1',
-                'name' => '0.1'
-            ),
-            array(
+                'name' => '0.1',
+            ],
+            [
                 'id_sitemap_priority' => '0.2',
-                'name' => '0.2'
-            ),
-            array(
+                'name' => '0.2',
+            ],
+            [
                 'id_sitemap_priority' => '0.3',
-                'name' => '0.3'
-            ),
-            array(
+                'name' => '0.3',
+            ],
+            [
                 'id_sitemap_priority' => '0.4',
-                'name' => '0.4'
-            ),
-            array(
+                'name' => '0.4',
+            ],
+            [
                 'id_sitemap_priority' => '0.5',
-                'name' => '0.5'
-            ),
-            array(
+                'name' => '0.5',
+            ],
+            [
                 'id_sitemap_priority' => '0.6',
-                'name' => '0.6'
-            ),
-            array(
+                'name' => '0.6',
+            ],
+            [
                 'id_sitemap_priority' => '0.7',
-                'name' => '0.7'
-            ),
-            array(
+                'name' => '0.7',
+            ],
+            [
                 'id_sitemap_priority' => '0.8',
-                'name' => '0.8'
-            ),
-            array(
+                'name' => '0.8',
+            ],
+            [
                 'id_sitemap_priority' => '0.9',
-                'name' => '0.9'
-            ),
-            array(
+                'name' => '0.9',
+            ],
+            [
                 'id_sitemap_priority' => '1',
-                'name' => '1'
-            ),
+                'name' => '1',
+            ],
         ];
 
         if (file_exists(_PS_MODULE_DIR_ . 'everpsseo/views/img/everpsseo.jpg')) {
@@ -1051,17 +1043,17 @@ class Everpsseo extends Module
                 'PS_LOGO'
             );
         }
-        $defaultImage = '<image src="' . (string)$defaultUrlImage . '" style="max-width:80px;" />';
+        $defaultImage = '<image src="' . (string) $defaultUrlImage . '" style="max-width:80px;" />';
 
         $knowledgegraph_type = [
-            array(
+            [
                 'id_knowledgegraph' => 'Organization',
-                'name' => 'Organization'
-            ),
-            array(
+                'name' => 'Organization',
+            ],
+            [
                 'id_knowledgegraph' => 'Person',
-                'name' => 'Person'
-            ),
+                'name' => 'Person',
+            ],
         ];
 
         $form_fields = [];
@@ -1069,38 +1061,38 @@ class Everpsseo extends Module
         //General SEO parameters
         $form_fields[] = array(
             'form' => array(
-                'legend' => array(
+                'legend' => [
                     'title' => $this->l('Global SEO settings'),
                     'icon' => 'icon-smile',
-                ),
+                ],
                 'input' => array(
-                    array(
+                    [
                         'type' => 'select',
                         'label' => $this->l('Person or company'),
                         'desc' => $this->l('For Google knowledgegraph'),
                         'hint' => $this->l('Will work using rich snippets'),
                         'name' => 'EVERSEO_KNOWLEDGE',
                         'required' => true,
-                        'options' => array(
+                        'options' => [
                             'query' => $knowledgegraph_type,
                             'id' => 'id_knowledgegraph',
-                            'name' => 'name'
-                        )
-                    ),
-                    array(
+                            'name' => 'name',
+                        ],
+                    ],
+                    [
                         'type' => 'select',
                         'label' => $this->l('Ever Quality level ?'),
                         'desc' => $this->l('Notation system level'),
                         'hint' => $this->l('At what level of difficulty do you want to start?'),
                         'name' => 'EVERSEO_QUALITY_LEVEL',
                         'required' => true,
-                        'options' => array(
+                        'options' => [
                             'query' => $qualityRiskLevel,
                             'id' => 'id_quality_risk_level',
-                            'name' => 'name'
-                        )
-                    ),
-                    array(
+                            'name' => 'name',
+                        ],
+                    ],
+                    [
                         'type' => 'color',
                         'label' => $this->l('Theme color'),
                         'desc' => $this->l('This will be used for mobile'),
@@ -1108,7 +1100,7 @@ class Everpsseo extends Module
                         'required' => false,
                         'name' => 'EVERSEO_THEME_COLOR',
                         'lang' => false,
-                    ),
+                    ],
                     array(
                         'type' => 'switch',
                         'label' => $this->l('Redirect all users except registered IP'),
@@ -1116,28 +1108,28 @@ class Everpsseo extends Module
                         'hint' => $this->l('Enable if you have troubles with maintenance mode'),
                         'name' => 'EVERSEO_MAINTENANCE',
                         'is_bool' => true,
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
-                    array(
+                    [
                         'type' => 'text',
                         'label' => $this->l('Redirect users to this URL if SEO maintenance is ON'),
                         'desc' => $this->l('Will redirect to this URL only if SEO maintenance is ON'),
                         'hint' => $this->l('Default will be google.com'),
                         'name' => 'EVERSEO_MAINTENANCE_URL',
                         'lang' => false,
-                    ),
-                    array(
+                    ],
+                    [
                         'type' => 'text',
                         'label' => $this->l('Index now request limit per day'),
                         'desc' => $this->l('Set here how many requests can be sent to Index Nox'),
@@ -1145,8 +1137,8 @@ class Everpsseo extends Module
                         'required' => true,
                         'name' => 'EVERSEO_INDEXNOW_LIMIT',
                         'lang' => false,
-                    ),
-                    array(
+                    ],
+                    [
                         'type' => 'text',
                         'label' => $this->l('Analytics tracking code'),
                         'desc' => $this->l('This is your GA_TRACKING_ID'),
@@ -1154,8 +1146,8 @@ class Everpsseo extends Module
                         'required' => false,
                         'name' => 'EVERSEO_ANALYTICS',
                         'lang' => false,
-                    ),
-                    array(
+                    ],
+                    [
                         'type' => 'text',
                         'label' => $this->l('Search Console site verification'),
                         'desc' => $this->l('Please add Search Console meta content'),
@@ -1163,8 +1155,8 @@ class Everpsseo extends Module
                         'required' => false,
                         'name' => 'EVERSEO_SEARCHCONSOLE',
                         'lang' => false,
-                    ),
-                    array(
+                    ],
+                    [
                         'type' => 'text',
                         'label' => $this->l('Google Tag Manager code'),
                         'desc' => $this->l('Please add Google Tag Manager GTM code'),
@@ -1172,8 +1164,8 @@ class Everpsseo extends Module
                         'required' => false,
                         'name' => 'EVERSEO_GTAG',
                         'lang' => false,
-                    ),
-                    array(
+                    ],
+                    [
                         'type' => 'text',
                         'label' => $this->l('Facebook pixel (number)'),
                         'desc' => $this->l('Facebook pixel number'),
@@ -1181,8 +1173,8 @@ class Everpsseo extends Module
                         'required' => false,
                         'name' => 'EVERSEO_FBPIXEL',
                         'lang' => false,
-                    ),
-                    array(
+                    ],
+                    [
                         'type' => 'text',
                         'label' => $this->l('Adwords tracking code'),
                         'desc' => $this->l('Adwords meta value'),
@@ -1190,8 +1182,8 @@ class Everpsseo extends Module
                         'required' => false,
                         'name' => 'EVERSEO_ADWORDS',
                         'lang' => false,
-                    ),
-                    array(
+                    ],
+                    [
                         'type' => 'text',
                         'label' => $this->l('Adwords event snippet code'),
                         'desc' => $this->l('Adwords meta value for order confirmation'),
@@ -1199,8 +1191,8 @@ class Everpsseo extends Module
                         'required' => false,
                         'name' => 'EVERSEO_ADWORDS_SENDTO',
                         'lang' => false,
-                    ),
-                    array(
+                    ],
+                    [
                         'type' => 'text',
                         'label' => $this->l('Adwords contact event snippet code'),
                         'desc' => $this->l('Adwords meta value for contact page'),
@@ -1208,8 +1200,8 @@ class Everpsseo extends Module
                         'required' => false,
                         'name' => 'EVERSEO_ADWORDS_CONTACT',
                         'lang' => false,
-                    ),
-                    array(
+                    ],
+                    [
                         'type' => 'text',
                         'label' => $this->l('Adwords Opart quotation event snippet code'),
                         'desc' => $this->l('Adwords meta value for quotation page'),
@@ -1217,7 +1209,7 @@ class Everpsseo extends Module
                         'required' => false,
                         'name' => 'EVERSEO_ADWORDS_OPART',
                         'lang' => false,
-                    ),
+                    ],
                     array(
                         'type' => 'switch',
                         'label' => $this->l('Add Facebook Open Graph metas'),
@@ -1225,18 +1217,18 @@ class Everpsseo extends Module
                         'hint' => $this->l('Only if your theme does not support it'),
                         'name' => 'EVERSEO_USE_OPENGRAPH',
                         'is_bool' => true,
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                     array(
                         'type' => 'switch',
@@ -1245,18 +1237,18 @@ class Everpsseo extends Module
                         'hint' => $this->l('You should !'),
                         'name' => 'EVERSEO_USE_TWITTER',
                         'is_bool' => true,
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                     array(
                         'type' => 'text',
@@ -1285,18 +1277,18 @@ class Everpsseo extends Module
                         'hint' => $this->l('Will not add notations, please use King Avis'),
                         'name' => 'EVERSEO_RSNIPPETS',
                         'is_bool' => true,
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                     array(
                         'type' => 'switch',
@@ -1305,18 +1297,18 @@ class Everpsseo extends Module
                         'hint' => $this->l('Is fully required by Google'),
                         'name' => 'EVERSEO_CANONICAL',
                         'is_bool' => true,
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                     array(
                         'type' => 'switch',
@@ -1325,18 +1317,18 @@ class Everpsseo extends Module
                         'hint' => $this->l('Set not if your site is not multilingual'),
                         'name' => 'EVERSEO_HREF_LANG',
                         'is_bool' => true,
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                     array(
                         'type' => 'text',
@@ -1370,18 +1362,18 @@ class Everpsseo extends Module
                         'hint' => $this->l('Set "No" will leave actual link rewrites'),
                         'name' => 'EVERSEO_REWRITE_LINKS',
                         'is_bool' => true,
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                     array(
                         'type' => 'switch',
@@ -1390,18 +1382,18 @@ class Everpsseo extends Module
                         'hint' => $this->l('Set "No" will only output errors on commands'),
                         'name' => 'EVER_LOG_CMD',
                         'is_bool' => true,
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                 ),
                 'submit' => array(
@@ -1539,18 +1531,18 @@ class Everpsseo extends Module
                         'hint' => $this->l('Else search won\'t be redirected to category'),
                         'name' => 'EVER_SEARCH_CATEGORIES',
                         'is_bool' => true,
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                     array(
                         'type' => 'switch',
@@ -1559,18 +1551,18 @@ class Everpsseo extends Module
                         'hint' => $this->l('Else search won\'t be redirected to manufacturer'),
                         'name' => 'EVER_SEARCH_MANUFACTURERS',
                         'is_bool' => true,
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                     array(
                         'type' => 'switch',
@@ -1579,18 +1571,18 @@ class Everpsseo extends Module
                         'hint' => $this->l('Else search won\'t be redirected to supplier'),
                         'name' => 'EVER_SEARCH_SUPPLIERS',
                         'is_bool' => true,
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                     array(
                         'type' => 'switch',
@@ -1599,18 +1591,18 @@ class Everpsseo extends Module
                         'hint' => $this->l('Else search won\'t be redirected to product'),
                         'name' => 'EVER_SEARCH_PRODUCTS',
                         'is_bool' => true,
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                 ),
                 'submit' => array(
@@ -1654,18 +1646,18 @@ class Everpsseo extends Module
                         'hint' => $this->l('You are on an e-shop... Of course you want !'),
                         'name' => 'EVERSEO_PRODUCT',
                         'is_bool' => true,
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                     array(
                         'type' => 'switch',
@@ -1674,18 +1666,18 @@ class Everpsseo extends Module
                         'hint' => $this->l('Perhaps categories are more useful than products ?'),
                         'name' => 'EVERSEO_CATEGORY',
                         'is_bool' => true,
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                     array(
                         'type' => 'switch',
@@ -1694,18 +1686,18 @@ class Everpsseo extends Module
                         'hint' => $this->l('You should if you use tags on products'),
                         'name' => 'EVERSEO_TAGS',
                         'is_bool' => true,
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                     array(
                         'type' => 'select',
@@ -2496,18 +2488,18 @@ class Everpsseo extends Module
                         'hint' => $this->l('Set "No" to add content after'),
                         'name' => 'EVERSEO_DELETE_PRODUCT_CONTENT',
                         'is_bool' => true,
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                     array(
                         'type' => 'select',
@@ -2560,18 +2552,18 @@ class Everpsseo extends Module
                         'hint' => $this->l('Set "yes" for add this in generation content'),
                         'name' => 'EVERSEO_BOTTOM_PRODUCT_CONTENT',
                         'is_bool' => true,
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                     array(
                         'type' => 'textarea',
@@ -2619,18 +2611,18 @@ class Everpsseo extends Module
                         'hint' => $this->l('Set "No" to add content after'),
                         'name' => 'EVERSEO_DELETE_CATEGORY_CONTENT',
                         'is_bool' => true,
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                     array(
                         'type' => 'switch',
@@ -2639,18 +2631,18 @@ class Everpsseo extends Module
                         'hint' => $this->l('Set "No" to add default content'),
                         'name' => 'EVERSEO_BOTTOM_CATEGORY_CONTENT',
                         'is_bool' => true,
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                     array(
                         'type' => 'select',
@@ -2722,18 +2714,18 @@ class Everpsseo extends Module
                         'hint' => $this->l('Set "No" to add content after'),
                         'name' => 'EVERSEO_DELETE_MANUFACTURER_CONTENT',
                         'is_bool' => true,
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                     array(
                         'type' => 'switch',
@@ -2742,18 +2734,18 @@ class Everpsseo extends Module
                         'hint' => $this->l('Set "No" to add default content'),
                         'name' => 'EVERSEO_BOTTOM_MANUFACTURER_CONTENT',
                         'is_bool' => true,
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                     array(
                         'type' => 'textarea',
@@ -2801,18 +2793,18 @@ class Everpsseo extends Module
                         'hint' => $this->l('Set "No" to add content after'),
                         'name' => 'EVERSEO_DELETE_SUPPLIER_CONTENT',
                         'is_bool' => true,
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                     array(
                         'type' => 'switch',
@@ -2821,18 +2813,18 @@ class Everpsseo extends Module
                         'hint' => $this->l('Set "No" to add default content'),
                         'name' => 'EVERSEO_BOTTOM_SUPPLIER_CONTENT',
                         'is_bool' => true,
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                     array(
                         'type' => 'textarea',
@@ -2875,18 +2867,18 @@ class Everpsseo extends Module
                         'is_bool' => true,
                         'desc' => $this->l('Generate a sitemap for categories'),
                         'hint' => $this->l('Will allow categories sitemaps generation'),
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                     array(
                         'type' => 'select',
@@ -2939,18 +2931,18 @@ class Everpsseo extends Module
                         'is_bool' => true,
                         'desc' => $this->l('Generate a sitemap for products'),
                         'hint' => $this->l('Will allow products sitemaps generation'),
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                     array(
                         'type' => 'select',
@@ -3003,18 +2995,18 @@ class Everpsseo extends Module
                         'is_bool' => true,
                         'desc' => $this->l('Generate a sitemap for images'),
                         'hint' => $this->l('Will allow images sitemaps generation'),
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                     array(
                         'type' => 'select',
@@ -3067,18 +3059,18 @@ class Everpsseo extends Module
                         'is_bool' => true,
                         'desc' => $this->l('Generate a sitemap for cms'),
                         'hint' => $this->l('Will allow CMS sitemaps generation'),
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                     array(
                         'type' => 'select',
@@ -3130,18 +3122,18 @@ class Everpsseo extends Module
                         'name' => 'EVERSEO_SITEMAP_PAGE_META',
                         'is_bool' => true,
                         'desc' => $this->l('Generate a sitemap for page meta'),
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                     array(
                         'type' => 'select',
@@ -3193,18 +3185,18 @@ class Everpsseo extends Module
                         'name' => 'EVERSEO_SITEMAP_MANUFACTURER',
                         'is_bool' => true,
                         'desc' => $this->l('Generate a sitemap for manufaturers'),
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                     array(
                         'type' => 'select',
@@ -3256,18 +3248,18 @@ class Everpsseo extends Module
                         'name' => 'EVERSEO_SITEMAP_SUPPLIER',
                         'is_bool' => true,
                         'desc' => $this->l('Generate a sitemap for suppliers'),
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                     array(
                         'type' => 'select',
@@ -3319,18 +3311,18 @@ class Everpsseo extends Module
                         'name' => 'EVERSEO_INDEX_CATEGORY',
                         'is_bool' => true,
                         'desc' => $this->l('Default index categories'),
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                     array(
                         'type' => 'switch',
@@ -3338,18 +3330,18 @@ class Everpsseo extends Module
                         'name' => 'EVERSEO_INDEX_PRODUCT',
                         'is_bool' => true,
                         'desc' => $this->l('Default index products'),
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                     array(
                         'type' => 'switch',
@@ -3357,18 +3349,18 @@ class Everpsseo extends Module
                         'name' => 'EVERSEO_INDEX_CMS',
                         'is_bool' => true,
                         'desc' => $this->l('Default index CMS'),
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                     array(
                         'type' => 'switch',
@@ -3376,18 +3368,18 @@ class Everpsseo extends Module
                         'name' => 'EVERSEO_INDEX_PAGE_META',
                         'is_bool' => true,
                         'desc' => $this->l('Default index pages meta'),
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                     array(
                         'type' => 'switch',
@@ -3395,18 +3387,18 @@ class Everpsseo extends Module
                         'name' => 'EVERSEO_INDEX_MANUFACTURER',
                         'is_bool' => true,
                         'desc' => $this->l('Default index manufacturers'),
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                     array(
                         'type' => 'switch',
@@ -3414,18 +3406,18 @@ class Everpsseo extends Module
                         'name' => 'EVERSEO_INDEX_SUPPLIER',
                         'is_bool' => true,
                         'desc' => $this->l('Default index suppliers'),
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                     array(
                         'type' => 'switch',
@@ -3433,18 +3425,18 @@ class Everpsseo extends Module
                         'name' => 'EVERSEO_INDEX_ARGS',
                         'is_bool' => true,
                         'desc' => $this->l('Will set index on pages with args'),
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                 ),
                 'submit' => array(
@@ -3467,18 +3459,18 @@ class Everpsseo extends Module
                         'name' => 'EVERSEO_FOLLOW_CATEGORY',
                         'is_bool' => true,
                         'desc' => $this->l('Default follow categories'),
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                     array(
                         'type' => 'switch',
@@ -3486,18 +3478,18 @@ class Everpsseo extends Module
                         'name' => 'EVERSEO_FOLLOW_PRODUCT',
                         'is_bool' => true,
                         'desc' => $this->l('Default follow products'),
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                     array(
                         'type' => 'switch',
@@ -3505,18 +3497,18 @@ class Everpsseo extends Module
                         'name' => 'EVERSEO_FOLLOW_CMS',
                         'is_bool' => true,
                         'desc' => $this->l('Default follow CMS'),
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                     array(
                         'type' => 'switch',
@@ -3524,18 +3516,18 @@ class Everpsseo extends Module
                         'name' => 'EVERSEO_FOLLOW_PAGE_META',
                         'is_bool' => true,
                         'desc' => $this->l('Default follow pages meta'),
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                     array(
                         'type' => 'switch',
@@ -3543,18 +3535,18 @@ class Everpsseo extends Module
                         'name' => 'EVERSEO_FOLLOW_MANUFACTURER',
                         'is_bool' => true,
                         'desc' => $this->l('Default follow manufacturers'),
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                     array(
                         'type' => 'switch',
@@ -3562,18 +3554,18 @@ class Everpsseo extends Module
                         'name' => 'EVERSEO_FOLLOW_SUPPLIER',
                         'is_bool' => true,
                         'desc' => $this->l('Default follow suppliers'),
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                     array(
                         'type' => 'switch',
@@ -3582,18 +3574,18 @@ class Everpsseo extends Module
                         'hint' => $this->l('Args can be pages parameters'),
                         'name' => 'EVERSEO_FOLLOW_ARGS',
                         'is_bool' => true,
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                 ),
                 'submit' => array(
@@ -3856,18 +3848,18 @@ class Everpsseo extends Module
                         'hint' => $this->l('Will secure your shop'),
                         'name' => 'EVERSEO_BLOCK_RIGHT_CLICK',
                         'is_bool' => true,
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                     array(
                         'type' => 'switch',
@@ -3876,18 +3868,18 @@ class Everpsseo extends Module
                         'hint' => $this->l('Will prevent hotlinking on your shop'),
                         'name' => 'EVERSEO_HOTLINKING',
                         'is_bool' => true,
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                     array(
                         'type' => 'switch',
@@ -3896,18 +3888,18 @@ class Everpsseo extends Module
                         'hint' => $this->l('Will secure your shop'),
                         'name' => 'EVERSEO_CLICKJACKING',
                         'is_bool' => true,
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                     array(
                         'type' => 'text',
@@ -3960,18 +3952,18 @@ class Everpsseo extends Module
                         'hint' => $this->l('Else PHP will only do redirections'),
                         'name' => 'EVERHTACCESS_404',
                         'is_bool' => true,
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                 ),
                 'submit' => array(
@@ -3994,18 +3986,18 @@ class Everpsseo extends Module
                         'hint' => $this->l('Set "No" to hide Google Translate widget'),
                         'name' => 'EVERSEO_GTOP',
                         'is_bool' => true,
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                     array(
                         'type' => 'switch',
@@ -4014,18 +4006,18 @@ class Everpsseo extends Module
                         'hint' => $this->l('Set "No" to hide Google Translate widget'),
                         'name' => 'EVERSEO_GCOLUMN',
                         'is_bool' => true,
-                        'values' => array(
-                            array(
+                        'values' => [
+                            [
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
-                            ),
-                            array(
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
-                        ),
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
                     ),
                 ),
                 'submit' => array(
@@ -5621,94 +5613,94 @@ class Everpsseo extends Module
         $this->getColumnStructure(
             'ever_seo_category',
             'indexable',
-            (int)Tools::getValue('EVERSEO_INDEX_CATEGORY')
+            (int) Tools::getValue('EVERSEO_INDEX_CATEGORY')
         );
         // Set default product index
         $this->getColumnStructure(
             'ever_seo_product',
             'indexable',
-            (int)Tools::getValue('EVERSEO_INDEX_PRODUCT')
+            (int) Tools::getValue('EVERSEO_INDEX_PRODUCT')
         );
         // Set default page meta index
         $this->getColumnStructure(
             'ever_seo_pagemeta',
             'indexable',
-            (int)Tools::getValue('EVERSEO_INDEX_PAGE_META')
+            (int) Tools::getValue('EVERSEO_INDEX_PAGE_META')
         );
         // Set default manufacturer index
         $this->getColumnStructure(
             'ever_seo_manufacturer',
             'indexable',
-            (int)Tools::getValue('EVERSEO_INDEX_MANUFACTURER')
+            (int) Tools::getValue('EVERSEO_INDEX_MANUFACTURER')
         );
         // Set default supplier index
         $this->getColumnStructure(
             'ever_seo_supplier',
             'indexable',
-            (int)Tools::getValue('EVERSEO_INDEX_SUPPLIER')
+            (int) Tools::getValue('EVERSEO_INDEX_SUPPLIER')
         );
         // Set default category follow
         $this->getColumnStructure(
             'ever_seo_category',
             'follow',
-            (int)Tools::getValue('EVERSEO_FOLLOW_CATEGORY')
+            (int) Tools::getValue('EVERSEO_FOLLOW_CATEGORY')
         );
         // Set default product follow
         $this->getColumnStructure(
             'ever_seo_product',
             'follow',
-            (int)Tools::getValue('EVERSEO_FOLLOW_PRODUCT')
+            (int) Tools::getValue('EVERSEO_FOLLOW_PRODUCT')
         );
         // Set default page meta follow
         $this->getColumnStructure(
             'ever_seo_pagemeta',
             'follow',
-            (int)Tools::getValue('EVERSEO_FOLLOW_PAGE_META')
+            (int) Tools::getValue('EVERSEO_FOLLOW_PAGE_META')
         );
         // Set default manufacturer follow
         $this->getColumnStructure(
             'ever_seo_manufacturer',
             'follow',
-            (int)Tools::getValue('EVERSEO_FOLLOW_MANUFACTURER')
+            (int) Tools::getValue('EVERSEO_FOLLOW_MANUFACTURER')
         );
         // Set default supplier follow
         $this->getColumnStructure(
             'ever_seo_supplier',
             'follow',
-            (int)Tools::getValue('EVERSEO_FOLLOW_SUPPLIER')
+            (int) Tools::getValue('EVERSEO_FOLLOW_SUPPLIER')
         );
         // Set default category sitemap
         $this->getColumnStructure(
             'ever_seo_category',
             'allowed_sitemap',
-            (int)Tools::getValue('EVERSEO_SITEMAP_CATEGORY')
+            (int) Tools::getValue('EVERSEO_SITEMAP_CATEGORY')
         );
         // Set default product sitemap
         $this->getColumnStructure(
             'ever_seo_product',
             'allowed_sitemap',
-            (int)Tools::getValue('EVERSEO_SITEMAP_PRODUCT')
+            (int) Tools::getValue('EVERSEO_SITEMAP_PRODUCT')
         );
         // Set default page meta sitemap
         $this->getColumnStructure(
             'ever_seo_pagemeta',
             'allowed_sitemap',
-            (int)Tools::getValue('EVERSEO_SITEMAP_PAGE_META')
+            (int) Tools::getValue('EVERSEO_SITEMAP_PAGE_META')
         );
         // Set default manufacturer sitemap
         $this->getColumnStructure(
             'ever_seo_manufacturer',
             'allowed_sitemap',
-            (int)Tools::getValue('EVERSEO_SITEMAP_MANUFACTURER')
+            (int) Tools::getValue('EVERSEO_SITEMAP_MANUFACTURER')
         );
         // Set default supplier sitemap
         $this->getColumnStructure(
             'ever_seo_supplier',
             'allowed_sitemap',
-            (int)Tools::getValue('EVERSEO_SITEMAP_SUPPLIER')
+            (int) Tools::getValue('EVERSEO_SITEMAP_SUPPLIER')
         );
         // Generate robots.txt file if rewrite file in ON
-        if ((bool)Configuration::get('EVERSEO_ROBOTS_TXT_REWRITE')) {
+        if ((bool) Configuration::get('EVERSEO_ROBOTS_TXT_REWRITE')) {
             $this->generateRobots();
         }
         if (!Configuration::get('EVERSEO_INDEXNOW_KEY')) {
@@ -5733,25 +5725,25 @@ class Everpsseo extends Module
                 $this->addElementInTable(
                     'ever_seo_product',
                     'id_seo_product',
-                    (int)$params['object']->id,
-                    (int)$id_shop,
-                    (int)$language['id_lang']
+                    (int) $params['object']->id,
+                    (int) $id_shop,
+                    (int) $language['id_lang']
                 );
                 if (isset($params['object']->name[$language['id_lang']])
                     && !empty($params['object']->name[$language['id_lang']])
                 ) {
-                    if (in_array((int)$language['id_lang'], $allowedLangs)) {
+                    if (in_array((int) $language['id_lang'], $allowedLangs)) {
                         $this->autoSetTitle(
                             'id_seo_product',
-                            (int)$params['object']->id,
-                            (int)$id_shop,
-                            (int)$language['id_lang']
+                            (int) $params['object']->id,
+                            (int) $id_shop,
+                            (int) $language['id_lang']
                         );
                         $this->autoSetDescription(
                             'id_seo_product',
-                            (int)$params['object']->id,
-                            (int)$id_shop,
-                            (int)$language['id_lang']
+                            (int) $params['object']->id,
+                            (int) $id_shop,
+                            (int) $language['id_lang']
                         );
                     }
                 }
@@ -5788,12 +5780,12 @@ class Everpsseo extends Module
         $baseDomain = str_replace('www.', '', Tools::getHttpHost());
         $rules = Configuration::get('EVERHTACCESS')."\n\n";
         $prepend_rules = Configuration::get('EVERHTACCESS_PREPEND')."\n\n";
-        if ((bool)Configuration::get('EVERHTACCESS_404') === true) {
+        if ((bool) Configuration::get('EVERHTACCESS_404') === true) {
             $everseo_redirects = EverPsSeoRedirect::getRedirects(
-                (int)Context::getContext()->shop->id
+                (int) Context::getContext()->shop->id
             );
             foreach ($everseo_redirects as $redirect) {
-                switch ((int)$redirect->code) {
+                switch ((int) $redirect->code) {
                     case 301:
                         $prepend_rules .= 'Redirect permanent '.$redirect->not_found.' '.$redirect->redirection."\n\n";
                         break;
@@ -5812,12 +5804,12 @@ class Everpsseo extends Module
                 }
             }
         }
-        if ((bool)Configuration::get('EVERSEO_CLICKJACKING')) {
+        if ((bool) Configuration::get('EVERSEO_CLICKJACKING')) {
             $rules .= '<IfModule mod_headers.c>
 Header always append X-Frame-Options SAMEORIGIN
 </IfModule>'."\n\n";
         }
-        if ((bool)Configuration::get('EVERSEO_HOTLINKING')) {
+        if ((bool) Configuration::get('EVERSEO_HOTLINKING')) {
             $rules .= '# Team-Ever hotlinks protection
 RewriteCond %{HTTP_REFERER} !^$
 RewriteCond %{HTTP_REFERER} !^http(s)?://(www\.)?'.$baseDomain.' [NC]
@@ -5826,7 +5818,7 @@ RewriteCond %{HTTP_REFERER} !^http(s)?://(www\.)?facebook.com [NC]
 RewriteCond %{HTTP_REFERER} !^http(s)?://(www\.)?twitter.com [NC]
 RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         }
-        if ((bool)Configuration::get('EVERSEO_DEFLATE')) {
+        if ((bool) Configuration::get('EVERSEO_DEFLATE')) {
             $rules .= '<IfModule mod_deflate.c>
   # Compress HTML, CSS, JavaScript, Text, XML and fonts
   AddOutputFilterByType DEFLATE application/javascript
@@ -5917,22 +5909,22 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
     public function hookActionObjectLanguageAddAfter($params)
     {
-        $id_shop = (int)$this->context->shop->id;
-        $id_seo_lang = (int)$params['object']->id;
+        $id_shop = (int) $this->context->shop->id;
+        $id_seo_lang = (int) $params['object']->id;
         $seoAddLang = Db::getInstance()->insert(
             'ever_seo_lang',
             array(
-                'id_seo_lang' => (int)$id_seo_lang,
-                'id_shop' => (int)$id_shop,
-                'iso_code' => (string)$params['object']->iso_code,
-                'language_code' => (string)$params['object']->language_code,
+                'id_seo_lang' => (int) $id_seo_lang,
+                'id_shop' => (int) $id_shop,
+                'iso_code' => (string) $params['object']->iso_code,
+                'language_code' => (string) $params['object']->language_code,
             )
         );
         if ($seoAddLang) {
-            $this->updateSeoTables((int)$id_shop, (int)$id_seo_lang);
+            $this->updateSeoTables((int) $id_shop, (int) $id_seo_lang);
             return true;
         } else {
-            die('can\'t add SEO lang '.(int)$params['object']->id);
+            die('can\'t add SEO lang '.(int) $params['object']->id);
         }
     }
 
@@ -5949,22 +5941,22 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 $this->addElementInTable(
                     'ever_seo_category',
                     'id_seo_category',
-                    (int)$params['object']->id,
-                    (int)$id_shop,
-                    (int)$language['id_lang']
+                    (int) $params['object']->id,
+                    (int) $id_shop,
+                    (int) $language['id_lang']
                 );
-                if (in_array((int)$language['id_lang'], $allowedLangs)) {
+                if (in_array((int) $language['id_lang'], $allowedLangs)) {
                     $this->autoSetTitle(
                         'id_seo_category',
-                        (int)$params['object']->id,
-                        (int)$id_shop,
-                        (int)$language['id_lang']
+                        (int) $params['object']->id,
+                        (int) $id_shop,
+                        (int) $language['id_lang']
                     );
                     $this->autoSetDescription(
                         'id_seo_category',
-                        (int)$params['object']->id,
-                        (int)$id_shop,
-                        (int)$language['id_lang']
+                        (int) $params['object']->id,
+                        (int) $id_shop,
+                        (int) $language['id_lang']
                     );
                 }
             }
@@ -5984,22 +5976,22 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 $this->addElementInTable(
                     'ever_seo_cms',
                     'id_seo_cms',
-                    (int)$params['object']->id,
-                    (int)$id_shop,
-                    (int)$language['id_lang']
+                    (int) $params['object']->id,
+                    (int) $id_shop,
+                    (int) $language['id_lang']
                 );
-                if (in_array((int)$language['id_lang'], $allowedLangs)) {
+                if (in_array((int) $language['id_lang'], $allowedLangs)) {
                     $this->autoSetTitle(
                         'id_seo_cms',
-                        (int)$params['object']->id,
-                        (int)$id_shop,
-                        (int)$language['id_lang']
+                        (int) $params['object']->id,
+                        (int) $id_shop,
+                        (int) $language['id_lang']
                     );
                     $this->autoSetDescription(
                         'id_seo_cms',
-                        (int)$params['object']->id,
-                        (int)$id_shop,
-                        (int)$language['id_lang']
+                        (int) $params['object']->id,
+                        (int) $id_shop,
+                        (int) $language['id_lang']
                     );
                 }
             }
@@ -6019,22 +6011,22 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 $this->addElementInTable(
                     'ever_seo_manufacturer',
                     'id_seo_manufacturer',
-                    (int)$params['object']->id,
-                    (int)$id_shop,
-                    (int)$language['id_lang']
+                    (int) $params['object']->id,
+                    (int) $id_shop,
+                    (int) $language['id_lang']
                 );
-                if (in_array((int)$language['id_lang'], $allowedLangs)) {
+                if (in_array((int) $language['id_lang'], $allowedLangs)) {
                     $this->autoSetTitle(
                         'id_seo_manufacturer',
-                        (int)$params['object']->id,
-                        (int)$id_shop,
-                        (int)$language['id_lang']
+                        (int) $params['object']->id,
+                        (int) $id_shop,
+                        (int) $language['id_lang']
                     );
                     $this->autoSetDescription(
                         'id_seo_manufacturer',
-                        (int)$params['object']->id,
-                        (int)$id_shop,
-                        (int)$language['id_lang']
+                        (int) $params['object']->id,
+                        (int) $id_shop,
+                        (int) $language['id_lang']
                     );
                 }
             }
@@ -6054,22 +6046,22 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 $this->addElementInTable(
                     'ever_seo_supplier',
                     'id_seo_supplier',
-                    (int)$params['object']->id,
-                    (int)$id_shop,
-                    (int)$language['id_lang']
+                    (int) $params['object']->id,
+                    (int) $id_shop,
+                    (int) $language['id_lang']
                 );
-                if (in_array((int)$language['id_lang'], $allowedLangs)) {
+                if (in_array((int) $language['id_lang'], $allowedLangs)) {
                     $this->autoSetTitle(
                         'id_seo_supplier',
-                        (int)$params['object']->id,
-                        (int)$id_shop,
-                        (int)$language['id_lang']
+                        (int) $params['object']->id,
+                        (int) $id_shop,
+                        (int) $language['id_lang']
                     );
                     $this->autoSetDescription(
                         'id_seo_supplier',
-                        (int)$params['object']->id,
-                        (int)$id_shop,
-                        (int)$language['id_lang']
+                        (int) $params['object']->id,
+                        (int) $id_shop,
+                        (int) $language['id_lang']
                     );
                 }
             }
@@ -6085,17 +6077,17 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
         foreach (Language::getLanguages(false) as $lang) {
             $seoImage = EverPsSeoImage::getSeoImage(
-                (int)$image->id,
-                (int)$this->context->shop->id,
-                (int)$lang['id_lang']
+                (int) $image->id,
+                (int) $this->context->shop->id,
+                (int) $lang['id_lang']
             );
 
             if (!$seoImage) {
                 $seoImage = new EverPsSeoImage();
                 $alt =  EverPsSeoImage::changeImageAltShortcodes(
-                    (int)$image->id,
-                    (int)$lang['id_lang'],
-                    (int)Context::getContext()->shop->id
+                    (int) $image->id,
+                    (int) $lang['id_lang'],
+                    (int) Context::getContext()->shop->id
                 );
                 if (empty($alt)) {
                     continue;
@@ -6106,10 +6098,10 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     128
                 );
                 $seoImage->alt = $legend;
-                $seoImage->id_shop = (int)Context::getContext()->shop->id;
-                $seoImage->id_seo_lang = (int)$lang['id_lang'];
-                $seoImage->id_seo_product = (int)$image->id_product;
-                $seoImage->id_seo_img = (int)$image->id;
+                $seoImage->id_shop = (int) Context::getContext()->shop->id;
+                $seoImage->id_seo_lang = (int) $lang['id_lang'];
+                $seoImage->id_seo_product = (int) $image->id_product;
+                $seoImage->id_seo_img = (int) $image->id;
                 $seoImage->allowed_sitemap = true;
                 $seoImage->save();
             }
@@ -6124,7 +6116,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         $this->deleteElementFromTable(
             'ever_seo_lang',
             'id_seo_lang',
-            (int)$params['object']->id
+            (int) $params['object']->id
         );
     }
 
@@ -6136,7 +6128,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         $this->deleteElementFromTable(
             'ever_seo_product',
             'id_seo_product',
-            (int)$params['object']->id
+            (int) $params['object']->id
         );
     }
 
@@ -6148,7 +6140,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         $this->deleteElementFromTable(
             'ever_seo_category',
             'id_seo_category',
-            (int)$params['object']->id
+            (int) $params['object']->id
         );
     }
 
@@ -6160,7 +6152,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         $this->deleteElementFromTable(
             'ever_seo_cms',
             'id_seo_cms',
-            (int)$params['object']->id
+            (int) $params['object']->id
         );
     }
 
@@ -6172,7 +6164,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         $this->deleteElementFromTable(
             'ever_seo_manufacturer',
             'id_seo_manufacturer',
-            (int)$params['object']->id
+            (int) $params['object']->id
         );
     }
 
@@ -6184,7 +6176,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         $this->deleteElementFromTable(
             'ever_seo_supplier',
             'id_seo_supplier',
-            (int)$params['object']->id
+            (int) $params['object']->id
         );
     }
 
@@ -6196,7 +6188,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         $this->deleteElementFromTable(
             'ever_seo_image',
             'id_seo_img',
-            (int)$params['object']->id
+            (int) $params['object']->id
         );
     }
 
@@ -6206,15 +6198,15 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             return;
         }
         $shortcodes = EverPsSeoShortcode::getAllSeoShortcodes(
-            (int)Context::getContext()->shop->id,
-            (int)Context::getContext()->language->id
+            (int) Context::getContext()->shop->id,
+            (int) Context::getContext()->language->id
         );
         if (count($shortcodes) > 0) {
             foreach ($shortcodes as $shortcode) {
                 $params['content'] = str_replace(
-                    (string)$shortcode->shortcode,
-                    (string)$shortcode->content,
-                    (string)$params['content']
+                    (string) $shortcode->shortcode,
+                    (string) $shortcode->content,
+                    (string) $params['content']
                 );
             }
         }
@@ -6231,28 +6223,28 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         }
         foreach (Language::getLanguages(false) as $lang) {
             $seo_product = EverPsSeoProduct::getSeoProduct(
-                (int)$params['object']->id,
-                (int)$this->context->shop->id,
-                (int)$lang['id_lang']
+                (int) $params['object']->id,
+                (int) $this->context->shop->id,
+                (int) $lang['id_lang']
             );
             if (!Validate::isLoadedObject($seo_product)) {
                 $seo_product = new EverPsSeoProduct();
             }
             $product = new Product(
-                (int)$params['object']->id,
+                (int) $params['object']->id,
                 false,
-                (int)$lang['id_lang'],
-                (int)$this->context->shop->id
+                (int) $lang['id_lang'],
+                (int) $this->context->shop->id
             );
-            $seo_product->id_seo_product = (int)$params['object']->id;
-            $seo_product->id_shop = (int)$this->context->shop->id;
-            $seo_product->id_seo_lang = (int)$lang['id_lang'];
+            $seo_product->id_seo_product = (int) $params['object']->id;
+            $seo_product->id_shop = (int) $this->context->shop->id;
+            $seo_product->id_seo_lang = (int) $lang['id_lang'];
             if (empty($product->meta_title)) {
                 $this->autoSetTitle(
                     'id_seo_product',
-                    (int)$params['object']->id,
-                    (int)$this->context->shop->id,
-                    (int)$lang['id_lang']
+                    (int) $params['object']->id,
+                    (int) $this->context->shop->id,
+                    (int) $lang['id_lang']
                 );
             } else {
                 $seo_product->meta_title = $product->meta_title;
@@ -6260,20 +6252,20 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             if (empty($product->meta_description)) {
                 $this->autoSetDescription(
                     'id_seo_product',
-                    (int)$params['object']->id,
-                    (int)$this->context->shop->id,
-                    (int)$lang['id_lang']
+                    (int) $params['object']->id,
+                    (int) $this->context->shop->id,
+                    (int) $lang['id_lang']
                 );
             } else {
                 $seo_product->meta_description = $product->meta_description;
             }
             $seo_product->link_rewrite = $product->link_rewrite;
-            if ((bool)$product->active === false
+            if ((bool) $product->active === false
                 && (empty($product->redirect_type) || $product->redirect_type == '404')
             ) {
                 EverPsSeoProduct::inactiveRedirect(
-                    (int)$seo_product->id_seo_product,
-                    (int)$this->context->shop->id
+                    (int) $seo_product->id_seo_product,
+                    (int) $this->context->shop->id
                 );
             }
             $seo_product->save();
@@ -6288,21 +6280,21 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         }
         foreach (Language::getLanguages(false) as $lang) {
             $seoCategory = EverPsSeoCategory::getSeoCategory(
-                (int)$params['object']->id,
-                (int)$this->context->shop->id,
-                (int)$lang['id_lang']
+                (int) $params['object']->id,
+                (int) $this->context->shop->id,
+                (int) $lang['id_lang']
             );
             if (!$seoCategory) {
                 $seoCategory = new EverPsSeoCategory();
             }
             $category = new Category(
-                (int)$params['object']->id,
-                (int)$lang['id_lang'],
-                (int)$this->context->shop->id
+                (int) $params['object']->id,
+                (int) $lang['id_lang'],
+                (int) $this->context->shop->id
             );
-            $seoCategory->id_seo_category = (int)$params['object']->id;
-            $seoCategory->id_shop = (int)$this->context->shop->id;
-            $seoCategory->id_seo_lang = (int)$lang['id_lang'];
+            $seoCategory->id_seo_category = (int) $params['object']->id;
+            $seoCategory->id_shop = (int) $this->context->shop->id;
+            $seoCategory->id_seo_lang = (int) $lang['id_lang'];
             $seoCategory->meta_title = $category->meta_title;
             $seoCategory->meta_description = $category->meta_description;
             $seoCategory->link_rewrite = $category->link_rewrite;
@@ -6319,17 +6311,17 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
         foreach (Language::getLanguages(false) as $lang) {
             $seoImage = EverPsSeoImage::getSeoImage(
-                (int)$image->id,
-                (int)$this->context->shop->id,
-                (int)$lang['id_lang']
+                (int) $image->id,
+                (int) $this->context->shop->id,
+                (int) $lang['id_lang']
             );
 
             if (!$seoImage) {
                 $seoImage = new EverPsSeoImage();
                 $alt =  EverPsSeoImage::changeImageAltShortcodes(
-                    (int)$image->id,
-                    (int)$lang['id_lang'],
-                    (int)Context::getContext()->shop->id
+                    (int) $image->id,
+                    (int) $lang['id_lang'],
+                    (int) Context::getContext()->shop->id
                 );
                 if (empty($alt)) {
                     continue;
@@ -6340,10 +6332,10 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     128
                 );
                 $seoImage->alt = $legend;
-                $seoImage->id_shop = (int)$this->context->shop->id;
-                $seoImage->id_seo_lang = (int)$lang['id_lang'];
-                $seoImage->id_seo_product = (int)$image->id_product;
-                $seoImage->id_seo_img = (int)$image->id;
+                $seoImage->id_shop = (int) $this->context->shop->id;
+                $seoImage->id_seo_lang = (int) $lang['id_lang'];
+                $seoImage->id_seo_product = (int) $image->id_product;
+                $seoImage->id_seo_img = (int) $image->id;
                 $seoImage->allowed_sitemap = true;
                 $seoImage->save();
             }
@@ -6357,21 +6349,21 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         }
         foreach (Language::getLanguages(false) as $lang) {
             $seoCms = EverPsSeoCms::getSeoCms(
-                (int)$params['object']->id,
-                (int)$this->context->shop->id,
-                (int)$lang['id_lang']
+                (int) $params['object']->id,
+                (int) $this->context->shop->id,
+                (int) $lang['id_lang']
             );
             if (!$seoCms) {
                 $seoCms = new EverPsSeoCms();
             }
             $cms = new CMS(
-                (int)$params['object']->id,
-                (int)$this->context->shop->id,
-                (int)$lang['id_lang']
+                (int) $params['object']->id,
+                (int) $this->context->shop->id,
+                (int) $lang['id_lang']
             );
-            $seoCms->id_seo_cms = (int)$params['object']->id;
-            $seoCms->id_shop = (int)$this->context->shop->id;
-            $seoCms->id_seo_lang = (int)$lang['id_lang'];
+            $seoCms->id_seo_cms = (int) $params['object']->id;
+            $seoCms->id_shop = (int) $this->context->shop->id;
+            $seoCms->id_seo_lang = (int) $lang['id_lang'];
             $seoCms->meta_title = $cms->meta_title;
             $seoCms->meta_description = $cms->meta_description;
             $seoCms->link_rewrite = $cms->link_rewrite;
@@ -6387,21 +6379,21 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         }
         foreach (Language::getLanguages(false) as $lang) {
             $seoCmsCategory = EverPsSeoCmsCategory::getSeoCmsCategory(
-                (int)$params['object']->id,
-                (int)$this->context->shop->id,
-                (int)$lang['id_lang']
+                (int) $params['object']->id,
+                (int) $this->context->shop->id,
+                (int) $lang['id_lang']
             );
             if (!$seoCmsCategory) {
                 $seoCmsCategory = new getSeoCmsCategory();
             }
             $cmsCategory = new CMSCategory(
-                (int)$params['object']->id,
-                (int)$this->context->shop->id,
-                (int)$lang['id_lang']
+                (int) $params['object']->id,
+                (int) $this->context->shop->id,
+                (int) $lang['id_lang']
             );
-            $seoCmsCategory->id_seo_cms_category = (int)$params['object']->id;
-            $seoCmsCategory->id_shop = (int)$this->context->shop->id;
-            $seoCmsCategory->id_seo_lang = (int)$lang['id_lang'];
+            $seoCmsCategory->id_seo_cms_category = (int) $params['object']->id;
+            $seoCmsCategory->id_shop = (int) $this->context->shop->id;
+            $seoCmsCategory->id_seo_lang = (int) $lang['id_lang'];
             $seoCmsCategory->meta_title = $cmsCategory->meta_title;
             $seoCmsCategory->meta_description = $cmsCategory->meta_description;
             $seoCmsCategory->link_rewrite = $cmsCategory->link_rewrite;
@@ -6417,20 +6409,20 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         }
         foreach (Language::getLanguages(false) as $lang) {
             $seoManufacturer = EverPsSeoManufacturer::getSeoManufacturer(
-                (int)$params['object']->id,
-                (int)$this->context->shop->id,
-                (int)$lang['id_lang']
+                (int) $params['object']->id,
+                (int) $this->context->shop->id,
+                (int) $lang['id_lang']
             );
             if (!$seoManufacturer) {
                 $seoManufacturer = new EverPsSeoManufacturer();
             }
             $manufacturer = new Manufacturer(
-                (int)$params['object']->id,
-                (int)$lang['id_lang']
+                (int) $params['object']->id,
+                (int) $lang['id_lang']
             );
-            $seoManufacturer->id_seo_manufacturer = (int)$params['object']->id;
-            $seoManufacturer->id_shop = (int)$this->context->shop->id;
-            $seoManufacturer->id_seo_lang = (int)$lang['id_lang'];
+            $seoManufacturer->id_seo_manufacturer = (int) $params['object']->id;
+            $seoManufacturer->id_shop = (int) $this->context->shop->id;
+            $seoManufacturer->id_seo_lang = (int) $lang['id_lang'];
             $seoManufacturer->meta_title = $manufacturer->meta_title;
             $seoManufacturer->meta_description != $manufacturer->meta_description;
             $seoManufacturer->link_rewrite = $manufacturer->link_rewrite;
@@ -6445,20 +6437,20 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         }
         foreach (Language::getLanguages(false) as $lang) {
             $seoSupplier = EverPsSeoSupplier::getSeoSupplier(
-                (int)$params['object']->id,
-                (int)$this->context->shop->id,
-                (int)$lang['id_lang']
+                (int) $params['object']->id,
+                (int) $this->context->shop->id,
+                (int) $lang['id_lang']
             );
             if (!$seoSupplier) {
                 $seoSupplier = new EverPsSeoSupplier();
             }
             $supplier = new Supplier(
-                (int)$params['object']->id,
-                (int)$lang['id_lang']
+                (int) $params['object']->id,
+                (int) $lang['id_lang']
             );
-            $seoSupplier->id_seo_supplier = (int)$params['object']->id;
-            $seoSupplier->id_shop = (int)$this->context->shop->id;
-            $seoSupplier->id_seo_lang = (int)$lang['id_lang'];
+            $seoSupplier->id_seo_supplier = (int) $params['object']->id;
+            $seoSupplier->id_shop = (int) $this->context->shop->id;
+            $seoSupplier->id_seo_lang = (int) $lang['id_lang'];
             $seoSupplier->meta_title = $supplier->meta_title;
             $seoSupplier->meta_description = $supplier->meta_description;
             $seoSupplier->link_rewrite = $supplier->link_rewrite;
@@ -6477,16 +6469,16 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         foreach ($seotable as $table) {
             $seoObj = $this->getSeoObjByPsTable($table);
             $update = '
-                INSERT INTO '._DB_PREFIX_.pSQL($table).' (
+                INSERT INTO '. _DB_PREFIX_ .pSQL($table).' (
                     '.pSQL($seoObj).',
                     id_shop,
                     id_seo_lang
                 )
                 SELECT
                     '.pSQL($seoObj).',
-                    '.(int)$id_shop.',
-                    '.(int)$id_seo_lang.'
-                FROM '._DB_PREFIX_.pSQL($table).'
+                    '.(int) $id_shop.',
+                    '.(int) $id_seo_lang.'
+                FROM '. _DB_PREFIX_ .pSQL($table).'
             ';
             if (!Db::getInstance()->Execute($update)) {
                 die('can\'t update SEO tables');
@@ -6499,9 +6491,9 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         return Db::getInstance()->insert(
             $table,
             array(
-                $object => (int)$id_element,
-                'id_shop' => (int)$id_shop,
-                'id_seo_lang' => (int)$id_lang
+                $object => (int) $id_element,
+                'id_shop' => (int) $id_shop,
+                'id_seo_lang' => (int) $id_lang
             )
         );
     }
@@ -6511,23 +6503,23 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         switch ($object) {
             case 'id_seo_product':
                 $meta_title = EverPsSeoProduct::changeProductTitleShortcodes(
-                    (int)$id_element,
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_element,
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
                 $meta_title = Tools::substr($meta_title, 0, 128);
 
-                $sql = 'UPDATE `'._DB_PREFIX_.'product_lang`
+                $sql = 'UPDATE `' . _DB_PREFIX_ . 'product_lang`
                 SET meta_title = "'.pSQL($meta_title).'"
-                WHERE id_lang = '.(int)$id_lang.'
-                AND id_shop = '.(int)$id_shop.'
-                AND id_product = '.(int)$id_element;
+                WHERE id_lang = '.(int) $id_lang.'
+                AND id_shop = ' . (int) $id_shop . '
+                AND id_product = '.(int) $id_element;
 
-                $sql2 = 'UPDATE `'._DB_PREFIX_.'ever_seo_product`
+                $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_product`
                 SET meta_title = "'.pSQL($meta_title).'"
-                WHERE id_seo_lang = '.(int)$id_lang.'
-                AND id_shop = '.(int)$this->context->shop->id.'
-                AND id_seo_product = '.(int)$id_element;
+                WHERE id_seo_lang = '.(int) $id_lang.'
+                AND id_shop = '.(int) $this->context->shop->id.'
+                AND id_seo_product = '.(int) $id_element;
                 if (!Db::getInstance()->execute($sql)) {
                     $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
                 } else {
@@ -6537,23 +6529,23 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
             case 'id_seo_category':
                 $meta_title = EverPsSeoCategory::changeCategoryTitleShortcodes(
-                    (int)$id_element,
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_element,
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
                 $meta_title = Tools::substr($meta_title, 0, 128);
 
-                $sql = 'UPDATE `'._DB_PREFIX_.'category_lang`
+                $sql = 'UPDATE `' . _DB_PREFIX_ . 'category_lang`
                 SET meta_title = "'.pSQL($meta_title).'"
-                WHERE id_lang = '.(int)$id_lang.'
-                AND id_shop = '.(int)$id_shop.'
-                AND id_category = '.(int)$id_element;
+                WHERE id_lang = '.(int) $id_lang.'
+                AND id_shop = ' . (int) $id_shop . '
+                AND id_category = '.(int) $id_element;
 
-                $sql2 = 'UPDATE `'._DB_PREFIX_.'ever_seo_category`
+                $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_category`
                 SET meta_title = "'.pSQL($meta_title).'"
-                WHERE id_seo_lang = '.(int)$id_lang.'
-                AND id_shop = '.(int)$id_shop.'
-                AND id_seo_category = '.(int)$id_element;
+                WHERE id_seo_lang = '.(int) $id_lang.'
+                AND id_shop = ' . (int) $id_shop . '
+                AND id_seo_category = '.(int) $id_element;
                 if (!Db::getInstance()->execute($sql)) {
                     $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
                 } else {
@@ -6563,23 +6555,23 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
             case 'id_seo_cms':
                 $meta_title = EverPsSeoCms::changeCmsTitleShortcodes(
-                    (int)$id_element,
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_element,
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
                 $meta_title = Tools::substr(pSQL($meta_title), 0, 128);
 
-                $sql = 'UPDATE `'._DB_PREFIX_.'cms_lang`
+                $sql = 'UPDATE `' . _DB_PREFIX_ . 'cms_lang`
                 SET meta_title = "'.pSQL($meta_title).'"
-                WHERE id_lang = '.(int)$id_lang.'
-                AND id_shop = '.(int)$id_shop.'
-                AND id_cms = '.(int)$id_element;
+                WHERE id_lang = '.(int) $id_lang.'
+                AND id_shop = ' . (int) $id_shop . '
+                AND id_cms = '.(int) $id_element;
 
-                $sql2 = 'UPDATE `'._DB_PREFIX_.'ever_seo_cms`
+                $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_cms`
                 SET meta_title = "'.pSQL($meta_title).'"
-                WHERE id_seo_lang = '.(int)$id_lang.'
-                AND id_shop = '.(int)$id_shop.'
-                AND id_seo_cms = '.(int)$id_element;
+                WHERE id_seo_lang = '.(int) $id_lang.'
+                AND id_shop = ' . (int) $id_shop . '
+                AND id_seo_cms = '.(int) $id_element;
                 if (!Db::getInstance()->execute($sql)) {
                     $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
                 } else {
@@ -6589,23 +6581,23 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
             case 'id_seo_manufacturer':
                 $meta_title = EverPsSeoManufacturer::changeManufacturerTitleShortcodes(
-                    (int)$id_element,
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_element,
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
                 $meta_title = Tools::substr(pSQL($meta_title), 0, 128);
 
-                $sql = 'UPDATE `'._DB_PREFIX_.'manufacturer_lang`
+                $sql = 'UPDATE `' . _DB_PREFIX_ . 'manufacturer_lang`
                 SET meta_title = "'.pSQL($meta_title).'"
-                WHERE id_lang = '.(int)$id_lang.'
-                AND id_shop = '.(int)$id_shop.'
-                AND id_manufacturer = '.(int)$id_element;
+                WHERE id_lang = '.(int) $id_lang.'
+                AND id_shop = ' . (int) $id_shop . '
+                AND id_manufacturer = '.(int) $id_element;
 
-                $sql2 = 'UPDATE `'._DB_PREFIX_.'ever_seo_manufacturer`
+                $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_manufacturer`
                 SET meta_title = "'.pSQL($meta_title).'"
-                WHERE id_seo_lang = '.(int)$id_lang.'
-                AND id_shop = '.(int)$id_shop.'
-                AND id_seo_manufacturer = '.(int)$id_element;
+                WHERE id_seo_lang = '.(int) $id_lang.'
+                AND id_shop = ' . (int) $id_shop . '
+                AND id_seo_manufacturer = '.(int) $id_element;
                 if (!Db::getInstance()->execute($sql)) {
                     $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
                 } else {
@@ -6615,23 +6607,23 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
             case 'id_seo_supplier':
                 $meta_title = EverPsSeoSupplier::changeSupplierTitleShortcodes(
-                    (int)$id_element,
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_element,
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
                 $meta_title = Tools::substr($meta_title, 0, 128);
 
-                $sql = 'UPDATE `'._DB_PREFIX_.'supplier_lang`
+                $sql = 'UPDATE `' . _DB_PREFIX_ . 'supplier_lang`
                 SET meta_title = "'.pSQL($meta_title).'"
-                WHERE id_lang = '.(int)$id_lang.'
-                AND id_shop = '.(int)$id_shop.'
-                AND id_supplier = '.(int)$id_element;
+                WHERE id_lang = '.(int) $id_lang.'
+                AND id_shop = ' . (int) $id_shop . '
+                AND id_supplier = '.(int) $id_element;
 
-                $sql2 = 'UPDATE `'._DB_PREFIX_.'ever_seo_supplier`
+                $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_supplier`
                 SET meta_title = "'.pSQL($meta_title).'"
-                WHERE id_seo_lang = '.(int)$id_lang.'
-                AND id_shop = '.(int)$id_shop.'
-                AND id_seo_supplier = '.(int)$id_element;
+                WHERE id_seo_lang = '.(int) $id_lang.'
+                AND id_shop = ' . (int) $id_shop . '
+                AND id_seo_supplier = '.(int) $id_element;
                 if (!Db::getInstance()->execute($sql)) {
                     $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
                 } else {
@@ -6641,14 +6633,14 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
             case 'id_seo_pagemeta':
                 $meta_title = EverPsSeoPageMeta::changePagemetaTitleShortcodes(
-                    (int)$id_element,
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_element,
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
                 $pageMeta = new Meta(
-                    (int)$id_element,
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_element,
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
                 $pageMeta->title = Tools::substr(pSQL($meta_title), 0, 128);
                 // TODO : use SQL query
@@ -6664,23 +6656,23 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         switch ($object) {
             case 'id_seo_product':
                 $meta_description = EverPsSeoProduct::changeProductMetadescShortcodes(
-                    (int)$id_element,
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_element,
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
                 $meta_description = Tools::substr($meta_description, 0, 250);
 
-                $sql = 'UPDATE `'._DB_PREFIX_.'product_lang`
+                $sql = 'UPDATE `' . _DB_PREFIX_ . 'product_lang`
                 SET meta_description = "'.pSQL($meta_description).'"
-                WHERE id_lang = '.(int)$id_lang.'
-                AND id_shop = '.(int)$id_shop.'
-                AND id_product = '.(int)$id_element;
+                WHERE id_lang = '.(int) $id_lang.'
+                AND id_shop = ' . (int) $id_shop . '
+                AND id_product = '.(int) $id_element;
 
-                $sql2 = 'UPDATE `'._DB_PREFIX_.'ever_seo_product`
+                $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_product`
                 SET meta_description = "'.pSQL($meta_description).'"
-                WHERE id_seo_lang = '.(int)$id_lang.'
-                AND id_shop = '.(int)$id_shop.'
-                AND id_seo_product = '.(int)$id_element;
+                WHERE id_seo_lang = '.(int) $id_lang.'
+                AND id_shop = ' . (int) $id_shop . '
+                AND id_seo_product = '.(int) $id_element;
                 if (!Db::getInstance()->execute($sql)) {
                     $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
                 } else {
@@ -6690,23 +6682,23 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
             case 'id_seo_category':
                 $meta_description = EverPsSeoCategory::changeCategoryMetadescShortcodes(
-                    (int)$id_element,
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_element,
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
                 $meta_description = Tools::substr($meta_description, 0, 250);
 
-                $sql = 'UPDATE `'._DB_PREFIX_.'category_lang`
+                $sql = 'UPDATE `' . _DB_PREFIX_ . 'category_lang`
                 SET meta_description = "'.pSQL($meta_description).'"
-                WHERE id_lang = '.(int)$id_lang.'
-                AND id_shop = '.(int)$id_shop.'
-                AND id_category = '.(int)$id_element;
+                WHERE id_lang = '.(int) $id_lang.'
+                AND id_shop = ' . (int) $id_shop . '
+                AND id_category = '.(int) $id_element;
 
-                $sql2 = 'UPDATE `'._DB_PREFIX_.'ever_seo_category`
+                $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_category`
                 SET meta_description = "'.pSQL($meta_description).'"
-                WHERE id_seo_lang = '.(int)$id_lang.'
-                AND id_shop = '.(int)$id_shop.'
-                AND id_seo_category = '.(int)$id_element;
+                WHERE id_seo_lang = '.(int) $id_lang.'
+                AND id_shop = ' . (int) $id_shop . '
+                AND id_seo_category = '.(int) $id_element;
                 if (!Db::getInstance()->execute($sql)) {
                     $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
                 } else {
@@ -6716,23 +6708,23 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
             case 'id_seo_cms':
                 $meta_description = EverPsSeoCms::changeCmsMetadescShortcodes(
-                    (int)$id_element,
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_element,
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
                 $meta_description = Tools::substr($meta_description, 0, 250);
 
-                $sql = 'UPDATE `'._DB_PREFIX_.'cms_lang`
+                $sql = 'UPDATE `' . _DB_PREFIX_ . 'cms_lang`
                 SET meta_description = "'.pSQL($meta_description).'"
-                WHERE id_lang = '.(int)$id_lang.'
-                AND id_shop = '.(int)$id_shop.'
-                AND id_cms = '.(int)$id_element;
+                WHERE id_lang = '.(int) $id_lang.'
+                AND id_shop = ' . (int) $id_shop . '
+                AND id_cms = '.(int) $id_element;
 
-                $sql2 = 'UPDATE `'._DB_PREFIX_.'ever_seo_cms`
+                $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_cms`
                 SET meta_description = "'.pSQL($meta_description).'"
-                WHERE id_seo_lang = '.(int)$id_lang.'
-                AND id_shop = '.(int)$id_shop.'
-                AND id_seo_cms = '.(int)$id_element;
+                WHERE id_seo_lang = '.(int) $id_lang.'
+                AND id_shop = ' . (int) $id_shop . '
+                AND id_seo_cms = '.(int) $id_element;
                 if (!Db::getInstance()->execute($sql)) {
                     $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
                 } else {
@@ -6742,23 +6734,23 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
             case 'id_seo_manufacturer':
                 $meta_description = EverPsSeoManufacturer::changeManufacturerMetadescShortcodes(
-                    (int)$id_element,
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_element,
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
                 $meta_description = Tools::substr($meta_description, 0, 250);
 
-                $sql = 'UPDATE `'._DB_PREFIX_.'manufacturer_lang`
+                $sql = 'UPDATE `' . _DB_PREFIX_ . 'manufacturer_lang`
                 SET meta_description = "'.pSQL($meta_description).'"
-                WHERE id_lang = '.(int)$id_lang.'
-                AND id_shop = '.(int)$id_shop.'
-                AND id_manufacturer = '.(int)$id_element;
+                WHERE id_lang = '.(int) $id_lang.'
+                AND id_shop = ' . (int) $id_shop . '
+                AND id_manufacturer = '.(int) $id_element;
 
-                $sql2 = 'UPDATE `'._DB_PREFIX_.'ever_seo_manufacturer`
+                $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_manufacturer`
                 SET meta_description = "'.pSQL($meta_description).'"
-                WHERE id_seo_lang = '.(int)$id_lang.'
-                AND id_shop = '.(int)$id_shop.'
-                AND id_seo_manufacturer = '.(int)$id_element;
+                WHERE id_seo_lang = '.(int) $id_lang.'
+                AND id_shop = ' . (int) $id_shop . '
+                AND id_seo_manufacturer = '.(int) $id_element;
                 if (!Db::getInstance()->execute($sql)) {
                     $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
                 } else {
@@ -6768,23 +6760,23 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
             case 'id_seo_supplier':
                 $meta_description = EverPsSeoSupplier::changeSupplierMetadescShortcodes(
-                    (int)$id_element,
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_element,
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
                 $meta_description = Tools::substr(pSQL($meta_description), 0, 250);
 
-                $sql = 'UPDATE `'._DB_PREFIX_.'supplier_lang`
+                $sql = 'UPDATE `' . _DB_PREFIX_ . 'supplier_lang`
                 SET meta_description = "'.pSQL($meta_description).'"
-                WHERE id_lang = '.(int)$id_lang.'
-                AND id_shop = '.(int)$id_shop.'
-                AND id_supplier = '.(int)$id_element;
+                WHERE id_lang = '.(int) $id_lang.'
+                AND id_shop = ' . (int) $id_shop . '
+                AND id_supplier = '.(int) $id_element;
 
-                $sql2 = 'UPDATE `'._DB_PREFIX_.'ever_seo_supplier`
+                $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_supplier`
                 SET meta_description = "'.pSQL($meta_description).'"
-                WHERE id_seo_lang = '.(int)$id_lang.'
-                AND id_shop = '.(int)$id_shop.'
-                AND id_seo_supplier = '.(int)$id_element;
+                WHERE id_seo_lang = '.(int) $id_lang.'
+                AND id_shop = ' . (int) $id_shop . '
+                AND id_seo_supplier = '.(int) $id_element;
                 if (!Db::getInstance()->execute($sql)) {
                     $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
                 } else {
@@ -6794,14 +6786,14 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
             case 'id_seo_pagemeta':
                 $meta_description = EverPsSeoPageMeta::changePagemetaMetadescShortcodes(
-                    (int)$id_element,
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_element,
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
                 $pageMeta = new Meta(
-                    (int)$id_element,
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_element,
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
                 $pageMeta->meta_description = Tools::substr(pSQL($meta_description), 0, 250);
                 // TODO : use SQL query
@@ -6820,9 +6812,9 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             $id_shop
         );
         $image = new Image(
-            (int)$id_element,
-            (int)$id_lang,
-            (int)$id_shop
+            (int) $id_element,
+            (int) $id_lang,
+            (int) $id_shop
         );
         $legend = Tools::substr(
             strip_tags($alt),
@@ -6846,7 +6838,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             $id_shop
         );
         $everImg = new EverPsSeoImage(
-            (int)$id_ever_seo_image
+            (int) $id_ever_seo_image
         );
         $legend = Tools::substr(
             strip_tags($alt),
@@ -6868,66 +6860,66 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         switch ($object) {
             case 'id_seo_product':
                 $description = EverPsSeoProduct::changeProductDescShortcodes(
-                    (int)$id_element,
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_element,
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
 
                 if (empty($description)) {
                     return;
                 }
                 $product = new Product(
-                    (int)$id_element,
+                    (int) $id_element,
                     false,
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
                 if (!in_array($product->id_category_default, $this->getAllowedGeneratorCategories(true))) {
                     return;
                 }
 
-                if ((bool)Configuration::get('EVERSEO_DELETE_PRODUCT_CONTENT') === true) {
+                if ((bool) Configuration::get('EVERSEO_DELETE_PRODUCT_CONTENT') === true) {
                     $product->description = $description;
                 } else {
                     $product->description .= $description;
                 }
                 $meta_title = Tools::substr($meta_title, 0, 128);
 
-                $sql_desc = 'UPDATE `'._DB_PREFIX_.'product_lang`
+                $sql_desc = 'UPDATE `' . _DB_PREFIX_ . 'product_lang`
                     SET description = "'.pSQL($product->description, true).'"
-                    WHERE id_lang = '.(int)$id_lang.'
-                    AND id_shop = '.(int)$id_shop.'
-                    AND id_product = '.(int)$id_element;
+                    WHERE id_lang = '.(int) $id_lang.'
+                    AND id_shop = ' . (int) $id_shop . '
+                    AND id_product = '.(int) $id_element;
 
                 if (!Db::getInstance()->execute($sql_desc)) {
                     return false;
                 }
 
-                if ((bool)Configuration::get('EVERSEO_BOTTOM_PRODUCT_CONTENT') === true) {
+                if ((bool) Configuration::get('EVERSEO_BOTTOM_PRODUCT_CONTENT') === true) {
                     $obj = EverPsSeoProduct::getSeoProduct(
-                        (int)$id_element,
-                        (int)$id_lang,
-                        (int)$id_shop
+                        (int) $id_element,
+                        (int) $id_lang,
+                        (int) $id_shop
                     );
 
                     $descriptionBottom = EverPsSeoProduct::changeProductBottomShortcodes(
-                        (int)$id_element,
-                        (int)$id_lang,
-                        (int)$id_shop
+                        (int) $id_element,
+                        (int) $id_lang,
+                        (int) $id_shop
                     );
                     if (empty($descriptionBottom)) {
                         return;
                     }
-                    if ((bool)Configuration::get('EVERSEO_DELETE_PRODUCT_CONTENT') === false) {
+                    if ((bool) Configuration::get('EVERSEO_DELETE_PRODUCT_CONTENT') === false) {
                         $obj->bottom_content = $obj->bottom_content.' '.$descriptionBottom;
                     } else {
                         $obj->bottom_content = $descriptionBottom;
                     }
-                    $sql_ever_desc = 'UPDATE `'._DB_PREFIX_.'ever_seo_product`
+                    $sql_ever_desc = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_product`
                         SET bottom_content = "'.pSQL($obj->bottom_content, true).'"
-                        WHERE id_seo_lang = '.(int)$id_lang.'
-                        AND id_shop = '.(int)$id_shop.'
-                        AND id_seo_product = '.(int)$id_element;
+                        WHERE id_seo_lang = '.(int) $id_lang.'
+                        AND id_shop = ' . (int) $id_shop . '
+                        AND id_seo_product = '.(int) $id_element;
 
                     if (!Db::getInstance()->execute($sql_ever_desc)) {
                         return false;
@@ -6937,23 +6929,23 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
             case 'id_seo_category':
                 $description = EverPsSeoCategory::changeCategoryDescShortcodes(
-                    (int)$id_element,
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_element,
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
                 if (empty($description)) {
                     return;
                 }
                 $category = new Category(
-                    (int)$id_element,
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_element,
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
                 if (!in_array($category->id, $this->getAllowedGeneratorCategories())) {
                     return;
                 }
-                if ((bool)Configuration::get('EVERSEO_BOTTOM_CATEGORY_CONTENT') === false) {
-                    if ((bool)Configuration::get('EVERSEO_DELETE_CATEGORY_CONTENT')) {
+                if ((bool) Configuration::get('EVERSEO_BOTTOM_CATEGORY_CONTENT') === false) {
+                    if ((bool) Configuration::get('EVERSEO_DELETE_CATEGORY_CONTENT')) {
                         $category->description = $description;
                     } else {
                         $category->description = $category->description.' '.$description;
@@ -6966,11 +6958,11 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     }
                 } else {
                     $obj = EverPsSeoCategory::getSeoCategory(
-                        (int)$id_element,
-                        (int)$id_lang,
-                        (int)$id_shop
+                        (int) $id_element,
+                        (int) $id_lang,
+                        (int) $id_shop
                     );
-                    if ((bool)Configuration::get('EVERSEO_DELETE_CATEGORY_CONTENT') === false) {
+                    if ((bool) Configuration::get('EVERSEO_DELETE_CATEGORY_CONTENT') === false) {
                         $obj->bottom_content = $obj->bottom_content.' '.$description;
                     } else {
                         $obj->bottom_content = $description;
@@ -6981,29 +6973,29 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
             case 'id_seo_manufacturer':
                 $description = EverPsSeoManufacturer::changeManufacturerDescShortcodes(
-                    (int)$id_element,
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_element,
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
                 if (empty($description)) {
                     return;
                 }
                 $manufacturer = new Manufacturer(
-                    (int)$id_element,
-                    (int)$id_lang
+                    (int) $id_element,
+                    (int) $id_lang
                 );
-                if ((bool)Configuration::get('EVERSEO_BOTTOM_MANUFACTURER_CONTENT') === false) {
+                if ((bool) Configuration::get('EVERSEO_BOTTOM_MANUFACTURER_CONTENT') === false) {
                     $manufacturer->description = Tools::substr(pSQL($description), 0, 250);
                     if ($manufacturer->save()) {
                         return true;
                     }
                 } else {
                     $obj = EverPsSeoManufacturer::getSeoManufacturer(
-                        (int)$id_element,
-                        (int)$id_lang,
-                        (int)$id_shop
+                        (int) $id_element,
+                        (int) $id_lang,
+                        (int) $id_shop
                     );
-                    if ((bool)Configuration::get('EVERSEO_DELETE_MANUFACTURER_CONTENT') === false) {
+                    if ((bool) Configuration::get('EVERSEO_DELETE_MANUFACTURER_CONTENT') === false) {
                         $obj->bottom_content = $obj->bottom_content.' '.$description;
                     } else {
                         $obj->bottom_content = $description;
@@ -7014,29 +7006,29 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
             case 'id_seo_supplier':
                 $description = EverPsSeoSupplier::changeSupplierDescShortcodes(
-                    (int)$id_element,
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_element,
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
                 if (empty($description)) {
                     return;
                 }
                 $supplier = new Supplier(
-                    (int)$id_element,
-                    (int)$id_lang
+                    (int) $id_element,
+                    (int) $id_lang
                 );
-                if ((bool)Configuration::get('EVERSEO_BOTTOM_SUPPLIER_CONTENT') === false) {
+                if ((bool) Configuration::get('EVERSEO_BOTTOM_SUPPLIER_CONTENT') === false) {
                     $supplier->description = Tools::substr(pSQL($description), 0, 250);
                     if ($supplier->save()) {
                         return true;
                     }
                 } else {
                     $obj = EverPsSeoSupplier::getSeoSupplier(
-                        (int)$id_element,
-                        (int)$id_lang,
-                        (int)$id_shop
+                        (int) $id_element,
+                        (int) $id_lang,
+                        (int) $id_shop
                     );
-                    if ((bool)Configuration::get('EVERSEO_DELETE_SUPPLIER_CONTENT') === false) {
+                    if ((bool) Configuration::get('EVERSEO_DELETE_SUPPLIER_CONTENT') === false) {
                         $obj->bottom_content = $obj->bottom_content.' '.$description;
                     } else {
                         $obj->bottom_content = $description;
@@ -7052,33 +7044,33 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         switch ($object) {
             case 'id_seo_product':
                 $description_short = EverPsSeoProduct::changeProductShortDescShortcodes(
-                    (int)$id_element,
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_element,
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
                 if (empty($description_short)) {
                     return;
                 }
                 $product = new Product(
-                    (int)$id_element,
+                    (int) $id_element,
                     false,
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
                 if (!in_array($product->id_category_default, $this->getAllowedGeneratorCategories(true))) {
                     return;
                 }
-                if ((bool)Configuration::get('EVERSEO_DELETE_PRODUCT_CONTENT')) {
+                if ((bool) Configuration::get('EVERSEO_DELETE_PRODUCT_CONTENT')) {
                     $product->description_short = $description_short;
                 } else {
                     $product->description_short .= $description_short;
                 }
 
-                $sql_desc_short = 'UPDATE `'._DB_PREFIX_.'product_lang`
+                $sql_desc_short = 'UPDATE `' . _DB_PREFIX_ . 'product_lang`
                     SET description_short = "'.pSQL($product->description_short, true).'"
-                    WHERE id_lang = '.(int)$id_lang.'
-                    AND id_shop = '.(int)$id_shop.'
-                    AND id_product = '.(int)$id_element;
+                    WHERE id_lang = '.(int) $id_lang.'
+                    AND id_shop = ' . (int) $id_shop . '
+                    AND id_product = '.(int) $id_element;
 
                 if (Db::getInstance()->execute($sql_desc_short)) {
                     return true;
@@ -7091,7 +7083,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
     {
         return Db::getInstance()->delete(
             $table,
-            $object.' = '.(int)$id_element
+            $object.' = '.(int) $id_element
         );
     }
 #################### END OBJECT ADD/DELETE ####################
@@ -7099,12 +7091,12 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
     public function hookDisplayAdminProductsSeoStepBottom($params)
     {
-        $id_product = (int)$params['id_product'];
+        $id_product = (int) $params['id_product'];
         $link = new Link();
         $seo_product = EverPsSeoProduct::getSeoProduct(
-            (int)$id_product,
-            (int)Context::getContext()->shop->id,
-            (int)Context::getContext()->language->id
+            (int) $id_product,
+            (int) Context::getContext()->shop->id,
+            (int) Context::getContext()->language->id
         );
         $this->context->smarty->assign(array(
             'seo_product' => $seo_product,
@@ -7129,40 +7121,40 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         if (!in_array(Tools::getValue('controller'), $allowed_controllers)) {
             return;
         }
-        if ((int)Tools::getValue('page') > 0) {
+        if ((int) Tools::getValue('page') > 0) {
             return;
         }
         $controller_name = Tools::getValue('controller');
         switch ($controller_name) {
             case 'manufacturer':
                 $obj = EverPsSeoManufacturer::getSeoManufacturer(
-                    (int)Tools::getValue('id_manufacturer'),
-                    (int)Context::getContext()->shop->id,
-                    (int)Context::getContext()->language->id
+                    (int) Tools::getValue('id_manufacturer'),
+                    (int) Context::getContext()->shop->id,
+                    (int) Context::getContext()->language->id
                 );
                 break;
 
             case 'supplier':
                 $obj = EverPsSeoSupplier::getSeoSupplier(
-                    (int)Tools::getValue('id_supplier'),
-                    (int)Context::getContext()->shop->id,
-                    (int)Context::getContext()->language->id
+                    (int) Tools::getValue('id_supplier'),
+                    (int) Context::getContext()->shop->id,
+                    (int) Context::getContext()->language->id
                 );
                 break;
 
             case 'category':
                 $obj = EverPsSeoCategory::getSeoCategory(
-                    (int)Tools::getValue('id_category'),
-                    (int)Context::getContext()->shop->id,
-                    (int)Context::getContext()->language->id
+                    (int) Tools::getValue('id_category'),
+                    (int) Context::getContext()->shop->id,
+                    (int) Context::getContext()->language->id
                 );
                 break;
 
             case 'product':
                 $obj = EverPsSeoProduct::getSeoProduct(
-                    (int)Tools::getValue('id_product'),
-                    (int)Context::getContext()->shop->id,
-                    (int)Context::getContext()->language->id
+                    (int) Tools::getValue('id_product'),
+                    (int) Context::getContext()->shop->id,
+                    (int) Context::getContext()->language->id
                 );
                 break;
 
@@ -7184,35 +7176,35 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
     public function hookDisplayReassurance()
     {
-        if (!(int)Tools::getValue('id_product')) {
+        if (!(int) Tools::getValue('id_product')) {
             return;
         }
-        $id_product = (int)Tools::getValue('id_product');
+        $id_product = (int) Tools::getValue('id_product');
         $cacheId = $this->getCacheId($this->name.'-reassurance-'.$id_product.'-'.date('Ymd'));
         if (!$this->isCached('reassurance.tpl', $cacheId)) {
             $product = new Product(
-                (int)$id_product,
+                (int) $id_product,
                 false,
-                (int)$this->context->language->id,
-                (int)$this->context->shop->id
+                (int) $this->context->language->id,
+                (int) $this->context->shop->id
             );
-            if ((int)$product->id_manufacturer
-                && (bool)Configuration::get('EVERSEO_MANUFACTURER_REASSURANCE')
+            if ((int) $product->id_manufacturer
+                && (bool) Configuration::get('EVERSEO_MANUFACTURER_REASSURANCE')
             ) {
                 $manufacturer = new Manufacturer(
-                    (int)$product->id_manufacturer,
-                    (int)$this->context->language->id
+                    (int) $product->id_manufacturer,
+                    (int) $this->context->language->id
                 );
                 $this->context->smarty->assign(array(
                     'manufacturer' => $manufacturer,
                 ));
             }
-            if ((int)$product->id_supplier
-                && (bool)Configuration::get('EVERSEO_SUPPLIER_REASSURANCE')
+            if ((int) $product->id_supplier
+                && (bool) Configuration::get('EVERSEO_SUPPLIER_REASSURANCE')
             ) {
                 $supplier = new Supplier(
-                    (int)$product->id_supplier,
-                    (int)$this->context->language->id
+                    (int) $product->id_supplier,
+                    (int) $this->context->language->id
                 );
                 $this->context->smarty->assign(array(
                     'supplier' => $supplier,
@@ -7234,28 +7226,28 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
     public function hookDisplayOrderConfirmation($params)
     {
         $order = $params['order'];
-        $address = new Address((int)$order->id_address_delivery);
-        $carrier = new Carrier((int)$order->id_carrier);
+        $address = new Address((int) $order->id_address_delivery);
+        $carrier = new Carrier((int) $order->id_carrier);
         $currency = $this->context->currency;
         $products = [];
         foreach ($order->getProducts() as $prod) {
             $product = new Product(
-                (int)$prod['id_product'],
+                (int) $prod['id_product'],
                 false,
-                (int)$this->context->language->id,
-                (int)$this->context->shop->id
+                (int) $this->context->language->id,
+                (int) $this->context->shop->id
             );
             $category = new Category(
-                (int)$product->id_category_default,
-                (int)$this->context->language->id,
-                (int)$this->context->shop->id
+                (int) $product->id_category_default,
+                (int) $this->context->language->id,
+                (int) $this->context->shop->id
             );
             $manufacturer = new Manufacturer(
-                (int)$product->id_manufacturer,
-                (int)$this->context->language->id,
-                (int)$this->context->shop->id
+                (int) $product->id_manufacturer,
+                (int) $this->context->language->id,
+                (int) $this->context->shop->id
             );
-            $product->qty_ordered = (int)$prod['product_quantity'];
+            $product->qty_ordered = (int) $prod['product_quantity'];
             $product->category_name = $category->name;
             $product->manufacturer_name = $manufacturer->name;
             $product->unit_price_tax_incl = $prod['unit_price_tax_incl'];
@@ -7264,7 +7256,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         }
         $cartRules = $order->getCartRules();
         if ($cartRules) {
-            $cart_rule = new CartRule((int)$cartRules[0]['id_cart_rule']);
+            $cart_rule = new CartRule((int) $cartRules[0]['id_cart_rule']);
             $voucherCode = $cart_rule->code;
         } else {
             $voucherCode = false;
@@ -7311,7 +7303,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
     public function hookHeader()
     {
-        if ((bool)Configuration::get('EVERSEO_MAINTENANCE') === true
+        if ((bool) Configuration::get('EVERSEO_MAINTENANCE') === true
             && (bool)EverPsSeoTools::isMaintenanceIpAddress() === false
         ) {
             if (!Configuration::get('EVERSEO_MAINTENANCE_URL')) {
@@ -7327,23 +7319,23 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         $link = new Link();
         if ((bool)Context::getContext()->customer->isLogged()) {
             $customer = new Customer(
-                (int)Context::getContext()->customer->id
+                (int) Context::getContext()->customer->id
             );
         } else {
             $customer = false;
         }
         // Do not cache if updatedTransaction is set, else page will be reloaded every time
-        if ((bool)Configuration::get('EVERSEO_CACHE') === true
+        if ((bool) Configuration::get('EVERSEO_CACHE') === true
             && !Tools::getValue('updatedTransaction')
         ) {
             $this->context->controller->addJs($this->_path.'views/js/evercache.js');
         }
         // Right click block on FO
-        if ((bool)Configuration::get('EVERSEO_BLOCK_RIGHT_CLICK') === true) {
+        if ((bool) Configuration::get('EVERSEO_BLOCK_RIGHT_CLICK') === true) {
             $this->context->controller->addJs($this->_path.'views/js/rightclick.js');
         }
         // Lazy load
-        if ((bool)Configuration::get('EVERSEO_LAZY_LOAD')) {
+        if ((bool) Configuration::get('EVERSEO_LAZY_LOAD')) {
             $this->context->controller->addJs($this->_path.'views/js/jquery.lazyload.min.js');
             $this->context->controller->addJs($this->_path.'views/js/unveil.min.js');
             $this->context->controller->addJs($this->_path.'views/js/lazyload.js');
@@ -7402,23 +7394,23 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             'PS_SHOP_DOMAIN_SSL',
             null,
             null,
-            (int)$this->context->shop->id
+            (int) $this->context->shop->id
         );
         // Default image for social networks, case of product
-        if ((int)Tools::getValue('id_product')) {
+        if ((int) Tools::getValue('id_product')) {
             $product = new Product(
-                (int)Tools::getValue('id_product'),
+                (int) Tools::getValue('id_product'),
                 false,
-                (int)$this->context->language->id,
-                (int)$this->context->shop->id
+                (int) $this->context->language->id,
+                (int) $this->context->shop->id
             );
             if (Validate::isLoadedObject($product)) {
                 $coverId = Product::getCover(
-                    (int)$product->id
+                    (int) $product->id
                 );
                 $defaultImage = $link->getImageLink(
                     $product->link_rewrite,
-                    (int)$product->id.'-'.(int)$coverId['id_image'],
+                    (int) $product->id . '-' . (int) $coverId['id_image'],
                     $this->imageType
                 );
                 if (!$defaultImage) {
@@ -7426,17 +7418,17 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 }
             }
         } else {
-            $defaultImage = Tools::getHttpHost(true).__PS_BASE_URI__.'/modules/everpsseo/views/img/everpsseo.jpg';
+            $defaultImage = Tools::getHttpHost(true) . __PS_BASE_URI__.'/modules/everpsseo/views/img/everpsseo.jpg';
             if (!$defaultImage) {
                 $defaultImage = _PS_IMG_ . Configuration::get('PS_LOGO');
             }
         }
-        $id_shop = (int)$this->context->shop->id;
-        $id_lang = (int)$this->context->language->id;
-        $id_author = (int)Configuration::get(
+        $id_shop = (int) $this->context->shop->id;
+        $id_lang = (int) $this->context->language->id;
+        $id_author = (int) Configuration::get(
             'EVERSEO_AUTHOR'
         );
-        $employee = new Employee((int)$id_author);
+        $employee = new Employee((int) $id_author);
 
         // Set backlink counter +1 or add new one
         $from = EverPsSeoTools::getReferrer();
@@ -7446,13 +7438,13 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         if ($from && $to) {
             $id_ever_seo_backlink = EverPsSeoBacklink::ifBacklinkExists(
                 pSQL($from),
-                (string)$to,
-                (int)$id_shop
+                (string) $to,
+                (int) $id_shop
             );
             if ($id_ever_seo_backlink) {
                 EverPsSeoBacklink::incrementCounter(
-                    (int)$id_ever_seo_backlink,
-                    (int)$id_shop
+                    (int) $id_ever_seo_backlink,
+                    (int) $id_shop
                 );
             } else {
                 if (false !== stripos(pSQL($from), Configuration::get(
@@ -7467,12 +7459,12 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                         255
                     );
                     $backlink->everto = Tools::substr(
-                        (string)$to,
+                        (string) $to,
                         0,
                         255
                     );
                     $backlink->count = 1;
-                    $backlink->id_shop = (int)$id_shop;
+                    $backlink->id_shop = (int) $id_shop;
                     $backlink->save();
                 }
             }
@@ -7480,31 +7472,31 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
         switch ($controller_name) {
             case 'product':
-                $id_product = (int)Tools::getValue('id_product');
-                if ((int)$id_product <= 0) {
+                $id_product = (int) Tools::getValue('id_product');
+                if ((int) $id_product <= 0) {
                     return;
                 }
                 $product = new Product(
-                    (int)$id_product,
+                    (int) $id_product,
                     false,
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
                 if (!Validate::isLoadedObject($product)) {
                     return;
                 }
                 $seo_product = EverPsSeoProduct::getSeoProduct(
-                    (int)$id_product,
-                    (int)$id_shop,
-                    (int)$id_lang
+                    (int) $id_product,
+                    (int) $id_shop,
+                    (int) $id_lang
                 );
                 $currentUrl = $link->getProductLink(
-                    (int)$product->id,
+                    (int) $product->id,
                     null,
                     null,
                     null,
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
                 if (property_exists('EverPsSeoProduct', 'canonical')
                     && isset($seo_product->canonical)
@@ -7526,37 +7518,37 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 ));
                 $seo = EverPsSeoTools::getSeoIndexFollow(
                     pSQL($controller_name),
-                    (int)$id_shop,
-                    (int)Tools::getValue('id_product'),
-                    (int)$id_lang
+                    (int) $id_shop,
+                    (int) Tools::getValue('id_product'),
+                    (int) $id_lang
                 );
                 break;
 
             case 'category':
-                $id_category = (int)Tools::getValue('id_category');
-                if ((int)$id_category <= 0) {
+                $id_category = (int) Tools::getValue('id_category');
+                if ((int) $id_category <= 0) {
                     return;
                 }
-                if ((bool)Configuration::get('EVERSEO_CANONICAL') === true) {
+                if ((bool) Configuration::get('EVERSEO_CANONICAL') === true) {
                     if (Tools::getValue('module') || Tools::getValue('fc') === 'module') {
                         return;
                     } else {
                         $category = new Category(
-                            (int)$id_category,
-                            (int)$id_lang,
-                            (int)$id_shop
+                            (int) $id_category,
+                            (int) $id_lang,
+                            (int) $id_shop
                         );
                         $seo_category = EverPsSeoCategory::getSeoCategory(
-                            (int)$id_category,
-                            (int)$id_shop,
-                            (int)$id_lang
+                            (int) $id_category,
+                            (int) $id_shop,
+                            (int) $id_lang
                         );
                         $currentUrl = $link->getCategoryLink(
-                            (object)$category,
+                            (object) $category,
                             null,
-                            (int)$id_lang,
+                            (int) $id_lang,
                             null,
-                            (int)$id_shop
+                            (int) $id_shop
                         );
                     }
                     if (property_exists('EverPsSeoCategory', 'canonical')
@@ -7573,35 +7565,35 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 if (!Tools::getValue('module')) {
                     $seo = EverPsSeoTools::getSeoIndexFollow(
                         pSQL($controller_name),
-                        (int)$id_shop,
-                        (int)$id_category,
-                        (int)$id_lang
+                        (int) $id_shop,
+                        (int) $id_category,
+                        (int) $id_lang
                     );
                 }
                 break;
 
             case 'cms':
-                $id_cms = (int)Tools::getValue('id_cms');
-                if ((int)$id_cms <= 0) {
+                $id_cms = (int) Tools::getValue('id_cms');
+                if ((int) $id_cms <= 0) {
                     return;
                 }
-                if ((bool)Configuration::get('EVERSEO_CANONICAL') === true) {
+                if ((bool) Configuration::get('EVERSEO_CANONICAL') === true) {
                     $cms = new CMS(
-                        (int)$id_cms,
-                        (int)$id_lang,
-                        (int)$id_shop
+                        (int) $id_cms,
+                        (int) $id_lang,
+                        (int) $id_shop
                     );
                     $seo_cms = EverPsSeoCms::getSeoCms(
-                        (int)$id_cms,
-                        (int)$id_shop,
-                        (int)$id_lang
+                        (int) $id_cms,
+                        (int) $id_shop,
+                        (int) $id_lang
                     );
                     $canonical_url = $link->getCMSLink(
-                        (object)$cms,
+                        (object) $cms,
                         null,
                         true,
-                        (int)$id_lang,
-                        (int)$id_shop
+                        (int) $id_lang,
+                        (int) $id_shop
                     );
                     if (property_exists('EverPsSeoCms', 'canonical')
                         && isset($seo_cms->canonical)
@@ -7616,23 +7608,23 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 }
                 $seo = EverPsSeoTools::getSeoIndexFollow(
                     pSQL($controller_name),
-                    (int)$id_shop,
-                    (int)$id_cms,
-                    (int)$id_lang
+                    (int) $id_shop,
+                    (int) $id_cms,
+                    (int) $id_lang
                 );
                 break;
 
             case 'manufacturer':
-                $id_manufacturer = (int)Tools::getValue('id_manufacturer');
-                if ((int)$id_manufacturer <= 0) {
+                $id_manufacturer = (int) Tools::getValue('id_manufacturer');
+                if ((int) $id_manufacturer <= 0) {
                     return;
                 }
-                if ((bool)Configuration::get('EVERSEO_CANONICAL') === true) {
+                if ((bool) Configuration::get('EVERSEO_CANONICAL') === true) {
                     $manufacturer = new Manufacturer(
-                        (int)$id_manufacturer,
-                        (int)$id_lang
+                        (int) $id_manufacturer,
+                        (int) $id_lang
                     );
-                    if ((bool)Configuration::get('EVERSEO_CANONICAL') === true) {
+                    if ((bool) Configuration::get('EVERSEO_CANONICAL') === true) {
                         $canonical_url = $link->getManufacturerLink(
                             $manufacturer,
                             null,
@@ -7641,15 +7633,15 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                         );
                     }
                     $seo_manufacturer = EverPsSeoManufacturer::getSeoManufacturer(
-                        (int)$id_manufacturer,
-                        (int)$id_shop,
-                        (int)$id_lang
+                        (int) $id_manufacturer,
+                        (int) $id_shop,
+                        (int) $id_lang
                     );
                     $currentUrl = $link->getManufacturerLink(
-                        (object)$manufacturer,
+                        (object) $manufacturer,
                         null,
-                        (int)$id_lang,
-                        (int)$id_shop
+                        (int) $id_lang,
+                        (int) $id_shop
                     );
                     if (property_exists('EverPsSeoManufacturer', 'canonical')
                         && isset($seo_manufacturer->canonical)
@@ -7665,36 +7657,36 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 if (Tools::getValue('id_manufacturer')) {
                     $seo = EverPsSeoTools::getSeoIndexFollow(
                         pSQL($controller_name),
-                        (int)$id_shop,
-                        (int)Tools::getValue('id_manufacturer'),
-                        (int)$id_lang
+                        (int) $id_shop,
+                        (int) Tools::getValue('id_manufacturer'),
+                        (int) $id_lang
                     );
                 } else {
                     $pageMetaId = Db::getInstance()->getValue(
                         'SELECT id_meta
-                        FROM '._DB_PREFIX_.'meta
-                        WHERE page = "'.pSQL($controller_name).'"'
+                        FROM ' . _DB_PREFIX_ . 'meta
+                        WHERE page = "' . pSQL($controller_name) . '"'
                     );
                     $seo = EverPsSeoTools::getSeoIndexFollow(
                         false,
-                        (int)$id_shop,
-                        (int)$pageMetaId,
-                        (int)$id_lang
+                        (int) $id_shop,
+                        (int) $pageMetaId,
+                        (int) $id_lang
                     );
                 }
                 break;
 
             case 'supplier':
-                $id_supplier = (int)Tools::getValue('id_supplier');
-                if ((int)$id_supplier <= 0) {
+                $id_supplier = (int) Tools::getValue('id_supplier');
+                if ((int) $id_supplier <= 0) {
                     return;
                 }
-                if ((bool)Configuration::get('EVERSEO_CANONICAL') === true) {
+                if ((bool) Configuration::get('EVERSEO_CANONICAL') === true) {
                     $supplier = new Supplier(
-                        (int)$id_supplier,
-                        (int)$id_lang
+                        (int) $id_supplier,
+                        (int) $id_lang
                     );
-                    if ((bool)Configuration::get('EVERSEO_CANONICAL') === true) {
+                    if ((bool) Configuration::get('EVERSEO_CANONICAL') === true) {
                         $canonical_url = $link->getSupplierLink(
                             $supplier,
                             null,
@@ -7703,15 +7695,15 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                         );
                     }
                     $seo_supplier = EverPsSeoSupplier::getSeoSupplier(
-                        (int)$id_supplier,
-                        (int)$id_shop,
-                        (int)$id_lang
+                        (int) $id_supplier,
+                        (int) $id_shop,
+                        (int) $id_lang
                     );
                     $currentUrl = $link->getSupplierLink(
-                        (object)$supplier,
+                        (object) $supplier,
                         null,
-                        (int)$id_lang,
-                        (int)$id_shop
+                        (int) $id_lang,
+                        (int) $id_shop
                     );
                     if (property_exists('EverPsSeoSupplier', 'canonical')
                         && isset($seo_supplier->canonical)
@@ -7727,21 +7719,21 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 if (Tools::getValue('id_supplier')) {
                     $seo = EverPsSeoTools::getSeoIndexFollow(
                         pSQL($controller_name),
-                        (int)$id_shop,
-                        (int)Tools::getValue('id_supplier'),
-                        (int)$id_lang
+                        (int) $id_shop,
+                        (int) Tools::getValue('id_supplier'),
+                        (int) $id_lang
                     );
                 } else {
                     $pageMetaId = Db::getInstance()->getValue(
                         'SELECT id_meta
-                        FROM '._DB_PREFIX_.'meta
-                        WHERE page = "'.pSQL($controller_name).'"'
+                        FROM ' . _DB_PREFIX_ . 'meta
+                        WHERE page = "' . pSQL($controller_name) . '"'
                     );
                     $seo = EverPsSeoTools::getSeoIndexFollow(
                         false,
-                        (int)$id_shop,
-                        (int)$pageMetaId,
-                        (int)$id_lang
+                        (int) $id_shop,
+                        (int) $pageMetaId,
+                        (int) $id_lang
                     );
                 }
                 break;
@@ -7749,17 +7741,17 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             default:
                 $pageMetaId = Db::getInstance()->getValue(
                     'SELECT id_meta
-                    FROM '._DB_PREFIX_.'meta
-                    WHERE page = "'.pSQL($controller_name).'"'
+                    FROM ' . _DB_PREFIX_ . 'meta
+                    WHERE page = "' . pSQL($controller_name) . '"'
                 );
-                if ((bool)Configuration::get('EVERSEO_CANONICAL') === true) {
+                if ((bool) Configuration::get('EVERSEO_CANONICAL') === true) {
                     $canonical_url = $link->getPageLink(pSQL($controller_name));
                 }
                 $seo = EverPsSeoTools::getSeoIndexFollow(
                     pSQL($controller_name),
-                    (int)$id_shop,
-                    (int)$pageMetaId,
-                    (int)$id_lang
+                    (int) $id_shop,
+                    (int) $pageMetaId,
+                    (int) $id_lang
                 );
                 break;
         }
@@ -7806,27 +7798,27 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             } else {
                 if ($controller_name == 'product') {
                     $cover_array = Product::getCover(
-                        (int)Tools::getValue('id_product')
+                        (int) Tools::getValue('id_product')
                     );
                     $product = new Product(
-                        (int)Tools::getValue('id_product'),
+                        (int) Tools::getValue('id_product'),
                         false,
-                        (int)$this->context->shop->id,
-                        (int)$this->context->language->id
+                        (int) $this->context->shop->id,
+                        (int) $this->context->language->id
                     );
                     if ($cover_array['id_image']) {
                         $social_img_url = $link->getImageLink(
                             $product->link_rewrite,
-                            (int)$product->id.'-'.(int)$cover_array['id_image'],
+                            (int) $product->id . '-' . (int) $cover_array['id_image'],
                             $this->imageType
                         );
                     } else {
-                        $social_img_url = Tools::getHttpHost(true).__PS_BASE_URI__.'img/'.Configuration::get(
+                        $social_img_url = Tools::getHttpHost(true) . __PS_BASE_URI__.'img/'.Configuration::get(
                             'PS_LOGO'
                         );
                     }
                 } else {
-                    $social_img_url = Tools::getHttpHost(true).__PS_BASE_URI__.'img/'.Configuration::get(
+                    $social_img_url = Tools::getHttpHost(true) . __PS_BASE_URI__.'img/'.Configuration::get(
                         'PS_LOGO'
                     );
                 }
@@ -7849,7 +7841,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             $page['meta']['title'] = $meta_title;
             $page['meta']['description'] = $meta_description;
         }
-        if ((bool)Configuration::get('EVERSEO_CANONICAL') === true
+        if ((bool) Configuration::get('EVERSEO_CANONICAL') === true
             && isset($canonical_url)
             && !empty($canonical_url)
         ) {
@@ -7857,7 +7849,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             $page['canonical_url'] = $canonical_url;
         }
         $this->context->smarty->assign('page', $page);
-        if ((bool)Configuration::get('EVERSEO_CANONICAL') === false) {
+        if ((bool) Configuration::get('EVERSEO_CANONICAL') === false) {
             $canonical_url = false;
         }
         $replyto = Configuration::get(
@@ -7870,13 +7862,13 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         $this->context->smarty->assign(array(
             'ever_customer' => $customer,
             'controller_name' => pSQL($controller_name),
-            'sitename' => (string)Configuration::get('PS_SHOP_NAME'),
+            'sitename' => (string) Configuration::get('PS_SHOP_NAME'),
             'site_url' => $this->siteUrl,
             'shop_logo' => $this->siteUrl._PS_IMG_.Configuration::get('PS_LOGO'),
             'everyear' => date('Y'),
             'priceValidUntil' => $yearEnd,
-            'replyto' => (string)$replyto,
-            'identifierUrl' => (string)$identifierUrl,
+            'replyto' => (string) $replyto,
+            'identifierUrl' => (string) $identifierUrl,
             'header_tags' => Configuration::get(
                 'EVERSEO_HEADER_TAGS'
             ),
@@ -7901,7 +7893,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             'siteName' => Configuration::get(
                 'PS_SHOP_NAME'
             ),
-            'defaultImage' => (string)$defaultImage,
+            'defaultImage' => (string) $defaultImage,
             'usehreflang' => Configuration::get(
                 'EVERSEO_HREF_LANG'
             ),
@@ -7959,18 +7951,18 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
     public function hookDisplayRightColumn()
     {
-        if ((bool)Configuration::get('EVERSEO_GCOLUMN')
-            && !(bool)Configuration::get('EVERSEO_GTOP')
+        if ((bool) Configuration::get('EVERSEO_GCOLUMN')
+            && !(bool) Configuration::get('EVERSEO_GTOP')
         ) {
-            $cacheId = $this->getCacheId($this->name.'-gtranslate-'.date('Ymd'));
+            $cacheId = $this->getCacheId($this->name . '-gtranslate-' . date('Ymd'));
             if (!$this->isCached('gtranslate.tpl', $cacheId)) {
                 $default_lang = Configuration::get(
                     'PS_LANG_DEFAULT'
                 );
-                $language = new Language((int)$default_lang);
-                $this->context->smarty->assign(array(
-                    'default_iso_code' => (string)$language->iso_code,
-                ));
+                $language = new Language((int) $default_lang);
+                $this->context->smarty->assign([
+                    'default_iso_code' => (string) $language->iso_code,
+                ]);
             }
             return $this->display(__FILE__, 'views/templates/hook/gtranslate.tpl', $cacheId);
         }
@@ -7988,17 +7980,17 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
     public function hookDisplayTop()
     {
-        $cacheId = $this->getCacheId($this->name.'-displaytop-'.date('Ymd'));
+        $cacheId = $this->getCacheId($this->name . '-displaytop-' . date('Ymd'));
         if (!$this->isCached('displaytop.tpl', $cacheId)) {
             $default_lang = Configuration::get(
                 'PS_LANG_DEFAULT'
             );
-            $language = new Language((int)$default_lang);
+            $language = new Language((int) $default_lang);
             $this->context->smarty->assign(array(
                 'gtag_manager' => Configuration::get(
                     'EVERSEO_GTAG'
                 ),
-                'default_iso_code' => (string)$language->iso_code,
+                'default_iso_code' => (string) $language->iso_code,
                 'translate_top' => Configuration::get(
                     'EVERSEO_GTOP'
                 ),
@@ -8015,7 +8007,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         if (Tools::getValue('fc') === 'module') {
             return;
         }
-        if ((bool)Configuration::get(
+        if ((bool) Configuration::get(
             'EVERSEO_RSNIPPETS'
         )) {
             return $this->hookFooter($params);
@@ -8028,40 +8020,40 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             return;
         }
         $return = false;
-        if ((bool)Configuration::get(
+        if ((bool) Configuration::get(
             'EVERSEO_RSNIPPETS'
         )) {
             $controller_name = Tools::getValue('controller');
-            $cacheId = $this->getCacheId($this->name.'-richsnippets-'.$controller_name.'-'.date('Ymd'));
+            $cacheId = $this->getCacheId($this->name . '-richsnippets-' . $controller_name . '-' . date('Ymd'));
             if (!$this->isCached('richsnippets.tpl', $cacheId)) {
                 $shop_name = Configuration::get('PS_SHOP_NAME');
                 $shop_logo = _PS_IMG_ . Configuration::get('PS_LOGO');
-                $homepage = Tools::getHttpHost(true).__PS_BASE_URI__;
-                $id_lang = (int)$this->context->language->id;
-                $id_shop = (int)$this->context->shop->id;
-                $id_currency = (int)$this->context->currency->id;
-                $currency = new Currency((int)$id_currency);
+                $homepage = Tools::getHttpHost(true) . __PS_BASE_URI__;
+                $id_lang = (int) $this->context->language->id;
+                $id_shop = (int) $this->context->shop->id;
+                $id_currency = (int) $this->context->currency->id;
+                $currency = new Currency((int) $id_currency);
 
                 switch ($controller_name) {
                     case 'product':
-                        $id_product = (int)Tools::getValue('id_product');
-                        if ((int)$id_product <= 0) {
+                        $id_product = (int) Tools::getValue('id_product');
+                        if ((int) $id_product <= 0) {
                             return;
                         }
                         $link = new Link();
                         $product = new Product(
-                            (int)$id_product,
+                            (int) $id_product,
                             false,
-                            (int)$id_lang,
-                            (int)$id_shop
+                            (int) $id_lang,
+                            (int) $id_shop
                         );
                         if (!Validate::isLoadedObject($product)) {
                             return;
                         }
-                        $richImage = $product->getCover((int)$product->id);
+                        $richImage = $product->getCover((int) $product->id);
                         $imgUrl = Tools::getShopProtocol().$link->getImageLink(
                             $product->link_rewrite,
-                            (int)$product->id.'-'.$richImage['id_image'],
+                            (int) $product->id . '-' . $richImage['id_image'],
                             $this->imageType
                         );
                         $currentUrl = $link->getProductLink(
@@ -8069,29 +8061,29 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                             null,
                             null,
                             null,
-                            (int)$id_lang,
-                            (int)$id_shop
+                            (int) $id_lang,
+                            (int) $id_shop
                         );
                         $yearEnd = date('Y-m-d', strtotime('Dec 31'));
                         $this->context->smarty->assign(array(
                             'controller' => pSQL($controller_name),
-                            'shop_name' => (string)$shop_name,
+                            'shop_name' => (string) $shop_name,
                             'shop_logo' => $shop_logo,
                             'homepage' => $homepage,
                             'currentUrl' => $currentUrl,
-                            'productId' => (int)$product->id,
-                            'productReference' => (string)$product->reference,
-                            'productName' => (string)$product->name,
-                            'productID' => (int)$product->id,
-                            'productCondition' => (string)$product->condition,
+                            'productId' => (int) $product->id,
+                            'productReference' => (string) $product->reference,
+                            'productName' => (string) $product->name,
+                            'productID' => (int) $product->id,
+                            'productCondition' => (string) $product->condition,
                             'productQuantity' => $product->quantity,
-                            'descriptionShort' => (string)$product->description_short,
+                            'descriptionShort' => (string) $product->description_short,
                             'productPrice' => $product->price,
                             'currencyIsocode' => $currency->iso_code,
                             'currencyPrefix' => $currency->prefix,
                             'currencySuffix' => $currency->suffix,
-                            'imgUrl' => (string)$imgUrl,
-                            'manufacturer' => Manufacturer::getNameById((int)$product->id_manufacturer),
+                            'imgUrl' => (string) $imgUrl,
+                            'manufacturer' => Manufacturer::getNameById((int) $product->id_manufacturer),
                             'priceValidUntil' => $yearEnd,
                         ));
                         $return = true;
@@ -8101,23 +8093,23 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                         $id_category = Tools::getValue('id_category');
                         $link = new Link();
                         $category = new Category(
-                            (int)$id_category,
-                            (int)$id_lang,
-                            (int)$id_shop
+                            (int) $id_category,
+                            (int) $id_lang,
+                            (int) $id_shop
                         );
                         $currentUrl = $link->getCategoryLink(
-                            (object)$category,
+                            (object) $category,
                             null,
-                            (int)$id_lang,
+                            (int) $id_lang,
                             null,
-                            (int)$id_shop
+                            (int) $id_shop
                         );
                         $this->context->smarty->assign(array(
                             'controller' => pSQL($controller_name),
-                            'shop_name' => (string)$shop_name,
-                            'shop_logo' => (string)$shop_logo,
-                            'homepage' => (string)$homepage,
-                            'currentUrl' => (string)$currentUrl
+                            'shop_name' => (string) $shop_name,
+                            'shop_logo' => (string) $shop_logo,
+                            'homepage' => (string) $homepage,
+                            'currentUrl' => (string) $currentUrl,
                         ));
                         $return = true;
                         break;
@@ -8126,23 +8118,23 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                         $id_cms = Tools::getValue('id_cms');
                         $link = new Link();
                         $cms = new CMS(
-                            (int)$id_cms,
-                            (int)$id_lang,
-                            (int)$id_shop
+                            (int) $id_cms,
+                            (int) $id_lang,
+                            (int) $id_shop
                         );
                         $currentUrl = $link->getCMSLink(
-                            (object)$cms,
+                            (object) $cms,
                             null,
                             true,
-                            (int)$id_lang,
-                            (int)$id_shop
+                            (int) $id_lang,
+                            (int) $id_shop
                         );
                         $this->context->smarty->assign(array(
                             'controller' => pSQL($controller_name),
-                            'shop_name' => (string)$shop_name,
-                            'shop_logo' => (string)$shop_logo,
-                            'homepage' => (string)$homepage,
-                            'currentUrl' => (string)$currentUrl
+                            'shop_name' => (string) $shop_name,
+                            'shop_logo' => (string) $shop_logo,
+                            'homepage' => (string) $homepage,
+                            'currentUrl' => (string) $currentUrl,
                         ));
                         $return = true;
                         break;
@@ -8151,21 +8143,21 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                         $id_manufacturer = Tools::getValue('id_manufacturer');
                         $link = new Link();
                         $manufacturer = new Manufacturer(
-                            (int)$id_manufacturer,
-                            (int)$id_lang
+                            (int) $id_manufacturer,
+                            (int) $id_lang
                         );
                         $currentUrl = $link->getManufacturerLink(
-                            (object)$manufacturer,
+                            (object) $manufacturer,
                             null,
-                            (int)$id_lang,
-                            (int)$id_shop
+                            (int) $id_lang,
+                            (int) $id_shop
                         );
                         $this->context->smarty->assign(array(
                             'controller' => pSQL($controller_name),
-                            'shop_name' => (string)$shop_name,
-                            'shop_logo' => (string)$shop_logo,
-                            'homepage' => (string)$homepage,
-                            'currentUrl' => (string)$currentUrl
+                            'shop_name' => (string) $shop_name,
+                            'shop_logo' => (string) $shop_logo,
+                            'homepage' => (string) $homepage,
+                            'currentUrl' => (string) $currentUrl,
                         ));
                         $return = true;
                         break;
@@ -8174,21 +8166,21 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                         $id_supplier = Tools::getValue('id_supplier');
                         $link = new Link();
                         $supplier = new Supplier(
-                            (int)$id_supplier,
-                            (int)$id_lang
+                            (int) $id_supplier,
+                            (int) $id_lang
                         );
                         $currentUrl = $link->getSupplierLink(
-                            (object)$supplier,
+                            (object) $supplier,
                             null,
-                            (int)$id_lang,
-                            (int)$id_shop
+                            (int) $id_lang,
+                            (int) $id_shop
                         );
                         $this->context->smarty->assign(array(
                             'controller' => pSQL($controller_name),
-                            'shop_name' => (string)$shop_name,
-                            'shop_logo' => (string)$shop_logo,
-                            'homepage' => (string)$homepage,
-                            'currentUrl' => (string)$currentUrl
+                            'shop_name' => (string) $shop_name,
+                            'shop_logo' => (string) $shop_logo,
+                            'homepage' => (string) $homepage,
+                            'currentUrl' => (string) $currentUrl,
                         ));
                         $return = true;
                         break;
@@ -8198,15 +8190,15 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                         $currentUrl = $link->getPageLink(pSQL($controller_name));
                         $this->context->smarty->assign(array(
                             'controller' => pSQL($controller_name),
-                            'shop_name' => (string)$shop_name,
-                            'shop_logo' => (string)$shop_logo,
+                            'shop_name' => (string) $shop_name,
+                            'shop_logo' => (string) $shop_logo,
                             'homepage' => $homepage,
-                            'currentUrl' => (string)$currentUrl
+                            'currentUrl' => (string) $currentUrl,
                         ));
                         $return = true;
                         break;
                 }
-                if ((bool)$return === true) {                    
+                if ((bool) $return === true) {                    
                     return $this->display(
                         __FILE__,
                         'views/templates/front/richsnippets.tpl',
@@ -8221,46 +8213,45 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 #################### START SITEMAPS ####################
     protected function processSitemapProduct($id_shop, $id_lang)
     {
-        set_time_limit(0);
         if (!Configuration::get('EVERSEO_SITEMAP_PRODUCT')) {
             return false;
         }
 
-        $iso_lang = Language::getIsoById((int)$id_lang);
+        $iso_lang = Language::getIsoById((int) $id_lang);
 
         $sitemap = new EverPsSeoSitemap(
-            Tools::getHttpHost(true).__PS_BASE_URI__
+            Tools::getHttpHost(true) . __PS_BASE_URI__
         );
-        $sitemap->setPath(_PS_ROOT_DIR_.'/');
-        $sitemap->setFilename('product_shop_'.(int)$id_shop.'_lang_'.(string)$iso_lang);
+        $sitemap->setPath(_PS_ROOT_DIR_ . '/');
+        $sitemap->setFilename('product_shop_' . (int) $id_shop . '_lang_' . (string) $iso_lang);
 
         $sql =
-            'SELECT id_seo_product FROM '._DB_PREFIX_.'ever_seo_product esp
-            LEFT JOIN '._DB_PREFIX_.'product p
+            'SELECT id_seo_product FROM ' . _DB_PREFIX_ . 'ever_seo_product esp
+            LEFT JOIN ' . _DB_PREFIX_ . 'product p
             ON (
                 p.id_product = esp.id_seo_product
             )
             WHERE esp.allowed_sitemap = 1
                 AND p.active = 1
-                AND esp.id_shop = '.pSQL((int)$id_shop).'
-                AND esp.id_seo_lang = '.pSQL((int)$id_lang).'';
+                AND esp.id_shop = '.pSQL((int) $id_shop).'
+                AND esp.id_seo_lang = '.pSQL((int) $id_lang).'';
 
         if ($results = Db::getInstance()->executeS($sql)) {
             foreach ($results as $id_product) {
                 $link = new Link();
                 $product = new Product(
-                    (int)$id_product['id_seo_product'],
+                    (int) $id_product['id_seo_product'],
                     false,
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
                 $productUrl = $link->getProductLink(
                     $product,
                     null,
                     null,
                     null,
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
 
                 if ($product->active && !empty($product->name)) {
@@ -8273,7 +8264,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 }
             }
             return $sitemap->createSitemapIndex(
-                Tools::getHttpHost(true).__PS_BASE_URI__,
+                Tools::getHttpHost(true) . __PS_BASE_URI__,
                 'Today'
             );
         }
@@ -8289,28 +8280,28 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             return false;
         }
 
-        $iso_lang = Language::getIsoById((int)$id_lang);
+        $iso_lang = Language::getIsoById((int) $id_lang);
 
         $sitemap = new EverPsSeoSitemap(
-            Tools::getHttpHost(true).__PS_BASE_URI__
+            Tools::getHttpHost(true) . __PS_BASE_URI__
         );
-        $sitemap->setPath(_PS_ROOT_DIR_.'/');
-        $sitemap->setFilename('img_shop_'.(int)$id_shop.'_lang_'.$iso_lang);
+        $sitemap->setPath(_PS_ROOT_DIR_ . '/');
+        $sitemap->setFilename('img_shop_' . (int) $id_shop . '_lang_' . $iso_lang);
 
         $sql =
-            'SELECT * FROM '._DB_PREFIX_.'ever_seo_image esi
-            LEFT JOIN '._DB_PREFIX_.'image i
+            'SELECT * FROM ' . _DB_PREFIX_ . 'ever_seo_image esi
+            LEFT JOIN ' . _DB_PREFIX_ . 'image i
             ON (
                 i.id_image = esi.id_seo_img
             )
-            LEFT JOIN '._DB_PREFIX_.'product p
+            LEFT JOIN ' . _DB_PREFIX_ . 'product p
             ON (
                 p.id_product = i.id_product
             )
             WHERE esi.allowed_sitemap = 1
                 AND p.active = 1
-                AND esi.id_shop = '.(int)$id_shop.'
-                AND esi.id_seo_lang = '.(int)$id_lang;
+                AND esi.id_shop = ' . (int) $id_shop . '
+                AND esi.id_seo_lang = ' . (int) $id_lang;
 
         if ($results = Db::getInstance()->ExecuteS($sql)) {
             foreach ($results as $id_img) {
@@ -8320,16 +8311,16 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     || Tools::usingSecureMode()) ? true : false;
                 $protocol_content = ($useSSL) ? 'https://' : 'http://';
                 $link = new Link($this->protocol_link, $protocol_content);
-                $image = new Image((int)$id_img['id_seo_img']);
+                $image = new Image((int) $id_img['id_seo_img']);
                 $product = new Product(
                     $id_img['id_seo_product'],
                     false,
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
                 $imgUrl = $link->getImageLink(
                     $product->link_rewrite,
-                    (int)$product->id.'-'.(int)$image->id,
+                    (int) $product->id . '-' . (int) $image->id,
                     $this->imageType
                 );
 
@@ -8344,7 +8335,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             }
 
             return $sitemap->createSitemapIndex(
-                Tools::getHttpHost(true).__PS_BASE_URI__,
+                Tools::getHttpHost(true) . __PS_BASE_URI__,
                 'Today'
             );
         }
@@ -8352,46 +8343,45 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
     protected function processSitemapCategory($id_shop, $id_lang)
     {
-        set_time_limit(0);
         if (!Configuration::get('EVERSEO_SITEMAP_CATEGORY')) {
             return false;
         }
 
-        $iso_lang = Language::getIsoById((int)$id_lang);
+        $iso_lang = Language::getIsoById((int) $id_lang);
 
         $sitemap = new EverPsSeoSitemap(
-            Tools::getHttpHost(true).__PS_BASE_URI__
+            Tools::getHttpHost(true) . __PS_BASE_URI__
         );
-        $sitemap->setPath(_PS_ROOT_DIR_.'/');
-        $sitemap->setFilename('category_shop_'.(int)$id_shop.'_lang_'.(string)$iso_lang);
+        $sitemap->setPath(_PS_ROOT_DIR_ . '/');
+        $sitemap->setFilename('category_shop_'.(int) $id_shop.'_lang_'.(string) $iso_lang);
 
         $sql =
-            'SELECT * FROM '._DB_PREFIX_.'ever_seo_category esc
-            LEFT JOIN '._DB_PREFIX_.'category c
+            'SELECT * FROM ' . _DB_PREFIX_ . 'ever_seo_category esc
+            LEFT JOIN ' . _DB_PREFIX_ . 'category c
             ON (
                 c.id_category = esc.id_seo_category
             )
             WHERE allowed_sitemap = 1
                 AND c.active = 1
-                AND id_shop = '.pSQL((int)$id_shop).'
-                AND id_seo_lang = '.pSQL((int)$id_lang).'';
+                AND id_shop = '. (int) $id_shop .'
+                AND id_seo_lang = ' . (int) $id_lang;
 
         if ($results = Db::getInstance()->ExecuteS($sql)) {
             foreach ($results as $id_category) {
                 $link = new Link();
                 $category = new Category(
                     $id_category['id_seo_category'],
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
 
                 if ($category->active && !empty($category->name)) {
                     $categoryUrl = $link->getCategoryLink(
                         $category,
                         null,
-                        (int)$id_lang,
+                        (int) $id_lang,
                         null,
-                        (int)$id_shop
+                        (int) $id_shop
                     );
 
                     $sitemap->addItem(
@@ -8404,7 +8394,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             }
 
             return $sitemap->createSitemapIndex(
-                Tools::getHttpHost(true).__PS_BASE_URI__,
+                Tools::getHttpHost(true) . __PS_BASE_URI__,
                 'Today'
             );
         }
@@ -8412,34 +8402,33 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
     protected function processSitemapPageMeta($id_shop, $id_lang)
     {
-        set_time_limit(0);
         if (!Configuration::get('EVERSEO_SITEMAP_PAGE_META')) {
             return false;
         }
 
-        $iso_lang = Language::getIsoById((int)$id_lang);
+        $iso_lang = Language::getIsoById((int) $id_lang);
         $sitemap = new EverPsSeoSitemap(
-            Tools::getHttpHost(true).__PS_BASE_URI__
+            Tools::getHttpHost(true) . __PS_BASE_URI__
         );
-        $sitemap->setPath(_PS_ROOT_DIR_.'/');
-        $sitemap->setFilename('pagemeta_shop_'.(int)$id_shop.'_lang_'.(string)$iso_lang);
+        $sitemap->setPath(_PS_ROOT_DIR_ . '/');
+        $sitemap->setFilename('pagemeta_shop_' . (int) $id_shop . '_lang_' . (string) $iso_lang);
 
         $sql =
-            'SELECT * FROM '._DB_PREFIX_.'ever_seo_pagemeta
+            'SELECT * FROM ' . _DB_PREFIX_ . 'ever_seo_pagemeta
             WHERE allowed_sitemap = 1
-                AND id_shop = '.pSQL((int)$id_shop).'
-                AND id_seo_lang = '.pSQL((int)$id_lang);
+                AND id_shop = ' . (int) $id_shop . '
+                AND id_seo_lang = '. (int) $id_lang;
 
         if ($results = Db::getInstance()->ExecuteS($sql)) {
             foreach ($results as $id_page) {
                 $link = new Link();
                 $pageMeta = new Meta(
-                    (int)$id_page['id_seo_pagemeta'],
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_page['id_seo_pagemeta'],
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
                 // Only configurable pages
-                if ((bool)$pageMeta->configurable === false) {
+                if ((bool) $pageMeta->configurable === false) {
                     // continue;
                 }
                 // Disable module pages on sitemaps, should be set manually
@@ -8465,10 +8454,10 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 $pageMetaUrl = $link->getPageLink(
                     $pageMeta->page,
                     true,
-                    (int)$id_lang,
+                    (int) $id_lang,
                     null,
                     false,
-                    (int)$id_shop
+                    (int) $id_shop
                 );
 
                 $sitemap->addItem(
@@ -8480,7 +8469,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             }
 
             return $sitemap->createSitemapIndex(
-                Tools::getHttpHost(true).__PS_BASE_URI__,
+                Tools::getHttpHost(true) . __PS_BASE_URI__,
                 'Today'
             );
         }
@@ -8493,33 +8482,33 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             return false;
         }
 
-        $iso_lang = Language::getIsoById((int)$id_lang);
+        $iso_lang = Language::getIsoById((int) $id_lang);
 
         $sitemap = new EverPsSeoSitemap(
-            Tools::getHttpHost(true).__PS_BASE_URI__
+            Tools::getHttpHost(true) . __PS_BASE_URI__
         );
-        $sitemap->setPath(_PS_ROOT_DIR_.'/');
-        $sitemap->setFilename('manufacturer_shop_'.(int)$id_shop.'_lang_'.(string)$iso_lang);
+        $sitemap->setPath(_PS_ROOT_DIR_ . '/');
+        $sitemap->setFilename('manufacturer_shop_' . (int) $id_shop.'_lang_' . (string) $iso_lang);
 
         $sql =
-            'SELECT * FROM '._DB_PREFIX_.'ever_seo_manufacturer
+            'SELECT * FROM ' . _DB_PREFIX_ . 'ever_seo_manufacturer
             WHERE allowed_sitemap = 1
-                AND id_shop = '.pSQL((int)$id_shop).'
-                AND id_seo_lang = '.pSQL((int)$id_lang);
+                AND id_shop = ' . (int) $id_shop . '
+                AND id_seo_lang = ' . (int) $id_lang;
 
         if ($results = Db::getInstance()->ExecuteS($sql)) {
             foreach ($results as $id_page) {
                 $link = new Link();
                 $manufacturer = new Manufacturer(
-                    (int)$id_page['id_seo_manufacturer'],
-                    (int)$id_lang
+                    (int) $id_page['id_seo_manufacturer'],
+                    (int) $id_lang
                 );
 
                 $manufacturerUrl = $link->getManufacturerLink(
-                    (int)$id_page['id_seo_manufacturer'],
+                    (int) $id_page['id_seo_manufacturer'],
                     null,
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
 
                 if ($manufacturer->active) {
@@ -8533,7 +8522,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             }
 
             return $sitemap->createSitemapIndex(
-                Tools::getHttpHost(true).__PS_BASE_URI__,
+                Tools::getHttpHost(true) . __PS_BASE_URI__,
                 'Today'
             );
         }
@@ -8541,38 +8530,37 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
     protected function processSitemapSupplier($id_shop, $id_lang)
     {
-        set_time_limit(0);
         if (!Configuration::get('EVERSEO_SITEMAP_SUPPLIER')) {
             return false;
         }
 
-        $iso_lang = Language::getIsoById((int)$id_lang);
+        $iso_lang = Language::getIsoById((int) $id_lang);
 
         $sitemap = new EverPsSeoSitemap(
-            Tools::getHttpHost(true).__PS_BASE_URI__
+            Tools::getHttpHost(true) . __PS_BASE_URI__
         );
-        $sitemap->setPath(_PS_ROOT_DIR_.'/');
-        $sitemap->setFilename('supplier_shop_'.(int)$id_shop.'_lang_'.(string)$iso_lang);
+        $sitemap->setPath(_PS_ROOT_DIR_ . '/');
+        $sitemap->setFilename('supplier_shop_' . (int) $id_shop . '_lang_' . (string) $iso_lang);
 
         $sql =
-            'SELECT * FROM '._DB_PREFIX_.'ever_seo_supplier
+            'SELECT * FROM ' . _DB_PREFIX_ . 'ever_seo_supplier
             WHERE allowed_sitemap = 1
-                AND id_shop = '.pSQL((int)$id_shop).'
-                AND id_seo_lang = '.pSQL((int)$id_lang);
+                AND id_shop = ' . (int) $id_shop . '
+                AND id_seo_lang = ' . (int) $id_lang;
 
         if ($results = Db::getInstance()->ExecuteS($sql)) {
             foreach ($results as $id_page) {
                 $link = new Link();
                 $supplier = new Supplier(
-                    (int)$id_page['id_seo_supplier'],
-                    (int)$id_lang
+                    (int) $id_page['id_seo_supplier'],
+                    (int) $id_lang
                 );
 
                 $supplierUrl = $link->getSupplierLink(
-                    (int)$id_page['id_seo_supplier'],
+                    (int) $id_page['id_seo_supplier'],
                     null,
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
 
                 if ($supplier->active) {
@@ -8586,7 +8574,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             }
 
             return $sitemap->createSitemapIndex(
-                Tools::getHttpHost(true).__PS_BASE_URI__,
+                Tools::getHttpHost(true) . __PS_BASE_URI__,
                 'Today'
             );
         }
@@ -8594,32 +8582,31 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
     protected function processSitemapCms($id_shop, $id_lang)
     {
-        set_time_limit(0);
         if (!Configuration::get('EVERSEO_SITEMAP_CMS')) {
             return false;
         }
 
-        $iso_lang = Language::getIsoById((int)$id_lang);
+        $iso_lang = Language::getIsoById((int) $id_lang);
 
         $sitemap = new EverPsSeoSitemap(
-            Tools::getHttpHost(true).__PS_BASE_URI__
+            Tools::getHttpHost(true) . __PS_BASE_URI__
         );
-        $sitemap->setPath(_PS_ROOT_DIR_.'/');
-        $sitemap->setFilename('cms_shop_'.(int)$id_shop.'_lang_'.(string)$iso_lang);
+        $sitemap->setPath(_PS_ROOT_DIR_ . '/');
+        $sitemap->setFilename('cms_shop_' . (int) $id_shop . '_lang_' . (string) $iso_lang);
 
         $sql =
-            'SELECT * FROM '._DB_PREFIX_.'ever_seo_cms
+            'SELECT * FROM ' . _DB_PREFIX_ . 'ever_seo_cms
             WHERE allowed_sitemap = 1
-                AND id_shop = '.pSQL((int)$id_shop).'
-                AND id_seo_lang = '.pSQL((int)$id_lang);
+                AND id_shop = ' . (int) $id_shop .'
+                AND id_seo_lang = ' . (int) $id_lang;
 
         if ($results = Db::getInstance()->ExecuteS($sql)) {
             foreach ($results as $id_page) {
                 $link = new Link();
                 $cms = new CMS(
-                    (int)$id_page['id_seo_cms'],
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_page['id_seo_cms'],
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
 
                 if (!$cms->active) {
@@ -8627,15 +8614,15 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 }
 
                 $cmsUrl = $link->getCMSLink(
-                    (object)$cms,
+                    (object) $cms,
                     null,
                     true,
-                    (int)$id_lang,
-                    (int)$id_shop
+                    (int) $id_lang,
+                    (int) $id_shop
                 );
 
                 $sitemap->addItem(
-                    (string)$cmsUrl,
+                    (string) $cmsUrl,
                     Configuration::get('EVERSEO_SITEMAP_CMS_PRIORITY'),
                     Configuration::get('EVERSEO_SITEMAP_CMS_FREQUENCY'),
                     date('Y-m-d')
@@ -8643,7 +8630,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             }
 
             return $sitemap->createSitemapIndex(
-                Tools::getHttpHost(true).__PS_BASE_URI__,
+                Tools::getHttpHost(true) . __PS_BASE_URI__,
                 'Today'
             );
         }
@@ -8651,26 +8638,21 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
     public function everGenerateSitemaps($id_shop = null)
     {
-        set_time_limit(0);
         if (!$id_shop) {
-            $id_shop = (int)$this->context->shop->id;
+            $id_shop = (int) $this->context->shop->id;
         }
-        if (_PS_VERSION_ >= '1.6.1.7') {
-            $languages = Language::getIDs(true);
-        } else {
-            $languages = EverPsSeoTools::getLanguagesIds(true);
-        }
+        $languages = Language::getIDs(true);
 
         foreach ($languages as $id_lang) {
             $allowedLangs = $this->getAllowedSitemapLangs();
-            if (in_array((int)$id_lang, $allowedLangs)) {
-                $this->processSitemapProduct((int)$id_shop, (int)$id_lang);
-                $this->processSitemapImage((int)$id_shop, (int)$id_lang);
-                $this->processSitemapCategory((int)$id_shop, (int)$id_lang);
-                $this->processSitemapManufacturer((int)$id_shop, (int)$id_lang);
-                $this->processSitemapSupplier((int)$id_shop, (int)$id_lang);
-                $this->processSitemapCms((int)$id_shop, (int)$id_lang);
-                $this->processSitemapPageMeta((int)$id_shop, (int)$id_lang);
+            if (in_array((int) $id_lang, $allowedLangs)) {
+                $this->processSitemapProduct((int) $id_shop, (int) $id_lang);
+                $this->processSitemapImage((int) $id_shop, (int) $id_lang);
+                $this->processSitemapCategory((int) $id_shop, (int) $id_lang);
+                $this->processSitemapManufacturer((int) $id_shop, (int) $id_lang);
+                $this->processSitemapSupplier((int) $id_shop, (int) $id_lang);
+                $this->processSitemapCms((int) $id_shop, (int) $id_lang);
+                $this->processSitemapPageMeta((int) $id_shop, (int) $id_lang);
                 $this->pingbots();
             }
         }
@@ -8678,7 +8660,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
     public function pingbots()
     {
-        $siteUrl = Tools::getHttpHost(true).__PS_BASE_URI__;
+        $siteUrl = Tools::getHttpHost(true) . __PS_BASE_URI__;
         $pingbots = [];
         $pingbots[] = 'https://google.com/ping?sitemap=';
         $pingbots[] = 'https://www.bing.com/webmaster/ping.aspx?siteMap=';
@@ -8707,7 +8689,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
     protected function processDeleteUnusedObjects()
     {
-        $pstable = array(
+        $pstable = [
             'category_lang',
             'product_lang',
             'image_lang',
@@ -8726,26 +8708,26 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             'carrier_lang',
             'attachment_lang',
             'attribute_lang',
-            'attribute_group_lang'
-        );
+            'attribute_group_lang',
+        ];
         foreach ($pstable as $table) {
             $seotable = $this->getSeoTableByPsTable($table);
-            $unused = 'DELETE FROM '._DB_PREFIX_.pSQL($table).'
+            $unused = 'DELETE FROM '. _DB_PREFIX_ .pSQL($table).'
             WHERE id_lang NOT IN
-            (SELECT id_seo_lang FROM '._DB_PREFIX_.'ever_seo_lang)';
+            (SELECT id_seo_lang FROM ' . _DB_PREFIX_ . 'ever_seo_lang)';
             if (Db::getInstance()->Execute($unused)) {
                 if ($seotable) {
-                    $updateSeo = 'DELETE FROM '._DB_PREFIX_.pSQL($seotable).'
+                    $updateSeo = 'DELETE FROM '. _DB_PREFIX_ .pSQL($seotable).'
                     WHERE id_seo_lang NOT IN
-                    (SELECT id_seo_lang FROM '._DB_PREFIX_.'ever_seo_lang)';
+                    (SELECT id_seo_lang FROM ' . _DB_PREFIX_ . 'ever_seo_lang)';
                     if (!Db::getInstance()->Execute($updateSeo)) {
-                        die('Can\'t delete object on '._DB_PREFIX_.$seotable);
+                        die('Can\'t delete object on '. _DB_PREFIX_ .$seotable);
                     }
                 } else {
                     return true;
                 }
             } else {
-                die('Can\'t delete object on '._DB_PREFIX_.$table);
+                die('Can\'t delete object on '. _DB_PREFIX_ .$table);
             }
         }
     }
@@ -8756,37 +8738,37 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
     protected function processInternalLinking($id_shop)
     {
         set_time_limit(0);
-        $id_lang = (int)Configuration::get('EVERSEO_LANG');
-        $cms = (int)Configuration::get('EVERSEO_CMS_LINKED');
-        $product_long_desc = (int)Configuration::get('EVERSEO_LONG_DESC_LINKED');
-        $product_short_desc = (int)Configuration::get('EVERSEO_SHORT_DESC_LINKED');
-        $categ = (int)Configuration::get('EVERSEO_CATEG_LINKED');
-        $maxOccur = (int)Configuration::get('EVERSEO_LINKED_NBR');
-        $searchedText = (string)Configuration::get('SEARCHED');
-        $replacingText = (string)Configuration::get('LINKEDTO');
-        $link = '<a href=\"'.pSQL($replacingText).'\" title=\"'.pSQL($searchedText).'\">'.pSQL($searchedText).'</a>';
-        $limit = (int)Configuration::get('EVERSEO_LINKED_NBR');
+        $id_lang = (int) Configuration::get('EVERSEO_LANG');
+        $cms = (int) Configuration::get('EVERSEO_CMS_LINKED');
+        $product_long_desc = (int) Configuration::get('EVERSEO_LONG_DESC_LINKED');
+        $product_short_desc = (int) Configuration::get('EVERSEO_SHORT_DESC_LINKED');
+        $categ = (int) Configuration::get('EVERSEO_CATEG_LINKED');
+        $maxOccur = (int) Configuration::get('EVERSEO_LINKED_NBR');
+        $searchedText = (string) Configuration::get('SEARCHED');
+        $replacingText = (string) Configuration::get('LINKEDTO');
+        $link = '<a href=\"' . pSQL($replacingText) . '\" title=\"' . pSQL($searchedText) . '\">' . pSQL($searchedText) . '</a>';
+        $limit = (int) Configuration::get('EVERSEO_LINKED_NBR');
 
         //CMS
         if ($cms) {
             $sql =
-                'UPDATE '._DB_PREFIX_.'cms_lang
+                'UPDATE ' . _DB_PREFIX_ . 'cms_lang
                 SET content =
                 REPLACE(
                     content,
-                    "'.pSQL($searchedText, true).'",
-                    "'.pSQL($link, true).'")
+                    "' . pSQL($searchedText, true) . '",
+                    "' . pSQL($link, true) . '")
                 WHERE INSTR(
                     content,
-                    "'.pSQL($searchedText, true).'"
+                    "' . pSQL($searchedText, true) . '"
                 ) > 0
                 AND INSTR(
                     content,
-                    "'.pSQL($searchedText, true).'"
-                ) <= '.(int)$maxOccur.'
-                AND id_shop = '.(int)$id_shop.'
-                AND id_lang = '.(int)$id_lang.'
-                LIMIT '.(int)$limit;
+                    "' . pSQL($searchedText, true) . '"
+                ) <= ' . (int) $maxOccur . '
+                AND id_shop = ' . (int) $id_shop . '
+                AND id_lang = '.(int) $id_lang.'
+                LIMIT ' . (int) $limit;
 
             if (!Db::getInstance()->execute($sql)) {
                 $this->postErrors[] = $this->l('Error on CMS content');
@@ -8798,7 +8780,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         //Products
         if ($product_long_desc) {
             $sql =
-                'UPDATE '._DB_PREFIX_.'product_lang
+                'UPDATE ' . _DB_PREFIX_ . 'product_lang
                 SET description =
                 REPLACE(
                     description,
@@ -8809,9 +8791,9 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                     description,
                     "'.pSQL($searchedText, true).'"
                 ) > 0
-                AND id_shop = '.(int)$id_shop.'
-                AND id_lang = '.(int)$id_lang.'
-                LIMIT '.(int)$limit;
+                AND id_shop = ' . (int) $id_shop . '
+                AND id_lang = ' . (int) $id_lang . '
+                LIMIT ' . (int) $limit;
 
             if (!Db::getInstance()->execute($sql)) {
                 $this->postErrors[] = $this->l('Error on Products description content');
@@ -8822,20 +8804,20 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
         if ($product_short_desc) {
             $sql =
-                'UPDATE '._DB_PREFIX_.'product_lang
+                'UPDATE ' . _DB_PREFIX_ . 'product_lang
                 SET description_short =
                 REPLACE(
                     description_short,
-                    "'.pSQL($searchedText, true).'",
-                    "'.$link.'"
+                    "' . pSQL($searchedText, true) . '",
+                    "' . $link . '"
                 )
                 WHERE INSTR(
                     description_short,
-                    "'.pSQL($searchedText, true).'"
+                    "' . pSQL($searchedText, true) . '"
                 ) > 0
-                AND id_shop = '.(int)$id_shop.'
-                AND id_lang = '.(int)$id_lang.'
-                LIMIT '.(int)$limit;
+                AND id_shop = ' . (int) $id_shop . '
+                AND id_lang = ' . (int) $id_lang . '
+                LIMIT ' . (int) $limit;
 
             if (!Db::getInstance()->execute($sql)) {
                 $this->postErrors[] = $this->l('Error on Products short description content');
@@ -8847,20 +8829,20 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         //Categories
         if ($categ) {
             $sql =
-                'UPDATE '._DB_PREFIX_.'category_lang
+                'UPDATE ' . _DB_PREFIX_ . 'category_lang
                 SET description =
                 REPLACE(
                     description,
-                    "'.pSQL($searchedText, true).'",
-                    "'.$link.'"
+                    "' . pSQL($searchedText, true) . '",
+                    "' . $link . '"
                 )
                 WHERE INSTR(
                     description,
-                    "'.pSQL($searchedText, true).'"
+                    "' . pSQL($searchedText, true) . '"
                 ) > 0
-                AND id_shop = '.(int)$id_shop.'
-                AND id_lang = '.(int)$id_lang.'
-                LIMIT '.(int)$limit;
+                AND id_shop = ' . (int) $id_shop . '
+                AND id_lang = ' . (int) $id_lang . '
+                LIMIT ' . (int) $limit;
 
             if (!Db::getInstance()->execute($sql)) {
                 $this->postErrors[] = $this->l('Error on Categories description content');
@@ -8873,11 +8855,11 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 #################### START SETTERS ####################
     protected function generateRobots()
     {
-        if ((bool)Configuration::get('EVERSEO_ROBOTS_TXT_REWRITE') === false) {
+        if ((bool) Configuration::get('EVERSEO_ROBOTS_TXT_REWRITE') === false) {
             return;
         }
         $robots = Configuration::get('EVERSEO_ROBOTS_TXT');
-        $fp = fopen(_PS_ROOT_DIR_.'/robots.txt', 'wb');
+        $fp = fopen(_PS_ROOT_DIR_ . '/robots.txt', 'wb');
         fwrite($fp, $robots);
         fclose($fp);
     }
@@ -8885,10 +8867,11 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
     protected function setColumnDefault($tableName, $columnName, $default)
     {
         $sql =
-            'ALTER TABLE '._DB_PREFIX_.pSQL($tableName).'
-            CHANGE '.pSQL($columnName).' '.pSQL($columnName).' TINYINT(1) NOT NULL DEFAULT '.(int)$default.'';
+            'ALTER TABLE '. _DB_PREFIX_ . pSQL($tableName).'
+            CHANGE ' . pSQL($columnName) .' '. pSQL($columnName) . ' TINYINT(1) NOT NULL DEFAULT ' . (int) $default.'';
         if (!Db::getInstance()->Execute($sql)) {
             $this->postErrors[] = $this->l('An error occured while altering column default value');
+            return false;
         } else {
             return true;
         }
@@ -8898,7 +8881,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
     {
         set_time_limit(0);
         $sql =
-            'INSERT INTO `'._DB_PREFIX_.'ever_seo_product` (
+            'INSERT INTO `' . _DB_PREFIX_ . 'ever_seo_product` (
                 id_seo_product,
                 id_shop,
                 id_seo_lang,
@@ -8917,21 +8900,21 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 p.indexed,
                 1,
                 1
-            FROM `'._DB_PREFIX_.'product_lang` pl
-            INNER JOIN `'._DB_PREFIX_.'product` p
+            FROM `' . _DB_PREFIX_ . 'product_lang` pl
+            INNER JOIN `' . _DB_PREFIX_ . 'product` p
                 ON (
                     p.id_product = pl.id_product
                 )
             WHERE p.id_product NOT IN (
-                SELECT id_seo_product FROM `'._DB_PREFIX_.'ever_seo_product`
+                SELECT id_seo_product FROM `' . _DB_PREFIX_ . 'ever_seo_product`
             )';
         if (!Db::getInstance()->execute($sql)) {
             return false;
         } else {
-            $duplicates = 'DELETE FROM `'._DB_PREFIX_.'ever_seo_product`
+            $duplicates = 'DELETE FROM `' . _DB_PREFIX_ . 'ever_seo_product`
             WHERE id_seo_product
             NOT IN (
-                SELECT id_product FROM '._DB_PREFIX_.'product
+                SELECT id_product FROM ' . _DB_PREFIX_ . 'product
             )';
             return Db::getInstance()->execute($duplicates);
         }
@@ -8941,7 +8924,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
     {
         set_time_limit(0);
         $sql =
-            'INSERT INTO `'._DB_PREFIX_.'ever_seo_category` (
+            'INSERT INTO `' . _DB_PREFIX_ . 'ever_seo_category` (
                 id_seo_category,
                 id_shop,
                 id_seo_lang,
@@ -8960,17 +8943,17 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 1,
                 1,
                 1
-            FROM `'._DB_PREFIX_.'category_lang`
+            FROM `' . _DB_PREFIX_ . 'category_lang`
             WHERE id_category NOT IN (
-                SELECT id_seo_category FROM `'._DB_PREFIX_.'ever_seo_category`
+                SELECT id_seo_category FROM `' . _DB_PREFIX_ . 'ever_seo_category`
             )';
         if (!Db::getInstance()->execute($sql)) {
             return false;
         } else {
-            $duplicates = 'DELETE FROM `'._DB_PREFIX_.'ever_seo_category`
+            $duplicates = 'DELETE FROM `' . _DB_PREFIX_ . 'ever_seo_category`
             WHERE id_seo_category
             NOT IN (
-                SELECT id_category FROM '._DB_PREFIX_.'category
+                SELECT id_category FROM ' . _DB_PREFIX_ . 'category
             )';
             return Db::getInstance()->execute($duplicates);
         }
@@ -8980,7 +8963,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
     {
         set_time_limit(0);
         $sql =
-            'INSERT INTO `'._DB_PREFIX_.'ever_seo_supplier` (
+            'INSERT INTO `' . _DB_PREFIX_ . 'ever_seo_supplier` (
                 id_seo_supplier,
                 id_shop,
                 id_seo_lang
@@ -8989,21 +8972,21 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 sl.id_supplier,
                 ss.id_shop,
                 sl.id_lang
-            FROM `'._DB_PREFIX_.'supplier_lang` sl
-            INNER JOIN `'._DB_PREFIX_.'supplier_shop` ss
+            FROM `' . _DB_PREFIX_ . 'supplier_lang` sl
+            INNER JOIN `' . _DB_PREFIX_ . 'supplier_shop` ss
                 ON (
                     ss.id_supplier = sl.id_supplier
                 )
             WHERE ss.id_supplier NOT IN (
-                SELECT id_seo_supplier FROM `'._DB_PREFIX_.'ever_seo_supplier`
+                SELECT id_seo_supplier FROM `' . _DB_PREFIX_ . 'ever_seo_supplier`
             )';
         if (!Db::getInstance()->execute($sql)) {
             return false;
         } else {
-            $duplicates = 'DELETE FROM `'._DB_PREFIX_.'ever_seo_supplier`
+            $duplicates = 'DELETE FROM `' . _DB_PREFIX_ . 'ever_seo_supplier`
             WHERE id_seo_supplier
             NOT IN (
-                SELECT id_supplier FROM '._DB_PREFIX_.'supplier
+                SELECT id_supplier FROM ' . _DB_PREFIX_ . 'supplier
             )';
             return Db::getInstance()->execute($duplicates);
         }
@@ -9013,7 +8996,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
     {
         set_time_limit(0);
         $sql =
-            'INSERT INTO `'._DB_PREFIX_.'ever_seo_manufacturer` (
+            'INSERT INTO `' . _DB_PREFIX_ . 'ever_seo_manufacturer` (
                 id_seo_manufacturer,
                 id_shop,
                 id_seo_lang
@@ -9022,21 +9005,21 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 ml.id_manufacturer,
                 ms.id_shop,
                 ml.id_lang
-            FROM `'._DB_PREFIX_.'manufacturer_lang` ml
-            INNER JOIN `'._DB_PREFIX_.'manufacturer_shop` ms
+            FROM `' . _DB_PREFIX_ . 'manufacturer_lang` ml
+            INNER JOIN `' . _DB_PREFIX_ . 'manufacturer_shop` ms
                ON (
                     ms.id_manufacturer = ml.id_manufacturer
                )
             WHERE ms.id_manufacturer NOT IN (
-                SELECT id_seo_manufacturer FROM `'._DB_PREFIX_.'ever_seo_manufacturer`
+                SELECT id_seo_manufacturer FROM `' . _DB_PREFIX_ . 'ever_seo_manufacturer`
             )';
         if (!Db::getInstance()->execute($sql)) {
             return false;
         } else {
-            $duplicates = 'DELETE FROM `'._DB_PREFIX_.'ever_seo_manufacturer`
+            $duplicates = 'DELETE FROM `' . _DB_PREFIX_ . 'ever_seo_manufacturer`
             WHERE id_seo_manufacturer
             NOT IN (
-                SELECT id_manufacturer FROM '._DB_PREFIX_.'manufacturer
+                SELECT id_manufacturer FROM ' . _DB_PREFIX_ . 'manufacturer
             )';
             return Db::getInstance()->execute($duplicates);
         }
@@ -9046,7 +9029,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
     {
         set_time_limit(0);
         $sql =
-            'INSERT INTO `'._DB_PREFIX_.'ever_seo_cms` (
+            'INSERT INTO `' . _DB_PREFIX_ . 'ever_seo_cms` (
                 id_seo_cms,
                 id_shop,
                 id_seo_lang,
@@ -9065,19 +9048,19 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 c.indexation,
                 1,
                 1
-            FROM `'._DB_PREFIX_.'cms_lang` cl
-            INNER JOIN `'._DB_PREFIX_.'cms` c
+            FROM `' . _DB_PREFIX_ . 'cms_lang` cl
+            INNER JOIN `' . _DB_PREFIX_ . 'cms` c
                 ON c.id_cms = cl.id_cms
             WHERE c.id_cms NOT IN (
-                SELECT id_seo_cms FROM `'._DB_PREFIX_.'ever_seo_cms`
+                SELECT id_seo_cms FROM `' . _DB_PREFIX_ . 'ever_seo_cms`
             )';
         if (!Db::getInstance()->execute($sql)) {
             return false;
         } else {
-            $duplicates = 'DELETE FROM `'._DB_PREFIX_.'ever_seo_cms`
+            $duplicates = 'DELETE FROM `' . _DB_PREFIX_ . 'ever_seo_cms`
             WHERE id_seo_cms
             NOT IN (
-                SELECT id_cms FROM '._DB_PREFIX_.'cms
+                SELECT id_cms FROM ' . _DB_PREFIX_ . 'cms
             )';
             return Db::getInstance()->execute($duplicates);
         }
@@ -9087,7 +9070,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
     {
         set_time_limit(0);
         $sql =
-            'INSERT INTO `'._DB_PREFIX_.'ever_seo_pagemeta` (
+            'INSERT INTO `' . _DB_PREFIX_ . 'ever_seo_pagemeta` (
                 id_seo_pagemeta,
                 id_shop,
                 id_seo_lang,
@@ -9100,9 +9083,9 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 id_lang,
                 title,
                 description
-            FROM `'._DB_PREFIX_.'meta_lang`
+            FROM `' . _DB_PREFIX_ . 'meta_lang`
             WHERE id_meta NOT IN (
-                SELECT id_seo_pagemeta FROM `'._DB_PREFIX_.'ever_seo_pagemeta`
+                SELECT id_seo_pagemeta FROM `' . _DB_PREFIX_ . 'ever_seo_pagemeta`
             )';
         if (!Db::getInstance()->execute($sql)) {
             return false;
@@ -9113,7 +9096,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
     {
         set_time_limit(0);
         $sql =
-            'INSERT INTO `'._DB_PREFIX_.'ever_seo_image` (
+            'INSERT INTO `' . _DB_PREFIX_ . 'ever_seo_image` (
                 id_seo_img,
                 id_seo_product,
                 id_shop,
@@ -9124,20 +9107,20 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 i.id_product,
                 i.id_shop,
                 il.id_lang
-            FROM `'._DB_PREFIX_.'image_lang` il
-            INNER JOIN `'._DB_PREFIX_.'image_shop` i
+            FROM `' . _DB_PREFIX_ . 'image_lang` il
+            INNER JOIN `' . _DB_PREFIX_ . 'image_shop` i
                 ON i.id_image = il.id_image
             WHERE il.id_image NOT IN (
-                SELECT id_seo_img FROM `'._DB_PREFIX_.'ever_seo_image`
+                SELECT id_seo_img FROM `' . _DB_PREFIX_ . 'ever_seo_image`
             )
             GROUP BY il.id_image, il.id_lang, i.id_shop';
         if (!Db::getInstance()->execute($sql)) {
             return false;
         } else {
-            $duplicates = 'DELETE FROM `'._DB_PREFIX_.'ever_seo_image`
+            $duplicates = 'DELETE FROM `' . _DB_PREFIX_ . 'ever_seo_image`
             WHERE id_seo_img
             NOT IN (
-                SELECT id_image FROM '._DB_PREFIX_.'image
+                SELECT id_image FROM ' . _DB_PREFIX_ . 'image
             )';
             return Db::getInstance()->execute($duplicates);
         }
@@ -9149,56 +9132,56 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
         // SEO products
         $sql[] = 'DELETE esp
-        FROM `'._DB_PREFIX_.'ever_seo_product` esp,
-        `'._DB_PREFIX_.'ever_seo_product` esp2
+        FROM `' . _DB_PREFIX_ . 'ever_seo_product` esp,
+        `' . _DB_PREFIX_ . 'ever_seo_product` esp2
         WHERE esp.id_seo_product < esp2.id_seo_product
         AND esp.id_shop = esp2.id_shop
         AND esp.id_seo_lang = esp2.id_seo_lang';
 
         // SEO categories
         $sql[] = 'DELETE esp
-        FROM `'._DB_PREFIX_.'ever_seo_category` esp,
-        `'._DB_PREFIX_.'ever_seo_category` esp2
+        FROM `' . _DB_PREFIX_ . 'ever_seo_category` esp,
+        `' . _DB_PREFIX_ . 'ever_seo_category` esp2
         WHERE esp.id_seo_category < esp2.id_seo_category
         AND esp.id_shop = esp2.id_shop
         AND esp.id_seo_lang = esp2.id_seo_lang';
 
         // SEO images
         $sql[] = 'DELETE esp
-        FROM `'._DB_PREFIX_.'ever_seo_image` esp,
-        `'._DB_PREFIX_.'ever_seo_image` esp2
+        FROM `' . _DB_PREFIX_ . 'ever_seo_image` esp,
+        `' . _DB_PREFIX_ . 'ever_seo_image` esp2
         WHERE esp.id_seo_img < esp2.id_seo_img
         AND esp.id_shop = esp2.id_shop
         AND esp.id_seo_lang = esp2.id_seo_lang';
 
         // SEO mannufacturers
         $sql[] = 'DELETE esp
-        FROM `'._DB_PREFIX_.'ever_seo_manufacturer` esp,
-        `'._DB_PREFIX_.'ever_seo_manufacturer` esp2
+        FROM `' . _DB_PREFIX_ . 'ever_seo_manufacturer` esp,
+        `' . _DB_PREFIX_ . 'ever_seo_manufacturer` esp2
         WHERE esp.id_seo_manufacturer < esp2.id_seo_manufacturer
         AND esp.id_shop = esp2.id_shop
         AND esp.id_seo_lang = esp2.id_seo_lang';
 
         // SEO suppliers
         $sql[] = 'DELETE esp
-        FROM `'._DB_PREFIX_.'ever_seo_supplier` esp,
-        `'._DB_PREFIX_.'ever_seo_supplier` esp2
+        FROM `' . _DB_PREFIX_ . 'ever_seo_supplier` esp,
+        `' . _DB_PREFIX_ . 'ever_seo_supplier` esp2
         WHERE esp.id_seo_supplier < esp2.id_seo_supplier
         AND esp.id_shop = esp2.id_shop
         AND esp.id_seo_lang = esp2.id_seo_lang';
 
         // SEO CMS
         $sql[] = 'DELETE esp
-        FROM `'._DB_PREFIX_.'ever_seo_product` esp,
-        `'._DB_PREFIX_.'ever_seo_product` esp2
+        FROM `' . _DB_PREFIX_ . 'ever_seo_product` esp,
+        `' . _DB_PREFIX_ . 'ever_seo_product` esp2
         WHERE esp.id_product < esp2.id_product
         AND esp.id_shop = esp2.id_shop
         AND esp.id_seo_lang = esp2.id_seo_lang';
 
         // SEO Meta
         $sql[] = 'DELETE esp
-        FROM `'._DB_PREFIX_.'ever_seo_cms` esp,
-        `'._DB_PREFIX_.'ever_seo_cms` esp2
+        FROM `' . _DB_PREFIX_ . 'ever_seo_cms` esp,
+        `' . _DB_PREFIX_ . 'ever_seo_cms` esp2
         WHERE esp.id_seo_cms < esp2.id_seo_cms
         AND esp.id_shop = esp2.id_shop
         AND esp.id_seo_lang = esp2.id_seo_lang';
@@ -9216,56 +9199,56 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
 
         // SEO products
         $sql[] = 'DELETE esp
-        FROM `'._DB_PREFIX_.'ever_seo_product` esp,
-        `'._DB_PREFIX_.'ever_seo_product` esp2
+        FROM `' . _DB_PREFIX_ . 'ever_seo_product` esp,
+        `' . _DB_PREFIX_ . 'ever_seo_product` esp2
         WHERE esp.id_seo_product < esp2.id_seo_product
         AND esp.id_shop = esp2.id_shop
         AND esp.id_seo_lang = esp2.id_seo_lang';
 
         // SEO categories
         $sql[] = 'DELETE esp
-        FROM `'._DB_PREFIX_.'ever_seo_category` esp,
-        `'._DB_PREFIX_.'ever_seo_category` esp2
+        FROM `' . _DB_PREFIX_ . 'ever_seo_category` esp,
+        `' . _DB_PREFIX_ . 'ever_seo_category` esp2
         WHERE esp.id_seo_category < esp2.id_seo_category
         AND esp.id_shop = esp2.id_shop
         AND esp.id_seo_lang = esp2.id_seo_lang';
 
         // SEO images
         $sql[] = 'DELETE esp
-        FROM `'._DB_PREFIX_.'ever_seo_image` esp,
-        `'._DB_PREFIX_.'ever_seo_image` esp2
+        FROM `' . _DB_PREFIX_ . 'ever_seo_image` esp,
+        `' . _DB_PREFIX_ . 'ever_seo_image` esp2
         WHERE esp.id_seo_img < esp2.id_seo_img
         AND esp.id_shop = esp2.id_shop
         AND esp.id_seo_lang = esp2.id_seo_lang';
 
         // SEO mannufacturers
         $sql[] = 'DELETE esp
-        FROM `'._DB_PREFIX_.'ever_seo_manufacturer` esp,
-        `'._DB_PREFIX_.'ever_seo_manufacturer` esp2
+        FROM `' . _DB_PREFIX_ . 'ever_seo_manufacturer` esp,
+        `' . _DB_PREFIX_ . 'ever_seo_manufacturer` esp2
         WHERE esp.id_seo_manufacturer < esp2.id_seo_manufacturer
         AND esp.id_shop = esp2.id_shop
         AND esp.id_seo_lang = esp2.id_seo_lang';
 
         // SEO suppliers
         $sql[] = 'DELETE esp
-        FROM `'._DB_PREFIX_.'ever_seo_supplier` esp,
-        `'._DB_PREFIX_.'ever_seo_supplier` esp2
+        FROM `' . _DB_PREFIX_ . 'ever_seo_supplier` esp,
+        `' . _DB_PREFIX_ . 'ever_seo_supplier` esp2
         WHERE esp.id_seo_supplier < esp2.id_seo_supplier
         AND esp.id_shop = esp2.id_shop
         AND esp.id_seo_lang = esp2.id_seo_lang';
 
         // SEO CMS
         $sql[] = 'DELETE esp
-        FROM `'._DB_PREFIX_.'ever_seo_product` esp,
-        `'._DB_PREFIX_.'ever_seo_product` esp2
+        FROM `' . _DB_PREFIX_ . 'ever_seo_product` esp,
+        `' . _DB_PREFIX_ . 'ever_seo_product` esp2
         WHERE esp.id_product < esp2.id_product
         AND esp.id_shop = esp2.id_shop
         AND esp.id_seo_lang = esp2.id_seo_lang';
 
         // SEO Meta
         $sql[] = 'DELETE esp
-        FROM `'._DB_PREFIX_.'ever_seo_cms` esp,
-        `'._DB_PREFIX_.'ever_seo_cms` esp2
+        FROM `' . _DB_PREFIX_ . 'ever_seo_cms` esp,
+        `' . _DB_PREFIX_ . 'ever_seo_cms` esp2
         WHERE esp.id_seo_cms < esp2.id_seo_cms
         AND esp.id_shop = esp2.id_shop
         AND esp.id_seo_lang = esp2.id_seo_lang';
@@ -9301,11 +9284,11 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
     {
         $allowedLangs = json_decode(
             Configuration::get(
-                (string)$getter
+                (string) $getter
             )
         );
         if (!$allowedLangs) {
-            $allowedLangs = array((int)Configuration::get('PS_LANG_DEFAULT'));
+            $allowedLangs = array((int) Configuration::get('PS_LANG_DEFAULT'));
         }
         return $allowedLangs;
     }
@@ -9320,7 +9303,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
         $seotable[] = 'ever_seo_pagemeta';
         $seotable[] = 'ever_seo_manufacturer';
         $seotable[] = 'ever_seo_supplier';
-        return (array)$seotable;
+        return $seotable;
     }
 
     protected function getSeoTableByPsTable($psTable)
@@ -9358,7 +9341,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 $seotable = false;
                 break;
         }
-        return (string)$seotable;
+        return (string) $seotable;
     }
 
     protected function getSeoObjByPsTable($psTable)
@@ -9392,23 +9375,23 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
                 $seoObj = 'id_seo_pagemeta';
                 break;
         }
-        return (string)$seoObj;
+        return (string) $seoObj;
     }
 
     protected function getColumnStructure($tableName, $columnName, $default)
     {
-        $describe = Db::getInstance()->ExecuteS('DESCRIBE '._DB_PREFIX_.pSQL($tableName));
+        $describe = Db::getInstance()->ExecuteS('DESCRIBE '. _DB_PREFIX_ . pSQL($tableName));
         foreach ($describe as $columnDatas) {
             if ($columnDatas['Field'] == $columnName
-                && (int)$columnDatas['Default'] != (int)$default) {
-                return $this->setColumnDefault($tableName, $columnName, (int)$default);
+                && (int) $columnDatas['Default'] != (int) $default) {
+                return $this->setColumnDefault($tableName, $columnName, (int) $default);
             }
         }
     }
 
-    protected function getAllowedGeneratorCategories($is_product = false)
+    protected function getAllowedGeneratorCategories($isProduct = false)
     {
-        if ((bool)$is_product) {
+        if ((bool) $isProduct === true) {
             $categories = json_decode(
                 Configuration::get(
                     'EVERSEO_PGENERATOR_CATEGORIES'
@@ -9422,7 +9405,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             );
         }
         if (!is_array($categories)) {
-            $categories = array($categories);
+            $categories = [$categories];
         }
         return $categories;
     }
@@ -9446,7 +9429,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             ) {
                 return false;
             }
-            copy($tmp_name, self::INPUT_FOLDER.'redirect.xlsx');
+            copy($tmp_name, EverPsSeoTools::INPUT_FOLDER . 'redirect.xlsx');
             $this->html .= $this->displayConfirmation($this->l('File has been uploaded, please wait for cron task'));
         }
     }
@@ -9470,7 +9453,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             ) {
                 return false;
             }
-            copy($tmp_name, self::INPUT_FOLDER.'products.xlsx');
+            copy($tmp_name, EverPsSeoTools::INPUT_FOLDER . 'products.xlsx');
             $this->html .= $this->displayConfirmation($this->l('File has been uploaded, please wait for cron task'));
         }
     }
@@ -9494,7 +9477,7 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]'."\n\n";
             ) {
                 return false;
             }
-            copy($tmp_name, self::INPUT_FOLDER.'categories.xlsx');
+            copy($tmp_name, EverPsSeoTools::INPUT_FOLDER . 'categories.xlsx');
             $this->html .= $this->displayConfirmation($this->l('File has been uploaded, please wait for cron task'));
         }
     }

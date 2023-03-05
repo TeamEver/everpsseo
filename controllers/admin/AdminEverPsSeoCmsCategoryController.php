@@ -11,8 +11,8 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoCmsCategory.php';
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoKeywordsStrategy.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoCmsCategory.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoKeywordsStrategy.php';
 
 class AdminEverPsSeoCmsCategoryController extends ModuleAdminController
 {
@@ -32,24 +32,24 @@ class AdminEverPsSeoCmsCategoryController extends ModuleAdminController
         $moduleConfUrl .= Tools::getAdminTokenLite('AdminModules');
 
         $this->context->smarty->assign(array(
-            'moduleConfUrl' => (string)$moduleConfUrl,
+            'moduleConfUrl' => (string) $moduleConfUrl,
             'image_dir' => _PS_BASE_URL_ . '/modules/everpsseo/views/img/'
         ));
 
         $this->_select = 'l.iso_code, cl.name';
 
         $this->_join =
-            'LEFT JOIN `'._DB_PREFIX_.'ever_seo_lang` l
+            'LEFT JOIN `' . _DB_PREFIX_ . 'ever_seo_lang` l
                 ON (
                     l.`id_seo_lang` = a.`id_seo_lang`
                 )
-            LEFT JOIN `'._DB_PREFIX_.'cms_category_lang` cl
+            LEFT JOIN `' . _DB_PREFIX_ . 'cms_category_lang` cl
                 ON (
                     cl.`id_lang` = a.`id_seo_lang`
                     AND cl.id_cms_category = a.id_seo_cms_category
                 )';
 
-        $this->_where = 'AND a.id_shop = '.(int)$this->context->shop->id;
+        $this->_where = 'AND a.id_shop = '.(int) $this->context->shop->id;
 
         $this->_group = 'GROUP BY a.id_ever_seo_cms_category';
 
@@ -117,15 +117,15 @@ class AdminEverPsSeoCmsCategoryController extends ModuleAdminController
             )
         );
 
-        $id_shop = (int)$this->context->shop->id;
-        $id_lang = (int)$this->context->language->id;
+        $id_shop = (int) $this->context->shop->id;
+        $id_lang = (int) $this->context->language->id;
 
         if (Tools::getValue('id_ever_seo_cms_category')) {
             $seoCmsCategory = new EverPsSeoCmsCategory(Tools::getValue('id_ever_seo_cms_category'));
             $cms_category = new CMSCategory(
-                (int)$seoCmsCategory->id_seo_cms_category,
-                (int)$id_lang,
-                (int)$id_shop
+                (int) $seoCmsCategory->id_seo_cms_category,
+                (int) $id_lang,
+                (int) $id_shop
             );
             $link = new Link();
             $objectUrl = $link->getCmsCategoryLink(
@@ -133,10 +133,10 @@ class AdminEverPsSeoCmsCategoryController extends ModuleAdminController
                 null,
                 null,
                 null,
-                (int)$this->context->language->id,
-                (int)$this->context->shop->id
+                (int) $this->context->language->id,
+                (int) $this->context->shop->id
             );
-            $editUrl  = 'index.php?controller=AdminCategories&id_cms_category='.(int)$cms_category->id.'';
+            $editUrl  = 'index.php?controller=AdminCategories&id_cms_category='.(int) $cms_category->id.'';
             $editUrl .= '&updatecms_category&token='.Tools::getAdminTokenLite('AdminCategories');
             $objectGSearch = str_replace(' ', '+', $cms_category->name);
 
@@ -145,19 +145,19 @@ class AdminEverPsSeoCmsCategoryController extends ModuleAdminController
                 $cms_category
             );
             switch (true) {
-                case ((int)$keywordsQlty['note'] <= 25):
+                case ((int) $keywordsQlty['note'] <= 25):
                     $color = 'ever-danger';
                     break;
 
-                case ((int)$keywordsQlty['note'] <= 50):
+                case ((int) $keywordsQlty['note'] <= 50):
                     $color = 'ever-alert';
                     break;
 
-                case ((int)$keywordsQlty['note'] <= 75):
+                case ((int) $keywordsQlty['note'] <= 75):
                     $color = 'ever-warning';
                     break;
 
-                case ((int)$keywordsQlty['note'] > 75):
+                case ((int) $keywordsQlty['note'] > 75):
                     $color = 'ever-success';
                     break;
 
@@ -326,7 +326,7 @@ class AdminEverPsSeoCmsCategoryController extends ModuleAdminController
             'buttons' => array(
                 'save-and-stay' => array(
                     'title' => $this->l('Save and stay'),
-                    'name' => 'submitAdd'.$this->table.'AndStay',
+                    'name' => 'submitAdd' . $this->table . 'AndStay',
                     'type' => 'submit',
                     'class' => 'btn btn-default pull-right',
                     'icon' => 'process-icon-save'
@@ -454,7 +454,7 @@ class AdminEverPsSeoCmsCategoryController extends ModuleAdminController
     public function processIndexable()
     {
         $everCmsCategory = new EverPsSeoCmsCategory(
-            (int)Tools::getValue('id_ever_seo_cms_category')
+            (int) Tools::getValue('id_ever_seo_cms_category')
         );
 
         $everCmsCategory->indexable = !$everCmsCategory->indexable;
@@ -467,7 +467,7 @@ class AdminEverPsSeoCmsCategoryController extends ModuleAdminController
     public function processFollow()
     {
         $everCmsCategory = new EverPsSeoCmsCategory(
-            (int)Tools::getValue('id_ever_seo_cms_category')
+            (int) Tools::getValue('id_ever_seo_cms_category')
         );
 
         $everCmsCategory->follow = !$everCmsCategory->follow;
@@ -480,15 +480,15 @@ class AdminEverPsSeoCmsCategoryController extends ModuleAdminController
     public function processSitemap()
     {
         $everCmsCategory = new EverPsSeoCmsCategory(
-            (int)Tools::getValue('id_ever_seo_cms_category')
+            (int) Tools::getValue('id_ever_seo_cms_category')
         );
         $cms_category = new CMSCategory(
-            (int)$everCmsCategory->id_seo_cms_category,
-            (int)$everCmsCategory->id_seo_lang,
-            (int)$this->context->shop->id
+            (int) $everCmsCategory->id_seo_cms_category,
+            (int) $everCmsCategory->id_seo_lang,
+            (int) $this->context->shop->id
         );
 
-        if ((int)$cms_category->active) {
+        if ((int) $cms_category->active) {
             $everCmsCategory->allowed_sitemap = !$everCmsCategory->allowed_sitemap;
         } else {
             $everCmsCategory->allowed_sitemap = 0;
@@ -547,12 +547,12 @@ class AdminEverPsSeoCmsCategoryController extends ModuleAdminController
 
             if (!count($this->errors)) {
                 $everCmsCategory = new EverPsSeoCmsCategory(
-                    (int)Tools::getValue('id_ever_seo_cms_category')
+                    (int) Tools::getValue('id_ever_seo_cms_category')
                 );
                 $cmsCategory = new CMSCategory(
-                    (int)$everCmsCategory->id_seo_cms,
-                    (int)$everCmsCategory->id_seo_lang,
-                    (int)$this->context->shop->id
+                    (int) $everCmsCategory->id_seo_cms,
+                    (int) $everCmsCategory->id_seo_lang,
+                    (int) $this->context->shop->id
                 );
                 // SEO object
                 $everCmsCategory->meta_title = Tools::getValue('meta_title');
@@ -585,7 +585,7 @@ class AdminEverPsSeoCmsCategoryController extends ModuleAdminController
     {
         foreach (Tools::getValue($this->table.'Box') as $idEverCmsCategory) {
             $everCmsCategory = new EverPsSeoCmsCategory(
-                (int)$idEverCmsCategory
+                (int) $idEverCmsCategory
             );
 
             $everCmsCategory->indexable = !$everCmsCategory->indexable;
@@ -600,7 +600,7 @@ class AdminEverPsSeoCmsCategoryController extends ModuleAdminController
     {
         foreach (Tools::getValue($this->table.'Box') as $idEverCmsCategory) {
             $everCmsCategory = new EverPsSeoCmsCategory(
-                (int)$idEverCmsCategory
+                (int) $idEverCmsCategory
             );
 
             $everCmsCategory->follow = !$everCmsCategory->follow;
@@ -615,7 +615,7 @@ class AdminEverPsSeoCmsCategoryController extends ModuleAdminController
     {
         foreach (Tools::getValue($this->table.'Box') as $idEverCmsCategory) {
             $everCmsCategory = new EverPsSeoCmsCategory(
-                (int)$idEverCmsCategory
+                (int) $idEverCmsCategory
             );
 
             $everCmsCategory->allowed_sitemap = !$everCmsCategory->allowed_sitemap;
@@ -630,18 +630,18 @@ class AdminEverPsSeoCmsCategoryController extends ModuleAdminController
     {
         foreach (Tools::getValue($this->table.'Box') as $idEverCmsCategory) {
             $everCmsCategory = new EverPsSeoCmsCategory(
-                (int)$idEverCmsCategory
+                (int) $idEverCmsCategory
             );
             $cmsCategory = new CMSCategory(
-                (int)$everCmsCategory->id_seo_cms,
-                (int)$everCmsCategory->id_seo_lang,
-                (int)$this->context->shop->id
+                (int) $everCmsCategory->id_seo_cms,
+                (int) $everCmsCategory->id_seo_lang,
+                (int) $this->context->shop->id
             );
 
             $meta_title = Db::getInstance()->getValue(
-                'SELECT meta_title FROM `'._DB_PREFIX_.'cms_category_lang`
-                WHERE id_cms_category = '.(int)$everCmsCategory->id_seo_cms_category.'
-                AND id_lang = '.(int)$everCmsCategory->id_seo_lang
+                'SELECT meta_title FROM `' . _DB_PREFIX_ . 'cms_category_lang`
+                WHERE id_cms_category = '.(int) $everCmsCategory->id_seo_cms_category.'
+                AND id_lang = '.(int) $everCmsCategory->id_seo_lang
             );
 
             if (!$meta_title) {
@@ -660,18 +660,18 @@ class AdminEverPsSeoCmsCategoryController extends ModuleAdminController
     {
         foreach (Tools::getValue($this->table.'Box') as $idEverCmsCategory) {
             $everCmsCategory = new EverPsSeoCmsCategory(
-                (int)$idEverCmsCategory
+                (int) $idEverCmsCategory
             );
             $cmsCategory = new CMSCategory(
-                (int)$everCmsCategory->id_seo_cms,
-                (int)$everCmsCategory->id_seo_lang,
-                (int)$this->context->shop->id
+                (int) $everCmsCategory->id_seo_cms,
+                (int) $everCmsCategory->id_seo_lang,
+                (int) $this->context->shop->id
             );
 
             $meta_description = Db::getInstance()->getValue(
-                'SELECT meta_description FROM `'._DB_PREFIX_.'cms_category_lang`
-                WHERE id_cms_category = '.(int)$everCmsCategory->id_seo_cms_category.'
-                AND id_lang = '.(int)$everCmsCategory->id_seo_lang
+                'SELECT meta_description FROM `' . _DB_PREFIX_ . 'cms_category_lang`
+                WHERE id_cms_category = '.(int) $everCmsCategory->id_seo_cms_category.'
+                AND id_lang = '.(int) $everCmsCategory->id_seo_lang
             );
 
             if (!$meta_description) {
@@ -690,18 +690,18 @@ class AdminEverPsSeoCmsCategoryController extends ModuleAdminController
     {
         foreach (Tools::getValue($this->table.'Box') as $idEverCmsCategory) {
             $everCmsCategory = new EverPsSeoCmsCategory(
-                (int)$idEverCmsCategory
+                (int) $idEverCmsCategory
             );
             $cmsCategory = new CMSCategory(
-                (int)$everCmsCategory->id_seo_cms,
-                (int)$everCmsCategory->id_seo_lang,
-                (int)$this->context->shop->id
+                (int) $everCmsCategory->id_seo_cms,
+                (int) $everCmsCategory->id_seo_lang,
+                (int) $this->context->shop->id
             );
 
             $name = Db::getInstance()->getValue(
-                'SELECT name FROM `'._DB_PREFIX_.'cms_category_lang`
-                WHERE id_cms_category = '.(int)$everCmsCategory->id_seo_cms_category.'
-                AND id_lang = '.(int)$everCmsCategory->id_seo_lang
+                'SELECT name FROM `' . _DB_PREFIX_ . 'cms_category_lang`
+                WHERE id_cms_category = '.(int) $everCmsCategory->id_seo_cms_category.'
+                AND id_lang = '.(int) $everCmsCategory->id_seo_lang
             );
 
             if (!$name) {
@@ -720,18 +720,18 @@ class AdminEverPsSeoCmsCategoryController extends ModuleAdminController
     {
         foreach (Tools::getValue($this->table.'Box') as $idEverCmsCategory) {
             $everCmsCategory = new EverPsSeoCmsCategory(
-                (int)$idEverCmsCategory
+                (int) $idEverCmsCategory
             );
             $cmsCategory = new CMSCategory(
-                (int)$everCmsCategory->id_seo_cms,
-                (int)$everCmsCategory->id_seo_lang,
-                (int)$this->context->shop->id
+                (int) $everCmsCategory->id_seo_cms,
+                (int) $everCmsCategory->id_seo_lang,
+                (int) $this->context->shop->id
             );
 
             $description = Db::getInstance()->getValue(
-                'SELECT content FROM `'._DB_PREFIX_.'cms_category_lang`
-                WHERE id_cms_category = '.(int)$everCmsCategory->id_seo_cms_category.'
-                AND id_lang = '.(int)$everCmsCategory->id_seo_lang
+                'SELECT content FROM `' . _DB_PREFIX_ . 'cms_category_lang`
+                WHERE id_cms_category = '.(int) $everCmsCategory->id_seo_cms_category.'
+                AND id_lang = '.(int) $everCmsCategory->id_seo_lang
             );
 
             if (!$description) {
@@ -754,12 +754,12 @@ class AdminEverPsSeoCmsCategoryController extends ModuleAdminController
     {
         foreach (Tools::getValue($this->table.'Box') as $idEverCmsCategory) {
             $everCmsCategory = new EverPsSeoCmsCategory(
-                (int)$idEverCmsCategory
+                (int) $idEverCmsCategory
             );
             $cmsCategory = new CMSCategory(
-                (int)$everCmsCategory->id_seo_cms,
-                (int)$everCmsCategory->id_seo_lang,
-                (int)$this->context->shop->id
+                (int) $everCmsCategory->id_seo_cms,
+                (int) $everCmsCategory->id_seo_lang,
+                (int) $this->context->shop->id
             );
 
             if (!Validate::isLoadedObject($cmsCategory)) {
@@ -771,17 +771,17 @@ class AdminEverPsSeoCmsCategoryController extends ModuleAdminController
                 null,
                 null,
                 null,
-                (int)$everCmsCategory->id_seo_lang,
-                (int)$this->context->shop->id
+                (int) $everCmsCategory->id_seo_lang,
+                (int) $this->context->shop->id
             );
             $httpCode = EverPsSeoTools::indexNow(
                 $url
             );
-            $sql = 'UPDATE `'._DB_PREFIX_.'ever_seo_cms_category`
-            SET status_code = '.(int)$httpCode.'
-            WHERE id_seo_lang = '.(int)$everCmsCategory->id_seo_lang.'
-            AND id_shop = '.(int)$this->context->shop->id.'
-            AND id_seo_cms_category = '.(int)$cmsCategory->id;
+            $sql = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_cms_category`
+            SET status_code = '.(int) $httpCode.'
+            WHERE id_seo_lang = '.(int) $everCmsCategory->id_seo_lang.'
+            AND id_shop = '.(int) $this->context->shop->id.'
+            AND id_seo_cms_category = '.(int) $cmsCategory->id;
             if (!Db::getInstance()->execute($sql)) {
                 $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
             }

@@ -14,7 +14,7 @@ if (!defined('_PS_VERSION_')) {
 $sql = [];
 
 $sql[] =
-    'INSERT INTO `'._DB_PREFIX_.'ever_seo_lang` (
+    'INSERT INTO `' . _DB_PREFIX_ . 'ever_seo_lang` (
         id_seo_lang,
         id_shop,
         iso_code,
@@ -25,12 +25,12 @@ $sql[] =
         ls.id_shop,
         l.iso_code,
         l.language_code
-    FROM `'._DB_PREFIX_.'lang` l
-    INNER JOIN `'._DB_PREFIX_.'lang_shop` ls
+    FROM `' . _DB_PREFIX_ . 'lang` l
+    INNER JOIN `' . _DB_PREFIX_ . 'lang_shop` ls
         ON l.id_lang = ls.id_lang';
 
 $sql[] =
-    'INSERT INTO `'._DB_PREFIX_.'ever_seo_product` (
+    'INSERT INTO `' . _DB_PREFIX_ . 'ever_seo_product` (
         id_seo_product,
         id_shop,
         id_seo_lang,
@@ -53,60 +53,60 @@ $sql[] =
         p.indexed,
         1,
         1
-    FROM `'._DB_PREFIX_.'product_lang` pl
-    INNER JOIN `'._DB_PREFIX_.'product` p
+    FROM `' . _DB_PREFIX_ . 'product_lang` pl
+    INNER JOIN `' . _DB_PREFIX_ . 'product` p
         ON (
             p.id_product = pl.id_product
         )';
 
 // $sql[] = '
-//     UPDATE '._DB_PREFIX_.'ever_seo_product
+//     UPDATE ' . _DB_PREFIX_ . 'ever_seo_product
 //         SET meta_description = (
 //             SELECT meta_description
-//             FROM '._DB_PREFIX_.'product_lang
-//             WHERE '._DB_PREFIX_.'ever_seo_product.id_seo_product = '._DB_PREFIX_.'product_lang.id_product
-//             AND '._DB_PREFIX_.'ever_seo_product.id_seo_lang = '._DB_PREFIX_.'product_lang.id_lang
+//             FROM ' . _DB_PREFIX_ . 'product_lang
+//             WHERE ' . _DB_PREFIX_ . 'ever_seo_product.id_seo_product = ' . _DB_PREFIX_ . 'product_lang.id_product
+//             AND ' . _DB_PREFIX_ . 'ever_seo_product.id_seo_lang = ' . _DB_PREFIX_ . 'product_lang.id_lang
 //         );
 
-//     UPDATE '._DB_PREFIX_.'ever_seo_product
+//     UPDATE ' . _DB_PREFIX_ . 'ever_seo_product
 //         SET meta_title = (
 //             SELECT meta_title
-//             FROM '._DB_PREFIX_.'product_lang
-//             WHERE '._DB_PREFIX_.'ever_seo_product.id_seo_product = '._DB_PREFIX_.'product_lang.id_product
-//             AND '._DB_PREFIX_.'ever_seo_product.id_seo_lang = '._DB_PREFIX_.'product_lang.id_lang
+//             FROM ' . _DB_PREFIX_ . 'product_lang
+//             WHERE ' . _DB_PREFIX_ . 'ever_seo_product.id_seo_product = ' . _DB_PREFIX_ . 'product_lang.id_product
+//             AND ' . _DB_PREFIX_ . 'ever_seo_product.id_seo_lang = ' . _DB_PREFIX_ . 'product_lang.id_lang
 //         );
-//     UPDATE '._DB_PREFIX_.'ever_seo_product
+//     UPDATE ' . _DB_PREFIX_ . 'ever_seo_product
 //         SET link_rewrite = (
 //             SELECT link_rewrite
-//             FROM '._DB_PREFIX_.'product_lang
-//             WHERE '._DB_PREFIX_.'ever_seo_product.id_seo_product = '._DB_PREFIX_.'product_lang.id_product
-//             AND '._DB_PREFIX_.'ever_seo_product.id_seo_lang = '._DB_PREFIX_.'product_lang.id_lang
+//             FROM ' . _DB_PREFIX_ . 'product_lang
+//             WHERE ' . _DB_PREFIX_ . 'ever_seo_product.id_seo_product = ' . _DB_PREFIX_ . 'product_lang.id_product
+//             AND ' . _DB_PREFIX_ . 'ever_seo_product.id_seo_lang = ' . _DB_PREFIX_ . 'product_lang.id_lang
 //         );
-//     UPDATE '._DB_PREFIX_.'ever_seo_product
+//     UPDATE ' . _DB_PREFIX_ . 'ever_seo_product
 //         SET canonical = (
 //             SELECT link_rewrite
-//             FROM '._DB_PREFIX_.'product_lang
-//             WHERE '._DB_PREFIX_.'ever_seo_product.id_seo_product = '._DB_PREFIX_.'product_lang.id_product
-//             AND '._DB_PREFIX_.'ever_seo_product.id_seo_lang = '._DB_PREFIX_.'product_lang.id_lang
+//             FROM ' . _DB_PREFIX_ . 'product_lang
+//             WHERE ' . _DB_PREFIX_ . 'ever_seo_product.id_seo_product = ' . _DB_PREFIX_ . 'product_lang.id_product
+//             AND ' . _DB_PREFIX_ . 'ever_seo_product.id_seo_lang = ' . _DB_PREFIX_ . 'product_lang.id_lang
 //         );
-//     UPDATE '._DB_PREFIX_.'ever_seo_product
+//     UPDATE ' . _DB_PREFIX_ . 'ever_seo_product
 //         SET follow = (
 //             SELECT active
-//             FROM '._DB_PREFIX_.'product_shop
-//             WHERE '._DB_PREFIX_.'ever_seo_product.id_seo_product = '._DB_PREFIX_.'product_shop.id_product
-//             AND '._DB_PREFIX_.'ever_seo_product.id_shop = '._DB_PREFIX_.'product_shop.id_shop
+//             FROM ' . _DB_PREFIX_ . 'product_shop
+//             WHERE ' . _DB_PREFIX_ . 'ever_seo_product.id_seo_product = ' . _DB_PREFIX_ . 'product_shop.id_product
+//             AND ' . _DB_PREFIX_ . 'ever_seo_product.id_shop = ' . _DB_PREFIX_ . 'product_shop.id_shop
 //         );
-//     UPDATE '._DB_PREFIX_.'ever_seo_product
+//     UPDATE ' . _DB_PREFIX_ . 'ever_seo_product
 //         SET allowed_sitemap = (
 //             SELECT active
-//             FROM '._DB_PREFIX_.'product_shop
-//             WHERE '._DB_PREFIX_.'ever_seo_product.id_seo_product = '._DB_PREFIX_.'product_shop.id_product
-//             AND '._DB_PREFIX_.'ever_seo_product.id_shop = '._DB_PREFIX_.'product_shop.id_shop
+//             FROM ' . _DB_PREFIX_ . 'product_shop
+//             WHERE ' . _DB_PREFIX_ . 'ever_seo_product.id_seo_product = ' . _DB_PREFIX_ . 'product_shop.id_product
+//             AND ' . _DB_PREFIX_ . 'ever_seo_product.id_shop = ' . _DB_PREFIX_ . 'product_shop.id_shop
 //         );
 //     ';
 
 $sql[] =
-    'INSERT INTO `'._DB_PREFIX_.'ever_seo_image` (
+    'INSERT INTO `' . _DB_PREFIX_ . 'ever_seo_image` (
         id_seo_img,
         id_seo_product,
         id_shop,
@@ -122,13 +122,13 @@ $sql[] =
         il.id_lang,
         il.legend,
         1
-    FROM `'._DB_PREFIX_.'image_lang` il
-    INNER JOIN `'._DB_PREFIX_.'image_shop` i
+    FROM `' . _DB_PREFIX_ . 'image_lang` il
+    INNER JOIN `' . _DB_PREFIX_ . 'image_shop` i
         ON i.id_image = il.id_image
     GROUP BY il.id_image, il.id_lang, i.id_shop';
 
 $sql[] =
-    'INSERT INTO `'._DB_PREFIX_.'ever_seo_category` (
+    'INSERT INTO `' . _DB_PREFIX_ . 'ever_seo_category` (
         id_seo_category,
         id_shop,
         id_seo_lang,
@@ -152,42 +152,42 @@ $sql[] =
         1,
         1,
         1
-    FROM `'._DB_PREFIX_.'category_lang`';
+    FROM `' . _DB_PREFIX_ . 'category_lang`';
 
 // $sql[] = '
-//     UPDATE '._DB_PREFIX_.'ever_seo_category
+//     UPDATE ' . _DB_PREFIX_ . 'ever_seo_category
 //         SET meta_description = (
 //             SELECT meta_description
-//             FROM '._DB_PREFIX_.'category_lang
-//             WHERE '._DB_PREFIX_.'ever_seo_category.id_seo_category = '._DB_PREFIX_.'category_lang.id_category
-//             AND '._DB_PREFIX_.'ever_seo_category.id_seo_lang = '._DB_PREFIX_.'category_lang.id_lang
+//             FROM ' . _DB_PREFIX_ . 'category_lang
+//             WHERE ' . _DB_PREFIX_ . 'ever_seo_category.id_seo_category = ' . _DB_PREFIX_ . 'category_lang.id_category
+//             AND ' . _DB_PREFIX_ . 'ever_seo_category.id_seo_lang = ' . _DB_PREFIX_ . 'category_lang.id_lang
 //         );
 
-//     UPDATE '._DB_PREFIX_.'ever_seo_category
+//     UPDATE ' . _DB_PREFIX_ . 'ever_seo_category
 //         SET meta_title = (
 //             SELECT meta_title
-//             FROM '._DB_PREFIX_.'category_lang
-//             WHERE '._DB_PREFIX_.'ever_seo_category.id_seo_category = '._DB_PREFIX_.'category_lang.id_category
-//             AND '._DB_PREFIX_.'ever_seo_category.id_seo_lang = '._DB_PREFIX_.'category_lang.id_lang
+//             FROM ' . _DB_PREFIX_ . 'category_lang
+//             WHERE ' . _DB_PREFIX_ . 'ever_seo_category.id_seo_category = ' . _DB_PREFIX_ . 'category_lang.id_category
+//             AND ' . _DB_PREFIX_ . 'ever_seo_category.id_seo_lang = ' . _DB_PREFIX_ . 'category_lang.id_lang
 //         );
-//     UPDATE '._DB_PREFIX_.'ever_seo_category
+//     UPDATE ' . _DB_PREFIX_ . 'ever_seo_category
 //         SET link_rewrite = (
 //             SELECT link_rewrite
-//             FROM '._DB_PREFIX_.'category_lang
-//             WHERE '._DB_PREFIX_.'ever_seo_category.id_seo_category = '._DB_PREFIX_.'category_lang.id_category
-//             AND '._DB_PREFIX_.'ever_seo_category.id_seo_lang = '._DB_PREFIX_.'category_lang.id_lang
+//             FROM ' . _DB_PREFIX_ . 'category_lang
+//             WHERE ' . _DB_PREFIX_ . 'ever_seo_category.id_seo_category = ' . _DB_PREFIX_ . 'category_lang.id_category
+//             AND ' . _DB_PREFIX_ . 'ever_seo_category.id_seo_lang = ' . _DB_PREFIX_ . 'category_lang.id_lang
 //         );
-//     UPDATE '._DB_PREFIX_.'ever_seo_category
+//     UPDATE ' . _DB_PREFIX_ . 'ever_seo_category
 //         SET canonical = (
 //             SELECT link_rewrite
-//             FROM '._DB_PREFIX_.'category_lang
-//             WHERE '._DB_PREFIX_.'ever_seo_category.id_seo_category = '._DB_PREFIX_.'category_lang.id_category
-//             AND '._DB_PREFIX_.'ever_seo_category.id_seo_lang = '._DB_PREFIX_.'category_lang.id_lang
+//             FROM ' . _DB_PREFIX_ . 'category_lang
+//             WHERE ' . _DB_PREFIX_ . 'ever_seo_category.id_seo_category = ' . _DB_PREFIX_ . 'category_lang.id_category
+//             AND ' . _DB_PREFIX_ . 'ever_seo_category.id_seo_lang = ' . _DB_PREFIX_ . 'category_lang.id_lang
 //         );
 //     ';
 
 $sql[] =
-    'INSERT INTO `'._DB_PREFIX_.'ever_seo_manufacturer` (
+    'INSERT INTO `' . _DB_PREFIX_ . 'ever_seo_manufacturer` (
         id_seo_manufacturer,
         id_shop,
         id_seo_lang
@@ -196,14 +196,14 @@ $sql[] =
         ml.id_manufacturer,
         ms.id_shop,
         ml.id_lang
-    FROM `'._DB_PREFIX_.'manufacturer_lang` ml
-    INNER JOIN `'._DB_PREFIX_.'manufacturer_shop` ms
+    FROM `' . _DB_PREFIX_ . 'manufacturer_lang` ml
+    INNER JOIN `' . _DB_PREFIX_ . 'manufacturer_shop` ms
        ON (
             ms.id_manufacturer = ml.id_manufacturer
        )';
 
 $sql[] =
-    'INSERT INTO `'._DB_PREFIX_.'ever_seo_supplier` (
+    'INSERT INTO `' . _DB_PREFIX_ . 'ever_seo_supplier` (
         id_seo_supplier,
         id_shop,
         id_seo_lang
@@ -212,14 +212,14 @@ $sql[] =
         sl.id_supplier,
         ss.id_shop,
         sl.id_lang
-    FROM `'._DB_PREFIX_.'supplier_lang` sl
-    INNER JOIN `'._DB_PREFIX_.'supplier_shop` ss
+    FROM `' . _DB_PREFIX_ . 'supplier_lang` sl
+    INNER JOIN `' . _DB_PREFIX_ . 'supplier_shop` ss
         ON (
             ss.id_supplier = sl.id_supplier
         )';
 
 $sql[] =
-    'INSERT INTO `'._DB_PREFIX_.'ever_seo_pagemeta` (
+    'INSERT INTO `' . _DB_PREFIX_ . 'ever_seo_pagemeta` (
         id_seo_pagemeta,
         id_shop,
         id_seo_lang,
@@ -238,10 +238,10 @@ $sql[] =
         1,
         1,
         1
-    FROM `'._DB_PREFIX_.'meta_lang`';
+    FROM `' . _DB_PREFIX_ . 'meta_lang`';
 
 $sql[] =
-    'INSERT INTO `'._DB_PREFIX_.'ever_seo_cms_category` (
+    'INSERT INTO `' . _DB_PREFIX_ . 'ever_seo_cms_category` (
         id_seo_cms_category,
         id_shop,
         id_seo_lang,
@@ -261,10 +261,10 @@ $sql[] =
         1,
         1,
         1
-    FROM `'._DB_PREFIX_.'cms_category_lang`';
+    FROM `' . _DB_PREFIX_ . 'cms_category_lang`';
 
 $sql[] =
-    'INSERT INTO `'._DB_PREFIX_.'ever_seo_cms` (
+    'INSERT INTO `' . _DB_PREFIX_ . 'ever_seo_cms` (
         id_seo_cms,
         id_shop,
         id_seo_lang,
@@ -283,8 +283,8 @@ $sql[] =
         c.indexation,
         1,
         1
-    FROM `'._DB_PREFIX_.'cms_lang` cl
-    INNER JOIN `'._DB_PREFIX_.'cms` c
+    FROM `' . _DB_PREFIX_ . 'cms_lang` cl
+    INNER JOIN `' . _DB_PREFIX_ . 'cms` c
         ON c.id_cms = cl.id_cms';
 
 foreach ($sql as $s) {

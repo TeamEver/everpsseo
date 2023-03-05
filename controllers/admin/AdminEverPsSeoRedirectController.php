@@ -6,12 +6,11 @@
  * @license   Tous droits réservés / Le droit d'auteur s'applique (All rights reserved / French copyright law applies)
  * @see https://www.team-ever.com
  */
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-require_once _PS_MODULE_DIR_.'everpsseo/models/EverPsSeoRedirect.php';
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoRedirect.php';
 
 class AdminEverPsSeoRedirectController extends ModuleAdminController
 {
@@ -31,9 +30,9 @@ class AdminEverPsSeoRedirectController extends ModuleAdminController
         $moduleConfUrl .= Tools::getAdminTokenLite('AdminModules');
 
         $this->context->smarty->assign(array(
-            'moduleConfUrl' => (string)$moduleConfUrl,
+            'moduleConfUrl' => (string) $moduleConfUrl,
             'image_dir' => _PS_BASE_URL_ . '/modules/everpsseo/views/img/',
-            'redirects_enabled' => (bool)Configuration::get('EVERSEO_REWRITE')
+            'redirects_enabled' => (bool) Configuration::get('EVERSEO_REWRITE')
         ));
 
         $this->bulk_actions = array(
@@ -43,7 +42,7 @@ class AdminEverPsSeoRedirectController extends ModuleAdminController
             ),
         );
 
-        $this->_where = 'AND a.id_shop ='.(int)$this->context->shop->id;
+        $this->_where = 'AND a.id_shop ='.(int) $this->context->shop->id;
 
         $this->fields_list = array(
             'id_ever_seo_redirect' => array(
@@ -180,7 +179,7 @@ class AdminEverPsSeoRedirectController extends ModuleAdminController
             'buttons' => array(
                 'save-and-stay' => array(
                     'title' => $this->l('Save and stay'),
-                    'name' => 'submitAdd'.$this->table.'AndStay',
+                    'name' => 'submitAdd' . $this->table . 'AndStay',
                     'type' => 'submit',
                     'class' => 'btn btn-default pull-right',
                     'icon' => 'process-icon-save'
@@ -262,13 +261,13 @@ class AdminEverPsSeoRedirectController extends ModuleAdminController
 
             $redirectExists = EverPsSeoRedirect::ifRedirectExists(
                 Tools::getValue('redirection'),
-                (int)$this->context->shop->id
+                (int) $this->context->shop->id
             );
 
             if (!$redirectExists) {
                 $newRedirect->redirection = Tools::getValue('redirection');
                 $newRedirect->not_found = Tools::getValue('not_found');
-                $newRedirect->id_shop = (int)Context::getContext()->shop->id;
+                $newRedirect->id_shop = (int) Context::getContext()->shop->id;
                 $newRedirect->code = Tools::getValue('code');
                 $newRedirect->active = Tools::getValue('active');
 
@@ -279,11 +278,11 @@ class AdminEverPsSeoRedirectController extends ModuleAdminController
                     Db::getInstance()->update(
                         'ever_seo_redirect',
                         array(
-                            'active' => (int)Tools::getValue('active')
+                            'active' => (int) Tools::getValue('active')
                         ),
-                        'id_ever_seo_redirect = '.(int)Tools::getValue('id_ever_seo_redirect')
+                        'id_ever_seo_redirect = '.(int) Tools::getValue('id_ever_seo_redirect')
                     );
-                    if ((bool)Configuration::get('EVERHTACCESS_404') === true) {
+                    if ((bool) Configuration::get('EVERHTACCESS_404') === true) {
                         $this->module->hookActionHtaccessCreate();
                     }
                     Tools::redirectAdmin(self::$currentIndex.'&conf=4&token='.$this->token);
@@ -317,7 +316,7 @@ class AdminEverPsSeoRedirectController extends ModuleAdminController
                     if (is_array($redirections)) {
                         foreach ($redirections as $id_ever_seo_redirect) {
                             $notFound = new EverPsSeoRedirect(
-                                (int)$id_ever_seo_redirect
+                                (int) $id_ever_seo_redirect
                             );
 
                             if (!count($this->errors)) {
@@ -327,9 +326,9 @@ class AdminEverPsSeoRedirectController extends ModuleAdminController
                                         1,
                                         null,
                                         $this->className,
-                                        (int)$notFound->id,
+                                        (int) $notFound->id,
                                         true,
-                                        (int)$this->context->employee->id
+                                        (int) $this->context->employee->id
                                     );
                                 }
                             } else {

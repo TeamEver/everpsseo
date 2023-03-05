@@ -6,7 +6,6 @@
  * @license   Tous droits réservés / Le droit d'auteur s'applique (All rights reserved / French copyright law applies)
  * @see https://www.team-ever.com
  */
-
 class EverPsSeoStats extends ObjectModel
 {
     public static function getBestViewedProducts()
@@ -22,19 +21,19 @@ class EverPsSeoStats extends ObjectModel
         $best = Db::getInstance()->executeS($sql);
         foreach ($best as $prod) {
             $product = new Product(
-                (int)$prod['id_seo_product'],
+                (int) $prod['id_seo_product'],
                 false,
-                (int)Context::getContext()->language->id,
-                (int)Context::getContext()->shop->id
+                (int) Context::getContext()->language->id,
+                (int) Context::getContext()->shop->id
             );
-            $product->count = (int)$prod['count'];
+            $product->count = (int) $prod['count'];
             $product->url = $link->getProductLink(
-                (int)$prod['id_seo_product'],
+                (int) $prod['id_seo_product'],
                 null,
                 null,
                 null,
-                (int)Context::getContext()->language->id,
-                (int)Context::getContext()->shop->id
+                (int) Context::getContext()->language->id,
+                (int) Context::getContext()->shop->id
             );
             $return[] = $product;
         }
@@ -56,17 +55,17 @@ class EverPsSeoStats extends ObjectModel
         $best = Db::getInstance()->executeS($sql);
         foreach ($best as $cat) {
             $category = new Category(
-                (int)$cat['id_seo_category'],
-                (int)Context::getContext()->language->id,
-                (int)Context::getContext()->shop->id
+                (int) $cat['id_seo_category'],
+                (int) Context::getContext()->language->id,
+                (int) Context::getContext()->shop->id
             );
-            $category->count = (int)$cat['count'];
+            $category->count = (int) $cat['count'];
             $category->url = $link->getCategoryLink(
                 (object)$category,
                 null,
-                (int)Context::getContext()->language->id,
+                (int) Context::getContext()->language->id,
                 null,
-                (int)Context::getContext()->shop->id
+                (int) Context::getContext()->shop->id
             );
             $return[] = $category;
         }
@@ -87,7 +86,7 @@ class EverPsSeoStats extends ObjectModel
         $best = Db::getInstance()->executeS($sql);
         foreach ($best as $redir) {
             $redirect = new EverPsSeoRedirect(
-                (int)$redir['id_ever_seo_redirect']
+                (int) $redir['id_ever_seo_redirect']
             );
             $return[] = $redirect;
         }
@@ -108,7 +107,7 @@ class EverPsSeoStats extends ObjectModel
         $best = Db::getInstance()->executeS($sql);
         foreach ($best as $ref) {
             $referal = new EverPsSeoBacklink(
-                (int)$ref['id_ever_seo_backlink']
+                (int) $ref['id_ever_seo_backlink']
             );
             $return[] = $referal;
         }

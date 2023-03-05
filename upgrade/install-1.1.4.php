@@ -16,7 +16,7 @@ function upgrade_module_1_1_4()
     $result = false;
 
     $sql =
-        'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ever_seo_cms_category` (
+        'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'ever_seo_cms_category` (
             `id_ever_seo_cms_category` int(10) unsigned NOT NULL auto_increment,
             `id_seo_cms_category` int(10) unsigned NOT NULL,
             `id_shop` int(10) unsigned NOT NULL,
@@ -34,7 +34,7 @@ function upgrade_module_1_1_4()
     $result = Db::getInstance()->execute($sql);
 
     $sql =
-        'INSERT INTO `'._DB_PREFIX_.'ever_seo_cms_category` (
+        'INSERT INTO `' . _DB_PREFIX_ . 'ever_seo_cms_category` (
             id_seo_cms_category,
             id_shop,
             id_seo_lang,
@@ -53,7 +53,7 @@ function upgrade_module_1_1_4()
             1,
             1,
             1
-        FROM `'._DB_PREFIX_.'cms_category_lang`
+        FROM `' . _DB_PREFIX_ . 'cms_category_lang`
     ';
 
     $result &= Db::getInstance()->execute($sql);
@@ -67,7 +67,7 @@ function upgrade_module_1_1_4()
     $tab->module = 'everpsseo';
 
     foreach (Language::getLanguages(false) as $lang) {
-        $tab->name[(int)$lang['id_lang']] = 'SEO CMS Categories';
+        $tab->name[(int) $lang['id_lang']] = 'SEO CMS Categories';
     }
 
     return $tab->add();
