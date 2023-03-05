@@ -6,7 +6,6 @@
  * @license   Tous droits réservés / Le droit d'auteur s'applique (All rights reserved / French copyright law applies)
  * @see https://www.team-ever.com
  */
-
 class EverPsSeoPageMeta extends ObjectModel
 {
     public $id_seo_pagemeta;
@@ -24,94 +23,94 @@ class EverPsSeoPageMeta extends ObjectModel
     public $count;
     public $status_code;
 
-    public static $definition = array(
+    public static $definition = [
         'table' => 'ever_seo_pagemeta',
         'primary' => 'id_ever_seo_pagemeta',
         'multilang' => false,
-        'fields' => array(
-            'id_seo_pagemeta' => array(
+        'fields' => [
+            'id_seo_pagemeta' => [
                 'type' => self::TYPE_INT,
                 'lang' => false,
                 'validate' => 'isUnsignedInt',
-                'required' => true
-            ),
-            'id_shop' => array(
+                'required' => true,
+            ],
+            'id_shop' => [
                 'type' => self::TYPE_INT,
                 'lang' => false,
-                'validate' => 'isUnsignedInt'
-            ),
-            'id_seo_lang' => array(
+                'validate' => 'isUnsignedInt',
+            ],
+            'id_seo_lang' => [
                 'type' => self::TYPE_INT,
                 'lang' => false,
-                'validate' => 'isUnsignedInt'
-            ),
-            'meta_title' => array(
+                'validate' => 'isUnsignedInt',
+            ],
+            'meta_title' => [
                 'type' => self::TYPE_STRING,
                 'lang' => false,
-                'validate' => 'isString'
-            ),
-            'meta_description' => array(
+                'validate' => 'isString',
+            ],
+            'meta_description' => [
                 'type' => self::TYPE_STRING,
                 'lang' => false,
-                'validate' => 'isString'
-            ),
-            'social_title' => array(
+                'validate' => 'isString',
+            ],
+            'social_title' => [
                 'type' => self::TYPE_STRING,
                 'lang' => false,
-                'validate' => 'isString'
-            ),
-            'social_description' => array(
+                'validate' => 'isString',
+            ],
+            'social_description' => [
                 'type' => self::TYPE_STRING,
                 'lang' => false,
-                'validate' => 'isCleanHtml'
-            ),
-            'social_img_url' => array(
+                'validate' => 'isCleanHtml',
+            ],
+            'social_img_url' => [
                 'type' => self::TYPE_STRING,
                 'lang' => false,
-                'validate' => 'isUrl'
-            ),
-            'keywords' => array(
+                'validate' => 'isUrl',
+            ],
+            'keywords' => [
                 'type' => self::TYPE_STRING,
                 'lang' => false,
-                'validate' => 'isString'
-            ),
-            'indexable' => array(
+                'validate' => 'isString',
+            ],
+            'indexable' => [
                 'type' => self::TYPE_INT,
                 'lang' => false,
-                'validate' => 'isBool'
-            ),
-            'follow' => array(
+                'validate' => 'isBool',
+            ],
+            'follow' => [
                 'type' => self::TYPE_INT,
                 'lang' => false,
-                'validate' => 'isBool'
-            ),
-            'allowed_sitemap' => array(
+                'validate' => 'isBool',
+            ],
+            'allowed_sitemap' => [
                 'type' => self::TYPE_INT,
                 'lang' => false,
-                'validate' => 'isBool'
-            ),
-            'count' => array(
+                'validate' => 'isBool',
+            ],
+            'count' => [
                 'type' => self::TYPE_INT,
                 'lang' => false,
-                'validate' => 'isUnsignedInt'
-            ),
-            'status_code' => array(
+                'validate' => 'isUnsignedInt',
+            ],
+            'status_code' => [
                 'type' => self::TYPE_INT,
                 'lang' => false,
-                'validate' => 'isUnsignedInt'
-            ),
-        )
-    );
+                'validate' => 'isUnsignedInt',
+            ],
+        ],
+    ];
 
     public static function getAllSeoPagemetasIds($id_shop)
     {
         $cache_id = 'EverPsSeoPageMeta::getAllSeoPagemetasIds_'
-        .(int) $id_shop;
+        . (int) $id_shop;
         if (!Cache::isStored($cache_id)) {
             $sql = new DbQuery();
             $sql->select('*');
             $sql->from('ever_seo_pagemeta');
-            $sql->where('id_shop = '.(int) $id_shop);
+            $sql->where('id_shop = ' . (int) $id_shop);
             $return = Db::getInstance()->executeS($sql);
             Cache::store($cache_id, $return);
             return $return;
@@ -122,14 +121,14 @@ class EverPsSeoPageMeta extends ObjectModel
     public static function getPageNameBySeoId($id_seo_pagemeta, $id_lang)
     {
         $cache_id = 'EverPsSeoPageMeta::getPageNameBySeoId_'
-        .(int) $id_seo_pagemeta
-        .'_'
-        .(int) $id_lang;
+        . (int) $id_seo_pagemeta
+        . '_'
+        . (int) $id_lang;
         if (!Cache::isStored($cache_id)) {
             $sql = 'SELECT title
             FROM ' . _DB_PREFIX_ . 'meta_lang
-            WHERE id_meta = '.(int) $id_seo_pagemeta.'
-            AND id_lang = '.(int) $id_lang.'';
+            WHERE id_meta = ' . (int) $id_seo_pagemeta . '
+            AND id_lang = ' . (int) $id_lang . '';
             $return = Db::getInstance()->getValue($sql);
             Cache::store($cache_id, $return);
             return $return;
@@ -140,23 +139,23 @@ class EverPsSeoPageMeta extends ObjectModel
     public static function getSeoPageMeta($id_seo_pagemeta, $id_shop, $id_seo_lang)
     {
         $cache_id = 'EverPsSeoPageMeta::getSeoPageMeta_'
-        .(int) $id_seo_pagemeta
-        .'_'
-        .(int) $id_shop
-        .'_'
-        .(int) $id_seo_lang;
+        . (int) $id_seo_pagemeta
+        . '_'
+        . (int) $id_shop
+        . '_'
+        . (int) $id_seo_lang;
         if (!Cache::isStored($cache_id)) {
             $sql = new DbQuery();
             $sql->select('*');
             $sql->from('ever_seo_pagemeta');
             $sql->where(
-                'id_seo_pagemeta = '.(int) $id_seo_pagemeta
+                'id_seo_pagemeta = ' . (int) $id_seo_pagemeta
             );
             $sql->where(
-                'id_seo_lang = '.(int) $id_seo_lang
+                'id_seo_lang = ' . (int) $id_seo_lang
             );
             $sql->where(
-                'id_shop = '.(int) $id_shop
+                'id_shop = ' . (int) $id_shop
             );
             $return = new self(Db::getInstance()->getValue($sql));
             Cache::store($cache_id, $return);
@@ -175,23 +174,23 @@ class EverPsSeoPageMeta extends ObjectModel
         $message = Configuration::getConfigInMultipleLangs(
             'EVERSEO_PAGEMETA_TITLE_AUTO'
         );
-        $shortcodes = array(
+        $shortcodes = [
             '[pagemeta_title]' => $pagemeta->title ? $pagemeta->title : '',
             '[pagemeta_desc]' => $pagemeta->description ? $pagemeta->description : '',
             '[pagemeta_tags]' => $pagemeta->keywords ? $pagemeta->keywords : '',
             '[shop_name]' => (string) Configuration::get('PS_SHOP_NAME'),
             'NULL' => '', // Useful : remove empty strings in case of NULL
             'null' => '', // Useful : remove empty strings in case of null
-        );
+        ];
         foreach ($shortcodes as $key => $value) {
             $message[(int) $id_seo_lang] = str_replace(
                 (string) $key,
                 (string) $value,
                 (string) $message[(int) $id_seo_lang]
             );
-            $message[(int) $id_seo_lang] = Hook::exec('actionChangeSeoShortcodes', array(
+            $message[(int) $id_seo_lang] = Hook::exec('actionChangeSeoShortcodes', [
                 'content' => $message[(int) $id_seo_lang]
-            ));
+            ]);
         }
         if (!empty($message[(int) $id_seo_lang])) {
             return $message[(int) $id_seo_lang];
@@ -208,23 +207,23 @@ class EverPsSeoPageMeta extends ObjectModel
         $message = Configuration::getConfigInMultipleLangs(
             'EVERSEO_PAGEMETA_METADESC_AUTO'
         );
-        $shortcodes = array(
+        $shortcodes = [
             '[pagemeta_title]' => $pagemeta->title ? $pagemeta->title : '',
             '[pagemeta_desc]' => $pagemeta->description ? $pagemeta->description : '',
             '[pagemeta_tags]' => $pagemeta->keywords ? $pagemeta->keywords : '',
             '[shop_name]' => (string) Configuration::get('PS_SHOP_NAME'),
             'NULL' => '', // Useful : remove empty strings in case of NULL
             'null' => '', // Useful : remove empty strings in case of null
-        );
+        ];
         foreach ($shortcodes as $key => $value) {
             $message[(int) $id_seo_lang] = str_replace(
                 (string) $key,
                 (string) $value,
                 (string) $message[(int) $id_seo_lang]
             );
-            $message[(int) $id_seo_lang] = Hook::exec('actionChangeSeoShortcodes', array(
+            $message[(int) $id_seo_lang] = Hook::exec('actionChangeSeoShortcodes', [
                 'content' => $message[(int) $id_seo_lang]
-            ));
+            ]);
         }
         if (!empty($message[(int) $id_seo_lang])) {
             return $message[(int) $id_seo_lang];
@@ -241,7 +240,7 @@ class EverPsSeoPageMeta extends ObjectModel
         foreach ($metas as $m) {
             Db::getInstance()->delete(
                 'ever_seo_pagemeta',
-                'id_seo_pagemeta = '.(int) $m['id_meta']
+                'id_seo_pagemeta = ' . (int) $m['id_meta']
             );
         }
     }
