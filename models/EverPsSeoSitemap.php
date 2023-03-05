@@ -6,13 +6,8 @@
  * @license   Tous droits réservés / Le droit d'auteur s'applique (All rights reserved / French copyright law applies)
  * @see https://www.team-ever.com
  */
-
 class EverPsSeoSitemap extends ObjectModel
 {
-    /**
-     *
-     * @var \XMLWriter
-     */
     private $writer;
     private $domain;
     private $path;
@@ -26,10 +21,6 @@ class EverPsSeoSitemap extends ObjectModel
     const SEPERATOR = '-';
     const INDEX_SUFFIX = 'index';
 
-    /**
-     *
-     * @param string $domain
-     */
     public function __construct($domain)
     {
         $this->setDomain($domain);
@@ -168,10 +159,10 @@ class EverPsSeoSitemap extends ObjectModel
         if ($this->getCurrentSitemap()) {
             $this->getWriter()->openURI(
                 $this->getPath()
-                .$this->getFilename()
-                .self::SEPERATOR
-                .$this->getCurrentSitemap()
-                .self::EXT
+                . $this->getFilename()
+                . self::SEPERATOR
+                . $this->getCurrentSitemap()
+                . self::EXT
             );
         } else {
             $this->getWriter()->openURI(
@@ -261,10 +252,10 @@ class EverPsSeoSitemap extends ObjectModel
         $indexwriter = new \XMLWriter();
         $indexwriter->openURI(
             $this->getPath()
-            .$this->getFilename()
-            .self::SEPERATOR
-            .self::INDEX_SUFFIX
-            .self::EXT
+            . $this->getFilename()
+            . self::SEPERATOR
+            . self::INDEX_SUFFIX
+            . self::EXT
         );
         $indexwriter->startDocument('1.0', 'UTF-8');
         $indexwriter->setIndent(true);
@@ -275,9 +266,9 @@ class EverPsSeoSitemap extends ObjectModel
             $indexwriter->writeElement(
                 'loc',
                 $loc
-                .$this->getFilename()
-                .($index ? self::SEPERATOR . $index : '')
-                .self::EXT
+                . $this->getFilename()
+                . ($index ? self::SEPERATOR . $index : '')
+                . self::EXT
             );
             $indexwriter->writeElement('lastmod', $this->getLastModifiedDate($lastmod));
             $indexwriter->endElement();
@@ -290,13 +281,13 @@ class EverPsSeoSitemap extends ObjectModel
     {
         $siteUrl = Tools::getHttpHost(true) . __PS_BASE_URI__;
         $indexes = [];
-        $sitemap_indexes_dir = glob(_PS_ROOT_DIR_.'/*');
+        $sitemap_indexes_dir = glob(_PS_ROOT_DIR_ . '/*');
         foreach ($sitemap_indexes_dir as $index) {
             if (is_file($index)
                 && pathinfo($index, PATHINFO_EXTENSION) == 'xml'
                 && strpos(basename($index), 'index')
             ) {
-                $indexes[] = $siteUrl.basename($index);
+                $indexes[] = $siteUrl . basename($index);
             }
         }
         return (array)$indexes;
@@ -306,13 +297,13 @@ class EverPsSeoSitemap extends ObjectModel
     {
         $siteUrl = Tools::getHttpHost(true) . __PS_BASE_URI__;
         $sitemaps = [];
-        $sitemap_dir = glob(_PS_ROOT_DIR_.'/*');
+        $sitemap_dir = glob(_PS_ROOT_DIR_ . '/*');
         foreach ($sitemap_dir as $sitemap) {
             if (is_file($sitemap)
                 && pathinfo($sitemap, PATHINFO_EXTENSION) == 'xml'
                 && !strpos(basename($sitemap), 'index')
             ) {
-                $sitemaps[] = $siteUrl.basename($sitemap);
+                $sitemaps[] = $siteUrl . basename($sitemap);
             }
         }
         return (array)$sitemaps;

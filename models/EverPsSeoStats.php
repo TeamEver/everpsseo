@@ -61,7 +61,7 @@ class EverPsSeoStats extends ObjectModel
             );
             $category->count = (int) $cat['count'];
             $category->url = $link->getCategoryLink(
-                (object)$category,
+                (object) $category,
                 null,
                 (int) Context::getContext()->language->id,
                 null,

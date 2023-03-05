@@ -24,64 +24,63 @@ class EverPsSeoRedirect extends ObjectModel
     /**
      * @see ObjectModel::$definition
      */
-    public static $definition = array(
+    public static $definition = [
         'table' => 'ever_seo_redirect',
         'primary' => 'id_ever_seo_redirect',
-        'fields' => array(
-            'not_found' => array(
+        'fields' => [
+            'not_found' => [
                 'type' => self::TYPE_STRING,
                 'lang' => false,
                 'validate' => 'isUrl',
                 'required' => true,
-                'size' => 255
-            ),
-            'everfrom' => array(
+                'size' => 255,
+            ],
+            'everfrom' => [
                 'type' => self::TYPE_STRING,
                 'lang' => false,
                 'validate' => 'isUrl',
                 'required' => false,
-                'size' => 255
-            ),
-            'redirection' => array(
+                'size' => 255,
+            ],
+            'redirection' => [
                 'type' => self::TYPE_STRING,
                 'lang' => false,
                 'validate' => 'isUrl',
                 'required' => false,
-                'size' => 255
-            ),
-            'id_shop' => array(
+                'size' => 255,
+            ],
+            'id_shop' => [
                 'type' => self::TYPE_INT,
                 'lang' => false,
                 'validate' => 'isUnsignedInt',
-                'required' => false
-            ),
-            'count' => array(
+                'required' => false,
+            ],
+            'count' => [
                 'type' => self::TYPE_INT,
                 'lang' => false,
-                'validate' => 'isUnsignedInt'
-            ),
-            'active' => array(
+                'validate' => 'isUnsignedInt',
+            ],
+            'active' => [
                 'type' => self::TYPE_BOOL,
                 'lang' => false,
-                'validate' => 'isBool'
-            ),
-            'code' => array(
+                'validate' => 'isBool',
+            ],
+            'code' => [
                 'type' => self::TYPE_INT,
                 'lang' => false,
-                'validate' => 'isUnsignedInt'
-            ),
-
-        ),
-    );
+                'validate' => 'isUnsignedInt',
+            ],
+        ],
+    ];
 
     public static function ifRedirectExists($urlNotFound, $id_shop)
     {
         $notfound =
             'SELECT redirection
             FROM `' . _DB_PREFIX_ . 'ever_seo_redirect`
-            WHERE not_found = "'.pSQL($urlNotFound).'"
+            WHERE not_found = "' . pSQL($urlNotFound) . '"
                 AND active = 1
-                AND id_shop = '.(int) $id_shop;
+                AND id_shop = ' . (int) $id_shop;
 
         return Db::getInstance()->getValue($notfound);
     }
@@ -91,8 +90,8 @@ class EverPsSeoRedirect extends ObjectModel
         $notfound =
             'SELECT id_ever_seo_redirect
             FROM `' . _DB_PREFIX_ . 'ever_seo_redirect`
-            WHERE not_found = "'.pSQL($urlNotFound, true).'"
-            AND id_shop = '.(int) $id_shop;
+            WHERE not_found = "' . pSQL($urlNotFound, true) . '"
+            AND id_shop = ' . (int) $id_shop;
 
         $id_redirect = Db::getInstance()->getValue($notfound);
         if ($id_redirect) {
@@ -128,8 +127,8 @@ class EverPsSeoRedirect extends ObjectModel
         $notfound =
             'SELECT id_ever_seo_redirect
             FROM `' . _DB_PREFIX_ . 'ever_seo_redirect`
-            WHERE not_found = "'.pSQL($urlNotFound).'"
-            AND id_shop = '.(int) $id_shop;
+            WHERE not_found = "' . pSQL($urlNotFound) . '"
+            AND id_shop = ' . (int) $id_shop;
 
         $id_redirect = Db::getInstance()->getValue($notfound);
         if ($id_redirect) {
@@ -153,18 +152,18 @@ class EverPsSeoRedirect extends ObjectModel
         $count =
             'SELECT count
             FROM `' . _DB_PREFIX_ . 'ever_seo_redirect`
-            WHERE id_ever_seo_redirect = "'.(int) $id_redirect.'"
-                AND id_shop = '.(int) $id_shop;
+            WHERE id_ever_seo_redirect = "' . (int) $id_redirect . '"
+                AND id_shop = ' . (int) $id_shop;
 
         $currentCount = Db::getInstance()->getValue($count);
 
         $from = EverPsSeoTools::getReferrer();
         $update = Db::getInstance()->update(
             'ever_seo_redirect',
-            array(
+            [
                 'count' => (int) $currentCount + 1,
-                'everfrom' => pSQL($from, true)
-            ),
+                'everfrom' => pSQL($from, true),
+            ],
             'id_ever_seo_redirect = '.(int) $id_redirect
         );
 
@@ -200,7 +199,7 @@ class EverPsSeoRedirect extends ObjectModel
         $sql =
             'SELECT DISTINCT physical_uri
                 FROM `' . _DB_PREFIX_ . 'shop_url`
-                WHERE id_shop = '.(int) $id_shop;
+                WHERE id_shop = ' . (int) $id_shop;
 
         $pu =  Db::getInstance()->getValue($sql);
 
@@ -306,23 +305,23 @@ class EverPsSeoRedirect extends ObjectModel
             FROM `' . _DB_PREFIX_ . 'product_lang` pl
             INNER JOIN `' . _DB_PREFIX_ . 'product` p
             ON p.id_product = pl.id_product
-            WHERE pl.id_shop = '.(int) $id_shop.'
-            AND pl.id_lang = '.(int) $id_lang.'
+            WHERE pl.id_shop = ' . (int) $id_shop . '
+            AND pl.id_lang = ' . (int) $id_lang . '
             AND p.active = 1
             AND (
-                pl.name LIKE "%'.pSQL($string).'%"
-                OR pl.description LIKE "%'.pSQL($string).'%"
-                OR pl.meta_title LIKE "%'.pSQL($string).'%"
-                OR pl.meta_description LIKE "%'.pSQL($string).'%"
-                OR pl.link_rewrite LIKE "%'.pSQL($string).'%"
-                OR INSTR(pl.name, "'.pSQL($string).'") > 0
-                OR INSTR(pl.description, "'.pSQL($string).'") > 0
-                OR INSTR(pl.description_short, "'.pSQL($string).'") > 0
-                OR INSTR(pl.meta_title, "'.pSQL($string).'") > 0
-                OR INSTR(pl.meta_description, "'.pSQL($string).'") > 0
-                OR INSTR(pl.link_rewrite, "'.pSQL($string).'") > 0
+                pl.name LIKE "%' . pSQL($string, true) . '%"
+                OR pl.description LIKE "%' . pSQL($string, true) . '%"
+                OR pl.meta_title LIKE "%' . pSQL($string, true) . '%"
+                OR pl.meta_description LIKE "%' . pSQL($string, true) . '%"
+                OR pl.link_rewrite LIKE "%' . pSQL($string, true) . '%"
+                OR INSTR(pl.name, "' . pSQL($string, true) . '") > 0
+                OR INSTR(pl.description, "' . pSQL($string, true) . '") > 0
+                OR INSTR(pl.description_short, "' . pSQL($string, true) . '") > 0
+                OR INSTR(pl.meta_title, "' . pSQL($string, true) . '") > 0
+                OR INSTR(pl.meta_description, "' . pSQL($string, true) . '") > 0
+                OR INSTR(pl.link_rewrite, "' . pSQL($string, true) . '") > 0
             )
-            ORDER BY pl.id_product '.pSQL($orderby);
+            ORDER BY pl.id_product ' . pSQL($orderby);
             $id_product = Db::getInstance()->getValue($sql);
             if ((int) $id_product) {
                 $link = new Link();
@@ -341,15 +340,15 @@ class EverPsSeoRedirect extends ObjectModel
             FROM `' . _DB_PREFIX_ . 'category_lang` cl
             INNER JOIN `' . _DB_PREFIX_ . 'category` c
             ON c.id_category = cl.id_category
-            WHERE cl.id_shop = '.(int) $id_shop.'
-            AND cl.id_lang = '.(int) $id_lang.'
+            WHERE cl.id_shop = ' . (int) $id_shop . '
+            AND cl.id_lang = ' . (int) $id_lang . '
             AND c.active = 1
             AND (
-                cl.name LIKE "%'.pSQL($string).'%"
-                OR cl.description LIKE "%'.pSQL($string).'%"
-                OR cl.meta_title LIKE "%'.pSQL($string).'%"
-                OR cl.meta_description LIKE "%'.pSQL($string).'%"
-                OR cl.link_rewrite LIKE "%'.pSQL($string).'%"
+                cl.name LIKE "%' . pSQL($string, true) . '%"
+                OR cl.description LIKE "%' . pSQL($string, true) . '%"
+                OR cl.meta_title LIKE "%' . pSQL($string, true) . '%"
+                OR cl.meta_description LIKE "%' . pSQL($string, true) . '%"
+                OR cl.link_rewrite LIKE "%' . pSQL($string, true) . '%"
             )
             ORDER BY cl.id_category '.pSQL($orderby);
             $id_category = Db::getInstance()->getValue($sql);
@@ -372,9 +371,9 @@ class EverPsSeoRedirect extends ObjectModel
             ON pt.id_tag = t.id_tag
             INNER JOIN `' . _DB_PREFIX_ . 'tag_count` tc
             ON tc.id_tag = t.id_tag
-            WHERE tc.id_shop = '.(int) $id_shop.'
-            AND tc.id_lang = '.(int) $id_lang.'
-            AND t.name LIKE "%'.pSQL($string).'%"
+            WHERE tc.id_shop = ' . (int) $id_shop . '
+            AND tc.id_lang = ' . (int) $id_lang . '
+            AND t.name LIKE "%' . pSQL($string, true) . '%"
             ORDER BY t.id_tag '.pSQL($orderby);
             $id_product = Db::getInstance()->getValue($sql);
             if ((int) $id_product) {
@@ -392,8 +391,8 @@ class EverPsSeoRedirect extends ObjectModel
         $siteUrl = Tools::getHttpHost(true) . __PS_BASE_URI__;
         $return = [];
         $query = 'SELECT * FROM ' . _DB_PREFIX_ . 'ever_seo_redirect
-        WHERE active = '.(bool) $active.'
-        AND id_shop = '.(int) $id_shop;
+        WHERE active = ' . (bool) $active . '
+        AND id_shop = ' . (int) $id_shop;
         $redirects = Db::getInstance()->ExecuteS($query);
         foreach ($redirects as $redirect) {
             $redirect_obj = new self(
