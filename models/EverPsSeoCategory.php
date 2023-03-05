@@ -27,108 +27,108 @@ class EverPsSeoCategory extends ObjectModel
     public $count;
     public $status_code;
 
-    public static $definition = array(
+    public static $definition = [
         'table' => 'ever_seo_category',
         'primary' => 'id_ever_seo_category',
         'multilang' => false,
-        'fields' => array(
-            'id_seo_category' => array(
+        'fields' => [
+            'id_seo_category' => [
                 'type' => self::TYPE_INT,
                 'lang' => false,
                 'validate' => 'isUnsignedInt',
-                'required' => true
-            ),
-            'id_shop' => array(
+                'required' => true,
+            ],
+            'id_shop' => [
                 'type' => self::TYPE_INT,
                 'lang' => false,
-                'validate' => 'isUnsignedInt'
-            ),
-            'id_seo_lang' => array(
+                'validate' => 'isUnsignedInt',
+            ],
+            'id_seo_lang' => [
                 'type' => self::TYPE_INT,
                 'lang' => false,
-                'validate' => 'isUnsignedInt'
-            ),
-            'meta_title' => array(
+                'validate' => 'isUnsignedInt',
+            ],
+            'meta_title' => [
                 'type' => self::TYPE_STRING,
                 'lang' => false,
-                'validate' => 'isString'
-            ),
-            'meta_description' => array(
+                'validate' => 'isString',
+            ],
+            'meta_description' => [
                 'type' => self::TYPE_STRING,
                 'lang' => false,
-                'validate' => 'isString'
-            ),
-            'social_title' => array(
+                'validate' => 'isString',
+            ],
+            'social_title' => [
                 'type' => self::TYPE_STRING,
                 'lang' => false,
-                'validate' => 'isString'
-            ),
-            'social_description' => array(
+                'validate' => 'isString',
+            ],
+            'social_description' => [
                 'type' => self::TYPE_STRING,
                 'lang' => false,
-                'validate' => 'isCleanHtml'
-            ),
-            'social_img_url' => array(
+                'validate' => 'isCleanHtml',
+            ],
+            'social_img_url' => [
                 'type' => self::TYPE_STRING,
                 'lang' => false,
-                'validate' => 'isUrl'
-            ),
-            'bottom_content' => array(
+                'validate' => 'isUrl',
+            ],
+            'bottom_content' => [
                 'type' => self::TYPE_HTML,
                 'lang' => false,
-                'validate' => 'isCleanHtml'
-            ),
-            'link_rewrite' => array(
+                'validate' => 'isCleanHtml',
+            ],
+            'link_rewrite' => [
                 'type' => self::TYPE_STRING,
                 'lang' => false,
-                'validate' => 'isLinkRewrite'
-            ),
-            'canonical' => array(
+                'validate' => 'isLinkRewrite',
+            ],
+            'canonical' => [
                 'type' => self::TYPE_STRING,
-                'validate' => 'isLinkRewrite'
-            ),
-            'keywords' => array(
+                'validate' => 'isLinkRewrite',
+            ],
+            'keywords' => [
                 'type' => self::TYPE_STRING,
                 'lang' => false,
-                'validate' => 'isString'
-            ),
-            'indexable' => array(
+                'validate' => 'isString',
+            ],
+            'indexable' => [
                 'type' => self::TYPE_INT,
                 'lang' => false,
-                'validate' => 'isBool'
-            ),
-            'follow' => array(
+                'validate' => 'isBool',
+            ],
+            'follow' => [
                 'type' => self::TYPE_INT,
                 'lang' => false,
-                'validate' => 'isBool'
-            ),
-            'allowed_sitemap' => array(
+                'validate' => 'isBool',
+            ],
+            'allowed_sitemap' => [
                 'type' => self::TYPE_INT,
                 'lang' => false,
-                'validate' => 'isBool'
-            ),
-            'count' => array(
+                'validate' => 'isBool',
+            ],
+            'count' => [
                 'type' => self::TYPE_INT,
                 'lang' => false,
-                'validate' => 'isUnsignedInt'
-            ),
-            'status_code' => array(
+                'validate' => 'isUnsignedInt',
+            ],
+            'status_code' => [
                 'type' => self::TYPE_INT,
                 'lang' => false,
-                'validate' => 'isUnsignedInt'
-            ),
-        )
-    );
+                'validate' => 'isUnsignedInt',
+            ],
+        ],
+    ];
 
     public static function getAllSeoCategoriesIds($id_shop)
     {
         $cache_id = 'EverPsSeoCategory::getAllSeoCategoriesIds_'
-        .(int) $id_shop;
+        . (int) $id_shop;
         if (!Cache::isStored($cache_id)) {
             $sql = new DbQuery();
             $sql->select('*');
             $sql->from('ever_seo_category');
-            $sql->where('id_shop = '.(int) $id_shop);
+            $sql->where('id_shop = ' . (int) $id_shop);
             $return = Db::getInstance()->executeS($sql);
             Cache::store($cache_id, $return);
             return $return;
@@ -139,14 +139,14 @@ class EverPsSeoCategory extends ObjectModel
     public static function getCategoryNameBySeoId($id_seo_category, $id_lang)
     {
         $cache_id = 'EverPsSeoCategory::getCategoryNameBySeoId_'
-        .(int) $id_seo_category
-        .'_'
-        .(int) $id_lang;
+        . (int) $id_seo_category
+        . '_'
+        . (int) $id_lang;
         if (!Cache::isStored($cache_id)) {
             $sql = 'SELECT name
             FROM ' . _DB_PREFIX_ . 'category_lang
-            WHERE id_category = '.(int) $id_seo_category.'
-            AND id_lang = '.(int) $id_lang.'';
+            WHERE id_category = ' . (int) $id_seo_category . '
+            AND id_lang = ' . (int) $id_lang . '';
             $return = Db::getInstance()->getValue($sql);
             Cache::store($cache_id, $return);
             return $return;
@@ -157,23 +157,23 @@ class EverPsSeoCategory extends ObjectModel
     public static function getSeoCategory($id_seo_category, $id_shop, $id_seo_lang)
     {
         $cache_id = 'EverPsSeoCategory::getSeoCategory_'
-        .(int) $id_seo_category
-        .'_'
-        .(int) $id_shop
-        .'_'
-        .(int) $id_seo_lang;
+        . (int) $id_seo_category
+        . '_'
+        . (int) $id_shop
+        . '_'
+        . (int) $id_seo_lang;
         if (!Cache::isStored($cache_id)) {
             $sql = new DbQuery();
             $sql->select('*');
             $sql->from('ever_seo_category');
             $sql->where(
-                'id_seo_category = '.(int) $id_seo_category
+                'id_seo_category = ' . (int) $id_seo_category
             );
             $sql->where(
-                'id_seo_lang = '.(int) $id_seo_lang
+                'id_seo_lang = ' . (int) $id_seo_lang
             );
             $sql->where(
-                'id_shop = '.(int) $id_shop
+                'id_shop = ' . (int) $id_shop
             );
             $return = new self(Db::getInstance()->getValue($sql));
             Cache::store($cache_id, $return);
@@ -201,7 +201,7 @@ class EverPsSeoCategory extends ObjectModel
         $message = Configuration::getConfigInMultipleLangs(
             'EVERSEO_CATEGORY_TITLE_AUTO'
         );
-        $shortcodes = array(
+        $shortcodes = [
             '[category_title]' => $category->name ? $category->name : '',
             '[category_desc]' => $category->description ? $category->description : '',
             '[category_tags]' => $category->meta_keywords ? $category->meta_keywords : '',
@@ -209,16 +209,16 @@ class EverPsSeoCategory extends ObjectModel
             '[shop_name]' => (string) Configuration::get('PS_SHOP_NAME'),
             'NULL' => '', // Useful : remove empty strings in case of NULL
             'null' => '', // Useful : remove empty strings in case of null
-        );
+        ];
         foreach ($shortcodes as $key => $value) {
             $message[(int) $id_seo_lang] = str_replace(
                 (string) $key,
                 (string) $value,
                 (string) $message[(int) $id_seo_lang]
             );
-            $message[(int) $id_seo_lang] = Hook::exec('actionChangeSeoShortcodes', array(
-                'content' => $message[(int) $id_seo_lang]
-            ));
+            $message[(int) $id_seo_lang] = Hook::exec('actionChangeSeoShortcodes', [
+                'content' => $message[(int) $id_seo_lang],
+            ]);
         }
         if (!empty($message[(int) $id_seo_lang])) {
             return $message[(int) $id_seo_lang];
@@ -244,7 +244,7 @@ class EverPsSeoCategory extends ObjectModel
         $message = Configuration::getConfigInMultipleLangs(
             'EVERSEO_CATEGORY_METADESC_AUTO'
         );
-        $shortcodes = array(
+        $shortcodes = [
             '[category_title]' => $category->name ? $category->name : '',
             '[category_desc]' => $category->description ? $category->description : '',
             '[category_tags]' => $category->meta_keywords ? $category->meta_keywords : '',
@@ -252,16 +252,16 @@ class EverPsSeoCategory extends ObjectModel
             '[shop_name]' => (string) Configuration::get('PS_SHOP_NAME'),
             'NULL' => '', // Useful : remove empty strings in case of NULL
             'null' => '', // Useful : remove empty strings in case of null
-        );
+        ];
         foreach ($shortcodes as $key => $value) {
             $message[(int) $id_seo_lang] = str_replace(
                 (string) $key,
                 (string) $value,
                 (string) $message[(int) $id_seo_lang]
             );
-            $message[(int) $id_seo_lang] = Hook::exec('actionChangeSeoShortcodes', array(
-                'content' => $message[(int) $id_seo_lang]
-            ));
+            $message[(int) $id_seo_lang] = Hook::exec('actionChangeSeoShortcodes', [
+                'content' => $message[(int) $id_seo_lang],
+            ]);
         }
         if (!empty($message[(int) $id_seo_lang])) {
             return $message[(int) $id_seo_lang];
@@ -303,7 +303,7 @@ class EverPsSeoCategory extends ObjectModel
         $message = Configuration::getConfigInMultipleLangs(
             'CATEGORY_DESC_GENERATE'
         );
-        $shortcodes = array(
+        $shortcodes = [
             '[category_title]' => $category->name ? $category->name : '',
             '[category_desc]' => $category->description ? $category->description : '',
             '[children]' => $children_names,
@@ -312,16 +312,16 @@ class EverPsSeoCategory extends ObjectModel
             '[shop_name]' => (string) Configuration::get('PS_SHOP_NAME'),
             'NULL' => '', // Useful : remove empty strings in case of NULL
             'null' => '', // Useful : remove empty strings in case of null
-        );
+        ];
         foreach ($shortcodes as $key => $value) {
             $message[(int) $id_seo_lang] = str_replace(
                 (string) $key,
                 (string) $value,
                 (string) $message[(int) $id_seo_lang]
             );
-            $message[(int) $id_seo_lang] = Hook::exec('actionChangeSeoShortcodes', array(
-                'content' => $message[(int) $id_seo_lang]
-            ));
+            $message[(int) $id_seo_lang] = Hook::exec('actionChangeSeoShortcodes', [
+                'content' => $message[(int) $id_seo_lang],
+            ]);
         }
         if (!empty($message[(int) $id_seo_lang])) {
             return $message[(int) $id_seo_lang];
