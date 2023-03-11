@@ -6,6 +6,9 @@
  * @license   Tous droits réservés / Le droit d'auteur s'applique (All rights reserved / French copyright law applies)
  * @see https://www.team-ever.com
  */
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 class EverPsSeoCms extends ObjectModel
 {
@@ -122,14 +125,14 @@ class EverPsSeoCms extends ObjectModel
     public static function getCmsNameBySeoId($id_seo_cms, $id_lang)
     {
         $cache_id = 'EverPsSeoCms::getCmsNameBySeoId_'
-        .(int) $id_seo_cms
+        . (int) $id_seo_cms
         .'_'
         .$id_lang;
         if (!Cache::isStored($cache_id)) {
             $sql = 'SELECT meta_title
             FROM ' . _DB_PREFIX_ . 'cms_lang
-            WHERE id_cms = '.(int) $id_seo_cms.'
-            AND id_lang = '.(int) $id_lang.'';
+            WHERE id_cms = ' . (int) $id_seo_cms.'
+            AND id_lang = ' . (int) $id_lang.'';
             $return = Db::getInstance()->getValue($sql);
             Cache::store($cache_id, $return);
             return $return;

@@ -40,7 +40,7 @@ class AdminEverPsSeoRedirectController extends ModuleAdminController
             ),
         );
 
-        $this->_where = 'AND a.id_shop ='.(int) $this->context->shop->id;
+        $this->_where = 'AND a.id_shop =' . (int) $this->context->shop->id;
 
         $this->fields_list = array(
             'id_ever_seo_redirect' => array(
@@ -274,12 +274,12 @@ class AdminEverPsSeoRedirectController extends ModuleAdminController
                         array(
                             'active' => (int) Tools::getValue('active')
                         ),
-                        'id_ever_seo_redirect = '.(int) Tools::getValue('id_ever_seo_redirect')
+                        'id_ever_seo_redirect = ' . (int) Tools::getValue('id_ever_seo_redirect')
                     );
                     if ((bool) Configuration::get('EVERHTACCESS_404') === true) {
                         $this->module->hookActionHtaccessCreate();
                     }
-                    Tools::redirectAdmin(self::$currentIndex.'&conf=4&token='.$this->token);
+                    Tools::redirectAdmin(self::$currentIndex.'&conf=4&token=' . $this->token);
                 }
             }
         }

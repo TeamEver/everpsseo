@@ -6,7 +6,6 @@
  * @license   Tous droits réservés / Le droit d'auteur s'applique (All rights reserved / French copyright law applies)
  * @see https://www.team-ever.com
  */
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -52,7 +51,7 @@ class AdminEverPsSeoPageMetaController extends ModuleAdminController
                     AND ml.id_meta = a.id_seo_pagemeta
                 )';
 
-        $this->_where = 'AND a.id_shop ='.(int) $this->context->shop->id;
+        $this->_where = 'AND a.id_shop =' . (int) $this->context->shop->id;
         // Do not load module pages on listing
         $this->_where = 'AND INSTR(m.page, "module") <= 0';
 
@@ -143,7 +142,7 @@ class AdminEverPsSeoPageMetaController extends ModuleAdminController
                 (int) $this->context->language->id,
                 (int) $this->context->shop->id
             );
-            $editUrl  = 'index.php?controller=AdminMeta&id_meta='.(int) $meta->id.'';
+            $editUrl  = 'index.php?controller=AdminMeta&id_meta=' . (int) $meta->id.'';
             $editUrl .= '&updatemeta&token='.Tools::getAdminTokenLite('AdminMeta');
             $objectGSearch = str_replace(' ', '+', $meta->page);
 
@@ -234,39 +233,39 @@ class AdminEverPsSeoPageMetaController extends ModuleAdminController
             ),
         );
 
-        if (Tools::isSubmit('submitBulkindex'.$this->table)) {
+        if (Tools::isSubmit('submitBulkindex' . $this->table)) {
             $this->processBulkIndex();
         }
 
-        if (Tools::isSubmit('submitBulkfollow'.$this->table)) {
+        if (Tools::isSubmit('submitBulkfollow' . $this->table)) {
             $this->processBulkFollow();
         }
 
-        if (Tools::isSubmit('submitBulksitemap'.$this->table)) {
+        if (Tools::isSubmit('submitBulksitemap' . $this->table)) {
             $this->processBulkSitemap();
         }
 
-        if (Tools::isSubmit('submitBulkmetatitle'.$this->table)) {
+        if (Tools::isSubmit('submitBulkmetatitle' . $this->table)) {
             $this->processBulkMetatitle();
         }
 
-        if (Tools::isSubmit('submitBulkmetadescription'.$this->table)) {
+        if (Tools::isSubmit('submitBulkmetadescription' . $this->table)) {
             $this->processBulkMetadescription();
         }
 
-        if (Tools::isSubmit('submitBulkindexnow'.$this->table)) {
+        if (Tools::isSubmit('submitBulkindexnow' . $this->table)) {
             $this->processBulkIndexNow();
         }
 
-        if (Tools::isSubmit('indexable'.$this->table)) {
+        if (Tools::isSubmit('indexable' . $this->table)) {
             $this->processIndexable();
         }
 
-        if (Tools::isSubmit('follow'.$this->table)) {
+        if (Tools::isSubmit('follow' . $this->table)) {
             $this->processFollow();
         }
 
-        if (Tools::isSubmit('allowed_sitemap'.$this->table)) {
+        if (Tools::isSubmit('allowed_sitemap' . $this->table)) {
             $this->processSitemap();
         }
 
@@ -311,7 +310,7 @@ class AdminEverPsSeoPageMetaController extends ModuleAdminController
                 'PS_LOGO'
             );
         }
-        $defaultImage = '<image src="'.(string) $defaultUrlImage.'" style="max-width:80px;"/>';
+        $defaultImage = '<image src="' . (string) $defaultUrlImage . '" style="max-width:80px;"/>';
 
         $this->fields_form = array(
             'submit' => array(
@@ -561,8 +560,8 @@ class AdminEverPsSeoPageMetaController extends ModuleAdminController
                     && !empty($_FILES['social_media']['tmp_name'])
                 ) {
                     Configuration::set('PS_IMAGE_GENERATION_METHOD', 1);
-                    if (file_exists($this->img_folder.(int) $everPageMeta->id_seo_pagemeta.'.jpg')) {
-                        unlink($this->img_folder.(int) $everPageMeta->id_seo_pagemeta.'.jpg');
+                    if (file_exists($this->img_folder . (int) $everPageMeta->id_seo_pagemeta.'.jpg')) {
+                        unlink($this->img_folder . (int) $everPageMeta->id_seo_pagemeta.'.jpg');
                     }
                     if ($error = ImageManager::validateUpload($_FILES['social_media'])) {
                         $this->errors[] = $error;
@@ -572,7 +571,7 @@ class AdminEverPsSeoPageMetaController extends ModuleAdminController
                         return false;
                     } elseif (!ImageManager::resize(
                         $tmp_name,
-                        $this->img_folder.(int) $everPageMeta->id_seo_pagemeta.'.jpg'
+                        $this->img_folder . (int) $everPageMeta->id_seo_pagemeta.'.jpg'
                     )) {
                         $this->errors[] = $this->l('An error occurred while attempting to upload the image.');
                     }
@@ -580,14 +579,14 @@ class AdminEverPsSeoPageMetaController extends ModuleAdminController
                         unlink($tmp_name);
                     }
                     $everPageMeta->social_img_url = $this->img_url
-                    .(int) $everPageMeta->id_seo_pagemeta
+                    . (int) $everPageMeta->id_seo_pagemeta
                     .'.jpg';
                 }
                 // Hook update triggered
                 if (!$everPageMeta->save() || !$meta->save()) {
                     $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
                 } else {
-                    Tools::redirectAdmin(self::$currentIndex.'&conf=4&token='.$this->token);
+                    Tools::redirectAdmin(self::$currentIndex.'&conf=4&token=' . $this->token);
                 }
             }
         }
@@ -647,8 +646,8 @@ class AdminEverPsSeoPageMetaController extends ModuleAdminController
 
             $title = Db::getInstance()->getValue(
                 'SELECT title FROM `' . _DB_PREFIX_ . 'meta_lang`
-                WHERE id_meta = '.(int) $everPageMeta->id_seo_pagemeta.'
-                AND id_lang = '.(int) $everPageMeta->id_seo_lang
+                WHERE id_meta = ' . (int) $everPageMeta->id_seo_pagemeta.'
+                AND id_lang = ' . (int) $everPageMeta->id_seo_lang
             );
 
             if (!$title) {
@@ -671,8 +670,8 @@ class AdminEverPsSeoPageMetaController extends ModuleAdminController
             );
             $description = Db::getInstance()->getValue(
                 'SELECT description FROM `' . _DB_PREFIX_ . 'meta_lang`
-                WHERE id_meta = '.(int) $everPageMeta->id_seo_pagemeta.'
-                AND id_lang = '.(int) $everPageMeta->id_seo_lang
+                WHERE id_meta = ' . (int) $everPageMeta->id_seo_pagemeta.'
+                AND id_lang = ' . (int) $everPageMeta->id_seo_lang
             );
 
             if (!$description) {
@@ -715,10 +714,10 @@ class AdminEverPsSeoPageMetaController extends ModuleAdminController
                 $url
             );
             $sql = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_pagemeta`
-            SET status_code = '.(int) $httpCode.'
-            WHERE id_seo_lang = '.(int) $seoMeta->id_seo_lang.'
-            AND id_shop = '.(int) $this->context->shop->id.'
-            AND id_ever_seo_pagemeta = '.(int) $seoMeta->id;
+            SET status_code = ' . (int) $httpCode.'
+            WHERE id_seo_lang = ' . (int) $seoMeta->id_seo_lang.'
+            AND id_shop = ' . (int) $this->context->shop->id.'
+            AND id_ever_seo_pagemeta = ' . (int) $seoMeta->id;
             if (!Db::getInstance()->execute($sql)) {
                 $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
             }

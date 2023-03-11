@@ -6,7 +6,6 @@
  * @license   Tous droits réservés / Le droit d'auteur s'applique (All rights reserved / French copyright law applies)
  * @see https://www.team-ever.com
  */
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -762,10 +761,10 @@ class AdminEverPsSeoConfigureController extends ModuleAdminController
         $everseo_404_top = [];
         $everseo_404_bottom = [];
         foreach (Language::getLanguages(false) as $lang) {
-            $everseo_404_top[$lang['id_lang']] = (Tools::getValue('EVERSEO_404_TOP_'.$lang['id_lang']))
-            ? Tools::getValue('EVERSEO_404_TOP_'.$lang['id_lang']) : '';
-            $everseo_404_bottom[$lang['id_lang']] = (Tools::getValue('EVERSEO_404_BOTTOM_'.$lang['id_lang']))
-            ? Tools::getValue('EVERSEO_404_BOTTOM_'.$lang['id_lang']) : '';
+            $everseo_404_top[$lang['id_lang']] = (Tools::getValue('EVERSEO_404_TOP_' . $lang['id_lang']))
+            ? Tools::getValue('EVERSEO_404_TOP_' . $lang['id_lang']) : '';
+            $everseo_404_bottom[$lang['id_lang']] = (Tools::getValue('EVERSEO_404_BOTTOM_' . $lang['id_lang']))
+            ? Tools::getValue('EVERSEO_404_BOTTOM_' . $lang['id_lang']) : '';
         }
         return array(
             //404 redirects
@@ -1066,13 +1065,13 @@ class AdminEverPsSeoConfigureController extends ModuleAdminController
             }
 
             foreach (Language::getLanguages(false) as $language) {
-                if (Tools::getValue('EVERSEO_404_TOP_'.$language['id_lang'])
-                    && !Validate::isCleanHtml(Tools::getValue('EVERSEO_404_TOP_'.$language['id_lang']))
+                if (Tools::getValue('EVERSEO_404_TOP_' . $language['id_lang'])
+                    && !Validate::isCleanHtml(Tools::getValue('EVERSEO_404_TOP_' . $language['id_lang']))
                 ) {
                     $this->postErrors[] = $this->l('Error : The top content on 404 page is not valid');
                 }
-                if (Tools::getValue('EVERSEO_404_BOTTOM_'.$language['id_lang'])
-                    && !Validate::isCleanHtml(Tools::getValue('EVERSEO_404_BOTTOM_'.$language['id_lang']))
+                if (Tools::getValue('EVERSEO_404_BOTTOM_' . $language['id_lang'])
+                    && !Validate::isCleanHtml(Tools::getValue('EVERSEO_404_BOTTOM_' . $language['id_lang']))
                 ) {
                     $this->postErrors[] = $this->l('Error : The top content on 404 page is not valid');
                 }
@@ -1090,10 +1089,10 @@ class AdminEverPsSeoConfigureController extends ModuleAdminController
             $everseo_404_top = [];
             $everseo_404_bottom = [];
             foreach (Language::getLanguages(false) as $lang) {
-                $everseo_404_top[$lang['id_lang']] = (Tools::getValue('EVERSEO_404_TOP_'.$lang['id_lang']))
-                ? Tools::getValue('EVERSEO_404_TOP_'.$lang['id_lang']) : '';
-                $everseo_404_bottom[$lang['id_lang']] = (Tools::getValue('EVERSEO_404_BOTTOM_'.$lang['id_lang']))
-                ? Tools::getValue('EVERSEO_404_BOTTOM_'.$lang['id_lang']) : '';
+                $everseo_404_top[$lang['id_lang']] = (Tools::getValue('EVERSEO_404_TOP_' . $lang['id_lang']))
+                ? Tools::getValue('EVERSEO_404_TOP_' . $lang['id_lang']) : '';
+                $everseo_404_bottom[$lang['id_lang']] = (Tools::getValue('EVERSEO_404_BOTTOM_' . $lang['id_lang']))
+                ? Tools::getValue('EVERSEO_404_BOTTOM_' . $lang['id_lang']) : '';
             }
 
             foreach (array_keys($form_values) as $key) {
@@ -1196,7 +1195,7 @@ class AdminEverPsSeoConfigureController extends ModuleAdminController
         // Set allowed_sitemap
         $sql[] = 'UPDATE '. _DB_PREFIX_ .pSQL((string) $seo_table).'
         SET allowed_sitemap = 1
-        WHERE '.$seo_element.' IN
+        WHERE ' . $seo_element.' IN
         (
             SELECT '.pSQL((string) $ps_element).'
             FROM '. _DB_PREFIX_ .pSQL((string) $ps_table).'

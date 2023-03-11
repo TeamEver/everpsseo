@@ -6,7 +6,6 @@
  * @license   Tous droits réservés / Le droit d'auteur s'applique (All rights reserved / French copyright law applies)
  * @see https://www.team-ever.com
  */
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -47,7 +46,7 @@ class AdminEverPsSeoManufacturerController extends ModuleAdminController
                     m.`id_manufacturer` = a.`id_seo_manufacturer`
             )';
 
-        $this->_where = 'AND a.id_shop ='.(int) $this->context->shop->id;
+        $this->_where = 'AND a.id_shop =' . (int) $this->context->shop->id;
 
         $this->_group = 'GROUP BY a.id_ever_seo_manufacturer';
 
@@ -135,7 +134,7 @@ class AdminEverPsSeoManufacturerController extends ModuleAdminController
                 (int) $this->context->language->id,
                 (int) $this->context->shop->id
             );
-            $editUrl  = 'index.php?controller=AdminManufacturers&id_manufacturer='.(int) $manufacturer->id.'';
+            $editUrl  = 'index.php?controller=AdminManufacturers&id_manufacturer=' . (int) $manufacturer->id.'';
             $editUrl .= '&updatemanufacturer&token='.Tools::getAdminTokenLite('AdminManufacturers');
             $objectGSearch = str_replace(' ', '+', $manufacturer->name);
 
@@ -240,55 +239,55 @@ class AdminEverPsSeoManufacturerController extends ModuleAdminController
             ),
         );
 
-        if (Tools::isSubmit('submitBulkindex'.$this->table)) {
+        if (Tools::isSubmit('submitBulkindex' . $this->table)) {
             $this->processBulkIndex();
         }
 
-        if (Tools::isSubmit('submitBulkfollow'.$this->table)) {
+        if (Tools::isSubmit('submitBulkfollow' . $this->table)) {
             $this->processBulkFollow();
         }
 
-        if (Tools::isSubmit('submitBulksitemap'.$this->table)) {
+        if (Tools::isSubmit('submitBulksitemap' . $this->table)) {
             $this->processBulkSitemap();
         }
 
-        if (Tools::isSubmit('submitBulkmetatitle'.$this->table)) {
+        if (Tools::isSubmit('submitBulkmetatitle' . $this->table)) {
             $this->processBulkMetatitle();
         }
 
-        if (Tools::isSubmit('submitBulkmetadescription'.$this->table)) {
+        if (Tools::isSubmit('submitBulkmetadescription' . $this->table)) {
             $this->processBulkMetadescription();
         }
 
-        if (Tools::isSubmit('submitBulkmetatitlename'.$this->table)) {
+        if (Tools::isSubmit('submitBulkmetatitlename' . $this->table)) {
             $this->processBulkMetatitlename();
         }
 
-        if (Tools::isSubmit('submitBulkmetadescriptiondesc'.$this->table)) {
+        if (Tools::isSubmit('submitBulkmetadescriptiondesc' . $this->table)) {
             $this->processBulkMetadescriptiondesc();
         }
 
-        if (Tools::isSubmit('submitBulkmetadescshortcodes'.$this->table)) {
+        if (Tools::isSubmit('submitBulkmetadescshortcodes' . $this->table)) {
             $this->processBulkMetadescShortcodes();
         }
 
-        if (Tools::isSubmit('submitBulktitleshortcodes'.$this->table)) {
+        if (Tools::isSubmit('submitBulktitleshortcodes' . $this->table)) {
             $this->processBulkTitleShortcodes();
         }
 
-        if (Tools::isSubmit('submitBulkindexnow'.$this->table)) {
+        if (Tools::isSubmit('submitBulkindexnow' . $this->table)) {
             $this->processBulkIndexNow();
         }
 
-        if (Tools::isSubmit('indexable'.$this->table)) {
+        if (Tools::isSubmit('indexable' . $this->table)) {
             $this->processIndexable();
         }
 
-        if (Tools::isSubmit('follow'.$this->table)) {
+        if (Tools::isSubmit('follow' . $this->table)) {
             $this->processFollow();
         }
 
-        if (Tools::isSubmit('allowed_sitemap'.$this->table)) {
+        if (Tools::isSubmit('allowed_sitemap' . $this->table)) {
             $this->processSitemap();
         }
 
@@ -334,7 +333,7 @@ class AdminEverPsSeoManufacturerController extends ModuleAdminController
                 'PS_LOGO'
             );
         }
-        $defaultImage = '<image src="'.(string) $defaultUrlImage.'" style="max-width:80px;"/>';
+        $defaultImage = '<image src="' . (string) $defaultUrlImage . '" style="max-width:80px;"/>';
 
         $this->fields_form = array(
             'description' => $this->l('Manufacturer SEO'),
@@ -596,8 +595,8 @@ class AdminEverPsSeoManufacturerController extends ModuleAdminController
                     && !empty($_FILES['social_media']['tmp_name'])
                 ) {
                     Configuration::set('PS_IMAGE_GENERATION_METHOD', 1);
-                    if (file_exists($this->img_folder.(int) $everManufacturer->id_seo_manufacturer.'.jpg')) {
-                        unlink($this->img_folder.(int) $everManufacturer->id_seo_manufacturer.'.jpg');
+                    if (file_exists($this->img_folder . (int) $everManufacturer->id_seo_manufacturer.'.jpg')) {
+                        unlink($this->img_folder . (int) $everManufacturer->id_seo_manufacturer.'.jpg');
                     }
                     if ($error = ImageManager::validateUpload($_FILES['social_media'])) {
                         $this->errors[] = $error;
@@ -607,7 +606,7 @@ class AdminEverPsSeoManufacturerController extends ModuleAdminController
                         return false;
                     } elseif (!ImageManager::resize(
                         $tmp_name,
-                        $this->img_folder.(int) $everManufacturer->id_seo_manufacturer.'.jpg'
+                        $this->img_folder . (int) $everManufacturer->id_seo_manufacturer.'.jpg'
                     )) {
                         $this->errors[] = $this->l('An error occurred while attempting to upload the image.');
                     }
@@ -615,14 +614,14 @@ class AdminEverPsSeoManufacturerController extends ModuleAdminController
                         unlink($tmp_name);
                     }
                     $everManufacturer->social_img_url = $this->img_url
-                    .(int) $everManufacturer->id_seo_manufacturer
+                    . (int) $everManufacturer->id_seo_manufacturer
                     .'.jpg';
                 }
                 // Hook update triggered
                 if (!$manufacturer->save() || !$everManufacturer->save()) {
                     $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
                 } else {
-                    Tools::redirectAdmin(self::$currentIndex.'&conf=4&token='.$this->token);
+                    Tools::redirectAdmin(self::$currentIndex.'&conf=4&token=' . $this->token);
                 }
             }
         }
@@ -691,8 +690,8 @@ class AdminEverPsSeoManufacturerController extends ModuleAdminController
 
             $meta_title = Db::getInstance()->getValue(
                 'SELECT meta_title FROM `' . _DB_PREFIX_ . 'manufacturer_lang`
-                WHERE id_manufacturer = '.(int) $everManufacturer->id_seo_manufacturer.'
-                AND id_lang = '.(int) $everManufacturer->id_seo_lang
+                WHERE id_manufacturer = ' . (int) $everManufacturer->id_seo_manufacturer.'
+                AND id_lang = ' . (int) $everManufacturer->id_seo_lang
             );
 
             if (!$meta_title) {
@@ -720,8 +719,8 @@ class AdminEverPsSeoManufacturerController extends ModuleAdminController
 
             $description = Db::getInstance()->getValue(
                 'SELECT meta_description FROM `' . _DB_PREFIX_ . 'manufacturer_lang`
-                WHERE id_manufacturer = '.(int) $everManufacturer->id_seo_manufacturer.'
-                AND id_lang = '.(int) $everManufacturer->id_seo_lang
+                WHERE id_manufacturer = ' . (int) $everManufacturer->id_seo_manufacturer.'
+                AND id_lang = ' . (int) $everManufacturer->id_seo_lang
             );
 
             if (!$description) {
@@ -753,7 +752,7 @@ class AdminEverPsSeoManufacturerController extends ModuleAdminController
 
             $name = Db::getInstance()->getValue(
                 'SELECT name FROM `' . _DB_PREFIX_ . 'manufacturer`
-                WHERE id_manufacturer = '.(int) $everManufacturer->id_seo_manufacturer
+                WHERE id_manufacturer = ' . (int) $everManufacturer->id_seo_manufacturer
             );
 
             if (!$name) {
@@ -781,8 +780,8 @@ class AdminEverPsSeoManufacturerController extends ModuleAdminController
 
             $description = Db::getInstance()->getValue(
                 'SELECT description FROM `' . _DB_PREFIX_ . 'manufacturer_lang`
-                WHERE id_manufacturer = '.(int) $everManufacturer->id_seo_manufacturer.'
-                AND id_lang = '.(int) $everManufacturer->id_seo_lang
+                WHERE id_manufacturer = ' . (int) $everManufacturer->id_seo_manufacturer.'
+                AND id_lang = ' . (int) $everManufacturer->id_seo_lang
             );
 
             if (!$description) {
@@ -826,14 +825,14 @@ class AdminEverPsSeoManufacturerController extends ModuleAdminController
 
             $sql = 'UPDATE `' . _DB_PREFIX_ . 'manufacturer_lang`
             SET meta_title = "'.pSQL($manufacturer->meta_title).'"
-            WHERE id_lang = '.(int) $everManufacturer->id_seo_lang.'
-            AND id_manufacturer = '.(int) $manufacturer->id;
+            WHERE id_lang = ' . (int) $everManufacturer->id_seo_lang.'
+            AND id_manufacturer = ' . (int) $manufacturer->id;
 
             $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_manufacturer`
             SET meta_title = "'.pSQL($manufacturer->meta_title).'"
-            WHERE id_seo_lang = '.(int) $everManufacturer->id_seo_lang.'
-            AND id_shop = '.(int) $this->context->shop->id.'
-            AND id_seo_manufacturer = '.(int) $manufacturer->id;
+            WHERE id_seo_lang = ' . (int) $everManufacturer->id_seo_lang.'
+            AND id_shop = ' . (int) $this->context->shop->id.'
+            AND id_seo_manufacturer = ' . (int) $manufacturer->id;
             if (!Db::getInstance()->execute($sql)) {
                 $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
             } else {
@@ -870,15 +869,14 @@ class AdminEverPsSeoManufacturerController extends ModuleAdminController
 
             $sql = 'UPDATE `' . _DB_PREFIX_ . 'manufacturer_lang`
             SET meta_description = "'.pSQL($manufacturer->meta_description).'"
-            WHERE id_lang = '.(int) $everManufacturer->id_seo_lang.'
-            AND id_manufacturer = '.(int) $manufacturer->id;
+            WHERE id_lang = ' . (int) $everManufacturer->id_seo_lang.'
+            AND id_manufacturer = ' . (int) $manufacturer->id;
 
             $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_manufacturer`
             SET meta_description = "'.pSQL($manufacturer->meta_description).'"
-            WHERE id_seo_lang = '.(int) $everManufacturer->id_seo_lang.'
-            AND id_shop = '.(int) $this->context->shop->id.'
-            AND id_seo_manufacturer = '.(int) $manufacturer->id;
-            // die(var_dump($sql2));
+            WHERE id_seo_lang = ' . (int) $everManufacturer->id_seo_lang.'
+            AND id_shop = ' . (int) $this->context->shop->id.'
+            AND id_seo_manufacturer = ' . (int) $manufacturer->id;
             if (!Db::getInstance()->execute($sql)) {
                 $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
             } else {
@@ -910,10 +908,10 @@ class AdminEverPsSeoManufacturerController extends ModuleAdminController
                 $url
             );
             $sql = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_manufacturer`
-            SET status_code = '.(int) $httpCode.'
-            WHERE id_seo_lang = '.(int) $everManufacturer->id_seo_lang.'
-            AND id_shop = '.(int) $this->context->shop->id.'
-            AND id_ever_seo_manufacturer = '.(int) $everManufacturer->id;
+            SET status_code = ' . (int) $httpCode.'
+            WHERE id_seo_lang = ' . (int) $everManufacturer->id_seo_lang.'
+            AND id_shop = ' . (int) $this->context->shop->id.'
+            AND id_ever_seo_manufacturer = ' . (int) $everManufacturer->id;
             if (!Db::getInstance()->execute($sql)) {
                 $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
             }

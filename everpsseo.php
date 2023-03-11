@@ -90,7 +90,7 @@ class Everpsseo extends Module
                 ],
                 true
             );
-            $searchconsole = str_replace('://', '%3A%2F%2F', (string) $this->siteUrl);
+            $searchconsole = str_replace('://', '%3A%2F%2F', $this->siteUrl);
             if ((bool) Configuration::get('PS_REWRITING_SETTINGS') === false) {
                 $rewrite_enabled = false;
             } else {
@@ -113,7 +113,7 @@ class Everpsseo extends Module
                 'everpsseo_objects' => $objects_cron_url,
                 'indexes' => EverPsSeoSitemap::getSitemapIndexes(),
                 'sitemaps' => EverPsSeoSitemap::getSitemaps(),
-                'searchconsole' => (string) $searchconsole,
+                'searchconsole' => pSQL($searchconsole),
                 'rewrite_enabled' => $rewrite_enabled,
                 'ssl_enabled' => $ssl_enabled,
                 'canonical' => $canonical,
@@ -1042,7 +1042,7 @@ class Everpsseo extends Module
                 'PS_LOGO'
             );
         }
-        $defaultImage = '<image src="' . (string) $defaultUrlImage . '" style="max-width:80px;" />';
+        $defaultImage = '<image src="' . pSQL($defaultUrlImage) . '" style="max-width:80px;" />';
 
         $knowledgegraph_type = [
             [
@@ -4254,68 +4254,68 @@ class Everpsseo extends Module
         $product_metadesc = [];
         $product_title = [];
         foreach (Language::getLanguages(false) as $lang) {
-            $everseo_404_top[$lang['id_lang']] = (Tools::getValue('EVERSEO_404_TOP_'.$lang['id_lang']))
-            ? Tools::getValue('EVERSEO_404_TOP_'.$lang['id_lang']) : '';
+            $everseo_404_top[$lang['id_lang']] = (Tools::getValue('EVERSEO_404_TOP_' . $lang['id_lang']))
+            ? Tools::getValue('EVERSEO_404_TOP_' . $lang['id_lang']) : '';
 
-            $everseo_404_bottom[$lang['id_lang']] = (Tools::getValue('EVERSEO_404_BOTTOM_'.$lang['id_lang']))
-            ? Tools::getValue('EVERSEO_404_BOTTOM_'.$lang['id_lang']) : '';
+            $everseo_404_bottom[$lang['id_lang']] = (Tools::getValue('EVERSEO_404_BOTTOM_' . $lang['id_lang']))
+            ? Tools::getValue('EVERSEO_404_BOTTOM_' . $lang['id_lang']) : '';
 
-            $product_shortdesc[$lang['id_lang']] = (Tools::getValue('PRODUCT_SHORT_DESC_GENERATE_'.$lang['id_lang']))
-            ? Tools::getValue('PRODUCT_SHORT_DESC_GENERATE_'.$lang['id_lang']) : '';
+            $product_shortdesc[$lang['id_lang']] = (Tools::getValue('PRODUCT_SHORT_DESC_GENERATE_' . $lang['id_lang']))
+            ? Tools::getValue('PRODUCT_SHORT_DESC_GENERATE_' . $lang['id_lang']) : '';
 
-            $product_desc[$lang['id_lang']] = (Tools::getValue('PRODUCT_DESC_GENERATE_'.$lang['id_lang']))
-            ? Tools::getValue('PRODUCT_DESC_GENERATE_'.$lang['id_lang']) : '';
+            $product_desc[$lang['id_lang']] = (Tools::getValue('PRODUCT_DESC_GENERATE_' . $lang['id_lang']))
+            ? Tools::getValue('PRODUCT_DESC_GENERATE_' . $lang['id_lang']) : '';
 
-            $product_bttm[$lang['id_lang']] = (Tools::getValue('PRODUCT_BOTTOM_GENERATE_'.$lang['id_lang']))
-            ? Tools::getValue('PRODUCT_BOTTOM_GENERATE_'.$lang['id_lang']) : '';
+            $product_bttm[$lang['id_lang']] = (Tools::getValue('PRODUCT_BOTTOM_GENERATE_' . $lang['id_lang']))
+            ? Tools::getValue('PRODUCT_BOTTOM_GENERATE_' . $lang['id_lang']) : '';
 
-            $category_desc[$lang['id_lang']] = (Tools::getValue('CATEGORY_DESC_GENERATE_'.$lang['id_lang']))
-            ? Tools::getValue('CATEGORY_DESC_GENERATE_'.$lang['id_lang']) : '';
+            $category_desc[$lang['id_lang']] = (Tools::getValue('CATEGORY_DESC_GENERATE_' . $lang['id_lang']))
+            ? Tools::getValue('CATEGORY_DESC_GENERATE_' . $lang['id_lang']) : '';
 
-            $manufacturer_desc[$lang['id_lang']] = (Tools::getValue('MANUFACTURER_DESC_GENERATE_'.$lang['id_lang']))
-            ? Tools::getValue('MANUFACTURER_DESC_GENERATE_'.$lang['id_lang']) : '';
+            $manufacturer_desc[$lang['id_lang']] = (Tools::getValue('MANUFACTURER_DESC_GENERATE_' . $lang['id_lang']))
+            ? Tools::getValue('MANUFACTURER_DESC_GENERATE_' . $lang['id_lang']) : '';
 
-            $supplier_desc[$lang['id_lang']] = (Tools::getValue('SUPPLIER_DESC_GENERATE_'.$lang['id_lang']))
-            ? Tools::getValue('SUPPLIER_DESC_GENERATE_'.$lang['id_lang']) : '';
+            $supplier_desc[$lang['id_lang']] = (Tools::getValue('SUPPLIER_DESC_GENERATE_' . $lang['id_lang']))
+            ? Tools::getValue('SUPPLIER_DESC_GENERATE_' . $lang['id_lang']) : '';
 
-            $pagemeta_metadesc[$lang['id_lang']] = (Tools::getValue('EVERSEO_PAGEMETA_METADESC_AUTO_'.$lang['id_lang']))
-            ? Tools::getValue('EVERSEO_PAGEMETA_METADESC_AUTO_'.$lang['id_lang']) : '';
+            $pagemeta_metadesc[$lang['id_lang']] = (Tools::getValue('EVERSEO_PAGEMETA_METADESC_AUTO_' . $lang['id_lang']))
+            ? Tools::getValue('EVERSEO_PAGEMETA_METADESC_AUTO_' . $lang['id_lang']) : '';
 
-            $pagemeta_title[$lang['id_lang']] = (Tools::getValue('EVERSEO_PAGEMETA_TITLE_AUTO_'.$lang['id_lang']))
-            ? Tools::getValue('EVERSEO_PAGEMETA_TITLE_AUTO_'.$lang['id_lang']) : '';
+            $pagemeta_title[$lang['id_lang']] = (Tools::getValue('EVERSEO_PAGEMETA_TITLE_AUTO_' . $lang['id_lang']))
+            ? Tools::getValue('EVERSEO_PAGEMETA_TITLE_AUTO_' . $lang['id_lang']) : '';
 
-            $cms_metadesc[$lang['id_lang']] = (Tools::getValue('EVERSEO_CMS_METADESC_AUTO_'.$lang['id_lang']))
-            ? Tools::getValue('EVERSEO_CMS_METADESC_AUTO_'.$lang['id_lang']) : '';
+            $cms_metadesc[$lang['id_lang']] = (Tools::getValue('EVERSEO_CMS_METADESC_AUTO_' . $lang['id_lang']))
+            ? Tools::getValue('EVERSEO_CMS_METADESC_AUTO_' . $lang['id_lang']) : '';
 
-            $cms_title[$lang['id_lang']] = (Tools::getValue('EVERSEO_CMS_TITLE_AUTO_'.$lang['id_lang']))
-            ? Tools::getValue('EVERSEO_CMS_TITLE_AUTO_'.$lang['id_lang']) : '';
+            $cms_title[$lang['id_lang']] = (Tools::getValue('EVERSEO_CMS_TITLE_AUTO_' . $lang['id_lang']))
+            ? Tools::getValue('EVERSEO_CMS_TITLE_AUTO_' . $lang['id_lang']) : '';
 
-            $supplier_metadesc[$lang['id_lang']] = (Tools::getValue('EVERSEO_SUPPLIER_METADESC_AUTO_'.$lang['id_lang']))
-            ? Tools::getValue('EVERSEO_SUPPLIER_METADESC_AUTO_'.$lang['id_lang']) : '';
+            $supplier_metadesc[$lang['id_lang']] = (Tools::getValue('EVERSEO_SUPPLIER_METADESC_AUTO_' . $lang['id_lang']))
+            ? Tools::getValue('EVERSEO_SUPPLIER_METADESC_AUTO_' . $lang['id_lang']) : '';
 
-            $supplier_title[$lang['id_lang']] = (Tools::getValue('EVERSEO_SUPPLIER_TITLE_AUTO_'.$lang['id_lang']))
-            ? Tools::getValue('EVERSEO_SUPPLIER_TITLE_AUTO_'.$lang['id_lang']) : '';
+            $supplier_title[$lang['id_lang']] = (Tools::getValue('EVERSEO_SUPPLIER_TITLE_AUTO_' . $lang['id_lang']))
+            ? Tools::getValue('EVERSEO_SUPPLIER_TITLE_AUTO_' . $lang['id_lang']) : '';
 
-            $m_metadesc[$lang['id_lang']] = (Tools::getValue('EVERSEO_MANUFACTURER_METADESC_AUTO_'.$lang['id_lang']))
-            ? Tools::getValue('EVERSEO_MANUFACTURER_METADESC_AUTO_'.$lang['id_lang']) : '';
+            $m_metadesc[$lang['id_lang']] = (Tools::getValue('EVERSEO_MANUFACTURER_METADESC_AUTO_' . $lang['id_lang']))
+            ? Tools::getValue('EVERSEO_MANUFACTURER_METADESC_AUTO_' . $lang['id_lang']) : '';
 
-            $m_title[$lang['id_lang']] = (Tools::getValue('EVERSEO_MANUFACTURER_TITLE_AUTO_'.$lang['id_lang']))
-            ? Tools::getValue('EVERSEO_MANUFACTURER_TITLE_AUTO_'.$lang['id_lang']) : '';
+            $m_title[$lang['id_lang']] = (Tools::getValue('EVERSEO_MANUFACTURER_TITLE_AUTO_' . $lang['id_lang']))
+            ? Tools::getValue('EVERSEO_MANUFACTURER_TITLE_AUTO_' . $lang['id_lang']) : '';
 
-            $category_metadesc[$lang['id_lang']] = (Tools::getValue('EVERSEO_CATEGORY_METADESC_AUTO_'.$lang['id_lang']))
-            ? Tools::getValue('EVERSEO_CATEGORY_METADESC_AUTO_'.$lang['id_lang']) : '';
+            $category_metadesc[$lang['id_lang']] = (Tools::getValue('EVERSEO_CATEGORY_METADESC_AUTO_' . $lang['id_lang']))
+            ? Tools::getValue('EVERSEO_CATEGORY_METADESC_AUTO_' . $lang['id_lang']) : '';
 
-            $category_title[$lang['id_lang']] = (Tools::getValue('EVERSEO_CATEGORY_TITLE_AUTO_'.$lang['id_lang']))
-            ? Tools::getValue('EVERSEO_CATEGORY_TITLE_AUTO_'.$lang['id_lang']) : '';
+            $category_title[$lang['id_lang']] = (Tools::getValue('EVERSEO_CATEGORY_TITLE_AUTO_' . $lang['id_lang']))
+            ? Tools::getValue('EVERSEO_CATEGORY_TITLE_AUTO_' . $lang['id_lang']) : '';
 
-            $image_alt[$lang['id_lang']] = (Tools::getValue('EVERSEO_IMAGE_ALT_AUTO_'.$lang['id_lang']))
-            ? Tools::getValue('EVERSEO_IMAGE_ALT_AUTO_'.$lang['id_lang']) : '';
+            $image_alt[$lang['id_lang']] = (Tools::getValue('EVERSEO_IMAGE_ALT_AUTO_' . $lang['id_lang']))
+            ? Tools::getValue('EVERSEO_IMAGE_ALT_AUTO_' . $lang['id_lang']) : '';
 
-            $product_metadesc[$lang['id_lang']] = (Tools::getValue('EVERSEO_PRODUCT_METADESC_AUTO_'.$lang['id_lang']))
-            ? Tools::getValue('EVERSEO_PRODUCT_METADESC_AUTO_'.$lang['id_lang']) : '';
+            $product_metadesc[$lang['id_lang']] = (Tools::getValue('EVERSEO_PRODUCT_METADESC_AUTO_' . $lang['id_lang']))
+            ? Tools::getValue('EVERSEO_PRODUCT_METADESC_AUTO_' . $lang['id_lang']) : '';
 
-            $product_title[$lang['id_lang']] = (Tools::getValue('EVERSEO_PRODUCT_TITLE_AUTO_'.$lang['id_lang']))
-            ? Tools::getValue('EVERSEO_PRODUCT_TITLE_AUTO_'.$lang['id_lang']) : '';
+            $product_title[$lang['id_lang']] = (Tools::getValue('EVERSEO_PRODUCT_TITLE_AUTO_' . $lang['id_lang']))
+            ? Tools::getValue('EVERSEO_PRODUCT_TITLE_AUTO_' . $lang['id_lang']) : '';
         }
         return [
             'product_shortcodes' => '<p class="form-control-static">Products shortcodes</p>
@@ -5545,43 +5545,43 @@ class Everpsseo extends Module
             }
 
             foreach (Language::getLanguages(false) as $language) {
-                if (Tools::getValue('EVERSEO_404_TOP_'.$language['id_lang'])
-                    && !Validate::isCleanHtml(Tools::getValue('EVERSEO_404_TOP_'.$language['id_lang']))
+                if (Tools::getValue('EVERSEO_404_TOP_' . $language['id_lang'])
+                    && !Validate::isCleanHtml(Tools::getValue('EVERSEO_404_TOP_' . $language['id_lang']))
                 ) {
                     $this->postErrors[] = $this->l('Error : The top content on 404 page is not valid');
                 }
-                if (Tools::getValue('EVERSEO_404_BOTTOM_'.$language['id_lang'])
-                    && !Validate::isCleanHtml(Tools::getValue('EVERSEO_404_BOTTOM_'.$language['id_lang']))
+                if (Tools::getValue('EVERSEO_404_BOTTOM_' . $language['id_lang'])
+                    && !Validate::isCleanHtml(Tools::getValue('EVERSEO_404_BOTTOM_' . $language['id_lang']))
                 ) {
                     $this->postErrors[] = $this->l('Error : The top content on 404 page is not valid');
                 }
 
-                if (Tools::getValue('PRODUCT_SHORT_DESC_GENERATE_'.$language['id_lang'])
-                    && !Validate::isCleanHtml(Tools::getValue('PRODUCT_SHORT_DESC_GENERATE_'.$language['id_lang']))
+                if (Tools::getValue('PRODUCT_SHORT_DESC_GENERATE_' . $language['id_lang'])
+                    && !Validate::isCleanHtml(Tools::getValue('PRODUCT_SHORT_DESC_GENERATE_' . $language['id_lang']))
                 ) {
                     $this->postErrors[] = $this->l('Error : The product short description is not valid');
                 }
 
-                if (Tools::getValue('PRODUCT_DESC_GENERATE_'.$language['id_lang'])
-                    && !Validate::isCleanHtml(Tools::getValue('PRODUCT_DESC_GENERATE_'.$language['id_lang']))
+                if (Tools::getValue('PRODUCT_DESC_GENERATE_' . $language['id_lang'])
+                    && !Validate::isCleanHtml(Tools::getValue('PRODUCT_DESC_GENERATE_' . $language['id_lang']))
                 ) {
                     $this->postErrors[] = $this->l('Error : The product description is not valid');
                 }
 
-                if (Tools::getValue('CATEGORY_DESC_GENERATE_'.$language['id_lang'])
-                    && !Validate::isCleanHtml(Tools::getValue('CATEGORY_DESC_GENERATE_'.$language['id_lang']))
+                if (Tools::getValue('CATEGORY_DESC_GENERATE_' . $language['id_lang'])
+                    && !Validate::isCleanHtml(Tools::getValue('CATEGORY_DESC_GENERATE_' . $language['id_lang']))
                 ) {
                     $this->postErrors[] = $this->l('Error : The category content is not valid');
                 }
 
-                if (Tools::getValue('SUPPLIER_DESC_GENERATE_'.$language['id_lang'])
-                    && !Validate::isCleanHtml(Tools::getValue('SUPPLIER_DESC_GENERATE_'.$language['id_lang']))
+                if (Tools::getValue('SUPPLIER_DESC_GENERATE_' . $language['id_lang'])
+                    && !Validate::isCleanHtml(Tools::getValue('SUPPLIER_DESC_GENERATE_' . $language['id_lang']))
                 ) {
                     $this->postErrors[] = $this->l('Error : The supplier content is not valid');
                 }
 
-                if (Tools::getValue('MANUFACTURER_DESC_GENERATE_'.$language['id_lang'])
-                    && !Validate::isCleanHtml(Tools::getValue('MANUFACTURER_DESC_GENERATE_'.$language['id_lang']))
+                if (Tools::getValue('MANUFACTURER_DESC_GENERATE_' . $language['id_lang'])
+                    && !Validate::isCleanHtml(Tools::getValue('MANUFACTURER_DESC_GENERATE_' . $language['id_lang']))
                 ) {
                     $this->postErrors[] = $this->l('Error : The manufacturer content is not valid');
                 }
@@ -5631,68 +5631,68 @@ class Everpsseo extends Module
         $product_metadesc = [];
         $product_title = [];
         foreach (Language::getLanguages(false) as $lang) {
-            $everseo_404_top[$lang['id_lang']] = (Tools::getValue('EVERSEO_404_TOP_'.$lang['id_lang']))
-            ? Tools::getValue('EVERSEO_404_TOP_'.$lang['id_lang']) : '';
+            $everseo_404_top[$lang['id_lang']] = (Tools::getValue('EVERSEO_404_TOP_' . $lang['id_lang']))
+            ? Tools::getValue('EVERSEO_404_TOP_' . $lang['id_lang']) : '';
 
-            $everseo_404_bottom[$lang['id_lang']] = (Tools::getValue('EVERSEO_404_BOTTOM_'.$lang['id_lang']))
-            ? Tools::getValue('EVERSEO_404_BOTTOM_'.$lang['id_lang']) : '';
+            $everseo_404_bottom[$lang['id_lang']] = (Tools::getValue('EVERSEO_404_BOTTOM_' . $lang['id_lang']))
+            ? Tools::getValue('EVERSEO_404_BOTTOM_' . $lang['id_lang']) : '';
 
-            $product_shortdesc[$lang['id_lang']] = (Tools::getValue('PRODUCT_SHORT_DESC_GENERATE_'.$lang['id_lang']))
-            ? Tools::getValue('PRODUCT_SHORT_DESC_GENERATE_'.$lang['id_lang']) : '';
+            $product_shortdesc[$lang['id_lang']] = (Tools::getValue('PRODUCT_SHORT_DESC_GENERATE_' . $lang['id_lang']))
+            ? Tools::getValue('PRODUCT_SHORT_DESC_GENERATE_' . $lang['id_lang']) : '';
 
-            $product_desc[$lang['id_lang']] = (Tools::getValue('PRODUCT_DESC_GENERATE_'.$lang['id_lang']))
-            ? Tools::getValue('PRODUCT_DESC_GENERATE_'.$lang['id_lang']) : '';
+            $product_desc[$lang['id_lang']] = (Tools::getValue('PRODUCT_DESC_GENERATE_' . $lang['id_lang']))
+            ? Tools::getValue('PRODUCT_DESC_GENERATE_' . $lang['id_lang']) : '';
 
-            $product_bttm[$lang['id_lang']] = (Tools::getValue('PRODUCT_BOTTOM_GENERATE_'.$lang['id_lang']))
-            ? Tools::getValue('PRODUCT_BOTTOM_GENERATE_'.$lang['id_lang']) : '';
+            $product_bttm[$lang['id_lang']] = (Tools::getValue('PRODUCT_BOTTOM_GENERATE_' . $lang['id_lang']))
+            ? Tools::getValue('PRODUCT_BOTTOM_GENERATE_' . $lang['id_lang']) : '';
 
-            $category_desc[$lang['id_lang']] = (Tools::getValue('CATEGORY_DESC_GENERATE_'.$lang['id_lang']))
-            ? Tools::getValue('CATEGORY_DESC_GENERATE_'.$lang['id_lang']) : '';
+            $category_desc[$lang['id_lang']] = (Tools::getValue('CATEGORY_DESC_GENERATE_' . $lang['id_lang']))
+            ? Tools::getValue('CATEGORY_DESC_GENERATE_' . $lang['id_lang']) : '';
 
-            $manufacturer_desc[$lang['id_lang']] = (Tools::getValue('MANUFACTURER_DESC_GENERATE_'.$lang['id_lang']))
-            ? Tools::getValue('MANUFACTURER_DESC_GENERATE_'.$lang['id_lang']) : '';
+            $manufacturer_desc[$lang['id_lang']] = (Tools::getValue('MANUFACTURER_DESC_GENERATE_' . $lang['id_lang']))
+            ? Tools::getValue('MANUFACTURER_DESC_GENERATE_' . $lang['id_lang']) : '';
 
-            $supplier_desc[$lang['id_lang']] = (Tools::getValue('SUPPLIER_DESC_GENERATE_'.$lang['id_lang']))
-            ? Tools::getValue('SUPPLIER_DESC_GENERATE_'.$lang['id_lang']) : '';
+            $supplier_desc[$lang['id_lang']] = (Tools::getValue('SUPPLIER_DESC_GENERATE_' . $lang['id_lang']))
+            ? Tools::getValue('SUPPLIER_DESC_GENERATE_' . $lang['id_lang']) : '';
 
-            $pagemeta_metadesc[$lang['id_lang']] = (Tools::getValue('EVERSEO_PAGEMETA_METADESC_AUTO_'.$lang['id_lang']))
-            ? Tools::getValue('EVERSEO_PAGEMETA_METADESC_AUTO_'.$lang['id_lang']) : '';
+            $pagemeta_metadesc[$lang['id_lang']] = (Tools::getValue('EVERSEO_PAGEMETA_METADESC_AUTO_' . $lang['id_lang']))
+            ? Tools::getValue('EVERSEO_PAGEMETA_METADESC_AUTO_' . $lang['id_lang']) : '';
 
-            $pagemeta_title[$lang['id_lang']] = (Tools::getValue('EVERSEO_PAGEMETA_TITLE_AUTO_'.$lang['id_lang']))
-            ? Tools::getValue('EVERSEO_PAGEMETA_TITLE_AUTO_'.$lang['id_lang']) : '';
+            $pagemeta_title[$lang['id_lang']] = (Tools::getValue('EVERSEO_PAGEMETA_TITLE_AUTO_' . $lang['id_lang']))
+            ? Tools::getValue('EVERSEO_PAGEMETA_TITLE_AUTO_' . $lang['id_lang']) : '';
 
-            $cms_metadesc[$lang['id_lang']] = (Tools::getValue('EVERSEO_CMS_METADESC_AUTO_'.$lang['id_lang']))
-            ? Tools::getValue('EVERSEO_CMS_METADESC_AUTO_'.$lang['id_lang']) : '';
+            $cms_metadesc[$lang['id_lang']] = (Tools::getValue('EVERSEO_CMS_METADESC_AUTO_' . $lang['id_lang']))
+            ? Tools::getValue('EVERSEO_CMS_METADESC_AUTO_' . $lang['id_lang']) : '';
 
-            $cms_title[$lang['id_lang']] = (Tools::getValue('EVERSEO_CMS_TITLE_AUTO_'.$lang['id_lang']))
-            ? Tools::getValue('EVERSEO_CMS_TITLE_AUTO_'.$lang['id_lang']) : '';
+            $cms_title[$lang['id_lang']] = (Tools::getValue('EVERSEO_CMS_TITLE_AUTO_' . $lang['id_lang']))
+            ? Tools::getValue('EVERSEO_CMS_TITLE_AUTO_' . $lang['id_lang']) : '';
 
-            $supplier_metadesc[$lang['id_lang']] = (Tools::getValue('EVERSEO_SUPPLIER_METADESC_AUTO_'.$lang['id_lang']))
-            ? Tools::getValue('EVERSEO_SUPPLIER_METADESC_AUTO_'.$lang['id_lang']) : '';
+            $supplier_metadesc[$lang['id_lang']] = (Tools::getValue('EVERSEO_SUPPLIER_METADESC_AUTO_' . $lang['id_lang']))
+            ? Tools::getValue('EVERSEO_SUPPLIER_METADESC_AUTO_' . $lang['id_lang']) : '';
 
-            $supplier_title[$lang['id_lang']] = (Tools::getValue('EVERSEO_SUPPLIER_TITLE_AUTO_'.$lang['id_lang']))
-            ? Tools::getValue('EVERSEO_SUPPLIER_TITLE_AUTO_'.$lang['id_lang']) : '';
+            $supplier_title[$lang['id_lang']] = (Tools::getValue('EVERSEO_SUPPLIER_TITLE_AUTO_' . $lang['id_lang']))
+            ? Tools::getValue('EVERSEO_SUPPLIER_TITLE_AUTO_' . $lang['id_lang']) : '';
 
-            $m_metadesc[$lang['id_lang']] = (Tools::getValue('EVERSEO_MANUFACTURER_METADESC_AUTO_'.$lang['id_lang']))
-            ? Tools::getValue('EVERSEO_MANUFACTURER_METADESC_AUTO_'.$lang['id_lang']) : '';
+            $m_metadesc[$lang['id_lang']] = (Tools::getValue('EVERSEO_MANUFACTURER_METADESC_AUTO_' . $lang['id_lang']))
+            ? Tools::getValue('EVERSEO_MANUFACTURER_METADESC_AUTO_' . $lang['id_lang']) : '';
 
-            $m_title[$lang['id_lang']] = (Tools::getValue('EVERSEO_MANUFACTURER_TITLE_AUTO_'.$lang['id_lang']))
-            ? Tools::getValue('EVERSEO_MANUFACTURER_TITLE_AUTO_'.$lang['id_lang']) : '';
+            $m_title[$lang['id_lang']] = (Tools::getValue('EVERSEO_MANUFACTURER_TITLE_AUTO_' . $lang['id_lang']))
+            ? Tools::getValue('EVERSEO_MANUFACTURER_TITLE_AUTO_' . $lang['id_lang']) : '';
 
-            $category_metadesc[$lang['id_lang']] = (Tools::getValue('EVERSEO_CATEGORY_METADESC_AUTO_'.$lang['id_lang']))
-            ? Tools::getValue('EVERSEO_CATEGORY_METADESC_AUTO_'.$lang['id_lang']) : '';
+            $category_metadesc[$lang['id_lang']] = (Tools::getValue('EVERSEO_CATEGORY_METADESC_AUTO_' . $lang['id_lang']))
+            ? Tools::getValue('EVERSEO_CATEGORY_METADESC_AUTO_' . $lang['id_lang']) : '';
 
-            $category_title[$lang['id_lang']] = (Tools::getValue('EVERSEO_CATEGORY_TITLE_AUTO_'.$lang['id_lang']))
-            ? Tools::getValue('EVERSEO_CATEGORY_TITLE_AUTO_'.$lang['id_lang']) : '';
+            $category_title[$lang['id_lang']] = (Tools::getValue('EVERSEO_CATEGORY_TITLE_AUTO_' . $lang['id_lang']))
+            ? Tools::getValue('EVERSEO_CATEGORY_TITLE_AUTO_' . $lang['id_lang']) : '';
 
-            $image_alt[$lang['id_lang']] = (Tools::getValue('EVERSEO_IMAGE_ALT_AUTO_'.$lang['id_lang']))
-            ? Tools::getValue('EVERSEO_IMAGE_ALT_AUTO_'.$lang['id_lang']) : '';
+            $image_alt[$lang['id_lang']] = (Tools::getValue('EVERSEO_IMAGE_ALT_AUTO_' . $lang['id_lang']))
+            ? Tools::getValue('EVERSEO_IMAGE_ALT_AUTO_' . $lang['id_lang']) : '';
 
-            $product_metadesc[$lang['id_lang']] = (Tools::getValue('EVERSEO_PRODUCT_METADESC_AUTO_'.$lang['id_lang']))
-            ? Tools::getValue('EVERSEO_PRODUCT_METADESC_AUTO_'.$lang['id_lang']) : '';
+            $product_metadesc[$lang['id_lang']] = (Tools::getValue('EVERSEO_PRODUCT_METADESC_AUTO_' . $lang['id_lang']))
+            ? Tools::getValue('EVERSEO_PRODUCT_METADESC_AUTO_' . $lang['id_lang']) : '';
 
-            $product_title[$lang['id_lang']] = (Tools::getValue('EVERSEO_PRODUCT_TITLE_AUTO_'.$lang['id_lang']))
-            ? Tools::getValue('EVERSEO_PRODUCT_TITLE_AUTO_'.$lang['id_lang']) : '';
+            $product_title[$lang['id_lang']] = (Tools::getValue('EVERSEO_PRODUCT_TITLE_AUTO_' . $lang['id_lang']))
+            ? Tools::getValue('EVERSEO_PRODUCT_TITLE_AUTO_' . $lang['id_lang']) : '';
         }
         foreach (array_keys($form_values) as $key) {
             if ($key == 'EVERSEO_SITEMAP_LANGS[]') {
@@ -6068,7 +6068,6 @@ class Everpsseo extends Module
             $titles = $dom->getElementsByTagName('a');
             foreach ($titles as $item) {
                 $default_attr = EverPsSeoTools::removeEmptyLines($item->textContent);
-                // die(var_dump($default_attr));
                 if (!$item->getAttribute('alt') || empty($item->getAttribute('alt'))) {
                     $item->setAttribute(
                         'alt',
@@ -6093,10 +6092,10 @@ class Everpsseo extends Module
                 $js .= $value;
             }
             $txt = preg_replace('#<script(.*?)</script>#is', '', $txt);
-            $txt = preg_replace('#<body(.*?)</body>#is', '<body$1'.$js.'</body>', $txt);
+            $txt = preg_replace('#<body(.*?)</body>#is', '<body$1' . $js.'</body>', $txt);
         }
         // Defer javascript
-        if ((bool)Configuration::get('EVERSEO_DEFER')) {
+        if ((bool) Configuration::get('EVERSEO_DEFER')) {
             $txt = str_replace(
                 '<script type="text/javascript">',
                 '<script type="text/javascript" defer>',
@@ -6202,11 +6201,11 @@ class Everpsseo extends Module
             foreach ($everseo_redirects as $redirect) {
                 switch ((int) $redirect->code) {
                     case 301:
-                        $prepend_rules .= 'Redirect permanent '.$redirect->not_found.' '.$redirect->redirection."\n\n";
+                        $prepend_rules .= 'Redirect permanent ' . $redirect->not_found.' ' . $redirect->redirection."\n\n";
                         break;
 
                     case 302:
-                        $prepend_rules .= 'Redirect '.$redirect->not_found.' '.$redirect->redirection."\n\n";
+                        $prepend_rules .= 'Redirect ' . $redirect->not_found.' ' . $redirect->redirection."\n\n";
                         break;
 
                     case 303:
@@ -6375,20 +6374,19 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
     {
         $id_shop = (int) $this->context->shop->id;
         $id_seo_lang = (int) $params['object']->id;
-        $seoAddLang = Db::getInstance()->insert(
-            'ever_seo_lang',
-            [
-                'id_seo_lang' => (int) $id_seo_lang,
-                'id_shop' => (int) $id_shop,
-                'iso_code' => (string) $params['object']->iso_code,
-                'language_code' => (string) $params['object']->language_code,
-            ]
-        );
-        if ($seoAddLang) {
+        try {
+            Db::getInstance()->insert(
+                'ever_seo_lang',
+                [
+                    'id_seo_lang' => (int) $id_seo_lang,
+                    'id_shop' => (int) $id_shop,
+                    'iso_code' => pSQL($params['object']->iso_code),
+                    'language_code' => pSQL($params['object']->language_code),
+                ]
+            );
             $this->updateSeoTables((int) $id_shop, (int) $id_seo_lang);
-            return true;
-        } else {
-            die('can\'t add SEO lang '.(int) $params['object']->id);
+        } catch (Exception $e) {
+            PrestaShopLogger::addLog('can\'t add SEO lang ' . (int) $params['object']->id);
         }
     }
 
@@ -6690,9 +6688,9 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
         if (count($shortcodes) > 0) {
             foreach ($shortcodes as $shortcode) {
                 $params['content'] = str_replace(
-                    (string) $shortcode->shortcode,
-                    (string) $shortcode->content,
-                    (string) $params['content']
+                    pSQL($shortcode->shortcode),
+                    pSQL($shortcode->content),
+                    pSQL($params['content'], true)
                 );
             }
         }
@@ -7013,12 +7011,16 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
                 )
                 SELECT
                     '.pSQL($seoObj).',
-                    '.(int) $id_shop.',
-                    '.(int) $id_seo_lang.'
+                    ' . (int) $id_shop.',
+                    ' . (int) $id_seo_lang.'
                 FROM '. _DB_PREFIX_ .pSQL($table).'
             ';
-            if (!Db::getInstance()->Execute($update)) {
-                die('can\'t update SEO tables');
+            try {
+                Db::getInstance()->Execute($update)
+            } catch (Exception $e) {
+                PrestaShopLogger::addLog(
+                    'can\'t update SEO tables'
+                );
             }
         }
     }
@@ -7048,15 +7050,15 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
 
                 $sql = 'UPDATE `' . _DB_PREFIX_ . 'product_lang`
                 SET meta_title = "'.pSQL($meta_title).'"
-                WHERE id_lang = '.(int) $id_lang.'
+                WHERE id_lang = ' . (int) $id_lang.'
                 AND id_shop = ' . (int) $id_shop . '
-                AND id_product = '.(int) $id_element;
+                AND id_product = ' . (int) $id_element;
 
                 $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_product`
                 SET meta_title = "'.pSQL($meta_title).'"
-                WHERE id_seo_lang = '.(int) $id_lang.'
-                AND id_shop = '.(int) $this->context->shop->id.'
-                AND id_seo_product = '.(int) $id_element;
+                WHERE id_seo_lang = ' . (int) $id_lang.'
+                AND id_shop = ' . (int) $this->context->shop->id.'
+                AND id_seo_product = ' . (int) $id_element;
                 if (!Db::getInstance()->execute($sql)) {
                     $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
                 } else {
@@ -7074,15 +7076,15 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
 
                 $sql = 'UPDATE `' . _DB_PREFIX_ . 'category_lang`
                 SET meta_title = "'.pSQL($meta_title).'"
-                WHERE id_lang = '.(int) $id_lang.'
+                WHERE id_lang = ' . (int) $id_lang.'
                 AND id_shop = ' . (int) $id_shop . '
-                AND id_category = '.(int) $id_element;
+                AND id_category = ' . (int) $id_element;
 
                 $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_category`
                 SET meta_title = "'.pSQL($meta_title).'"
-                WHERE id_seo_lang = '.(int) $id_lang.'
+                WHERE id_seo_lang = ' . (int) $id_lang.'
                 AND id_shop = ' . (int) $id_shop . '
-                AND id_seo_category = '.(int) $id_element;
+                AND id_seo_category = ' . (int) $id_element;
                 if (!Db::getInstance()->execute($sql)) {
                     $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
                 } else {
@@ -7100,15 +7102,15 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
 
                 $sql = 'UPDATE `' . _DB_PREFIX_ . 'cms_lang`
                 SET meta_title = "'.pSQL($meta_title).'"
-                WHERE id_lang = '.(int) $id_lang.'
+                WHERE id_lang = ' . (int) $id_lang.'
                 AND id_shop = ' . (int) $id_shop . '
-                AND id_cms = '.(int) $id_element;
+                AND id_cms = ' . (int) $id_element;
 
                 $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_cms`
                 SET meta_title = "'.pSQL($meta_title).'"
-                WHERE id_seo_lang = '.(int) $id_lang.'
+                WHERE id_seo_lang = ' . (int) $id_lang.'
                 AND id_shop = ' . (int) $id_shop . '
-                AND id_seo_cms = '.(int) $id_element;
+                AND id_seo_cms = ' . (int) $id_element;
                 if (!Db::getInstance()->execute($sql)) {
                     $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
                 } else {
@@ -7126,15 +7128,15 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
 
                 $sql = 'UPDATE `' . _DB_PREFIX_ . 'manufacturer_lang`
                 SET meta_title = "'.pSQL($meta_title).'"
-                WHERE id_lang = '.(int) $id_lang.'
+                WHERE id_lang = ' . (int) $id_lang.'
                 AND id_shop = ' . (int) $id_shop . '
-                AND id_manufacturer = '.(int) $id_element;
+                AND id_manufacturer = ' . (int) $id_element;
 
                 $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_manufacturer`
                 SET meta_title = "'.pSQL($meta_title).'"
-                WHERE id_seo_lang = '.(int) $id_lang.'
+                WHERE id_seo_lang = ' . (int) $id_lang.'
                 AND id_shop = ' . (int) $id_shop . '
-                AND id_seo_manufacturer = '.(int) $id_element;
+                AND id_seo_manufacturer = ' . (int) $id_element;
                 if (!Db::getInstance()->execute($sql)) {
                     $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
                 } else {
@@ -7152,15 +7154,15 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
 
                 $sql = 'UPDATE `' . _DB_PREFIX_ . 'supplier_lang`
                 SET meta_title = "'.pSQL($meta_title).'"
-                WHERE id_lang = '.(int) $id_lang.'
+                WHERE id_lang = ' . (int) $id_lang.'
                 AND id_shop = ' . (int) $id_shop . '
-                AND id_supplier = '.(int) $id_element;
+                AND id_supplier = ' . (int) $id_element;
 
                 $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_supplier`
                 SET meta_title = "'.pSQL($meta_title).'"
-                WHERE id_seo_lang = '.(int) $id_lang.'
+                WHERE id_seo_lang = ' . (int) $id_lang.'
                 AND id_shop = ' . (int) $id_shop . '
-                AND id_seo_supplier = '.(int) $id_element;
+                AND id_seo_supplier = ' . (int) $id_element;
                 if (!Db::getInstance()->execute($sql)) {
                     $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
                 } else {
@@ -7201,15 +7203,15 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
 
                 $sql = 'UPDATE `' . _DB_PREFIX_ . 'product_lang`
                 SET meta_description = "'.pSQL($meta_description).'"
-                WHERE id_lang = '.(int) $id_lang.'
+                WHERE id_lang = ' . (int) $id_lang.'
                 AND id_shop = ' . (int) $id_shop . '
-                AND id_product = '.(int) $id_element;
+                AND id_product = ' . (int) $id_element;
 
                 $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_product`
                 SET meta_description = "'.pSQL($meta_description).'"
-                WHERE id_seo_lang = '.(int) $id_lang.'
+                WHERE id_seo_lang = ' . (int) $id_lang.'
                 AND id_shop = ' . (int) $id_shop . '
-                AND id_seo_product = '.(int) $id_element;
+                AND id_seo_product = ' . (int) $id_element;
                 if (!Db::getInstance()->execute($sql)) {
                     $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
                 } else {
@@ -7227,15 +7229,15 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
 
                 $sql = 'UPDATE `' . _DB_PREFIX_ . 'category_lang`
                 SET meta_description = "'.pSQL($meta_description).'"
-                WHERE id_lang = '.(int) $id_lang.'
+                WHERE id_lang = ' . (int) $id_lang.'
                 AND id_shop = ' . (int) $id_shop . '
-                AND id_category = '.(int) $id_element;
+                AND id_category = ' . (int) $id_element;
 
                 $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_category`
                 SET meta_description = "'.pSQL($meta_description).'"
-                WHERE id_seo_lang = '.(int) $id_lang.'
+                WHERE id_seo_lang = ' . (int) $id_lang.'
                 AND id_shop = ' . (int) $id_shop . '
-                AND id_seo_category = '.(int) $id_element;
+                AND id_seo_category = ' . (int) $id_element;
                 if (!Db::getInstance()->execute($sql)) {
                     $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
                 } else {
@@ -7253,15 +7255,15 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
 
                 $sql = 'UPDATE `' . _DB_PREFIX_ . 'cms_lang`
                 SET meta_description = "'.pSQL($meta_description).'"
-                WHERE id_lang = '.(int) $id_lang.'
+                WHERE id_lang = ' . (int) $id_lang.'
                 AND id_shop = ' . (int) $id_shop . '
-                AND id_cms = '.(int) $id_element;
+                AND id_cms = ' . (int) $id_element;
 
                 $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_cms`
                 SET meta_description = "'.pSQL($meta_description).'"
-                WHERE id_seo_lang = '.(int) $id_lang.'
+                WHERE id_seo_lang = ' . (int) $id_lang.'
                 AND id_shop = ' . (int) $id_shop . '
-                AND id_seo_cms = '.(int) $id_element;
+                AND id_seo_cms = ' . (int) $id_element;
                 if (!Db::getInstance()->execute($sql)) {
                     $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
                 } else {
@@ -7279,15 +7281,15 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
 
                 $sql = 'UPDATE `' . _DB_PREFIX_ . 'manufacturer_lang`
                 SET meta_description = "'.pSQL($meta_description).'"
-                WHERE id_lang = '.(int) $id_lang.'
+                WHERE id_lang = ' . (int) $id_lang.'
                 AND id_shop = ' . (int) $id_shop . '
-                AND id_manufacturer = '.(int) $id_element;
+                AND id_manufacturer = ' . (int) $id_element;
 
                 $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_manufacturer`
                 SET meta_description = "'.pSQL($meta_description).'"
-                WHERE id_seo_lang = '.(int) $id_lang.'
+                WHERE id_seo_lang = ' . (int) $id_lang.'
                 AND id_shop = ' . (int) $id_shop . '
-                AND id_seo_manufacturer = '.(int) $id_element;
+                AND id_seo_manufacturer = ' . (int) $id_element;
                 if (!Db::getInstance()->execute($sql)) {
                     $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
                 } else {
@@ -7305,15 +7307,15 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
 
                 $sql = 'UPDATE `' . _DB_PREFIX_ . 'supplier_lang`
                 SET meta_description = "'.pSQL($meta_description).'"
-                WHERE id_lang = '.(int) $id_lang.'
+                WHERE id_lang = ' . (int) $id_lang.'
                 AND id_shop = ' . (int) $id_shop . '
-                AND id_supplier = '.(int) $id_element;
+                AND id_supplier = ' . (int) $id_element;
 
                 $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_supplier`
                 SET meta_description = "'.pSQL($meta_description).'"
-                WHERE id_seo_lang = '.(int) $id_lang.'
+                WHERE id_seo_lang = ' . (int) $id_lang.'
                 AND id_shop = ' . (int) $id_shop . '
-                AND id_seo_supplier = '.(int) $id_element;
+                AND id_seo_supplier = ' . (int) $id_element;
                 if (!Db::getInstance()->execute($sql)) {
                     $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
                 } else {
@@ -7424,9 +7426,9 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
 
                 $sql_desc = 'UPDATE `' . _DB_PREFIX_ . 'product_lang`
                     SET description = "'.pSQL($product->description, true).'"
-                    WHERE id_lang = '.(int) $id_lang.'
+                    WHERE id_lang = ' . (int) $id_lang.'
                     AND id_shop = ' . (int) $id_shop . '
-                    AND id_product = '.(int) $id_element;
+                    AND id_product = ' . (int) $id_element;
 
                 if (!Db::getInstance()->execute($sql_desc)) {
                     return false;
@@ -7448,15 +7450,15 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
                         return;
                     }
                     if ((bool) Configuration::get('EVERSEO_DELETE_PRODUCT_CONTENT') === false) {
-                        $obj->bottom_content = $obj->bottom_content.' '.$descriptionBottom;
+                        $obj->bottom_content = $obj->bottom_content.' ' . $descriptionBottom;
                     } else {
                         $obj->bottom_content = $descriptionBottom;
                     }
                     $sql_ever_desc = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_product`
                         SET bottom_content = "'.pSQL($obj->bottom_content, true).'"
-                        WHERE id_seo_lang = '.(int) $id_lang.'
+                        WHERE id_seo_lang = ' . (int) $id_lang.'
                         AND id_shop = ' . (int) $id_shop . '
-                        AND id_seo_product = '.(int) $id_element;
+                        AND id_seo_product = ' . (int) $id_element;
 
                     if (!Db::getInstance()->execute($sql_ever_desc)) {
                         return false;
@@ -7485,7 +7487,7 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
                     if ((bool) Configuration::get('EVERSEO_DELETE_CATEGORY_CONTENT')) {
                         $category->description = $description;
                     } else {
-                        $category->description = $category->description.' '.$description;
+                        $category->description = $category->description.' ' . $description;
                     }
                     if (!$category->isParentCategoryAvailable()) {
                         $category->id_parent = 2;
@@ -7500,7 +7502,7 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
                         (int) $id_shop
                     );
                     if ((bool) Configuration::get('EVERSEO_DELETE_CATEGORY_CONTENT') === false) {
-                        $obj->bottom_content = $obj->bottom_content.' '.$description;
+                        $obj->bottom_content = $obj->bottom_content.' ' . $description;
                     } else {
                         $obj->bottom_content = $description;
                     }
@@ -7533,7 +7535,7 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
                         (int) $id_shop
                     );
                     if ((bool) Configuration::get('EVERSEO_DELETE_MANUFACTURER_CONTENT') === false) {
-                        $obj->bottom_content = $obj->bottom_content.' '.$description;
+                        $obj->bottom_content = $obj->bottom_content.' ' . $description;
                     } else {
                         $obj->bottom_content = $description;
                     }
@@ -7566,7 +7568,7 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
                         (int) $id_shop
                     );
                     if ((bool) Configuration::get('EVERSEO_DELETE_SUPPLIER_CONTENT') === false) {
-                        $obj->bottom_content = $obj->bottom_content.' '.$description;
+                        $obj->bottom_content = $obj->bottom_content.' ' . $description;
                     } else {
                         $obj->bottom_content = $description;
                     }
@@ -7605,9 +7607,9 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
 
                 $sql_desc_short = 'UPDATE `' . _DB_PREFIX_ . 'product_lang`
                     SET description_short = "'.pSQL($product->description_short, true).'"
-                    WHERE id_lang = '.(int) $id_lang.'
+                    WHERE id_lang = ' . (int) $id_lang.'
                     AND id_shop = ' . (int) $id_shop . '
-                    AND id_product = '.(int) $id_element;
+                    AND id_product = ' . (int) $id_element;
 
                 if (Db::getInstance()->execute($sql_desc_short)) {
                     return true;
@@ -7620,23 +7622,11 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
     {
         return Db::getInstance()->delete(
             $table,
-            $object.' = '.(int) $id_element
+            $object.' = ' . (int) $id_element
         );
     }
 #################### END OBJECT ADD/DELETE ####################
 #################### START DISPLAY HOOKS ####################
-
-    public function hookActionPresentProduct($params)
-    {
-        $context = Context::getContext();
-        $presentedProduct = $params['presentedProduct'];
-        $psProduct = new Product(
-            (int) $presentedProduct['id_product']
-        );
-        if (isset($presentedProduct['default_image']) && $presentedProduct['default_image']) {
-            // die(var_dump($presentedProduct['default_image']));
-        }
-    }
 
     public function hookDisplayAdminProductsSeoStepBottom($params)
     {
@@ -7729,7 +7719,7 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
             return;
         }
         $id_product = (int) Tools::getValue('id_product');
-        $cacheId = $this->getCacheId($this->name.'-reassurance-'.$id_product.'-'.date('Ymd'));
+        $cacheId = $this->getCacheId($this->name.'-reassurance-' . $id_product.'-'.date('Ymd'));
         if (!$this->isCached('reassurance.tpl', $cacheId)) {
             $product = new Product(
                 (int) $id_product,
@@ -7906,16 +7896,15 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
                     $responseData = json_decode($verifyResponse);
                     if (!$responseData->success) {
                         sleep(50);
-                        die('no valid Google recaptcha key');
+                        exit();
                     }
                 } else {
                     sleep(50);
-                    die('not human');
+                    exit();
                 }
             }
             // Set recaptcha
-            $captcha_content = 'https://www.google.com/recaptcha/api.js?render='
-                .Configuration::get('EVERPSCAPTCHA_SITE_KEY');
+            $captcha_content = 'https://www.google.com/recaptcha/api.js?render=' . Configuration::get('EVERPSCAPTCHA_SITE_KEY');
             $this->context->controller->addJquery();
             $this->context->controller->registerJavascript(
                 'remote-google-recaptcha',
@@ -7933,8 +7922,7 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
         }
         // Google tag manager, for Analytics
         if (Configuration::get('EVERSEO_ANALYTICS')) {
-            $analytics_tag_url = 'https://www.googletagmanager.com/gtag/js?id='
-            .Configuration::get('EVERSEO_ANALYTICS');
+            $analytics_tag_url = 'https://www.googletagmanager.com/gtag/js?id=' . Configuration::get('EVERSEO_ANALYTICS');
             $this->context->controller->addJs(
                 $analytics_tag_url
             );
@@ -7987,7 +7975,7 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
         if ($from && $to) {
             $id_ever_seo_backlink = EverPsSeoBacklink::ifBacklinkExists(
                 pSQL($from),
-                (string) $to,
+                pSQL($to),
                 (int) $id_shop
             );
             if ($id_ever_seo_backlink) {
@@ -8008,7 +7996,7 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
                         255
                     );
                     $backlink->everto = Tools::substr(
-                        (string) $to,
+                        pSQL($to),
                         0,
                         255
                     );
@@ -8411,13 +8399,13 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
         $this->context->smarty->assign([
             'ever_customer' => $customer,
             'controller_name' => pSQL($controller_name),
-            'sitename' => (string) Configuration::get('PS_SHOP_NAME'),
+            'sitename' => Configuration::get('PS_SHOP_NAME'),
             'site_url' => $this->siteUrl,
             'shop_logo' => $this->siteUrl._PS_IMG_.Configuration::get('PS_LOGO'),
             'everyear' => date('Y'),
             'priceValidUntil' => $yearEnd,
-            'replyto' => (string) $replyto,
-            'identifierUrl' => (string) $identifierUrl,
+            'replyto' => $replyto,
+            'identifierUrl' => $identifierUrl,
             'header_tags' => Configuration::get(
                 'EVERSEO_HEADER_TAGS'
             ),
@@ -8442,7 +8430,7 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
             'siteName' => Configuration::get(
                 'PS_SHOP_NAME'
             ),
-            'defaultImage' => (string) $defaultImage,
+            'defaultImage' => $defaultImage,
             'usehreflang' => Configuration::get(
                 'EVERSEO_HREF_LANG'
             ),
@@ -8467,7 +8455,7 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
             'everseo_use_author' => Configuration::get(
                 'EVERSEO_USE_AUTHOR'
             ),
-            'everseo_author' => $employee->firstname.' '.$employee->lastname,
+            'everseo_author' => $employee->firstname.' ' . $employee->lastname,
             'simplyUrl' => $simplyUrl,
             'currency_iso' => $this->context->currency->iso_code,
             'everweight_unit' => Configuration::get(
@@ -8510,7 +8498,7 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
                 );
                 $language = new Language((int) $default_lang);
                 $this->context->smarty->assign([
-                    'default_iso_code' => (string) $language->iso_code,
+                    'default_iso_code' => $language->iso_code,
                 ]);
             }
             return $this->display(__FILE__, 'views/templates/hook/gtranslate.tpl', $cacheId);
@@ -8539,7 +8527,7 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
                 'gtag_manager' => Configuration::get(
                     'EVERSEO_GTAG'
                 ),
-                'default_iso_code' => (string) $language->iso_code,
+                'default_iso_code' => $language->iso_code,
                 'translate_top' => Configuration::get(
                     'EVERSEO_GTOP'
                 ),
@@ -8616,22 +8604,22 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
                         $yearEnd = date('Y-m-d', strtotime('Dec 31'));
                         $this->context->smarty->assign([
                             'controller' => pSQL($controller_name),
-                            'shop_name' => (string) $shop_name,
+                            'shop_name' => $shop_name,
                             'shop_logo' => $shop_logo,
                             'homepage' => $homepage,
-                            'currentUrl' => $currentUrl,
+                            'currentUrl' => pSQL($currentUrl),
                             'productId' => (int) $product->id,
-                            'productReference' => (string) $product->reference,
-                            'productName' => (string) $product->name,
+                            'productReference' => $product->reference,
+                            'productName' => $product->name,
                             'productID' => (int) $product->id,
-                            'productCondition' => (string) $product->condition,
+                            'productCondition' => $product->condition,
                             'productQuantity' => $product->quantity,
-                            'descriptionShort' => (string) $product->description_short,
+                            'descriptionShort' => $product->description_short,
                             'productPrice' => $product->price,
                             'currencyIsocode' => $currency->iso_code,
                             'currencyPrefix' => $currency->prefix,
                             'currencySuffix' => $currency->suffix,
-                            'imgUrl' => (string) $imgUrl,
+                            'imgUrl' => $imgUrl,
                             'manufacturer' => Manufacturer::getNameById((int) $product->id_manufacturer),
                             'priceValidUntil' => $yearEnd,
                         ]);
@@ -8655,10 +8643,10 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
                         );
                         $this->context->smarty->assign([
                             'controller' => pSQL($controller_name),
-                            'shop_name' => (string) $shop_name,
-                            'shop_logo' => (string) $shop_logo,
-                            'homepage' => (string) $homepage,
-                            'currentUrl' => (string) $currentUrl,
+                            'shop_name' => $shop_name,
+                            'shop_logo' => $shop_logo,
+                            'homepage' => $homepage,
+                            'currentUrl' => pSQL($currentUrl),
                         ]);
                         $return = true;
                         break;
@@ -8680,10 +8668,10 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
                         );
                         $this->context->smarty->assign([
                             'controller' => pSQL($controller_name),
-                            'shop_name' => (string) $shop_name,
-                            'shop_logo' => (string) $shop_logo,
-                            'homepage' => (string) $homepage,
-                            'currentUrl' => (string) $currentUrl,
+                            'shop_name' => $shop_name,
+                            'shop_logo' => $shop_logo,
+                            'homepage' => $homepage,
+                            'currentUrl' => pSQL($currentUrl),
                         ]);
                         $return = true;
                         break;
@@ -8703,10 +8691,10 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
                         );
                         $this->context->smarty->assign([
                             'controller' => pSQL($controller_name),
-                            'shop_name' => (string) $shop_name,
-                            'shop_logo' => (string) $shop_logo,
-                            'homepage' => (string) $homepage,
-                            'currentUrl' => (string) $currentUrl,
+                            'shop_name' => $shop_name,
+                            'shop_logo' => $shop_logo,
+                            'homepage' => $homepage,
+                            'currentUrl' => pSQL($currentUrl),
                         ]);
                         $return = true;
                         break;
@@ -8726,10 +8714,10 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
                         );
                         $this->context->smarty->assign([
                             'controller' => pSQL($controller_name),
-                            'shop_name' => (string) $shop_name,
-                            'shop_logo' => (string) $shop_logo,
-                            'homepage' => (string) $homepage,
-                            'currentUrl' => (string) $currentUrl,
+                            'shop_name' => $shop_name,
+                            'shop_logo' => $shop_logo,
+                            'homepage' => $homepage,
+                            'currentUrl' => pSQL($currentUrl),
                         ]);
                         $return = true;
                         break;
@@ -8739,10 +8727,10 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
                         $currentUrl = $link->getPageLink(pSQL($controller_name));
                         $this->context->smarty->assign([
                             'controller' => pSQL($controller_name),
-                            'shop_name' => (string) $shop_name,
-                            'shop_logo' => (string) $shop_logo,
+                            'shop_name' => $shop_name,
+                            'shop_logo' => $shop_logo,
                             'homepage' => $homepage,
-                            'currentUrl' => (string) $currentUrl,
+                            'currentUrl' => pSQL($currentUrl),
                         ]);
                         $return = true;
                         break;
@@ -8772,7 +8760,7 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
             Tools::getHttpHost(true) . __PS_BASE_URI__
         );
         $sitemap->setPath(_PS_ROOT_DIR_ . '/');
-        $sitemap->setFilename('product_shop_' . (int) $id_shop . '_lang_' . (string) $iso_lang);
+        $sitemap->setFilename('product_shop_' . (int) $id_shop . '_lang_' . $iso_lang);
 
         $sql =
             'SELECT id_seo_product FROM ' . _DB_PREFIX_ . 'ever_seo_product esp
@@ -8902,7 +8890,7 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
             Tools::getHttpHost(true) . __PS_BASE_URI__
         );
         $sitemap->setPath(_PS_ROOT_DIR_ . '/');
-        $sitemap->setFilename('category_shop_'.(int) $id_shop.'_lang_'.(string) $iso_lang);
+        $sitemap->setFilename('category_shop_' . (int) $id_shop . '_lang_' . $iso_lang);
 
         $sql =
             'SELECT * FROM ' . _DB_PREFIX_ . 'ever_seo_category esc
@@ -8960,7 +8948,7 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
             Tools::getHttpHost(true) . __PS_BASE_URI__
         );
         $sitemap->setPath(_PS_ROOT_DIR_ . '/');
-        $sitemap->setFilename('pagemeta_shop_' . (int) $id_shop . '_lang_' . (string) $iso_lang);
+        $sitemap->setFilename('pagemeta_shop_' . (int) $id_shop . '_lang_' . $iso_lang);
 
         $sql =
             'SELECT * FROM ' . _DB_PREFIX_ . 'ever_seo_pagemeta
@@ -9037,7 +9025,7 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
             Tools::getHttpHost(true) . __PS_BASE_URI__
         );
         $sitemap->setPath(_PS_ROOT_DIR_ . '/');
-        $sitemap->setFilename('manufacturer_shop_' . (int) $id_shop.'_lang_' . (string) $iso_lang);
+        $sitemap->setFilename('manufacturer_shop_' . (int) $id_shop.'_lang_' . $iso_lang);
 
         $sql =
             'SELECT * FROM ' . _DB_PREFIX_ . 'ever_seo_manufacturer
@@ -9089,7 +9077,7 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
             Tools::getHttpHost(true) . __PS_BASE_URI__
         );
         $sitemap->setPath(_PS_ROOT_DIR_ . '/');
-        $sitemap->setFilename('supplier_shop_' . (int) $id_shop . '_lang_' . (string) $iso_lang);
+        $sitemap->setFilename('supplier_shop_' . (int) $id_shop . '_lang_' . $iso_lang);
 
         $sql =
             'SELECT * FROM ' . _DB_PREFIX_ . 'ever_seo_supplier
@@ -9141,7 +9129,7 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
             Tools::getHttpHost(true) . __PS_BASE_URI__
         );
         $sitemap->setPath(_PS_ROOT_DIR_ . '/');
-        $sitemap->setFilename('cms_shop_' . (int) $id_shop . '_lang_' . (string) $iso_lang);
+        $sitemap->setFilename('cms_shop_' . (int) $id_shop . '_lang_' . $iso_lang);
 
         $sql =
             'SELECT * FROM ' . _DB_PREFIX_ . 'ever_seo_cms
@@ -9171,7 +9159,7 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
                 );
 
                 $sitemap->addItem(
-                    (string) $cmsUrl,
+                    $cmsUrl,
                     Configuration::get('EVERSEO_SITEMAP_CMS_PRIORITY'),
                     Configuration::get('EVERSEO_SITEMAP_CMS_FREQUENCY'),
                     date('Y-m-d')
@@ -9269,14 +9257,20 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
                     $updateSeo = 'DELETE FROM '. _DB_PREFIX_ .pSQL($seotable).'
                     WHERE id_seo_lang NOT IN
                     (SELECT id_seo_lang FROM ' . _DB_PREFIX_ . 'ever_seo_lang)';
-                    if (!Db::getInstance()->Execute($updateSeo)) {
-                        die('Can\'t delete object on '. _DB_PREFIX_ .$seotable);
+                    try {
+                        Db::getInstance()->Execute($updateSeo)
+                    } catch (Exception $e) {
+                        PrestaShopLogger::addLog(
+                            'Can\'t delete object on '. _DB_PREFIX_ . $seotable
+                        );
                     }
                 } else {
                     return true;
                 }
             } else {
-                die('Can\'t delete object on '. _DB_PREFIX_ .$table);
+                PrestaShopLogger::addLog(
+                    'Can\'t delete object on '. _DB_PREFIX_ . $table
+                );
             }
         }
     }
@@ -9293,8 +9287,8 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
         $product_short_desc = (int) Configuration::get('EVERSEO_SHORT_DESC_LINKED');
         $categ = (int) Configuration::get('EVERSEO_CATEG_LINKED');
         $maxOccur = (int) Configuration::get('EVERSEO_LINKED_NBR');
-        $searchedText = (string) Configuration::get('SEARCHED');
-        $replacingText = (string) Configuration::get('LINKEDTO');
+        $searchedText = Configuration::get('SEARCHED');
+        $replacingText = Configuration::get('LINKEDTO');
         $link = '<a href=\"' . pSQL($replacingText) . '\" title=\"' . pSQL($searchedText) . '\">' . pSQL($searchedText) . '</a>';
         $limit = (int) Configuration::get('EVERSEO_LINKED_NBR');
 
@@ -9316,7 +9310,7 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
                     "' . pSQL($searchedText, true) . '"
                 ) <= ' . (int) $maxOccur . '
                 AND id_shop = ' . (int) $id_shop . '
-                AND id_lang = '.(int) $id_lang.'
+                AND id_lang = ' . (int) $id_lang.'
                 LIMIT ' . (int) $limit;
 
             if (!Db::getInstance()->execute($sql)) {
@@ -9334,7 +9328,7 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
                 REPLACE(
                     description,
                     "'.pSQL($searchedText, true).'",
-                    "'.$link.'"
+                    "' . $link.'"
                 )
                 WHERE INSTR(
                     description,
@@ -9833,7 +9827,7 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
     {
         $allowedLangs = json_decode(
             Configuration::get(
-                (string) $getter
+                $getter
             )
         );
         if (!$allowedLangs) {
@@ -9890,7 +9884,7 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
                 $seotable = false;
                 break;
         }
-        return (string) $seotable;
+        return $seotable;
     }
 
     protected function getSeoObjByPsTable($psTable)
@@ -9924,7 +9918,7 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
                 $seoObj = 'id_seo_pagemeta';
                 break;
         }
-        return (string) $seoObj;
+        return $seoObj;
     }
 
     protected function getColumnStructure($tableName, $columnName, $default)

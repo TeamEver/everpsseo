@@ -36,7 +36,7 @@ class EverpsseoEversitemapsModuleFrontController extends ModuleFrontController
         }
         $everpsseo = Module::getInstanceByName('everpsseo');
         if (!$everpsseo->active) {
-            die('Sorry, the module EverPsSeo is not active 😬');
+            Tools::redirect('index.php');
         }
         /* Check if the requested shop exists */
         $shops = Db::getInstance()->ExecuteS('SELECT id_shop FROM `' . _DB_PREFIX_ . 'shop`');
@@ -60,7 +60,7 @@ class EverpsseoEversitemapsModuleFrontController extends ModuleFrontController
         }
 
         $everpsseo->everGenerateSitemaps((int) $id_shop);
-
-        die('Sitemaps fully generated. Please submit Search Console if not already set 🙂');
+        echo 'Sitemaps fully generated. Please submit Search Console if not already set 🙂';
+        exit();
     }
 }

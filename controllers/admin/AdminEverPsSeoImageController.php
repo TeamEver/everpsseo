@@ -6,7 +6,6 @@
  * @license   Tous droits réservés / Le droit d'auteur s'applique (All rights reserved / French copyright law applies)
  * @see https://www.team-ever.com
  */
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -64,7 +63,7 @@ class AdminEverPsSeoImageController extends ModuleAdminController
                     AND p.id_category_default = cl.id_category
                 )';
 
-        $this->_where = 'AND a.id_shop ='.(int) $this->context->shop->id;
+        $this->_where = 'AND a.id_shop =' . (int) $this->context->shop->id;
 
         $this->_group = 'GROUP BY a.id_ever_seo_image';
 
@@ -151,10 +150,10 @@ class AdminEverPsSeoImageController extends ModuleAdminController
             );
             $objectUrl = Tools::getShopProtocol().$link->getImageLink(
                 $product->link_rewrite,
-                $product->id.'-'.$richImage['id_image'],
+                $product->id.'-' . $richImage['id_image'],
                 $imageType
             );
-            $editUrl  = 'index.php?controller=AdminProducts&id_product='.(int) $product->id.'';
+            $editUrl  = 'index.php?controller=AdminProducts&id_product=' . (int) $product->id.'';
             $editUrl .= '&updateproduct&token='.Tools::getAdminTokenLite('AdminProducts');
             $objectGSearch = str_replace(' ', '+', $product->name);
 
@@ -263,43 +262,43 @@ class AdminEverPsSeoImageController extends ModuleAdminController
             ),
         );
 
-        if (Tools::isSubmit('submitBulksitemap'.$this->table)) {
+        if (Tools::isSubmit('submitBulksitemap' . $this->table)) {
             $this->processBulkSitemap();
         }
 
-        if (Tools::isSubmit('submitBulklegendalt'.$this->table)) {
+        if (Tools::isSubmit('submitBulklegendalt' . $this->table)) {
             $this->processBulkLegendalt();
         }
 
-        if (Tools::isSubmit('submitBulkshortdescalt'.$this->table)) {
+        if (Tools::isSubmit('submitBulkshortdescalt' . $this->table)) {
             $this->processBulkShortdescalt();
         }
 
-        if (Tools::isSubmit('submitBulkdescalt'.$this->table)) {
+        if (Tools::isSubmit('submitBulkdescalt' . $this->table)) {
             $this->processBulkdescriptionAlt();
         }
 
-        if (Tools::isSubmit('submitBulkmetaaltname'.$this->table)) {
+        if (Tools::isSubmit('submitBulkmetaaltname' . $this->table)) {
             $this->processBulkMetaaltname();
         }
 
-        if (Tools::isSubmit('submitBulkmetaalttitle'.$this->table)) {
+        if (Tools::isSubmit('submitBulkmetaalttitle' . $this->table)) {
             $this->processBulkTitleAlt();
         }
 
-        if (Tools::isSubmit('submitBulkmetaaltmetadesc'.$this->table)) {
+        if (Tools::isSubmit('submitBulkmetaaltmetadesc' . $this->table)) {
             $this->processBulkMetaDescAlt();
         }
 
-        if (Tools::isSubmit('submitBulkaltshortcodes'.$this->table)) {
+        if (Tools::isSubmit('submitBulkaltshortcodes' . $this->table)) {
             $this->processBulkAltShortcodes();
         }
 
-        if (Tools::isSubmit('submitBulkindexnow'.$this->table)) {
+        if (Tools::isSubmit('submitBulkindexnow' . $this->table)) {
             $this->processBulkIndexNow();
         }
 
-        if (Tools::isSubmit('allowed_sitemap'.$this->table)) {
+        if (Tools::isSubmit('allowed_sitemap' . $this->table)) {
             $this->processSitemap();
         }
 
@@ -435,7 +434,7 @@ class AdminEverPsSeoImageController extends ModuleAdminController
                 if (!$image->save() || !$everImg->save()) {
                     $this->errors[] = $this->l('Can\'t update the native object');
                 } else {
-                    Tools::redirectAdmin(self::$currentIndex.'&conf=4&token='.$this->token);
+                    Tools::redirectAdmin(self::$currentIndex.'&conf=4&token=' . $this->token);
                 }
             }
         }
@@ -583,8 +582,8 @@ class AdminEverPsSeoImageController extends ModuleAdminController
 
             $description = Db::getInstance()->getValue(
                 'SELECT meta_title FROM `' . _DB_PREFIX_ . 'ever_seo_product`
-                WHERE id_seo_product = '.(int) $everImg->id_seo_product.'
-                AND id_seo_lang = '.(int) $everImg->id_seo_lang
+                WHERE id_seo_product = ' . (int) $everImg->id_seo_product.'
+                AND id_seo_lang = ' . (int) $everImg->id_seo_lang
             );
             if (!$description) {
                 continue;
@@ -592,8 +591,8 @@ class AdminEverPsSeoImageController extends ModuleAdminController
             $sql =
                 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_image`
                 SET alt = '.pSQl($description).'
-                WHERE id_seo_product = '.(int) $everImg->id_seo_product.'
-                AND id_seo_lang = '.(int) $everImg->id_seo_lang;
+                WHERE id_seo_product = ' . (int) $everImg->id_seo_product.'
+                AND id_seo_lang = ' . (int) $everImg->id_seo_lang;
                 Db::getInstance()->execute($sql);
             $everImg->alt = $description;
             $image->legend = strip_tags(Tools::substr($description, 0, 125).'');
@@ -696,17 +695,17 @@ class AdminEverPsSeoImageController extends ModuleAdminController
             $imageType = ImageType::getFormattedName('large');
             $url = Tools::getShopProtocol().$link->getImageLink(
                 $product->link_rewrite,
-                $product->id.'-'.$richImage['id_image'],
+                $product->id.'-' . $richImage['id_image'],
                 $imageType
             );
             $httpCode = EverPsSeoTools::indexNow(
                 $url
             );
             $sql = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_image`
-            SET status_code = "'.(int) $httpCode.'"
-            WHERE id_seo_lang = '.(int) $everImg->id_seo_lang.'
-            AND id_shop = '.(int) $this->context->shop->id.'
-            AND id_ever_seo_image = '.(int) $everImg->id;
+            SET status_code = "' . (int) $httpCode.'"
+            WHERE id_seo_lang = ' . (int) $everImg->id_seo_lang.'
+            AND id_shop = ' . (int) $this->context->shop->id.'
+            AND id_ever_seo_image = ' . (int) $everImg->id;
             if (!Db::getInstance()->execute($sql)) {
                 $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
             }

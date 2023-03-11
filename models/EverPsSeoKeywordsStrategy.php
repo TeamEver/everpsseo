@@ -6,6 +6,10 @@
  * @license   Tous droits réservés / Le droit d'auteur s'applique (All rights reserved / French copyright law applies)
  * @see https://www.team-ever.com
  */
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoCategory.php';
 require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoCmsCategory.php';
 require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoCms.php';

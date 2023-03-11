@@ -6,7 +6,6 @@
  * @license   Tous droits réservés / Le droit d'auteur s'applique (All rights reserved / French copyright law applies)
  * @see https://www.team-ever.com
  */
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -47,7 +46,7 @@ class AdminEverPsSeoCmsCategoryController extends ModuleAdminController
                     AND cl.id_cms_category = a.id_seo_cms_category
                 )';
 
-        $this->_where = 'AND a.id_shop = '.(int) $this->context->shop->id;
+        $this->_where = 'AND a.id_shop = ' . (int) $this->context->shop->id;
 
         $this->_group = 'GROUP BY a.id_ever_seo_cms_category';
 
@@ -134,7 +133,7 @@ class AdminEverPsSeoCmsCategoryController extends ModuleAdminController
                 (int) $this->context->language->id,
                 (int) $this->context->shop->id
             );
-            $editUrl  = 'index.php?controller=AdminCategories&id_cms_category='.(int) $cms_category->id.'';
+            $editUrl  = 'index.php?controller=AdminCategories&id_cms_category=' . (int) $cms_category->id.'';
             $editUrl .= '&updatecms_category&token='.Tools::getAdminTokenLite('AdminCategories');
             $objectGSearch = str_replace(' ', '+', $cms_category->name);
 
@@ -241,47 +240,47 @@ class AdminEverPsSeoCmsCategoryController extends ModuleAdminController
             ),
         );
 
-        if (Tools::isSubmit('submitBulkindex'.$this->table)) {
+        if (Tools::isSubmit('submitBulkindex' . $this->table)) {
             $this->processBulkIndex();
         }
 
-        if (Tools::isSubmit('submitBulkfollow'.$this->table)) {
+        if (Tools::isSubmit('submitBulkfollow' . $this->table)) {
             $this->processBulkFollow();
         }
 
-        if (Tools::isSubmit('submitBulksitemap'.$this->table)) {
+        if (Tools::isSubmit('submitBulksitemap' . $this->table)) {
             $this->processBulkSitemap();
         }
 
-        if (Tools::isSubmit('submitBulkmetatitle'.$this->table)) {
+        if (Tools::isSubmit('submitBulkmetatitle' . $this->table)) {
             $this->processBulkCopyMetaTitle();
         }
 
-        if (Tools::isSubmit('submitBulkmetadescription'.$this->table)) {
+        if (Tools::isSubmit('submitBulkmetadescription' . $this->table)) {
             $this->processBulkCopyMetaDescription();
         }
 
-        if (Tools::isSubmit('submitBulkmetatitlename'.$this->table)) {
+        if (Tools::isSubmit('submitBulkmetatitlename' . $this->table)) {
             $this->processBulkSetNameAsMetaTitle();
         }
 
-        if (Tools::isSubmit('submitBulkmetadescriptiondesc'.$this->table)) {
+        if (Tools::isSubmit('submitBulkmetadescriptiondesc' . $this->table)) {
             $this->processBulkSetDescriptionAsMetaDescription();
         }
 
-        if (Tools::isSubmit('submitBulkindexnow'.$this->table)) {
+        if (Tools::isSubmit('submitBulkindexnow' . $this->table)) {
             $this->processBulkIndexNow();
         }
 
-        if (Tools::isSubmit('indexable'.$this->table)) {
+        if (Tools::isSubmit('indexable' . $this->table)) {
             $this->processIndexable();
         }
 
-        if (Tools::isSubmit('follow'.$this->table)) {
+        if (Tools::isSubmit('follow' . $this->table)) {
             $this->processFollow();
         }
 
-        if (Tools::isSubmit('allowed_sitemap'.$this->table)) {
+        if (Tools::isSubmit('allowed_sitemap' . $this->table)) {
             $this->processSitemap();
         }
 
@@ -564,7 +563,7 @@ class AdminEverPsSeoCmsCategoryController extends ModuleAdminController
                 if (!$cmsCategory->save() || !$everCmsCategory->save()) {
                     $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
                 } else {
-                    Tools::redirectAdmin(self::$currentIndex.'&conf=4&token='.$this->token);
+                    Tools::redirectAdmin(self::$currentIndex.'&conf=4&token=' . $this->token);
                 }
             }
         }
@@ -634,8 +633,8 @@ class AdminEverPsSeoCmsCategoryController extends ModuleAdminController
 
             $meta_title = Db::getInstance()->getValue(
                 'SELECT meta_title FROM `' . _DB_PREFIX_ . 'cms_category_lang`
-                WHERE id_cms_category = '.(int) $everCmsCategory->id_seo_cms_category.'
-                AND id_lang = '.(int) $everCmsCategory->id_seo_lang
+                WHERE id_cms_category = ' . (int) $everCmsCategory->id_seo_cms_category.'
+                AND id_lang = ' . (int) $everCmsCategory->id_seo_lang
             );
 
             if (!$meta_title) {
@@ -664,8 +663,8 @@ class AdminEverPsSeoCmsCategoryController extends ModuleAdminController
 
             $meta_description = Db::getInstance()->getValue(
                 'SELECT meta_description FROM `' . _DB_PREFIX_ . 'cms_category_lang`
-                WHERE id_cms_category = '.(int) $everCmsCategory->id_seo_cms_category.'
-                AND id_lang = '.(int) $everCmsCategory->id_seo_lang
+                WHERE id_cms_category = ' . (int) $everCmsCategory->id_seo_cms_category.'
+                AND id_lang = ' . (int) $everCmsCategory->id_seo_lang
             );
 
             if (!$meta_description) {
@@ -694,8 +693,8 @@ class AdminEverPsSeoCmsCategoryController extends ModuleAdminController
 
             $name = Db::getInstance()->getValue(
                 'SELECT name FROM `' . _DB_PREFIX_ . 'cms_category_lang`
-                WHERE id_cms_category = '.(int) $everCmsCategory->id_seo_cms_category.'
-                AND id_lang = '.(int) $everCmsCategory->id_seo_lang
+                WHERE id_cms_category = ' . (int) $everCmsCategory->id_seo_cms_category.'
+                AND id_lang = ' . (int) $everCmsCategory->id_seo_lang
             );
 
             if (!$name) {
@@ -724,8 +723,8 @@ class AdminEverPsSeoCmsCategoryController extends ModuleAdminController
 
             $description = Db::getInstance()->getValue(
                 'SELECT content FROM `' . _DB_PREFIX_ . 'cms_category_lang`
-                WHERE id_cms_category = '.(int) $everCmsCategory->id_seo_cms_category.'
-                AND id_lang = '.(int) $everCmsCategory->id_seo_lang
+                WHERE id_cms_category = ' . (int) $everCmsCategory->id_seo_cms_category.'
+                AND id_lang = ' . (int) $everCmsCategory->id_seo_lang
             );
 
             if (!$description) {
@@ -772,10 +771,10 @@ class AdminEverPsSeoCmsCategoryController extends ModuleAdminController
                 $url
             );
             $sql = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_cms_category`
-            SET status_code = '.(int) $httpCode.'
-            WHERE id_seo_lang = '.(int) $everCmsCategory->id_seo_lang.'
-            AND id_shop = '.(int) $this->context->shop->id.'
-            AND id_seo_cms_category = '.(int) $cmsCategory->id;
+            SET status_code = ' . (int) $httpCode.'
+            WHERE id_seo_lang = ' . (int) $everCmsCategory->id_seo_lang.'
+            AND id_shop = ' . (int) $this->context->shop->id.'
+            AND id_seo_cms_category = ' . (int) $cmsCategory->id;
             if (!Db::getInstance()->execute($sql)) {
                 $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
             }

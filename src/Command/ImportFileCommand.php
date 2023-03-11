@@ -468,7 +468,7 @@ class ImportFileCommand extends ContainerAwareCommand
                 $seo_category->save();
             } else {
                 $output->writeln(
-                   '<error>Invalid link rewrite on product '.$line['id_category'].' object</error>'
+                   '<error>Invalid link rewrite on product ' . $line['id_category'].' object</error>'
                 );
             }
         }
@@ -531,7 +531,7 @@ class ImportFileCommand extends ContainerAwareCommand
                     );
                     if ((bool) \Configuration::get('EVER_LOG_CMD') === true) {
                         $this->logCommand(
-                            'invalid product on reference '.$line['reference']
+                            'invalid product on reference ' . $line['reference']
                         );
                     }
                 }
@@ -553,7 +553,7 @@ class ImportFileCommand extends ContainerAwareCommand
                     );
                     if ((bool) \Configuration::get('EVER_LOG_CMD') === true) {
                         $this->logCommand(
-                            'invalid product on ID '.$line['id_product']
+                            'invalid product on ID ' . $line['id_product']
                         );
                     }
                 }
@@ -576,7 +576,7 @@ class ImportFileCommand extends ContainerAwareCommand
                     );
                     if ((bool) \Configuration::get('EVER_LOG_CMD') === true) {
                         $this->logCommand(
-                            'invalid product on reference '.$line['reference']
+                            'invalid product on reference ' . $line['reference']
                         );
                     }
                 }
@@ -670,11 +670,11 @@ class ImportFileCommand extends ContainerAwareCommand
                 $seo_product->save();
             } else {
                 $output->writeln(
-                   '<error>Invalid link rewrite on product '.$line['id_product'].' object</error>'
+                   '<error>Invalid link rewrite on product ' . $line['id_product'].' object</error>'
                 );
                 if ((bool) \Configuration::get('EVER_LOG_CMD') === true) {
                     $this->logCommand(
-                        'Invalid link rewrite on product '.$line['id_product'].' object'
+                        'Invalid link rewrite on product ' . $line['id_product'].' object'
                     );
                 }
             }
@@ -690,11 +690,11 @@ class ImportFileCommand extends ContainerAwareCommand
                 AND id_seo_product = ' . (int) $product->id;
             } else {
                 $output->writeln(
-                   '<error>Invalid index on product '.$line['id_product'].' object</error>'
+                   '<error>Invalid index on product ' . $line['id_product'].' object</error>'
                 );
                 if ((bool) \Configuration::get('EVER_LOG_CMD') === true) {
                     $this->logCommand(
-                        'Invalid index on product '.$line['id_product'].' object'
+                        'Invalid index on product ' . $line['id_product'].' object'
                     );
                 }
             }
@@ -710,11 +710,11 @@ class ImportFileCommand extends ContainerAwareCommand
                 AND id_seo_product = ' . (int) $product->id;
             } else {
                 $output->writeln(
-                   '<error>Invalid follow on product '.$line['id_product'].' object</error>'
+                   '<error>Invalid follow on product ' . $line['id_product'].' object</error>'
                 );
                 if ((bool) \Configuration::get('EVER_LOG_CMD') === true) {
                     $this->logCommand(
-                        'Invalid follow on product '.$line['id_product'].' object'
+                        'Invalid follow on product ' . $line['id_product'].' object'
                     );
                 }
             }
@@ -730,11 +730,11 @@ class ImportFileCommand extends ContainerAwareCommand
                 AND id_seo_product = ' . (int) $product->id;
             } else {
                 $output->writeln(
-                   '<error>Invalid allowed_sitemap on product '.$line['id_product'].' object</error>'
+                   '<error>Invalid allowed_sitemap on product ' . $line['id_product'].' object</error>'
                 );
                 if ((bool) \Configuration::get('EVER_LOG_CMD') === true) {
                     $this->logCommand(
-                        'Invalid allowed_sitemap on product '.$line['id_product'].' object'
+                        'Invalid allowed_sitemap on product ' . $line['id_product'].' object'
                     );
                 }
             }

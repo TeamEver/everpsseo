@@ -6,6 +6,9 @@
  * @license   Tous droits réservés / Le droit d'auteur s'applique (All rights reserved / French copyright law applies)
  * @see https://www.team-ever.com
  */
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 class EverPsSeoCategory extends ObjectModel
 {

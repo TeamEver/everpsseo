@@ -166,7 +166,7 @@ class EverPsSeoRedirect extends ObjectModel
                 'count' => (int) $currentCount + 1,
                 'everfrom' => pSQL($from, true),
             ],
-            'id_ever_seo_redirect = '.(int) $id_redirect
+            'id_ever_seo_redirect = ' . (int) $id_redirect
         );
 
         return $update;

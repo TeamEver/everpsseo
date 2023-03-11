@@ -6,6 +6,9 @@
  * @license   Tous droits réservés / Le droit d'auteur s'applique (All rights reserved / French copyright law applies)
  * @see https://www.team-ever.com
  */
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 class EverPsSeoProduct extends ObjectModel
 {
@@ -129,15 +132,15 @@ class EverPsSeoProduct extends ObjectModel
     public static function getAllSeoProductsIds($id_shop, $allowedLangs = false)
     {
         $cache_id = 'EverPsSeoProduct::getAllSeoProductsIds_'
-        .(int) $id_shop;
+        . (int) $id_shop;
         if (!Cache::isStored($cache_id)) {
             $sql = new DbQuery();
             $sql->select('*');
             $sql->from('ever_seo_product');
             if ($allowedLangs) {
-                $sql->where('id_shop = '.(int) $id_shop.' AND id_seo_lang IN ('.implode(',', $allowedLangs).')');
+                $sql->where('id_shop = ' . (int) $id_shop.' AND id_seo_lang IN ('.implode(',', $allowedLangs).')');
             } else {
-                $sql->where('id_shop = '.(int) $id_shop);
+                $sql->where('id_shop = ' . (int) $id_shop);
             }
             $return = Db::getInstance()->executeS($sql);
             Cache::store($cache_id, $return);
@@ -149,12 +152,12 @@ class EverPsSeoProduct extends ObjectModel
     public static function getProductNameBySeoId($id_seo_product)
     {
         $cache_id = 'EverPsSeoProduct::getProductNameBySeoId_'
-        .(int) $id_seo_product;
+        . (int) $id_seo_product;
         if (!Cache::isStored($cache_id)) {
             $sql = new DbQuery();
             $sql->select('name');
             $sql->from('product_lang');
-            $sql->where('id_product = '.(int) $id_seo_product);
+            $sql->where('id_product = ' . (int) $id_seo_product);
             $return = Db::getInstance()->getValue($sql);
             Cache::store($cache_id, $return);
             return $return;
@@ -165,23 +168,23 @@ class EverPsSeoProduct extends ObjectModel
     public static function getSeoProduct($id_seo_product, $id_shop, $id_seo_lang)
     {
         $cache_id = 'EverPsSeoProduct::getSeoProduct_'
-        .(int) $id_seo_product
+        . (int) $id_seo_product
         .'_'
-        .(int) $id_shop
+        . (int) $id_shop
         .'_'
-        .(int) $id_seo_lang;
+        . (int) $id_seo_lang;
         if (!Cache::isStored($cache_id)) {
             $sql = new DbQuery();
             $sql->select('*');
             $sql->from('ever_seo_product');
             $sql->where(
-                'id_seo_product = '.(int) $id_seo_product
+                'id_seo_product = ' . (int) $id_seo_product
             );
             $sql->where(
-                'id_seo_lang = '.(int) $id_seo_lang
+                'id_seo_lang = ' . (int) $id_seo_lang
             );
             $sql->where(
-                'id_shop = '.(int) $id_shop
+                'id_shop = ' . (int) $id_shop
             );
             $return = new self(Db::getInstance()->getValue($sql));
             Cache::store($cache_id, $return);
@@ -205,9 +208,9 @@ class EverPsSeoProduct extends ObjectModel
             );
             foreach ($attr_resumes as $key => $attr_resume) {
                 if ($key == 0) {
-                    $combination_names .= ' '.$attr_resume['attribute_designation'];
+                    $combination_names .= ' ' . $attr_resume['attribute_designation'];
                 } else {
-                    $combination_names .= ' '.$attr_resume['attribute_designation'].', ';
+                    $combination_names .= ' ' . $attr_resume['attribute_designation'].', ';
                 }
             }
         }
@@ -221,9 +224,9 @@ class EverPsSeoProduct extends ObjectModel
         //         (int) $value['id_feature_value']
         //     );
         //     if ($key == 0) {
-        //         $feature_names .= $feature['name'].': '.$feature_value->value[(int) $id_seo_lang];
+        //         $feature_names .= $feature['name'].': ' . $feature_value->value[(int) $id_seo_lang];
         //     } else {
-        //         $feature_names .= $feature['name'].': '.$feature_value->value[(int) $id_seo_lang].', ';
+        //         $feature_names .= $feature['name'].': ' . $feature_value->value[(int) $id_seo_lang].', ';
         //     }
         // }
         $category = new Category(
@@ -306,9 +309,9 @@ class EverPsSeoProduct extends ObjectModel
         //         (int) $value['id_feature_value']
         //     );
         //     if ($key == 0) {
-        //         $feature_names .= $feature['name'].': '.$feature_value->value[(int) $id_seo_lang];
+        //         $feature_names .= $feature['name'].': ' . $feature_value->value[(int) $id_seo_lang];
         //     } else {
-        //         $feature_names .= $feature['name'].': '.$feature_value->value[(int) $id_seo_lang].', ';
+        //         $feature_names .= $feature['name'].': ' . $feature_value->value[(int) $id_seo_lang].', ';
         //     }
         // }
         $manufacturer = new Manufacturer(
@@ -390,9 +393,9 @@ class EverPsSeoProduct extends ObjectModel
                 (int) $value['id_feature_value']
             );
             if ($key == 0) {
-                $feature_names .= $feature['name'].': '.$feature_value->value[(int) $id_seo_lang];
+                $feature_names .= $feature['name'].': ' . $feature_value->value[(int) $id_seo_lang];
             } else {
-                $feature_names .= $feature['name'].': '.$feature_value->value[(int) $id_seo_lang].', ';
+                $feature_names .= $feature['name'].': ' . $feature_value->value[(int) $id_seo_lang].', ';
             }
         }
         $manufacturer = new Manufacturer(
@@ -473,9 +476,9 @@ class EverPsSeoProduct extends ObjectModel
                 (int) $value['id_feature_value']
             );
             if ($key == 0) {
-                $feature_names .= $feature['name'].': '.$feature_value->value[(int) $id_seo_lang];
+                $feature_names .= $feature['name'].': ' . $feature_value->value[(int) $id_seo_lang];
             } else {
-                $feature_names .= $feature['name'].': '.$feature_value->value[(int) $id_seo_lang].', ';
+                $feature_names .= $feature['name'].': ' . $feature_value->value[(int) $id_seo_lang].', ';
             }
         }
         $manufacturer = new Manufacturer(
@@ -556,9 +559,9 @@ class EverPsSeoProduct extends ObjectModel
                 (int) $value['id_feature_value']
             );
             if ($key == 0) {
-                $feature_names .= $feature['name'].': '.$feature_value->value[(int) $id_seo_lang];
+                $feature_names .= $feature['name'].': ' . $feature_value->value[(int) $id_seo_lang];
             } else {
-                $feature_names .= $feature['name'].': '.$feature_value->value[(int) $id_seo_lang].', ';
+                $feature_names .= $feature['name'].': ' . $feature_value->value[(int) $id_seo_lang].', ';
             }
         }
         $manufacturer = new Manufacturer(
@@ -626,20 +629,20 @@ class EverPsSeoProduct extends ObjectModel
         $sql = [];
         $sql[] = 'UPDATE `' . _DB_PREFIX_ . 'product`
         SET `redirect_type` = "301-category"
-        WHERE `id_product` = '.(int) $id_seo_product.';';
+        WHERE `id_product` = ' . (int) $id_seo_product.';';
 
         $sql[] = 'UPDATE `' . _DB_PREFIX_ . 'product`
-        SET `id_type_redirected` = '.(int) $id_type_redirected.'
-        WHERE `id_product` = '.(int) $id_seo_product.';';
+        SET `id_type_redirected` = ' . (int) $id_type_redirected.'
+        WHERE `id_product` = ' . (int) $id_seo_product.';';
 
         $sql[] = 'UPDATE `' . _DB_PREFIX_ . 'product_shop`
         SET `redirect_type` = "301-category"
-        WHERE `id_product` = '.(int) $id_seo_product.'
-        AND `id_shop` = '.(int) $id_shop.';';
+        WHERE `id_product` = ' . (int) $id_seo_product.'
+        AND `id_shop` = ' . (int) $id_shop.';';
 
         $sql[] = 'UPDATE `' . _DB_PREFIX_ . 'product_shop`
-        SET `id_type_redirected` = '.(int) $id_type_redirected.'
-        WHERE `id_product` = '.(int) $id_seo_product.';';
+        SET `id_type_redirected` = ' . (int) $id_type_redirected.'
+        WHERE `id_product` = ' . (int) $id_seo_product.';';
 
         foreach ($sql as $s) {
             Db::getInstance()->Execute($s);

@@ -55,7 +55,7 @@ class AdminEverPsSeoProductController extends ModuleAdminController
                     AND p.id_category_default = cl.id_category
                 )';
 
-        $this->_where = 'AND a.id_shop ='.(int) $this->context->shop->id;
+        $this->_where = 'AND a.id_shop =' . (int) $this->context->shop->id;
 
         $this->_group = 'GROUP BY a.id_ever_seo_product';
 
@@ -170,7 +170,7 @@ class AdminEverPsSeoProductController extends ModuleAdminController
                 (int) $this->context->language->id,
                 (int) $this->context->shop->id
             );
-            $editUrl  = 'index.php?controller=AdminProducts&id_product='.(int) $product->id.'';
+            $editUrl  = 'index.php?controller=AdminProducts&id_product=' . (int) $product->id.'';
             $editUrl .= '&updateproduct&token='.Tools::getAdminTokenLite('AdminProducts');
             $objectGSearch = str_replace(' ', '+', $product->name);
 
@@ -295,63 +295,63 @@ class AdminEverPsSeoProductController extends ModuleAdminController
             ),
         );
 
-        if (Tools::isSubmit('submitBulkindex'.$this->table)) {
+        if (Tools::isSubmit('submitBulkindex' . $this->table)) {
             $this->processBulkIndex();
         }
 
-        if (Tools::isSubmit('submitBulkfollow'.$this->table)) {
+        if (Tools::isSubmit('submitBulkfollow' . $this->table)) {
             $this->processBulkFollow();
         }
 
-        if (Tools::isSubmit('submitBulksitemap'.$this->table)) {
+        if (Tools::isSubmit('submitBulksitemap' . $this->table)) {
             $this->processBulkSitemap();
         }
 
-        if (Tools::isSubmit('submitBulkmetatitle'.$this->table)) {
+        if (Tools::isSubmit('submitBulkmetatitle' . $this->table)) {
             $this->processBulkMetatitle();
         }
 
-        if (Tools::isSubmit('submitBulkmetadescription'.$this->table)) {
+        if (Tools::isSubmit('submitBulkmetadescription' . $this->table)) {
             $this->processBulkMetadescription();
         }
 
-        if (Tools::isSubmit('submitBulkmetatitlename'.$this->table)) {
+        if (Tools::isSubmit('submitBulkmetatitlename' . $this->table)) {
             $this->processBulkMetatitlename();
         }
 
-        if (Tools::isSubmit('submitBulkmetadescriptiondesc'.$this->table)) {
+        if (Tools::isSubmit('submitBulkmetadescriptiondesc' . $this->table)) {
             $this->processBulkMetadescriptiondesc();
         }
 
-        if (Tools::isSubmit('submitBulkmetadescriptionlongdesc'.$this->table)) {
+        if (Tools::isSubmit('submitBulkmetadescriptionlongdesc' . $this->table)) {
             $this->processBulkMetadescriptionlongdesc();
         }
 
-        if (Tools::isSubmit('submitBulkmetadescshortcodes'.$this->table)) {
+        if (Tools::isSubmit('submitBulkmetadescshortcodes' . $this->table)) {
             $this->processBulkMetadescShortcodes();
         }
 
-        if (Tools::isSubmit('submitBulktitleshortcodes'.$this->table)) {
+        if (Tools::isSubmit('submitBulktitleshortcodes' . $this->table)) {
             $this->processBulkTitleShortcodes();
         }
 
-        if (Tools::isSubmit('submitBulklinkrewrite'.$this->table)) {
+        if (Tools::isSubmit('submitBulklinkrewrite' . $this->table)) {
             $this->processBulkLinkRewrite();
         }
 
-        if (Tools::isSubmit('submitBulkindexnow'.$this->table)) {
+        if (Tools::isSubmit('submitBulkindexnow' . $this->table)) {
             $this->processBulkIndexNow();
         }
 
-        if (Tools::isSubmit('indexable'.$this->table)) {
+        if (Tools::isSubmit('indexable' . $this->table)) {
             $this->processIndexable();
         }
 
-        if (Tools::isSubmit('follow'.$this->table)) {
+        if (Tools::isSubmit('follow' . $this->table)) {
             $this->processFollow();
         }
 
-        if (Tools::isSubmit('allowed_sitemap'.$this->table)) {
+        if (Tools::isSubmit('allowed_sitemap' . $this->table)) {
             $this->processSitemap();
         }
 
@@ -397,7 +397,7 @@ class AdminEverPsSeoProductController extends ModuleAdminController
                 'PS_LOGO'
             );
         }
-        $defaultImage = '<image src="'.(string) $defaultUrlImage.'" style="max-width:80px;"/>';
+        $defaultImage = '<image src="' . (string) $defaultUrlImage . '" style="max-width:80px;"/>';
 
         $this->fields_form = array(
             'submit' => array(
@@ -710,8 +710,8 @@ class AdminEverPsSeoProductController extends ModuleAdminController
                     && !empty($_FILES['social_media']['tmp_name'])
                 ) {
                     Configuration::set('PS_IMAGE_GENERATION_METHOD', 1);
-                    if (file_exists($this->img_folder.(int) $everProduct->id_seo_product.'.jpg')) {
-                        unlink($this->img_folder.(int) $everProduct->id_seo_product.'.jpg');
+                    if (file_exists($this->img_folder . (int) $everProduct->id_seo_product.'.jpg')) {
+                        unlink($this->img_folder . (int) $everProduct->id_seo_product.'.jpg');
                     }
                     if ($error = ImageManager::validateUpload($_FILES['social_media'])) {
                         $this->errors[] = $error;
@@ -721,7 +721,7 @@ class AdminEverPsSeoProductController extends ModuleAdminController
                         return false;
                     } elseif (!ImageManager::resize(
                         $tmp_name,
-                        $this->img_folder.(int) $everProduct->id_seo_product.'.jpg'
+                        $this->img_folder . (int) $everProduct->id_seo_product.'.jpg'
                     )) {
                         $this->errors[] = $this->l('An error occurred while attempting to upload the image.');
                     }
@@ -729,7 +729,7 @@ class AdminEverPsSeoProductController extends ModuleAdminController
                         unlink($tmp_name);
                     }
                     $everProduct->social_img_url = $this->img_url
-                    .(int) $everProduct->id_seo_product
+                    . (int) $everProduct->id_seo_product
                     .'.jpg';
                 }
                 $everProduct->save();
@@ -752,7 +752,7 @@ class AdminEverPsSeoProductController extends ModuleAdminController
         $everProduct = new EverPsSeoProduct(
             (int) $id_ever_seo_product
         );
-        $edit_url  = 'index.php?controller=AdminProducts&id_product='.(int) $everProduct->id_seo_product.'';
+        $edit_url  = 'index.php?controller=AdminProducts&id_product=' . (int) $everProduct->id_seo_product.'';
         $edit_url .= '&updateproduct&token='.Tools::getAdminTokenLite('AdminProducts');
 
         $this->context->smarty->assign(array(
@@ -892,8 +892,8 @@ class AdminEverPsSeoProductController extends ModuleAdminController
 
             $meta_description = Db::getInstance()->getValue(
                 'SELECT meta_description FROM `' . _DB_PREFIX_ . 'product_lang`
-                WHERE id_product = '.(int) $everProduct->id_seo_product.'
-                AND id_lang = '.(int) $everProduct->id_seo_lang
+                WHERE id_product = ' . (int) $everProduct->id_seo_product.'
+                AND id_lang = ' . (int) $everProduct->id_seo_lang
             );
 
             if (!$meta_description) {
@@ -923,8 +923,8 @@ class AdminEverPsSeoProductController extends ModuleAdminController
 
             $name = Db::getInstance()->getValue(
                 'SELECT name FROM `' . _DB_PREFIX_ . 'product_lang`
-                WHERE id_product = '.(int) $everProduct->id_seo_product.'
-                AND id_lang = '.(int) $everProduct->id_seo_lang
+                WHERE id_product = ' . (int) $everProduct->id_seo_product.'
+                AND id_lang = ' . (int) $everProduct->id_seo_lang
             );
 
             if (!$name) {
@@ -954,8 +954,8 @@ class AdminEverPsSeoProductController extends ModuleAdminController
 
             $description = Db::getInstance()->getValue(
                 'SELECT description_short FROM `' . _DB_PREFIX_ . 'product_lang`
-                WHERE id_product = '.(int) $everProduct->id_seo_product.'
-                AND id_lang = '.(int) $everProduct->id_seo_lang
+                WHERE id_product = ' . (int) $everProduct->id_seo_product.'
+                AND id_lang = ' . (int) $everProduct->id_seo_lang
             );
 
             if (!$description) {
@@ -989,8 +989,8 @@ class AdminEverPsSeoProductController extends ModuleAdminController
 
             $description = Db::getInstance()->getValue(
                 'SELECT description FROM `' . _DB_PREFIX_ . 'product_lang`
-                WHERE id_product = '.(int) $everProduct->id_seo_product.'
-                AND id_lang = '.(int) $everProduct->id_seo_lang
+                WHERE id_product = ' . (int) $everProduct->id_seo_product.'
+                AND id_lang = ' . (int) $everProduct->id_seo_lang
             );
 
             if (!$description) {
@@ -1040,15 +1040,15 @@ class AdminEverPsSeoProductController extends ModuleAdminController
 
             $sql = 'UPDATE `' . _DB_PREFIX_ . 'product_lang`
             SET meta_title = "'.pSQL($product->meta_title).'"
-            WHERE id_lang = '.(int) $everProduct->id_seo_lang.'
-            AND id_shop = '.(int) $this->context->shop->id.'
-            AND id_product = '.(int) $product->id;
+            WHERE id_lang = ' . (int) $everProduct->id_seo_lang.'
+            AND id_shop = ' . (int) $this->context->shop->id.'
+            AND id_product = ' . (int) $product->id;
 
             $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_product`
             SET meta_title = "'.pSQL($product->meta_title).'"
-            WHERE id_seo_lang = '.(int) $everProduct->id_seo_lang.'
-            AND id_shop = '.(int) $this->context->shop->id.'
-            AND id_seo_product = '.(int) $product->id;
+            WHERE id_seo_lang = ' . (int) $everProduct->id_seo_lang.'
+            AND id_shop = ' . (int) $this->context->shop->id.'
+            AND id_seo_product = ' . (int) $product->id;
             if (!Db::getInstance()->execute($sql)) {
                 $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
             } else {
@@ -1074,21 +1074,21 @@ class AdminEverPsSeoProductController extends ModuleAdminController
 
             $sql = 'UPDATE `' . _DB_PREFIX_ . 'product_lang`
             SET link_rewrite = "'.pSQL($linkRewrite).'"
-            WHERE id_lang = '.(int) $everProduct->id_seo_lang.'
-            AND id_shop = '.(int) $this->context->shop->id.'
-            AND id_product = '.(int) $product->id;
+            WHERE id_lang = ' . (int) $everProduct->id_seo_lang.'
+            AND id_shop = ' . (int) $this->context->shop->id.'
+            AND id_product = ' . (int) $product->id;
 
             $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_product`
             SET link_rewrite = "'.pSQL($linkRewrite).'"
-            WHERE id_seo_lang = '.(int) $everProduct->id_seo_lang.'
-            AND id_shop = '.(int) $this->context->shop->id.'
-            AND id_seo_product = '.(int) $product->id;
+            WHERE id_seo_lang = ' . (int) $everProduct->id_seo_lang.'
+            AND id_shop = ' . (int) $this->context->shop->id.'
+            AND id_seo_product = ' . (int) $product->id;
 
             $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_product`
             SET canonical = "'.pSQL($canonical).'"
-            WHERE id_seo_lang = '.(int) $everProduct->id_seo_lang.'
-            AND id_shop = '.(int) $this->context->shop->id.'
-            AND id_seo_product = '.(int) $product->id;
+            WHERE id_seo_lang = ' . (int) $everProduct->id_seo_lang.'
+            AND id_shop = ' . (int) $this->context->shop->id.'
+            AND id_seo_product = ' . (int) $product->id;
             if (!Db::getInstance()->execute($sql)) {
                 $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
             } else {
@@ -1127,16 +1127,15 @@ class AdminEverPsSeoProductController extends ModuleAdminController
 
             $sql = 'UPDATE `' . _DB_PREFIX_ . 'product_lang`
             SET meta_description = "'.pSQL($product->meta_description).'"
-            WHERE id_lang = '.(int) $everProduct->id_seo_lang.'
-            AND id_shop = '.(int) $this->context->shop->id.'
-            AND id_product = '.(int) $product->id;
+            WHERE id_lang = ' . (int) $everProduct->id_seo_lang.'
+            AND id_shop = ' . (int) $this->context->shop->id.'
+            AND id_product = ' . (int) $product->id;
 
             $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_product`
             SET meta_description = "'.pSQL($product->meta_description).'"
-            WHERE id_seo_lang = '.(int) $everProduct->id_seo_lang.'
-            AND id_shop = '.(int) $this->context->shop->id.'
-            AND id_seo_product = '.(int) $product->id;
-            // die(var_dump($sql2));
+            WHERE id_seo_lang = ' . (int) $everProduct->id_seo_lang.'
+            AND id_shop = ' . (int) $this->context->shop->id.'
+            AND id_seo_product = ' . (int) $product->id;
             if (!Db::getInstance()->execute($sql)) {
                 $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
             } else {
@@ -1170,10 +1169,10 @@ class AdminEverPsSeoProductController extends ModuleAdminController
                 $url
             );
             $sql = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_product`
-            SET status_code = "'.(int) $httpCode.'"
-            WHERE id_seo_lang = '.(int) $everProduct->id_seo_lang.'
-            AND id_shop = '.(int) $this->context->shop->id.'
-            AND id_seo_product = '.(int) $product->id;
+            SET status_code = "' . (int) $httpCode.'"
+            WHERE id_seo_lang = ' . (int) $everProduct->id_seo_lang.'
+            AND id_shop = ' . (int) $this->context->shop->id.'
+            AND id_seo_product = ' . (int) $product->id;
             if (!Db::getInstance()->execute($sql)) {
                 $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
             }

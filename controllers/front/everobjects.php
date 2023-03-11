@@ -36,7 +36,7 @@ class EverpsseoEverobjectsModuleFrontController extends ModuleFrontController
         }
         $everpsseo = Module::getInstanceByName('everpsseo');
         if (!$everpsseo->active) {
-            die('Sorry, the module EverPsSeo is not active 😬');
+            Tools::redirect('index.php');
         }
         $everpsseo->cron = true;
 
@@ -47,7 +47,7 @@ class EverpsseoEverobjectsModuleFrontController extends ModuleFrontController
         $everpsseo->updateSeoCms();
         $everpsseo->updateSeoPageMetas();
         $everpsseo->updateSeoImages();
-
-        die('Objects fully updated for each shop 🙂');
+        echo 'Objects fully updated for each shop 🙂';
+        exit();
     }
 }

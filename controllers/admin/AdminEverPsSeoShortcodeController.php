@@ -190,18 +190,18 @@ class AdminEverPsSeoShortcodeController extends ModuleAdminController
             $everblock_obj->shortcode = Tools::getValue('name');
             $everblock_obj->id_shop = (int) Context::getContext()->shop->id;
             foreach (Language::getLanguages(false) as $language) {
-                if (!Tools::getValue('content_'.$language['id_lang'])
+                if (!Tools::getValue('content_' . $language['id_lang'])
                 ) {
                     $this->errors[] = $this->l('Content is missing for lang ').$language['id_lang'];
                 } else {
-                    $everblock_obj->content[$language['id_lang']] = Tools::getValue('content_'.$language['id_lang']);
+                    $everblock_obj->content[$language['id_lang']] = Tools::getValue('content_' . $language['id_lang']);
                 }
             }
 
             if (!count($this->errors)) {
                 if ($everblock_obj->save()) {
                     if (Tools::isSubmit('save')) {
-                        Tools::redirectAdmin(self::$currentIndex.'&conf=4&token='.$this->token);
+                        Tools::redirectAdmin(self::$currentIndex.'&conf=4&token=' . $this->token);
                     }
                 } else {
                     $this->errors[] = $this->l('Can\'t update the current object');

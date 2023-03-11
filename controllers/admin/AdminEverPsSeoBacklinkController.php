@@ -6,7 +6,6 @@
  * @license   Tous droits réservés / Le droit d'auteur s'applique (All rights reserved / French copyright law applies)
  * @see https://www.team-ever.com
  */
-
 if (!defined('_PS_VERSION_')) {
     exit;
 }
@@ -40,7 +39,7 @@ class AdminEverPsSeoBacklinkController extends ModuleAdminController
             ],
         ];
 
-        $this->_where = 'AND a.id_shop ='.(int) $this->context->shop->id;
+        $this->_where = 'AND a.id_shop =' . (int) $this->context->shop->id;
 
         $this->fields_list = array(
             'id_ever_seo_backlink' => [
@@ -187,7 +186,7 @@ class AdminEverPsSeoBacklinkController extends ModuleAdminController
                 if (!$newBacklink->save()) {
                     $this->errors[] = $this->l('An error has occurred: Can\'t save the current object');
                 } else {
-                    Tools::redirectAdmin(self::$currentIndex.'&conf=4&token='.$this->token);
+                    Tools::redirectAdmin(self::$currentIndex.'&conf=4&token=' . $this->token);
                 }
             }
         }

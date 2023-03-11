@@ -99,10 +99,10 @@ class IndexNow extends Command
             \Configuration::updateValue('EVERSEO_INDEXNOW_LIMIT', $maxLimit);
         }
         $output->writeln(sprintf(
-            '<info>Index now : daily count is : '.$dailyCount.'</info>'
+            '<info>Index now : daily count is : ' . $dailyCount.'</info>'
         ));
         $output->writeln(sprintf(
-            '<info>Index now : max limit is : '.$maxLimit.'</info>'
+            '<info>Index now : max limit is : ' . $maxLimit.'</info>'
         ));
         $links = $this->getIndexNowUrls(
             (int) $shop->id

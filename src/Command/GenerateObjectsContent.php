@@ -202,7 +202,7 @@ class GenerateObjectsContent extends Command
             $this->getRandomFunnyComment($output)
         );
         $output->writeln(sprintf(
-            '<comment>See logs at '.$this->logFile.'</comment>'
+            '<comment>See logs at ' . $this->logFile.'</comment>'
         ));
         return self::SUCCESS;
     }
@@ -313,7 +313,7 @@ class GenerateObjectsContent extends Command
                         (int) $id_shop
                     );
                     if ((bool) \Configuration::get('EVERSEO_DELETE_PRODUCT_CONTENT') === false) {
-                        $obj->bottom_content = $obj->bottom_content.' '.$description;
+                        $obj->bottom_content = $obj->bottom_content.' ' . $description;
                     } else {
                         $obj->bottom_content = $description;
                     }
@@ -351,7 +351,7 @@ class GenerateObjectsContent extends Command
                     if ((bool) \Configuration::get('EVERSEO_DELETE_CATEGORY_CONTENT')) {
                         $category->description = $description;
                     } else {
-                        $category->description = $category->description.' '.$description;
+                        $category->description = $category->description.' ' . $description;
                     }
                     if (!$category->isParentCategoryAvailable()) {
                         $category->id_parent = 2;
@@ -366,7 +366,7 @@ class GenerateObjectsContent extends Command
                         (int) $id_shop
                     );
                     if ((bool) \Configuration::get('EVERSEO_DELETE_CATEGORY_CONTENT') === false) {
-                        $obj->bottom_content = $obj->bottom_content.' '.$description;
+                        $obj->bottom_content = $obj->bottom_content.' ' . $description;
                     } else {
                         $obj->bottom_content = $description;
                     }
@@ -399,7 +399,7 @@ class GenerateObjectsContent extends Command
                         (int) $id_shop
                     );
                     if ((bool) \Configuration::get('EVERSEO_DELETE_MANUFACTURER_CONTENT') === false) {
-                        $obj->bottom_content = $obj->bottom_content.' '.$description;
+                        $obj->bottom_content = $obj->bottom_content.' ' . $description;
                     } else {
                         $obj->bottom_content = $description;
                     }
@@ -432,7 +432,7 @@ class GenerateObjectsContent extends Command
                         (int) $id_shop
                     );
                     if ((bool) \Configuration::get('EVERSEO_DELETE_SUPPLIER_CONTENT') === false) {
-                        $obj->bottom_content = $obj->bottom_content.' '.$description;
+                        $obj->bottom_content = $obj->bottom_content.' ' . $description;
                     } else {
                         $obj->bottom_content = $description;
                     }

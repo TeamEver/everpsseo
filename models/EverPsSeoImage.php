@@ -6,6 +6,10 @@
  * @license   Tous droits réservés / Le droit d'auteur s'applique (All rights reserved / French copyright law applies)
  * @see https://www.team-ever.com
  */
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class EverPsSeoImage extends ObjectModel
 {
     public $id_ever_seo_image;
@@ -69,7 +73,7 @@ class EverPsSeoImage extends ObjectModel
             $sql = new DbQuery();
             $sql->select('*');
             $sql->from('ever_seo_image');
-            $sql->where('id_shop = '.(int) $id_shop);
+            $sql->where('id_shop = ' . (int) $id_shop);
             $return = Db::getInstance()->executeS($sql);
             Cache::store($cache_id, $return);
             return $return;
@@ -90,13 +94,13 @@ class EverPsSeoImage extends ObjectModel
             $sql->select('*');
             $sql->from('ever_seo_image');
             $sql->where(
-                'id_ever_seo_image = '.(int) $id_ever_seo_image
+                'id_ever_seo_image = ' . (int) $id_ever_seo_image
             );
             $sql->where(
-                'id_seo_lang = '.(int) $id_seo_lang
+                'id_seo_lang = ' . (int) $id_seo_lang
             );
             $sql->where(
-                'id_shop = '.(int) $id_shop
+                'id_shop = ' . (int) $id_shop
             );
             $return = new self(Db::getInstance()->getValue($sql));
             Cache::store($cache_id, $return);
