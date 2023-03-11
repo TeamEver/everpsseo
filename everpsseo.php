@@ -51,7 +51,7 @@ class Everpsseo extends Module
     {
         $this->name = 'everpsseo';
         $this->tab = 'seo';
-        $this->version = '9.2.1';
+        $this->version = '9.2.3';
         $this->author = 'Team Ever';
         $this->need_instance = false;
         $this->module_key = '5ddabba8ec414cd5bd646fad24368472';
@@ -221,7 +221,7 @@ class Everpsseo extends Module
             && $this->registerHook('displayReassurance')
             && $this->registerHook('displayOrderConfirmation')
             && $this->registerHook('displayContentWrapperBottom')
-            && $this->registerHook('actionPresentProductListing');
+            && $this->registerHook('actionOutputHTMLBefore');;
     }
 
     public function uninstall()
@@ -1277,6 +1277,106 @@ class Everpsseo extends Module
                         'desc' => $this->l('Do you want to use webp img files on your shop ?'),
                         'hint' => $this->l('First you will have to generate webp files using command lines'),
                         'name' => 'EVERSEO_WEBP',
+                        'is_bool' => true,
+                        'values' => [
+                            [
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
+                    ],
+                    [
+                        'type' => 'switch',
+                        'label' => $this->l('Defer all scripts'),
+                        'desc' => $this->l('If enabled, all scripts will have defer attribute'),
+                        'hint' => $this->l('Will add to all scripts defer attribute'),
+                        'name' => 'EVERSEO_DEFER',
+                        'is_bool' => true,
+                        'values' => [
+                            [
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
+                    ],
+                    [
+                        'type' => 'switch',
+                        'label' => $this->l('Move all scripts to bottom of HTML page'),
+                        'desc' => $this->l('If enabled, all scripts will be moved to bottom of HTML page'),
+                        'hint' => $this->l('Will move all scripts to bottom of HTML page'),
+                        'name' => 'EVERSEO_BOTTOM_SCRIPTS',
+                        'is_bool' => true,
+                        'values' => [
+                            [
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
+                    ],
+                    [
+                        'type' => 'switch',
+                        'label' => $this->l('Add missing alt attributes'),
+                        'desc' => $this->l('If enabled, all images without alt attributes will have auto generated alt'),
+                        'hint' => $this->l('Will add alt to all images without this attribute'),
+                        'name' => 'EVERSEO_ADD_ALT',
+                        'is_bool' => true,
+                        'values' => [
+                            [
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
+                    ],
+                    [
+                        'type' => 'switch',
+                        'label' => $this->l('Set all external links as nofollow'),
+                        'desc' => $this->l('All external links will open on new target with nofollow attribute'),
+                        'hint' => $this->l('Else all external links will have follow attribute'),
+                        'name' => 'EVERSEO_EXTERNAL_NOFOLLOW',
+                        'is_bool' => true,
+                        'values' => [
+                            [
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
+                    ],
+                    [
+                        'type' => 'switch',
+                        'label' => $this->l('Compress HTML page ?'),
+                        'desc' => $this->l('Will compress HTML page before rendering'),
+                        'hint' => $this->l('Else HTML output won\'t be compressed'),
+                        'name' => 'EVERSEO_COMPRESS_HTML',
                         'is_bool' => true,
                         'values' => [
                             [
@@ -4362,6 +4462,21 @@ class Everpsseo extends Module
             'EVERSEO_WEBP' => Configuration::get(
                 'EVERSEO_WEBP'
             ),
+            'EVERSEO_BOTTOM_SCRIPTS' => Configuration::get(
+                'EVERSEO_BOTTOM_SCRIPTS'
+            ),
+            'EVERSEO_DEFER' => Configuration::get(
+                'EVERSEO_DEFER'
+            ),
+            'EVERSEO_ADD_ALT' => Configuration::get(
+                'EVERSEO_ADD_ALT'
+            ),
+            'EVERSEO_EXTERNAL_NOFOLLOW' => Configuration::get(
+                'EVERSEO_EXTERNAL_NOFOLLOW'
+            ),
+            'EVERSEO_COMPRESS_HTML' => Configuration::get(
+                'EVERSEO_COMPRESS_HTML'
+            ),
             'EVERSEO_MAINTENANCE' => Configuration::get(
                 'EVERSEO_MAINTENANCE'
             ),
@@ -4911,6 +5026,10 @@ class Everpsseo extends Module
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Use webp" is not valid');
             }
+        
+            if (!function_exists('imagewebp') && (bool)Tools::getValue('EVERSEO_WEBP') === true) {
+                $this->postErrors[] = $this->l('Error : You must have imagewebp extension enabled on your server');
+            }
 
             if (Tools::getValue('EVERSEO_MAINTENANCE')
                 && !Validate::isBool(Tools::getValue('EVERSEO_MAINTENANCE'))
@@ -5395,6 +5514,7 @@ class Everpsseo extends Module
                 'PS_LOGO',
                 $psLogo
             );
+            Hook::exec('actionHtaccessCreate');
         }
         // Save configuration
         $form_values = $this->getConfigFormValues();
@@ -5751,6 +5871,163 @@ class Everpsseo extends Module
 
 #################### END CONFIG FORM ####################
 #################### START ACTION HOOKS ####################
+
+    public function hookActionOutputHTMLBefore($params)
+    {
+        $shop_url = Configuration::get(
+            'PS_SHOP_DOMAIN_SSL',
+            null,
+            null,
+            (int) $this->context->shop->id
+        );
+        $txt = $params['html'];
+        // Replace all shortcodes, everywhere
+        if ((bool) $this->context->customer->isLogged()) {
+            $txt = EverPsSeoTools::changeFrontShortcodes(
+                $txt,
+                (int) $this->context->customer->id
+            );
+        } else {
+            $txt = EverPsSeoTools::changeFrontShortcodes(
+                $txt
+            );
+        }
+        // Load HTML
+        $dom = new DOMDocument();
+        $dom->encoding = 'utf-8';
+        libxml_use_internal_errors(true);
+        $dom->loadHTML(utf8_decode($txt));
+        $dom->preserveWhiteSpace = false;
+        $dom->formatOutput = true;
+        // Set external links target blank and nofollow, add missing title attr
+        if ((bool) Configuration::get('EVERSEO_EXTERNAL_NOFOLLOW') === true) {
+            $anchors = $dom->getElementsByTagName('a');
+            foreach ($anchors as $item) {
+                $href = $item->getAttribute('href');
+                if (strpos($href, $shop_url) === false
+                    && EverPsSeoTools::isAbsolutePath($href)
+                ) {
+                    $item->setAttribute('rel', 'nofollow sponsored noopener');
+                    $item->setAttribute('target', '_blank');
+                    // Set custom data attr for debug
+                    $item->setAttribute('data-evercache', 'true');
+                } else {
+                    $default_attr = EverPsSeoTools::removeEmptyLines($item->nodeValue);
+                    if (!$item->getAttribute('title') || empty($item->getAttribute('title'))) {
+                        $item->setAttribute(
+                            'title',
+                            $default_attr
+                        );
+                        // Set custom data attr for debug
+                        $item->setAttribute('data-evercache', 'true');
+                    }
+                }
+            }
+            $txt = $dom->saveHTML();
+        }
+        // webp format
+        if ((bool) Configuration::get('EVERSEO_WEBP') === true) {
+            $images = $dom->getElementsByTagName('img');
+            foreach ($images as $item) {
+                $src = $item->getAttribute('src');
+                if ((bool)strpos($src, 'webp') === false
+                    && (bool)strpos($src, $shop_url) === true
+                ) {
+                    $headers = get_headers($src . '.webp');
+                    if ((bool) stripos($headers[0], '200 OK') === true) {
+                        $item->setAttribute('src', $src . '.webp');
+                        $item->setAttribute('data-evercache', 'true');
+                    }
+                }
+            }
+            $txt = $dom->saveHTML();
+        }
+        // Set missing alt and title
+        if ((bool) Configuration::get('EVERSEO_ADD_ALT')) {
+            $images = $dom->getElementsByTagName('img');
+            foreach ($images as $item) {
+                if (!$item->getAttribute('alt') || empty($item->getAttribute('alt'))) {
+                    $item->setAttribute(
+                        'alt',
+                        Configuration::get('PS_SHOP_NAME')
+                    );
+                }
+                if (!$item->getAttribute('title') || empty($item->getAttribute('title'))) {
+                    if ($item->getAttribute('alt')) {
+                        $item->setAttribute(
+                            'title',
+                            $item->getAttribute('alt')
+                        );
+                    } else {
+                        $item->setAttribute(
+                            'title',
+                            Configuration::get('PS_SHOP_NAME')
+                        );
+                    }
+                    $item->setAttribute('data-evercache', 'true');
+                }
+            }
+            $titles = $dom->getElementsByTagName('a');
+            foreach ($titles as $item) {
+                $default_attr = EverPsSeoTools::removeEmptyLines($item->textContent);
+                // die(var_dump($default_attr));
+                if (!$item->getAttribute('alt') || empty($item->getAttribute('alt'))) {
+                    $item->setAttribute(
+                        'alt',
+                        $default_attr
+                    );
+                }
+                if (!$item->getAttribute('title') || empty($item->getAttribute('title'))) {
+                    $item->setAttribute(
+                        'title',
+                        $default_attr
+                    );
+                    $item->setAttribute('data-evercache', 'true');
+                }
+            }
+            $txt = $dom->saveHTML();
+        }
+        // Move all scripts to footer
+        if ((bool) Configuration::get('EVERSEO_BOTTOM_SCRIPTS') && isset($txt)) {
+            $js = '';
+            preg_match_all('#<script(.*?)</script>#is', $txt, $matches);
+            foreach ($matches[0] as $value) {
+                $js .= $value;
+            }
+            $txt = preg_replace('#<script(.*?)</script>#is', '', $txt);
+            $txt = preg_replace('#<body(.*?)</body>#is', '<body$1'.$js.'</body>', $txt);
+        }
+        // Defer javascript
+        if ((bool)Configuration::get('EVERSEO_DEFER')) {
+            $txt = str_replace(
+                '<script type="text/javascript">',
+                '<script type="text/javascript" defer>',
+                $txt
+            );
+            $txt = str_replace(
+                '<script>',
+                '<script type="text/javascript" defer>',
+                $txt
+            );
+        }
+        if ((bool) Configuration::get('EVERSEO_COMPRESS_HTML') === true) {
+            $txt = preg_replace(
+                [
+                    '/ {2,}/',
+                    '/<!--.*?-->|\t|(?:\r?\n[ \t]*)+/s',
+                ],
+                [
+                    ' ',
+                    '',
+                ],
+                $txt
+            );
+        }
+        $txt = '<!-- optimized by Ever SEO -->'
+        .trim($txt)
+        .'<!-- optimized by Ever SEO -->';
+        $params['html'] = $txt;
+    }
 
     public function hookActionObjectProductAddAfter($params)
     {
@@ -6319,6 +6596,20 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
                 (int) $lang['id_lang'],
                 (int) $this->context->shop->id
             );
+            EverPsSeoTools::updateDatabaseMediasToWebP(
+                'product',
+                $product->id,
+                $product->description,
+                (int) $lang['id_lang'],
+                'description'
+            );
+            EverPsSeoTools::updateDatabaseMediasToWebP(
+                'product',
+                $product->id,
+                $product->description_short,
+                (int) $lang['id_lang'],
+                'description_short'
+            );
             $seo_product->id_seo_product = (int) $params['object']->id;
             $seo_product->id_shop = (int) $this->context->shop->id;
             $seo_product->id_seo_lang = (int) $lang['id_lang'];
@@ -6375,6 +6666,12 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
                 (int) $lang['id_lang'],
                 (int) $this->context->shop->id
             );
+            EverPsSeoTools::updateDatabaseMediasToWebP(
+                'category',
+                $category->id,
+                $category->description,
+                (int) $lang['id_lang']
+            );
             $seoCategory->id_seo_category = (int) $params['object']->id;
             $seoCategory->id_shop = (int) $this->context->shop->id;
             $seoCategory->id_seo_lang = (int) $lang['id_lang'];
@@ -6391,7 +6688,20 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
             return;
         }
         $image = $params['object'];
-
+        $allowedFormats = [
+            'jpg',
+            'jpeg',
+            'png'
+        ];
+        if ((bool) Configuration::get('EVERSEO_WEBP') === true) {
+            $productImages = glob(_PS_PRODUCT_IMG_DIR_ . $image->getImgFolder() . '*');
+            foreach ($productImages as $img) {
+                $info = new SplFileInfo(basename($img));
+                if (is_file($img) && in_array($info->getExtension(), $allowedFormats)) {
+                    EverPsSeoImage::webpConvert2($img);
+                }
+            }
+        }
         foreach (Language::getLanguages(false) as $lang) {
             $seoImage = EverPsSeoImage::getSeoImage(
                 (int) $image->id,
@@ -6442,6 +6752,12 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
             $cms = new CMS(
                 (int) $params['object']->id,
                 (int) $this->context->shop->id,
+                (int) $lang['id_lang']
+            );
+            EverPsSeoTools::updateDatabaseMediasToWebP(
+                'cms',
+                $cms->id,
+                $cms->content,
                 (int) $lang['id_lang']
             );
             $seoCms->id_seo_cms = (int) $params['object']->id;
@@ -6503,6 +6819,12 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
                 (int) $params['object']->id,
                 (int) $lang['id_lang']
             );
+            EverPsSeoTools::updateDatabaseMediasToWebP(
+                'manufacturer',
+                $manufacturer->id,
+                $manufacturer->description,
+                (int) $lang['id_lang']
+            );
             $seoManufacturer->id_seo_manufacturer = (int) $params['object']->id;
             $seoManufacturer->id_shop = (int) $this->context->shop->id;
             $seoManufacturer->id_seo_lang = (int) $lang['id_lang'];
@@ -6529,6 +6851,12 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
             }
             $supplier = new Supplier(
                 (int) $params['object']->id,
+                (int) $lang['id_lang']
+            );
+            EverPsSeoTools::updateDatabaseMediasToWebP(
+                'supplier',
+                $supplier->id,
+                $supplier->description,
                 (int) $lang['id_lang']
             );
             $seoSupplier->id_seo_supplier = (int) $params['object']->id;

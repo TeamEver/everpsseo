@@ -72,90 +72,28 @@ class ExecuteAction extends Command
         }
 
         if ($action === 'createWebpImage') {
-            if ((bool) Configuration::get('EVERSEO_WEBP') === false) {
+            if ((bool) \Configuration::get('EVERSEO_WEBP') === false) {
                 $output->writeln('<comment>Webp not allowed on module configuration</comment>');
                 return self::ABORTED;
             }
-            // Logo
-            $psLogo = \Configuration::get(
-                'PS_LOGO'
+            if (!function_exists('imagewebp')) {
+                $output->writeln('<comment>You must have imagewebp extension enabled on your server</comment>');
+                return self::ABORTED;
+            }
+            \EverPsSeoImage::setMedias2Webp();
+            \Hook::exec('actionHtaccessCreate');
+            // \Tools::clearAllCache();
+            $output->writeln(sprintf(
+                '<info>Execute ended</info>'
+            ));
+
+            $output->writeln(
+                $this->getRandomFunnyComment($output)
             );
-            $psLogo = str_replace('.webp', '', $psLogo);
-            \EverPsSeoImage::webpConvert2(_PS_IMG_DIR_ . $psLogo);
-            \Configuration::updateValue(
-                'PS_LOGO',
-                $psLogo.'.webp'
-            );
-            // Products images
-            $allImages = \Image::getAllImages();
-            $allowedFormats = [
-                'jpg',
-                'jpeg',
-                'png'
-            ];
-            foreach ($allImages as $img) {
-                $image = new \Image(
-                    (int) $img['id_image']
-                );
-                $productImages = glob(_PS_PRODUCT_IMG_DIR_ . $image->getImgFolder() . '*');
-                foreach ($productImages as $img) {
-                    $info = new \SplFileInfo(basename($img));
-                    if (is_file($img) && in_array($info->getExtension(), $allowedFormats)) {
-                        \EverPsSeoImage::webpConvert2($img);
-                    }
-                }
-            }
-            // Default product images
-            $defaultProductImages = glob(_PS_PRODUCT_IMG_DIR_ . '*');
-            foreach ($defaultProductImages as $img) {
-                $info = new \SplFileInfo(basename($img));
-                if (is_file($img) && in_array($info->getExtension(), $allowedFormats)) {
-                    \EverPsSeoImage::webpConvert2($img);
-                }
-            }
-            // Categories images
-            $categoryImages = glob(_PS_CAT_IMG_DIR_ . '*');
-            foreach ($categoryImages as $img) {
-                $info = new \SplFileInfo(basename($img));
-                if (is_file($img) && in_array($info->getExtension(), $allowedFormats)) {
-                    \EverPsSeoImage::webpConvert2($img);
-                }
-            }
-            // Manufacturer images
-            $manufacturerImages = glob(_PS_MANU_IMG_DIR_ . '*');
-            foreach ($manufacturerImages as $img) {
-                $info = new \SplFileInfo(basename($img));
-                if (is_file($img) && in_array($info->getExtension(), $allowedFormats)) {
-                    \EverPsSeoImage::webpConvert2($img);
-                }
-            }
-            // Supplier images
-            $supplierImages = glob(_PS_SUPP_IMG_DIR_ . '*');
-            foreach ($supplierImages as $img) {
-                $info = new \SplFileInfo(basename($img));
-                if (is_file($img) && in_array($info->getExtension(), $allowedFormats)) {
-                    \EverPsSeoImage::webpConvert2($img);
-                }
-            }
-            // Default images
-            $defaultImages = glob(_PS_IMG_DIR_ . '*');
-            foreach ($defaultImages as $img) {
-                $info = new \SplFileInfo(basename($img));
-                if (is_file($img) && in_array($info->getExtension(), $allowedFormats)) {
-                    \EverPsSeoImage::webpConvert2($img);
-                }
-            }
-            // CMS images
-            $cmsImages = glob(_PS_IMG_DIR_ . 'cms/*');
-            foreach ($cmsImages as $img) {
-                $info = new \SplFileInfo(basename($img));
-                if (is_file($img) && in_array($info->getExtension(), $allowedFormats)) {
-                    \EverPsSeoImage::webpConvert2($img);
-                }
-            }
+
+            return self::SUCCESS;
         }
         if ($action === 'redirectDisabledProduct') {
-
             if (!(bool)\Configuration::get('EVERSEO_FORCE_PRODUCT_REDIRECT')) {
                 $output->writeln('<comment>This action is disabled in module conf</comment>');
                 return self::ABORTED;
@@ -196,9 +134,9 @@ class ExecuteAction extends Command
 
     protected function logCommand($msg)
     {
-        $log  = 'Msg: '.$msg.PHP_EOL.
-                date('j.n.Y').PHP_EOL.
-                "-------------------------".PHP_EOL;
+        $log  = 'Msg: ' . $msg . PHP_EOL .
+                date('j.n.Y') . PHP_EOL .
+                '-------------------------' . PHP_EOL;
 
         //Save string to log, use FILE_APPEND to append.
         file_put_contents(

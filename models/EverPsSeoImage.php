@@ -188,7 +188,7 @@ class EverPsSeoImage extends ObjectModel
                     $image = imagecreatefromjpeg($file);
                     break;
                 case '3': //IMAGETYPE_PNG
-                        $image = imagecreatefrompng($file);
+                        $image = @imagecreatefrompng($file);
                         imagepalettetotruecolor($image);
                         imagealphablending($image, true);
                         imagesavealpha($image, true);
@@ -225,5 +225,168 @@ class EverPsSeoImage extends ObjectModel
             return $output_file;
         }
         return false;
+    }
+
+    public static function setMedias2Webp()
+    {
+        if ((bool) Configuration::get('EVERSEO_WEBP') === false) {
+            return false;
+        }
+        $allowedFormats = [
+            'jpg',
+            'jpeg',
+            'png'
+        ];
+        // Logo
+        $psLogo = Configuration::get(
+            'PS_LOGO'
+        );
+        $psLogo = str_replace('.webp', '', $psLogo);
+        self::webpConvert2(_PS_IMG_DIR_ . $psLogo);
+        Configuration::updateValue(
+            'PS_LOGO',
+            $psLogo.'.webp'
+        );
+        // Products images
+        $allImages = Image::getAllImages();
+        foreach ($allImages as $img) {
+            $image = new Image(
+                (int) $img['id_image']
+            );
+            $productImages = glob(_PS_PRODUCT_IMG_DIR_ . $image->getImgFolder() . '*');
+            foreach ($productImages as $img) {
+                $info = new SplFileInfo(basename($img));
+                if (is_file($img) && in_array($info->getExtension(), $allowedFormats)) {
+                    self::webpConvert2($img);
+                }
+            }
+        }
+        // Default product images
+        $defaultProductImages = glob(_PS_PRODUCT_IMG_DIR_ . '*');
+        foreach ($defaultProductImages as $img) {
+            $info = new SplFileInfo(basename($img));
+            if (is_file($img) && in_array($info->getExtension(), $allowedFormats)) {
+                self::webpConvert2($img);
+            }
+        }
+        // Default product images 2
+        $defaultProductImages = glob(_PS_PROD_IMG_DIR_ . '*');
+        foreach ($defaultProductImages as $img) {
+            $info = new SplFileInfo(basename($img));
+            if (is_file($img) && in_array($info->getExtension(), $allowedFormats)) {
+                self::webpConvert2($img);
+            }
+        }
+        // Categories images
+        $categoryImages = glob(_PS_CAT_IMG_DIR_ . '*');
+        foreach ($categoryImages as $img) {
+            $info = new SplFileInfo(basename($img));
+            if (is_file($img) && in_array($info->getExtension(), $allowedFormats)) {
+                self::webpConvert2($img);
+            }
+        }
+        // Manufacturer images
+        $manufacturerImages = glob(_PS_MANU_IMG_DIR_ . '*');
+        foreach ($manufacturerImages as $img) {
+            $info = new SplFileInfo(basename($img));
+            if (is_file($img) && in_array($info->getExtension(), $allowedFormats)) {
+                self::webpConvert2($img);
+            }
+        }
+        // Supplier images
+        $supplierImages = glob(_PS_SUPP_IMG_DIR_ . '*');
+        foreach ($supplierImages as $img) {
+            $info = new SplFileInfo(basename($img));
+            if (is_file($img) && in_array($info->getExtension(), $allowedFormats)) {
+                self::webpConvert2($img);
+            }
+        }
+        // Default images
+        $defaultImages = glob(_PS_IMG_DIR_ . '*');
+        foreach ($defaultImages as $img) {
+            $info = new SplFileInfo(basename($img));
+            if (is_file($img) && in_array($info->getExtension(), $allowedFormats)) {
+                self::webpConvert2($img);
+            }
+        }
+        // Stores images
+        $storeImages = glob(_PS_STORE_IMG_DIR_ . '*');
+        foreach ($storeImages as $img) {
+            $info = new SplFileInfo(basename($img));
+            if (is_file($img) && in_array($info->getExtension(), $allowedFormats)) {
+                self::webpConvert2($img);
+            }
+        }
+        // Shipping images
+        $shippingImages = glob(_PS_SHIP_IMG_DIR_ . '*');
+        foreach ($shippingImages as $img) {
+            $info = new SplFileInfo(basename($img));
+            if (is_file($img) && in_array($info->getExtension(), $allowedFormats)) {
+                self::webpConvert2($img);
+            }
+        }
+        // CMS images
+        $cmsImages = glob(_PS_IMG_DIR_ . 'cms/*');
+        foreach ($cmsImages as $img) {
+            $info = new SplFileInfo(basename($img));
+            if (is_file($img) && in_array($info->getExtension(), $allowedFormats)) {
+                self::webpConvert2($img);
+            }
+        }
+        // Modules : jpg
+        $modulesImages = EverPsSeoTools::rsearch(_PS_MODULE_DIR_, '/.*jpg/');
+        foreach ($modulesImages as $img) {
+            $info = new SplFileInfo(basename($img));
+            self::webpConvert2($img);
+        }
+        // Modules : jpeg
+        $modulesImages = EverPsSeoTools::rsearch(_PS_MODULE_DIR_, '/.*jpeg/');
+        foreach ($modulesImages as $img) {
+            self::webpConvert2($img);
+        }
+        // Modules : png
+        $modulesImages = EverPsSeoTools::rsearch(_PS_MODULE_DIR_, '/.*png/');
+        foreach ($modulesImages as $img) {
+            self::webpConvert2($img);
+        }
+        // Ever Blog images
+        if (Module::isInstalled('everpsblog')) {
+            if (file_exists(_PS_IMG_DIR_ . 'post')) {
+                $postImages = glob(_PS_IMG_DIR_ . 'post/*');
+                foreach ($postImages as $img) {
+                    $info = new SplFileInfo(basename($img));
+                    if (is_file($img) && in_array($info->getExtension(), $allowedFormats)) {
+                        self::webpConvert2($img);
+                    }
+                }
+            }
+            if (file_exists(_PS_IMG_DIR_ . 'category')) {
+                $categoryImages = glob(_PS_IMG_DIR_ . 'category/*');
+                foreach ($categoryImages as $img) {
+                    $info = new SplFileInfo(basename($img));
+                    if (is_file($img) && in_array($info->getExtension(), $allowedFormats)) {
+                        self::webpConvert2($img);
+                    }
+                }
+            }
+            if (file_exists(_PS_IMG_DIR_ . 'tag')) {
+                $tagImages = glob(_PS_IMG_DIR_ . 'tag/*');
+                foreach ($tagImages as $img) {
+                    $info = new SplFileInfo(basename($img));
+                    if (is_file($img) && in_array($info->getExtension(), $allowedFormats)) {
+                        self::webpConvert2($img);
+                    }
+                }
+            }
+            if (file_exists(_PS_IMG_DIR_ . 'author')) {
+                $authorImages = glob(_PS_IMG_DIR_ . 'author/*');
+                foreach ($authorImages as $img) {
+                    $info = new SplFileInfo(basename($img));
+                    if (is_file($img) && in_array($info->getExtension(), $allowedFormats)) {
+                        self::webpConvert2($img);
+                    }
+                }
+            }
+        }
     }
 }
