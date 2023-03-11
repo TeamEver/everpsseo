@@ -164,7 +164,7 @@ class EverPsSeoImage extends ObjectModel
         }
     }
 
-    public static function webpConvert2($file, $compression_quality = 80)
+    public static function webpConvert2($file, $compressionQuality = 80)
     {
         // check if file exists
         if (!file_exists($file)) {
@@ -201,16 +201,20 @@ class EverPsSeoImage extends ObjectModel
                     $image = imagecreatefrombmp($file);
                     break;
                 case '15': //IMAGETYPE_Webp
-                   return false;
+                    $lock = false;
                     break;
                 case '16': //IMAGETYPE_XBM
                     $image = imagecreatefromxbm($file);
                     break;
                 default:
-                    return false;
+                    $lock = false;
+                    break;
+            }
+            if (isset($lock) && (bool)$lock === false) {
+                return false;
             }
             // Save the image
-            $result = imagewebp($image, $output_file, $compression_quality);
+            $result = imagewebp($image, $output_file, $compressionQuality);
             if (false === $result) {
                 return false;
             }
@@ -222,7 +226,7 @@ class EverPsSeoImage extends ObjectModel
             $image->readImage($file);
             if ($file_type === "3") {
                 $image->setImageFormat('webp');
-                $image->setImageCompressionQuality($compression_quality);
+                $image->setImageCompressionQuality($compressionQuality);
                 $image->setOption('webp:lossless', 'true');
             }
             $image->writeImage($output_file);
