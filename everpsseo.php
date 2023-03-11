@@ -51,7 +51,7 @@ class Everpsseo extends Module
     {
         $this->name = 'everpsseo';
         $this->tab = 'seo';
-        $this->version = '9.2.1';
+        $this->version = '9.2.3';
         $this->author = 'Team Ever';
         $this->need_instance = false;
         $this->module_key = '5ddabba8ec414cd5bd646fad24368472';
@@ -68,8 +68,6 @@ class Everpsseo extends Module
         $this->imageType = ImageType::getFormattedName('large');
         $this->protocol_link = (Configuration::get('PS_SSL_ENABLED')
             || Tools::usingSecureMode()) ? 'https://' : 'http://';
-        $this->isSeven = Tools::version_compare(_PS_VERSION_, '1.7', '>=') ? true : false;
-        $this->isHeight = Tools::version_compare(_PS_VERSION_, '8.0', '>=') ? true : false;
         if (strpos(Tools::getValue('controller'), 'EverPsSeo') !== false
             || Tools::getValue('configure') == $this->name
         ) {
