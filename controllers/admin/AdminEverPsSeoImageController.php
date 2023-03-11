@@ -26,7 +26,6 @@ class AdminEverPsSeoImageController extends ModuleAdminController
         $this->className = 'EverPsSeoImage';
         $this->context = Context::getContext();
         $this->identifier = 'id_ever_seo_image';
-        $this->isSeven = Tools::version_compare(_PS_VERSION_, '1.7', '>=') ? true : false;
         $this->imageType = 'jpg';
         $this->max_file_size = (int)(Configuration::get('PS_LIMIT_UPLOAD_FILE_VALUE') * 1000000);
         $this->max_image_size = (int) Configuration::get('PS_PRODUCT_PICTURE_MAX_SIZE');
@@ -127,7 +126,6 @@ class AdminEverPsSeoImageController extends ModuleAdminController
         );
 
         $this->colorOnBackground = true;
-        $this->isSeven = Tools::version_compare(_PS_VERSION_, '1.7', '>=') ? true : false;
 
         $imageType = ImageType::getFormattedName('large');
 
@@ -213,15 +211,11 @@ class AdminEverPsSeoImageController extends ModuleAdminController
 
     public function l($string, $class = null, $addslashes = false, $htmlentities = true)
     {
-        if ($this->isSeven) {
-            return Context::getContext()->getTranslator()->trans(
-                $string,
-                [],
-                'Modules.Everpsseo.Admineverpsseoimagecontroller'
-            );
-        }
-
-        return parent::l($string, $class, $addslashes, $htmlentities);
+        return Context::getContext()->getTranslator()->trans(
+            $string,
+            [],
+            'Modules.Everpsseo.Admineverpsseoimagecontroller'
+        );
     }
 
     public function renderList()

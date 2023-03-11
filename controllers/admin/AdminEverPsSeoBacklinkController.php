@@ -25,8 +25,6 @@ class AdminEverPsSeoBacklinkController extends ModuleAdminController
         $this->className = 'EverPsSeoBacklink';
         $this->context = Context::getContext();
         $this->identifier = 'id_ever_seo_backlink';
-
-        $this->isSeven = Tools::version_compare(_PS_VERSION_, '1.7', '>=') ? true : false;
         $moduleConfUrl  = 'index.php?controller=AdminModules&configure=everpsseo&token=';
         $moduleConfUrl .= Tools::getAdminTokenLite('AdminModules');
 
@@ -86,15 +84,11 @@ class AdminEverPsSeoBacklinkController extends ModuleAdminController
 
     public function l($string, $class = null, $addslashes = false, $htmlentities = true)
     {
-        if ($this->isSeven) {
-            return Context::getContext()->getTranslator()->trans(
-                $string,
-                [],
-                'Modules.Everpsseo.Admineverpsseobacklinkcontroller'
-            );
-        }
-
-        return parent::l($string, $class, $addslashes, $htmlentities);
+        return Context::getContext()->getTranslator()->trans(
+            $string,
+            [],
+            'Modules.Everpsseo.Admineverpsseobacklinkcontroller'
+        );
     }
 
     public function renderList()

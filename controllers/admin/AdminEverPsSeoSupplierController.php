@@ -26,7 +26,6 @@ class AdminEverPsSeoSupplierController extends ModuleAdminController
         $this->className = 'EverPsSeoSupplier';
         $this->context = Context::getContext();
         $this->identifier = 'id_ever_seo_supplier';
-        $this->isSeven = Tools::version_compare(_PS_VERSION_, '1.7', '>=') ? true : false;
         $moduleConfUrl  = 'index.php?controller=AdminModules&configure=everpsseo&token=';
         $moduleConfUrl .= Tools::getAdminTokenLite('AdminModules');
         $this->img_folder = _PS_MODULE_DIR_.'everpsseo/views/img/s/';
@@ -195,15 +194,11 @@ class AdminEverPsSeoSupplierController extends ModuleAdminController
 
     public function l($string, $class = null, $addslashes = false, $htmlentities = true)
     {
-        if ($this->isSeven) {
-            return Context::getContext()->getTranslator()->trans(
-                $string,
-                [],
-                'Modules.Everpsseo.Admineverpsseosuppliercontroller'
-            );
-        }
-
-        return parent::l($string, $class, $addslashes, $htmlentities);
+        return Context::getContext()->getTranslator()->trans(
+            $string,
+            [],
+            'Modules.Everpsseo.Admineverpsseosuppliercontroller'
+        );
     }
 
     public function renderList()

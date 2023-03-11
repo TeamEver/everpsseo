@@ -26,8 +26,6 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
         $this->className = 'EverPsSeoCms';
         $this->context = Context::getContext();
         $this->identifier = 'id_ever_seo_cms';
-
-        $this->isSeven = Tools::version_compare(_PS_VERSION_, '1.7', '>=') ? true : false;
         $moduleConfUrl  = 'index.php?controller=AdminModules&configure=everpsseo&token=';
         $moduleConfUrl .= Tools::getAdminTokenLite('AdminModules');
         $this->img_folder = _PS_MODULE_DIR_.'everpsseo/views/img/cms/';
@@ -186,15 +184,11 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
 
     public function l($string, $class = null, $addslashes = false, $htmlentities = true)
     {
-        if ($this->isSeven) {
-            return Context::getContext()->getTranslator()->trans(
-                $string,
-                [],
-                'Modules.Everpsseo.Admineverpsseocmscontroller'
-            );
-        }
-
-        return parent::l($string, $class, $addslashes, $htmlentities);
+        return Context::getContext()->getTranslator()->trans(
+            $string,
+            [],
+            'Modules.Everpsseo.Admineverpsseocmscontroller'
+        );
     }
 
     public function renderList()

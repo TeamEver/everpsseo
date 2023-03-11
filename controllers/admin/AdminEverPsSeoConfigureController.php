@@ -34,7 +34,6 @@ class AdminEverPsSeoConfigureController extends ModuleAdminController
         $this->bootstrap = true;
         $this->lang = false;
         $this->context = Context::getContext();
-        $this->isSeven = Tools::version_compare(_PS_VERSION_, '1.7', '>=') ? true : false;
         $moduleConfUrl  = 'index.php?controller=AdminModules&configure=everpsseo&token=';
         $moduleConfUrl .= Tools::getAdminTokenLite('AdminModules');
         $this->everpsseo_module = $moduleConfUrl;
@@ -50,15 +49,11 @@ class AdminEverPsSeoConfigureController extends ModuleAdminController
 
     public function l($string, $class = null, $addslashes = false, $htmlentities = true)
     {
-        if ($this->isSeven) {
-            return Context::getContext()->getTranslator()->trans(
-                $string,
-                [],
-                'Modules.Everpsseo.Admineverpsseoconfigurecontroller'
-            );
-        }
-
-        return parent::l($string, $class, $addslashes, $htmlentities);
+        return Context::getContext()->getTranslator()->trans(
+            $string,
+            [],
+            'Modules.Everpsseo.Admineverpsseoconfigurecontroller'
+        );
     }
 
     public function initContent()

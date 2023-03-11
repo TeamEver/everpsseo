@@ -26,8 +26,6 @@ class AdminEverPsSeoPageMetaController extends ModuleAdminController
         $this->className = 'EverPsSeoPageMeta';
         $this->context = Context::getContext();
         $this->identifier = 'id_ever_seo_pagemeta';
-
-        $this->isSeven = Tools::version_compare(_PS_VERSION_, '1.7', '>=') ? true : false;
         $moduleConfUrl  = 'index.php?controller=AdminModules&configure=everpsseo&token=';
         $moduleConfUrl .= Tools::getAdminTokenLite('AdminModules');
         $this->img_folder = _PS_MODULE_DIR_.'everpsseo/views/img/meta/';
@@ -202,15 +200,11 @@ class AdminEverPsSeoPageMetaController extends ModuleAdminController
 
     public function l($string, $class = null, $addslashes = false, $htmlentities = true)
     {
-        if ($this->isSeven) {
-            return Context::getContext()->getTranslator()->trans(
-                $string,
-                [],
-                'Modules.Everpsseo.Admineverpsseopagemetacontroller'
-            );
-        }
-
-        return parent::l($string, $class, $addslashes, $htmlentities);
+        return Context::getContext()->getTranslator()->trans(
+            $string,
+            [],
+            'Modules.Everpsseo.Admineverpsseopagemetacontroller'
+        );
     }
 
     public function renderList()

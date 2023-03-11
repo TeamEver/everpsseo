@@ -24,8 +24,6 @@ class AdminEverPsSeoRedirectController extends ModuleAdminController
         $this->className = 'EverPsSeoRedirect';
         $this->context = Context::getContext();
         $this->identifier = "id_ever_seo_redirect";
-
-        $this->isSeven = Tools::version_compare(_PS_VERSION_, '1.7', '>=') ? true : false;
         $moduleConfUrl  = 'index.php?controller=AdminModules&configure=everpsseo&token=';
         $moduleConfUrl .= Tools::getAdminTokenLite('AdminModules');
 
@@ -98,15 +96,11 @@ class AdminEverPsSeoRedirectController extends ModuleAdminController
 
     public function l($string, $class = null, $addslashes = false, $htmlentities = true)
     {
-        if ($this->isSeven) {
-            return Context::getContext()->getTranslator()->trans(
-                $string,
-                [],
-                'Modules.Everpsseo.Admineverpsseoredirectcontroller'
-            );
-        }
-
-        return parent::l($string, $class, $addslashes, $htmlentities);
+        return Context::getContext()->getTranslator()->trans(
+            $string,
+            [],
+            'Modules.Everpsseo.Admineverpsseoredirectcontroller'
+        );
     }
 
     /**
