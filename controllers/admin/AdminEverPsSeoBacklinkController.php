@@ -78,7 +78,7 @@ class AdminEverPsSeoBacklinkController extends ModuleAdminController
     {
         parent::setMedia($isNewTheme);
 
-        $this->addCSS(_PS_MODULE_DIR_.'everpsseo/views/css/ever.css');
+        $this->addCSS(_PS_MODULE_DIR_ . 'everpsseo/views/css/ever.css');
     }
 
     public function l($string, $class = null, $addslashes = false, $htmlentities = true)
@@ -186,7 +186,7 @@ class AdminEverPsSeoBacklinkController extends ModuleAdminController
                 if (!$newBacklink->save()) {
                     $this->errors[] = $this->l('An error has occurred: Can\'t save the current object');
                 } else {
-                    Tools::redirectAdmin(self::$currentIndex.'&conf=4&token=' . $this->token);
+                    Tools::redirectAdmin(self::$currentIndex . '&conf=4&token=' . $this->token);
                 }
             }
         }
@@ -215,7 +215,7 @@ class AdminEverPsSeoBacklinkController extends ModuleAdminController
                 if (isset($object->noZeroObject)) {
                     $this->errors[] = $this->l('You need at least one object.');
                 } else {
-                    $backlink = Tools::getValue($this->table.'Box');
+                    $backlink = Tools::getValue($this->table . 'Box');
                     if (is_array($backlink)) {
                         foreach ($backlink as $id_ever_seo_backlink) {
                             $notFound = new EverPsSeoBacklink((int) $id_ever_seo_backlink);

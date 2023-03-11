@@ -249,7 +249,7 @@ class EverPsSeoImage extends ObjectModel
         self::webpConvert2(_PS_IMG_DIR_ . $psLogo);
         Configuration::updateValue(
             'PS_LOGO',
-            $psLogo.'.webp'
+            $psLogo . '.webp'
         );
         // Products images
         $allImages = Image::getAllImages();

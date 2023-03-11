@@ -53,7 +53,7 @@ class ExportFileCommand extends Command
         $this->filenameCategory = dirname(__FILE__) . '/../../output/categories.xlsx';
         $this->filenameProduct = dirname(__FILE__) . '/../../output/products.xlsx';
         $this->filenameFeatures = dirname(__FILE__) . '/../../output/features.xlsx';
-        $this->logFile = dirname(__FILE__) . '/../../output/logs/log-seo-export-'.date('Y-m-d').'.log';
+        $this->logFile = dirname(__FILE__) . '/../../output/logs/log-seo-export-' . date('Y-m-d') . '.log';
         $this->module = \Module::getInstanceByName('everpsseo');
     }
 

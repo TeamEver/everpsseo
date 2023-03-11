@@ -82,7 +82,7 @@ class SearchController extends SearchControllerCore
                 'c',
                 'cl.id_category = c.id_category'
             );
-            $sql->where('cl.name LIKE "'.pSQL($search).'"');
+            $sql->where('cl.name LIKE "' . pSQL($search) . '"');
             $sql->where('cs.id_shop = ' . (int) $id_shop);
             $sql->where('c.active = 1');
             $sql->where('cl.id_lang = ' . (int) $id_lang);
@@ -137,7 +137,7 @@ class SearchController extends SearchControllerCore
             );
             $sql->where('s.active = 1');
             $sql->where('ss.id_shop = ' . (int) $id_shop);
-            $sql->where('s.name LIKE "'.pSQL($search).'"');
+            $sql->where('s.name LIKE "' . pSQL($search) . '"');
             $result = Db::getInstance()->executeS($sql);
             if (count($result)) {
                 $obj = new Supplier(
@@ -164,7 +164,7 @@ class SearchController extends SearchControllerCore
                 'pl.id_product = ps.id_product'
             );
             $sql->where('pl.id_lang = ' . (int) $id_lang);
-            $sql->where('pl.name LIKE "'.pSQL($search).'"');
+            $sql->where('pl.name LIKE "' . pSQL($search) . '"');
             $sql->where('ps.active = 1');
             $sql->where('ps.visibility = "both" OR visibility = "search"');
             $sql->where('ps.id_shop = ' . (int) $id_shop);

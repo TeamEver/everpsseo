@@ -25,7 +25,7 @@ $sql[] =
         `active` int(10) unsigned NOT NULL,
         `code` int(10) unsigned NOT NULL,
         PRIMARY KEY (`id_ever_seo_redirect`)
-    ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8';
+    ) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8';
 
 // Backlinks
 $sql[] =
@@ -36,7 +36,7 @@ $sql[] =
         `id_shop` int(10) unsigned NOT NULL,
         `count` int(10) unsigned DEFAULT NULL,
         PRIMARY KEY (`id_ever_seo_backlink`)
-    ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8';
+    ) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8';
 
 // Products SEO
 $sql[] =
@@ -47,7 +47,7 @@ $sql[] =
         `iso_code` varchar(255) NOT NULL,
         `language_code` varchar(255) NOT NULL,
         PRIMARY KEY (`id_ever_lang`)
-    ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8';
+    ) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8';
 
 // Products lang SEO
 $sql[] =
@@ -72,7 +72,7 @@ $sql[] =
         `note` varchar(255) DEFAULT 0,
         `status_code` varchar(255) DEFAULT 0,
         PRIMARY KEY (`id_ever_seo_product`)
-    ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8';
+    ) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8';
 
 // Images lang SEO
 $sql[] =
@@ -86,7 +86,7 @@ $sql[] =
         `allowed_sitemap` int(10) unsigned NOT NULL,
         `status_code` varchar(255) DEFAULT 0,
         PRIMARY KEY (`id_ever_seo_image`)
-    ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8';
+    ) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8';
 
 // Category lang SEO
 $sql[] =
@@ -111,7 +111,7 @@ $sql[] =
         `note` varchar(255) DEFAULT 0,
         `status_code` varchar(255) DEFAULT 0,
         PRIMARY KEY (`id_ever_seo_category`)
-    ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8';
+    ) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8';
 
 // Manufacturer SEO
 $sql[] =
@@ -134,7 +134,7 @@ $sql[] =
         `note` varchar(255) DEFAULT 0,
         `status_code` varchar(255) DEFAULT 0,
         PRIMARY KEY (`id_ever_seo_manufacturer`)
-    ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8';
+    ) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8';
 
 // Suppliers lang SEO
 $sql[] =
@@ -157,7 +157,7 @@ $sql[] =
         `note` varchar(255) DEFAULT 0,
         `status_code` varchar(255) DEFAULT 0,
         PRIMARY KEY (`id_ever_seo_supplier`)
-    ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8';
+    ) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8';
 
 // Page metas lang SEO
 $sql[] =
@@ -179,7 +179,7 @@ $sql[] =
         `note` varchar(255) DEFAULT 0,
         `status_code` varchar(255) DEFAULT 0,
         PRIMARY KEY (`id_ever_seo_pagemeta`)
-    ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8';
+    ) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8';
 
 // CMS category lang SEO
 $sql[] =
@@ -201,7 +201,7 @@ $sql[] =
         `note` varchar(255) DEFAULT 0,
         `status_code` varchar(255) DEFAULT 0,
         PRIMARY KEY (`id_ever_seo_cms_category`)
-    ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8';
+    ) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8';
 
 // CMS lang SEO
 $sql[] =
@@ -223,7 +223,7 @@ $sql[] =
         `note` varchar(255) DEFAULT 0,
         `status_code` varchar(255) DEFAULT 0,
         PRIMARY KEY (`id_ever_seo_cms`)
-    ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8';
+    ) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8';
 
 // Shortcodes
 $sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'ever_seo_shortcode` (
@@ -231,7 +231,7 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'ever_seo_shortcode` (
         `shortcode` text DEFAULT NULL,
         `id_shop` int(10) unsigned NOT NULL,
         PRIMARY KEY (`id_ever_seo_shortcode`)
-    ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8';
+    ) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8';
 
 $sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'ever_seo_shortcode_lang` (
         `id_ever_seo_shortcode` int(10) unsigned NOT NULL,
@@ -239,7 +239,7 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'ever_seo_shortcode_lang
         `title` text DEFAULT NULL,
         `content` text DEFAULT NULL,
         PRIMARY KEY (`id_ever_seo_shortcode`, `id_lang`)
-    ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8';
+    ) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8';
 
 foreach ($sql as $s) {
     if (!Db::getInstance()->execute($s)) {

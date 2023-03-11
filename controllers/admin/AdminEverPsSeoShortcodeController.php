@@ -71,7 +71,7 @@ class AdminEverPsSeoShortcodeController extends ModuleAdminController
     {
         parent::setMedia($isNewTheme);
 
-        $this->addCSS(_PS_MODULE_DIR_.'everpsseo/views/css/ever.css');
+        $this->addCSS(_PS_MODULE_DIR_ . 'everpsseo/views/css/ever.css');
     }
 
     public function l($string, $class = null, $addslashes = false, $htmlentities = true)
@@ -201,7 +201,7 @@ class AdminEverPsSeoShortcodeController extends ModuleAdminController
             if (!count($this->errors)) {
                 if ($everblock_obj->save()) {
                     if (Tools::isSubmit('save')) {
-                        Tools::redirectAdmin(self::$currentIndex.'&conf=4&token=' . $this->token);
+                        Tools::redirectAdmin(self::$currentIndex . '&conf=4&token=' . $this->token);
                     }
                 } else {
                     $this->errors[] = $this->l('Can\'t update the current object');
@@ -233,7 +233,7 @@ class AdminEverPsSeoShortcodeController extends ModuleAdminController
                 if (isset($object->noZeroObject)) {
                     $this->errors[] = $this->l('You need at least one object.');
                 } else {
-                    $shortcode = Tools::getValue($this->table.'Box');
+                    $shortcode = Tools::getValue($this->table . 'Box');
                     if (is_array($shortcode)) {
                         foreach ($shortcode as $id_ever_seo_shortcode) {
                             $shortcode = new EverPsSeoShortcode(

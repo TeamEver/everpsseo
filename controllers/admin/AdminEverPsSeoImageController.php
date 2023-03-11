@@ -150,10 +150,10 @@ class AdminEverPsSeoImageController extends ModuleAdminController
             );
             $objectUrl = Tools::getShopProtocol().$link->getImageLink(
                 $product->link_rewrite,
-                $product->id.'-' . $richImage['id_image'],
+                $product->id . '-' . $richImage['id_image'],
                 $imageType
             );
-            $editUrl  = 'index.php?controller=AdminProducts&id_product=' . (int) $product->id.'';
+            $editUrl  = 'index.php?controller=AdminProducts&id_product=' . (int) $product->id . '';
             $editUrl .= '&updateproduct&token='.Tools::getAdminTokenLite('AdminProducts');
             $objectGSearch = str_replace(' ', '+', $product->name);
 
@@ -183,7 +183,7 @@ class AdminEverPsSeoImageController extends ModuleAdminController
                     break;
             }
             $this->context->smarty->assign(array(
-                'headerObjectName' => $product->name.' image',
+                'headerObjectName' => $product->name . ' image',
                 'objectGSearch' => $objectGSearch,
                 'objectUrl' => $objectUrl,
                 'editUrl' => $editUrl,
@@ -205,7 +205,7 @@ class AdminEverPsSeoImageController extends ModuleAdminController
     {
         parent::setMedia($isNewTheme);
 
-        $this->addCSS(_PS_MODULE_DIR_.'everpsseo/views/css/ever.css');
+        $this->addCSS(_PS_MODULE_DIR_ . 'everpsseo/views/css/ever.css');
     }
 
     public function l($string, $class = null, $addslashes = false, $htmlentities = true)
@@ -434,7 +434,7 @@ class AdminEverPsSeoImageController extends ModuleAdminController
                 if (!$image->save() || !$everImg->save()) {
                     $this->errors[] = $this->l('Can\'t update the native object');
                 } else {
-                    Tools::redirectAdmin(self::$currentIndex.'&conf=4&token=' . $this->token);
+                    Tools::redirectAdmin(self::$currentIndex . '&conf=4&token=' . $this->token);
                 }
             }
         }
@@ -442,7 +442,7 @@ class AdminEverPsSeoImageController extends ModuleAdminController
 
     protected function processBulkSitemap()
     {
-        foreach (Tools::getValue($this->table.'Box') as $idEverImg) {
+        foreach (Tools::getValue($this->table . 'Box') as $idEverImg) {
             $everImg = new EverPsSeoImage(
                 (int) $idEverImg
             );
@@ -457,7 +457,7 @@ class AdminEverPsSeoImageController extends ModuleAdminController
 
     protected function processBulkShortdescalt()
     {
-        foreach (Tools::getValue($this->table.'Box') as $idEverImg) {
+        foreach (Tools::getValue($this->table . 'Box') as $idEverImg) {
             $everImg = new EverPsSeoImage(
                 (int) $idEverImg
             );
@@ -469,8 +469,8 @@ class AdminEverPsSeoImageController extends ModuleAdminController
 
             $description = Db::getInstance()->getValue(
                 'SELECT description_short FROM `' . _DB_PREFIX_ . 'product_lang`
-                WHERE id_product = '.pSQL($everImg->id_seo_product).'
-                AND id_lang = '.pSQL($everImg->id_seo_lang)
+                WHERE id_product = ' . pSQL($everImg->id_seo_product) . '
+                AND id_lang = ' . pSQL($everImg->id_seo_lang)
             );
 
             if (!$description) {
@@ -478,7 +478,7 @@ class AdminEverPsSeoImageController extends ModuleAdminController
             }
 
             $everImg->alt = $description;
-            $image->legend = strip_tags(Tools::substr($description, 0, 125).'');
+            $image->legend = strip_tags(Tools::substr($description, 0, 125) . '');
             // Hook update triggered
             if (!$image->save()) {
                 $this->errors[] = $this->l('Can\'t update the native object');
@@ -488,7 +488,7 @@ class AdminEverPsSeoImageController extends ModuleAdminController
 
     protected function processBulkLegendalt()
     {
-        foreach (Tools::getValue($this->table.'Box') as $idEverImg) {
+        foreach (Tools::getValue($this->table . 'Box') as $idEverImg) {
             $everImg = new EverPsSeoImage(
                 (int) $idEverImg
             );
@@ -498,7 +498,7 @@ class AdminEverPsSeoImageController extends ModuleAdminController
                 (int) $this->context->shop->id
             );
 
-            $everImg->alt = strip_tags(Tools::substr($image->legend, 0, 125).'');
+            $everImg->alt = strip_tags(Tools::substr($image->legend, 0, 125) . '');
             // Hook update triggered
             if (!$everImg->save()) {
                 $this->errors[] = $this->l('Can\'t update the native object');
@@ -508,7 +508,7 @@ class AdminEverPsSeoImageController extends ModuleAdminController
 
     protected function processBulkMetaaltname()
     {
-        foreach (Tools::getValue($this->table.'Box') as $idEverImg) {
+        foreach (Tools::getValue($this->table . 'Box') as $idEverImg) {
             $everImg = new EverPsSeoImage(
                 (int) $idEverImg
             );
@@ -520,8 +520,8 @@ class AdminEverPsSeoImageController extends ModuleAdminController
 
             $name = Db::getInstance()->getValue(
                 'SELECT name FROM `' . _DB_PREFIX_ . 'product_lang`
-                WHERE id_product = '.pSQL($everImg->id_seo_product).'
-                AND id_lang = '.pSQL($everImg->id_seo_lang)
+                WHERE id_product = ' . pSQL($everImg->id_seo_product) . '
+                AND id_lang = ' . pSQL($everImg->id_seo_lang)
             );
 
             if (!$name) {
@@ -529,7 +529,7 @@ class AdminEverPsSeoImageController extends ModuleAdminController
             }
 
             $everImg->alt = $name;
-            $image->legend = strip_tags(Tools::substr($name, 0, 125).'');
+            $image->legend = strip_tags(Tools::substr($name, 0, 125) . '');
             // Hook update triggered
             if (!$image->save()) {
                 $this->errors[] = $this->l('Can\'t update the native object');
@@ -539,7 +539,7 @@ class AdminEverPsSeoImageController extends ModuleAdminController
 
     protected function processBulkdescriptionAlt()
     {
-        foreach (Tools::getValue($this->table.'Box') as $idEverImg) {
+        foreach (Tools::getValue($this->table . 'Box') as $idEverImg) {
             $everImg = new EverPsSeoImage(
                 (int) $idEverImg
             );
@@ -551,8 +551,8 @@ class AdminEverPsSeoImageController extends ModuleAdminController
 
             $description = Db::getInstance()->getValue(
                 'SELECT description FROM `' . _DB_PREFIX_ . 'product_lang`
-                WHERE id_product = '.pSQL($everImg->id_seo_product).'
-                AND id_lang = '.pSQL($everImg->id_seo_lang)
+                WHERE id_product = ' . pSQL($everImg->id_seo_product).'
+                AND id_lang = ' . pSQL($everImg->id_seo_lang)
             );
 
             if (!$description) {
@@ -560,7 +560,7 @@ class AdminEverPsSeoImageController extends ModuleAdminController
             }
 
             $everImg->alt = $description;
-            $image->legend = strip_tags(Tools::substr($description, 0, 125).'');
+            $image->legend = strip_tags(Tools::substr($description, 0, 125) . '');
             // Hook update triggered
             if (!$image->save()) {
                 $this->errors[] = $this->l('Can\'t update the native object');
@@ -570,7 +570,7 @@ class AdminEverPsSeoImageController extends ModuleAdminController
 
     protected function processBulkTitleAlt()
     {
-        foreach (Tools::getValue($this->table.'Box') as $idEverImg) {
+        foreach (Tools::getValue($this->table . 'Box') as $idEverImg) {
             $everImg = new EverPsSeoImage(
                 (int) $idEverImg
             );
@@ -582,7 +582,7 @@ class AdminEverPsSeoImageController extends ModuleAdminController
 
             $description = Db::getInstance()->getValue(
                 'SELECT meta_title FROM `' . _DB_PREFIX_ . 'ever_seo_product`
-                WHERE id_seo_product = ' . (int) $everImg->id_seo_product.'
+                WHERE id_seo_product = ' . (int) $everImg->id_seo_product . '
                 AND id_seo_lang = ' . (int) $everImg->id_seo_lang
             );
             if (!$description) {
@@ -590,12 +590,12 @@ class AdminEverPsSeoImageController extends ModuleAdminController
             }
             $sql =
                 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_image`
-                SET alt = '.pSQl($description).'
-                WHERE id_seo_product = ' . (int) $everImg->id_seo_product.'
+                SET alt = ' . pSQl($description) . '
+                WHERE id_seo_product = ' . (int) $everImg->id_seo_product . '
                 AND id_seo_lang = ' . (int) $everImg->id_seo_lang;
                 Db::getInstance()->execute($sql);
             $everImg->alt = $description;
-            $image->legend = strip_tags(Tools::substr($description, 0, 125).'');
+            $image->legend = strip_tags(Tools::substr($description, 0, 125) . '');
             // Hook update triggered
             if (!$image->save()) {
                 $this->errors[] = $this->l('Can\'t update the native object');
@@ -605,7 +605,7 @@ class AdminEverPsSeoImageController extends ModuleAdminController
 
     protected function processBulkMetaDescAlt()
     {
-        foreach (Tools::getValue($this->table.'Box') as $idEverImg) {
+        foreach (Tools::getValue($this->table . 'Box') as $idEverImg) {
             $everImg = new EverPsSeoImage(
                 (int) $idEverImg
             );
@@ -617,8 +617,8 @@ class AdminEverPsSeoImageController extends ModuleAdminController
 
             $description = Db::getInstance()->getValue(
                 'SELECT meta_description FROM `' . _DB_PREFIX_ . 'ever_seo_product`
-                WHERE id_seo_product = '.pSQL($everImg->id_seo_product).'
-                AND id_seo_lang = '.pSQL($everImg->id_seo_lang)
+                WHERE id_seo_product = ' . pSQL($everImg->id_seo_product).'
+                AND id_seo_lang = ' . pSQL($everImg->id_seo_lang)
             );
 
             if (!$description) {
@@ -626,7 +626,7 @@ class AdminEverPsSeoImageController extends ModuleAdminController
             }
 
             $everImg->alt = $description;
-            $image->legend = strip_tags(Tools::substr($description, 0, 125).'');
+            $image->legend = strip_tags(Tools::substr($description, 0, 125) . '');
             // Hook update triggered
             if (!$image->save()) {
                 $this->errors[] = $this->l('Can\'t update the native object');
@@ -636,7 +636,7 @@ class AdminEverPsSeoImageController extends ModuleAdminController
 
     protected function processBulkAltShortcodes()
     {
-        foreach (Tools::getValue($this->table.'Box') as $idEverImg) {
+        foreach (Tools::getValue($this->table . 'Box') as $idEverImg) {
             $everImg = new EverPsSeoImage(
                 (int) $idEverImg
             );
@@ -657,7 +657,7 @@ class AdminEverPsSeoImageController extends ModuleAdminController
             );
 
             $everImg->alt = $legend;
-            $image->legend = strip_tags(Tools::substr($legend, 0, 125).'');
+            $image->legend = strip_tags(Tools::substr($legend, 0, 125) . '');
             // Hook update triggered
             if (!$image->save()) {
                 $this->errors[] = $this->l('Can\'t update the native object');
@@ -667,7 +667,7 @@ class AdminEverPsSeoImageController extends ModuleAdminController
 
     protected function processBulkIndexNow()
     {
-        foreach (Tools::getValue($this->table.'Box') as $idEverImg) {
+        foreach (Tools::getValue($this->table . 'Box') as $idEverImg) {
             $everImg = new EverPsSeoImage(
                 (int) $idEverImg
             );
@@ -695,16 +695,16 @@ class AdminEverPsSeoImageController extends ModuleAdminController
             $imageType = ImageType::getFormattedName('large');
             $url = Tools::getShopProtocol().$link->getImageLink(
                 $product->link_rewrite,
-                $product->id.'-' . $richImage['id_image'],
+                $product->id . '-' . $richImage['id_image'],
                 $imageType
             );
             $httpCode = EverPsSeoTools::indexNow(
                 $url
             );
             $sql = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_image`
-            SET status_code = "' . (int) $httpCode.'"
-            WHERE id_seo_lang = ' . (int) $everImg->id_seo_lang.'
-            AND id_shop = ' . (int) $this->context->shop->id.'
+            SET status_code = "' . (int) $httpCode . '"
+            WHERE id_seo_lang = ' . (int) $everImg->id_seo_lang . '
+            AND id_shop = ' . (int) $this->context->shop->id . '
             AND id_ever_seo_image = ' . (int) $everImg->id;
             if (!Db::getInstance()->execute($sql)) {
                 $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');

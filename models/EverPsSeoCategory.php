@@ -290,7 +290,7 @@ class EverPsSeoCategory extends ObjectModel
                 if ($key == 0) {
                     $children_names .= $child['name'];
                 } else {
-                    $children_names .= $child['name'].', ';
+                    $children_names .= $child['name'] . ', ';
                 }
             }
         }

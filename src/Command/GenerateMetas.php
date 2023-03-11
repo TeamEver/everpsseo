@@ -41,7 +41,7 @@ class GenerateMetas extends Command
         $this->setDescription('Generate SEO title and meta description for each lang');
         $this->addArgument('action', InputArgument::OPTIONAL, sprintf('Action to execute (Allowed actions: %s).', implode(' / ', $this->allowedActions)));
         $this->addArgument('idshop id', InputArgument::OPTIONAL, 'Shop ID');
-        $this->logFile = dirname(__FILE__) . '/../../output/logs/log-seo-meta-generation-'.date('Y-m-d').'.log';
+        $this->logFile = dirname(__FILE__) . '/../../output/logs/log-seo-meta-generation-' . date('Y-m-d') . '.log';
         $this->module = \Module::getInstanceByName('everpsseo');
     }
 
@@ -81,11 +81,11 @@ class GenerateMetas extends Command
         $context->cookie->id_shop = $shop->id;
         $rewriteLinks = (bool) \Configuration::get('EVERSEO_REWRITE_LINKS');
         $output->writeln(sprintf(
-            '<info>Seo metas generation start : datetime : '.date('Y-m-d H:i:s').'</info>'
+            '<info>Seo metas generation start : datetime : ' . date('Y-m-d H:i:s') . '</info>'
         ));
 
         $output->writeln(sprintf(
-            '<info>Start products metas : datetime : '.date('Y-m-d H:i:s').'</info>'
+            '<info>Start products metas : datetime : ' . date('Y-m-d H:i:s') . '</info>'
         ));
         $allowedLangs = $this->getAllowedShortcodesLangs(
             'EVERSEO_AUTO_PRODUCT_LANGS'
@@ -103,7 +103,7 @@ class GenerateMetas extends Command
                     (int) $seo['id_seo_lang']
                 );
                 $output->writeln(sprintf(
-                    '<info>SEO title for id product ' . (int) $seo['id_seo_product'].' has been set</info>'
+                    '<info>SEO title for id product ' . (int) $seo['id_seo_product'] . ' has been set</info>'
                 ));
                 $this->autoSetDescription(
                     'id_seo_product',
@@ -120,16 +120,16 @@ class GenerateMetas extends Command
                     );
                 }
                 $output->writeln(sprintf(
-                    '<info>SEO meta description for id product ' . (int) $seo['id_seo_product'].' has been set</info>'
+                    '<info>SEO meta description for id product ' . (int) $seo['id_seo_product'] . ' has been set</info>'
                 ));
             }
         }
         $output->writeln(sprintf(
-            '<info>End products metas : datetime : '.date('Y-m-d H:i:s').'</info>'
+            '<info>End products metas : datetime : ' . date('Y-m-d H:i:s') . '</info>'
         ));
 
         $output->writeln(sprintf(
-            '<info>Start pages metas : datetime : '.date('Y-m-d H:i:s').'</info>'
+            '<info>Start pages metas : datetime : ' . date('Y-m-d H:i:s') . '</info>'
         ));
         $seoArray = \EverPsSeoPageMeta::getAllSeoPagemetasIds(
             (int) $shop->id
@@ -146,7 +146,7 @@ class GenerateMetas extends Command
                     (int) $seo['id_seo_lang']
                 );
                 $output->writeln(sprintf(
-                    '<info>SEO title for id page ' . (int) $seo['id_seo_pagemeta'].' has been set</info>'
+                    '<info>SEO title for id page ' . (int) $seo['id_seo_pagemeta'] . ' has been set</info>'
                 ));
                 $this->autoSetDescription(
                     'id_seo_pagemeta',
@@ -155,16 +155,16 @@ class GenerateMetas extends Command
                     (int) $seo['id_seo_lang']
                 );
                 $output->writeln(sprintf(
-                    '<info>SEO meta description for id page ' . (int) $seo['id_seo_pagemeta'].' has been set</info>'
+                    '<info>SEO meta description for id page ' . (int) $seo['id_seo_pagemeta'] . ' has been set</info>'
                 ));
             }
         }
         $output->writeln(sprintf(
-            '<info>End pages metas : datetime : '.date('Y-m-d H:i:s').'</info>'
+            '<info>End pages metas : datetime : ' . date('Y-m-d H:i:s') . '</info>'
         ));
 
         $output->writeln(sprintf(
-            '<info>Start CMS metas : datetime : '.date('Y-m-d H:i:s').'</info>'
+            '<info>Start CMS metas : datetime : ' . date('Y-m-d H:i:s') . '</info>'
         ));
         $seoArray = \EverPsSeoCms::getAllSeoCmsIds(
             (int) $shop->id
@@ -181,7 +181,7 @@ class GenerateMetas extends Command
                     (int) $seo['id_seo_lang']
                 );
                 $output->writeln(sprintf(
-                    '<info>SEO title for id CMS ' . (int) $seo['id_seo_cms'].' has been set</info>'
+                    '<info>SEO title for id CMS ' . (int) $seo['id_seo_cms'] . ' has been set</info>'
                 ));
                 $this->autoSetDescription(
                     'id_seo_cms',
@@ -190,16 +190,16 @@ class GenerateMetas extends Command
                     (int) $seo['id_seo_lang']
                 );
                 $output->writeln(sprintf(
-                    '<info>SEO meta description for id CMS ' . (int) $seo['id_seo_cms'].' has been set</info>'
+                    '<info>SEO meta description for id CMS ' . (int) $seo['id_seo_cms'] . ' has been set</info>'
                 ));
             }
         }
         $output->writeln(sprintf(
-            '<info>End CMS metas : datetime : '.date('Y-m-d H:i:s').'</info>'
+            '<info>End CMS metas : datetime : ' . date('Y-m-d H:i:s') . '</info>'
         ));
 
         $output->writeln(sprintf(
-            '<info>Start suppliers metas : datetime : '.date('Y-m-d H:i:s').'</info>'
+            '<info>Start suppliers metas : datetime : ' . date('Y-m-d H:i:s') . '</info>'
         ));
         $seoArray = \EverPsSeoCms::getAllSeoCmsIds(
             (int) $shop->id
@@ -216,7 +216,7 @@ class GenerateMetas extends Command
                     (int) $seo['id_seo_lang']
                 );
                 $output->writeln(sprintf(
-                    '<info>SEO title for id supplier ' . (int) $seo['id_seo_supplier'].' has been set</info>'
+                    '<info>SEO title for id supplier ' . (int) $seo['id_seo_supplier'] . ' has been set</info>'
                 ));
                 $this->autoSetDescription(
                     'id_seo_supplier',
@@ -225,16 +225,16 @@ class GenerateMetas extends Command
                     (int) $seo['id_seo_lang']
                 );
                 $output->writeln(sprintf(
-                    '<info>SEO meta description for id supplier ' . (int) $seo['id_seo_supplier'].' has been set</info>'
+                    '<info>SEO meta description for id supplier ' . (int) $seo['id_seo_supplier'] . ' has been set</info>'
                 ));
             }
         }
         $output->writeln(sprintf(
-            '<info>End suppliers metas : datetime : '.date('Y-m-d H:i:s').'</info>'
+            '<info>End suppliers metas : datetime : ' . date('Y-m-d H:i:s') . '</info>'
         ));
 
         $output->writeln(sprintf(
-            '<info>Start manufacturers metas : datetime : '.date('Y-m-d H:i:s').'</info>'
+            '<info>Start manufacturers metas : datetime : ' . date('Y-m-d H:i:s') . '</info>'
         ));
         $seoArray = \EverPsSeoCms::getAllSeoCmsIds(
             (int) $shop->id
@@ -251,7 +251,7 @@ class GenerateMetas extends Command
                     (int) $seo['id_seo_lang']
                 );
                 $output->writeln(sprintf(
-                    '<info>SEO title for id manufacturer ' . (int) $seo['id_seo_manufacturer'].' has been set</info>'
+                    '<info>SEO title for id manufacturer ' . (int) $seo['id_seo_manufacturer'] . ' has been set</info>'
                 ));
                 $this->autoSetDescription(
                     'id_seo_manufacturer',
@@ -260,16 +260,16 @@ class GenerateMetas extends Command
                     (int) $seo['id_seo_lang']
                 );
                 $output->writeln(sprintf(
-                    '<info>SEO meta description for id manufacturer ' . (int) $seo['id_seo_manufacturer'].' has been set</info>'
+                    '<info>SEO meta description for id manufacturer ' . (int) $seo['id_seo_manufacturer'] . ' has been set</info>'
                 ));
             }
         }
         $output->writeln(sprintf(
-            '<info>End manufacturers metas : datetime : '.date('Y-m-d H:i:s').'</info>'
+            '<info>End manufacturers metas : datetime : ' . date('Y-m-d H:i:s') . '</info>'
         ));
 
         $output->writeln(sprintf(
-            '<info>Start categories metas : datetime : '.date('Y-m-d H:i:s').'</info>'
+            '<info>Start categories metas : datetime : ' . date('Y-m-d H:i:s') . '</info>'
         ));
         $seoArray = \EverPsSeoCms::getAllSeoCmsIds(
             (int) $shop->id
@@ -286,7 +286,7 @@ class GenerateMetas extends Command
                     (int) $seo['id_seo_lang']
                 );
                 $output->writeln(sprintf(
-                    '<info>SEO title for id category ' . (int) $seo['id_seo_category'].' has been set</info>'
+                    '<info>SEO title for id category ' . (int) $seo['id_seo_category'] . ' has been set</info>'
                 ));
                 $this->autoSetDescription(
                     'id_seo_category',
@@ -295,16 +295,16 @@ class GenerateMetas extends Command
                     (int) $seo['id_seo_lang']
                 );
                 $output->writeln(sprintf(
-                    '<info>SEO meta description for id category ' . (int) $seo['id_seo_category'].' has been set</info>'
+                    '<info>SEO meta description for id category ' . (int) $seo['id_seo_category'] . ' has been set</info>'
                 ));
             }
         }
         $output->writeln(sprintf(
-            '<info>End categories metas : datetime : '.date('Y-m-d H:i:s').'</info>'
+            '<info>End categories metas : datetime : ' . date('Y-m-d H:i:s') . '</info>'
         ));
 
         $output->writeln(sprintf(
-            '<info>Start images alt : datetime : '.date('Y-m-d H:i:s').'</info>'
+            '<info>Start images alt : datetime : ' . date('Y-m-d H:i:s') . '</info>'
         ));
         $seoArray = \EverPsSeoImage::getAllSeoImagesIds(
             (int) $shop->id
@@ -326,12 +326,12 @@ class GenerateMetas extends Command
                     (int) $seo['id_seo_lang']
                 );
                 $output->writeln(sprintf(
-                    '<info>Alt/legend for id image ' . (int) $seo['id_seo_img'].' has been set</info>'
+                    '<info>Alt/legend for id image ' . (int) $seo['id_seo_img'] . ' has been set</info>'
                 ));
             }
         }
         $output->writeln(sprintf(
-            '<info>End categories metas : datetime : '.date('Y-m-d H:i:s').'</info>'
+            '<info>End categories metas : datetime : ' . date('Y-m-d H:i:s') . '</info>'
         ));
 
 
@@ -357,15 +357,15 @@ class GenerateMetas extends Command
                 $meta_title = \Tools::substr($meta_title, 0, 128);
 
                 $sql = 'UPDATE `' . _DB_PREFIX_ . 'product_lang`
-                SET meta_title = "'.\Db::getInstance()->escape($meta_title).'"
-                WHERE id_lang = ' . (int) $id_lang.'
-                AND id_shop = ' . (int) $id_shop.'
+                SET meta_title = "'.\Db::getInstance()->escape($meta_title) . '"
+                WHERE id_lang = ' . (int) $id_lang . '
+                AND id_shop = ' . (int) $id_shop . '
                 AND id_product = ' . (int) $id_element;
 
                 $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_product`
-                SET meta_title = "'.\Db::getInstance()->escape($meta_title).'"
-                WHERE id_seo_lang = ' . (int) $id_lang.'
-                AND id_shop = ' . (int) $id_shop.'
+                SET meta_title = "'.\Db::getInstance()->escape($meta_title) . '"
+                WHERE id_seo_lang = ' . (int) $id_lang . '
+                AND id_shop = ' . (int) $id_shop . '
                 AND id_seo_product = ' . (int) $id_element;
                 if (!\Db::getInstance()->execute($sql)) {
                     $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
@@ -383,15 +383,15 @@ class GenerateMetas extends Command
                 $meta_title = \Tools::substr($meta_title, 0, 128);
 
                 $sql = 'UPDATE `' . _DB_PREFIX_ . 'category_lang`
-                SET meta_title = "'.\Db::getInstance()->escape($meta_title).'"
-                WHERE id_lang = ' . (int) $id_lang.'
-                AND id_shop = ' . (int) $id_shop.'
+                SET meta_title = "'.\Db::getInstance()->escape($meta_title) . '"
+                WHERE id_lang = ' . (int) $id_lang . '
+                AND id_shop = ' . (int) $id_shop . '
                 AND id_category = ' . (int) $id_element;
 
                 $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_category`
-                SET meta_title = "'.\Db::getInstance()->escape($meta_title).'"
-                WHERE id_seo_lang = ' . (int) $id_lang.'
-                AND id_shop = ' . (int) $id_shop.'
+                SET meta_title = "'.\Db::getInstance()->escape($meta_title) . '"
+                WHERE id_seo_lang = ' . (int) $id_lang . '
+                AND id_shop = ' . (int) $id_shop . '
                 AND id_seo_category = ' . (int) $id_element;
                 if (!\Db::getInstance()->execute($sql)) {
                     $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
@@ -409,15 +409,15 @@ class GenerateMetas extends Command
                 $meta_title = \Tools::substr(\Db::getInstance()->escape($meta_title), 0, 128);
 
                 $sql = 'UPDATE `' . _DB_PREFIX_ . 'cms_lang`
-                SET meta_title = "'.\Db::getInstance()->escape($meta_title).'"
-                WHERE id_lang = ' . (int) $id_lang.'
-                AND id_shop = ' . (int) $id_shop.'
+                SET meta_title = "'.\Db::getInstance()->escape($meta_title) . '"
+                WHERE id_lang = ' . (int) $id_lang . '
+                AND id_shop = ' . (int) $id_shop . '
                 AND id_cms = ' . (int) $id_element;
 
                 $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_cms`
-                SET meta_title = "'.\Db::getInstance()->escape($meta_title).'"
-                WHERE id_seo_lang = ' . (int) $id_lang.'
-                AND id_shop = ' . (int) $id_shop.'
+                SET meta_title = "'.\Db::getInstance()->escape($meta_title) . '"
+                WHERE id_seo_lang = ' . (int) $id_lang . '
+                AND id_shop = ' . (int) $id_shop . '
                 AND id_seo_cms = ' . (int) $id_element;
                 if (!\Db::getInstance()->execute($sql)) {
                     $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
@@ -435,15 +435,15 @@ class GenerateMetas extends Command
                 $meta_title = \Tools::substr(\Db::getInstance()->escape($meta_title), 0, 128);
 
                 $sql = 'UPDATE `' . _DB_PREFIX_ . 'manufacturer_lang`
-                SET meta_title = "'.\Db::getInstance()->escape($meta_title).'"
-                WHERE id_lang = ' . (int) $id_lang.'
-                AND id_shop = ' . (int) $id_shop.'
+                SET meta_title = "'.\Db::getInstance()->escape($meta_title) . '"
+                WHERE id_lang = ' . (int) $id_lang . '
+                AND id_shop = ' . (int) $id_shop . '
                 AND id_manufacturer = ' . (int) $id_element;
 
                 $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_manufacturer`
-                SET meta_title = "'.\Db::getInstance()->escape($meta_title).'"
-                WHERE id_seo_lang = ' . (int) $id_lang.'
-                AND id_shop = ' . (int) $id_shop.'
+                SET meta_title = "'.\Db::getInstance()->escape($meta_title) . '"
+                WHERE id_seo_lang = ' . (int) $id_lang . '
+                AND id_shop = ' . (int) $id_shop . '
                 AND id_seo_manufacturer = ' . (int) $id_element;
                 if (!\Db::getInstance()->execute($sql)) {
                     $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
@@ -461,15 +461,15 @@ class GenerateMetas extends Command
                 $meta_title = \Tools::substr($meta_title, 0, 128);
 
                 $sql = 'UPDATE `' . _DB_PREFIX_ . 'supplier_lang`
-                SET meta_title = "'.\Db::getInstance()->escape($meta_title).'"
-                WHERE id_lang = ' . (int) $id_lang.'
-                AND id_shop = ' . (int) $id_shop.'
+                SET meta_title = "'.\Db::getInstance()->escape($meta_title) . '"
+                WHERE id_lang = ' . (int) $id_lang . '
+                AND id_shop = ' . (int) $id_shop . '
                 AND id_supplier = ' . (int) $id_element;
 
                 $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_supplier`
-                SET meta_title = "'.\Db::getInstance()->escape($meta_title).'"
-                WHERE id_seo_lang = ' . (int) $id_lang.'
-                AND id_shop = ' . (int) $id_shop.'
+                SET meta_title = "'.\Db::getInstance()->escape($meta_title) . '"
+                WHERE id_seo_lang = ' . (int) $id_lang . '
+                AND id_shop = ' . (int) $id_shop . '
                 AND id_seo_supplier = ' . (int) $id_element;
                 if (!\Db::getInstance()->execute($sql)) {
                     $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
@@ -510,15 +510,15 @@ class GenerateMetas extends Command
                 $meta_description = \Tools::substr($meta_description, 0, 250);
 
                 $sql = 'UPDATE `' . _DB_PREFIX_ . 'product_lang`
-                SET meta_description = "'.\Db::getInstance()->escape($meta_description).'"
-                WHERE id_lang = ' . (int) $id_lang.'
-                AND id_shop = ' . (int) $id_shop.'
+                SET meta_description = "'.\Db::getInstance()->escape($meta_description) . '"
+                WHERE id_lang = ' . (int) $id_lang . '
+                AND id_shop = ' . (int) $id_shop . '
                 AND id_product = ' . (int) $id_element;
 
                 $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_product`
-                SET meta_description = "'.\Db::getInstance()->escape($meta_description).'"
-                WHERE id_seo_lang = ' . (int) $id_lang.'
-                AND id_shop = ' . (int) $id_shop.'
+                SET meta_description = "'.\Db::getInstance()->escape($meta_description) . '"
+                WHERE id_seo_lang = ' . (int) $id_lang . '
+                AND id_shop = ' . (int) $id_shop . '
                 AND id_seo_product = ' . (int) $id_element;
                 if (!\Db::getInstance()->execute($sql)) {
                     $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
@@ -536,15 +536,15 @@ class GenerateMetas extends Command
                 $meta_description = \Tools::substr($meta_description, 0, 250);
 
                 $sql = 'UPDATE `' . _DB_PREFIX_ . 'category_lang`
-                SET meta_description = "'.\Db::getInstance()->escape($meta_description).'"
-                WHERE id_lang = ' . (int) $id_lang.'
-                AND id_shop = ' . (int) $id_shop.'
+                SET meta_description = "'.\Db::getInstance()->escape($meta_description) . '"
+                WHERE id_lang = ' . (int) $id_lang . '
+                AND id_shop = ' . (int) $id_shop . '
                 AND id_category = ' . (int) $id_element;
 
                 $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_category`
-                SET meta_description = "'.\Db::getInstance()->escape($meta_description).'"
-                WHERE id_seo_lang = ' . (int) $id_lang.'
-                AND id_shop = ' . (int) $id_shop.'
+                SET meta_description = "'.\Db::getInstance()->escape($meta_description) . '"
+                WHERE id_seo_lang = ' . (int) $id_lang . '
+                AND id_shop = ' . (int) $id_shop . '
                 AND id_seo_category = ' . (int) $id_element;
                 if (!\Db::getInstance()->execute($sql)) {
                     $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
@@ -562,15 +562,15 @@ class GenerateMetas extends Command
                 $meta_description = \Tools::substr($meta_description, 0, 250);
 
                 $sql = 'UPDATE `' . _DB_PREFIX_ . 'cms_lang`
-                SET meta_description = "'.\Db::getInstance()->escape($meta_description).'"
-                WHERE id_lang = ' . (int) $id_lang.'
-                AND id_shop = ' . (int) $id_shop.'
+                SET meta_description = "'.\Db::getInstance()->escape($meta_description) . '"
+                WHERE id_lang = ' . (int) $id_lang . '
+                AND id_shop = ' . (int) $id_shop . '
                 AND id_cms = ' . (int) $id_element;
 
                 $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_cms`
-                SET meta_description = "'.\Db::getInstance()->escape($meta_description).'"
-                WHERE id_seo_lang = ' . (int) $id_lang.'
-                AND id_shop = ' . (int) $id_shop.'
+                SET meta_description = "'.\Db::getInstance()->escape($meta_description) . '"
+                WHERE id_seo_lang = ' . (int) $id_lang . '
+                AND id_shop = ' . (int) $id_shop . '
                 AND id_seo_cms = ' . (int) $id_element;
                 if (!\Db::getInstance()->execute($sql)) {
                     $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
@@ -588,15 +588,15 @@ class GenerateMetas extends Command
                 $meta_description = \Tools::substr($meta_description, 0, 250);
 
                 $sql = 'UPDATE `' . _DB_PREFIX_ . 'manufacturer_lang`
-                SET meta_description = "'.\Db::getInstance()->escape($meta_description).'"
-                WHERE id_lang = ' . (int) $id_lang.'
-                AND id_shop = ' . (int) $id_shop.'
+                SET meta_description = "'.\Db::getInstance()->escape($meta_description) . '"
+                WHERE id_lang = ' . (int) $id_lang . '
+                AND id_shop = ' . (int) $id_shop . '
                 AND id_manufacturer = ' . (int) $id_element;
 
                 $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_manufacturer`
-                SET meta_description = "'.\Db::getInstance()->escape($meta_description).'"
-                WHERE id_seo_lang = ' . (int) $id_lang.'
-                AND id_shop = ' . (int) $id_shop.'
+                SET meta_description = "'.\Db::getInstance()->escape($meta_description) . '"
+                WHERE id_seo_lang = ' . (int) $id_lang . '
+                AND id_shop = ' . (int) $id_shop . '
                 AND id_seo_manufacturer = ' . (int) $id_element;
                 if (!\Db::getInstance()->execute($sql)) {
                     $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
@@ -614,15 +614,15 @@ class GenerateMetas extends Command
                 $meta_description = \Tools::substr(\Db::getInstance()->escape($meta_description), 0, 250);
 
                 $sql = 'UPDATE `' . _DB_PREFIX_ . 'supplier_lang`
-                SET meta_description = "'.\Db::getInstance()->escape($meta_description).'"
-                WHERE id_lang = ' . (int) $id_lang.'
-                AND id_shop = ' . (int) $id_shop.'
+                SET meta_description = "'.\Db::getInstance()->escape($meta_description) . '"
+                WHERE id_lang = ' . (int) $id_lang . '
+                AND id_shop = ' . (int) $id_shop . '
                 AND id_supplier = ' . (int) $id_element;
 
                 $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_supplier`
-                SET meta_description = "'.\Db::getInstance()->escape($meta_description).'"
-                WHERE id_seo_lang = ' . (int) $id_lang.'
-                AND id_shop = ' . (int) $id_shop.'
+                SET meta_description = "'.\Db::getInstance()->escape($meta_description) . '"
+                WHERE id_seo_lang = ' . (int) $id_lang . '
+                AND id_shop = ' . (int) $id_shop . '
                 AND id_seo_supplier = ' . (int) $id_element;
                 if (!\Db::getInstance()->execute($sql)) {
                     $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
@@ -664,15 +664,15 @@ class GenerateMetas extends Command
                 $linkRewrite = \Tools::link_rewrite($product->name);
 
                 $sql = 'UPDATE `' . _DB_PREFIX_ . 'product_lang`
-                SET link_rewrite = "'.\Db::getInstance()->escape($linkRewrite).'"
-                WHERE id_lang = ' . (int) $id_lang.'
-                AND id_shop = ' . (int) $id_shop.'
+                SET link_rewrite = "'.\Db::getInstance()->escape($linkRewrite) . '"
+                WHERE id_lang = ' . (int) $id_lang . '
+                AND id_shop = ' . (int) $id_shop . '
                 AND id_product = ' . (int) $id_element;
 
                 $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_product`
-                SET link_rewrite = "'.\Db::getInstance()->escape($linkRewrite).'"
-                WHERE id_seo_lang = ' . (int) $id_lang.'
-                AND id_shop = ' . (int) $id_shop.'
+                SET link_rewrite = "'.\Db::getInstance()->escape($linkRewrite) . '"
+                WHERE id_seo_lang = ' . (int) $id_lang . '
+                AND id_shop = ' . (int) $id_shop . '
                 AND id_seo_product = ' . (int) $id_element;
                 if (!\Db::getInstance()->execute($sql)) {
                     $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
@@ -690,14 +690,14 @@ class GenerateMetas extends Command
                 $linkRewrite = \Tools::link_rewrite($category->name);
 
                 $sql = 'UPDATE `' . _DB_PREFIX_ . 'category_lang`
-                SET link_rewrite = "'.\Db::getInstance()->escape($linkRewrite).'"
-                WHERE id_lang = ' . (int) $id_lang.'
+                SET link_rewrite = "'.\Db::getInstance()->escape($linkRewrite) . '"
+                WHERE id_lang = ' . (int) $id_lang . '
                 AND id_category = ' . (int) $id_element;
 
                 $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_category`
-                SET link_rewrite = "'.\Db::getInstance()->escape($linkRewrite).'"
-                WHERE id_seo_lang = ' . (int) $id_lang.'
-                AND id_shop = ' . (int) $id_shop.'
+                SET link_rewrite = "'.\Db::getInstance()->escape($linkRewrite) . '"
+                WHERE id_seo_lang = ' . (int) $id_lang . '
+                AND id_shop = ' . (int) $id_shop . '
                 AND id_seo_category = ' . (int) $id_element;
                 if (!\Db::getInstance()->execute($sql)) {
                     $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');

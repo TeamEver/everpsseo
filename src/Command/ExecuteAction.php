@@ -42,7 +42,7 @@ class ExecuteAction extends Command
         $this->setDescription('Execute action');
         $this->addArgument('action', InputArgument::REQUIRED, sprintf('Action to execute (Allowed actions: %s).', implode(' / ', $this->allowedActions)));
         $this->addArgument('idshop id', InputArgument::OPTIONAL, 'Shop ID');
-        $this->logFile = dirname(__FILE__) . '/../../output/logs/log-seo-execute-action-'.date('Y-m-d').'.log';
+        $this->logFile = dirname(__FILE__) . '/../../output/logs/log-seo-execute-action-' . date('Y-m-d') . '.log';
         $this->module = \Module::getInstanceByName('everpsseo');;
     }
 
@@ -81,7 +81,7 @@ class ExecuteAction extends Command
                 return self::ABORTED;
             }
             $output->writeln(sprintf(
-                '<info>Start creating webp images : datetime : '.date('Y-m-d H:i:s').'</info>'
+                '<info>Start creating webp images : datetime : ' . date('Y-m-d H:i:s') . '</info>'
             ));
             \EverPsSeoImage::setMedias2Webp();
             \Hook::exec('actionHtaccessCreate');
@@ -106,18 +106,18 @@ class ExecuteAction extends Command
 
             if ($products && count($products) > 0) {
                 $output->writeln(sprintf(
-                    '<info>Start forcing redirection disabled product type 404 to parent category : datetime : '.date('Y-m-d H:i:s').'</info>'
+                    '<info>Start forcing redirection disabled product type 404 to parent category : datetime : ' . date('Y-m-d H:i:s') . '</info>'
                 ));
 
                 foreach ($products as $value) {
                     \EverPsSeoProduct::inactiveRedirect($value["id_product"], $shop->id);
                     $output->writeln(sprintf(
-                        '<info>Forcing redirection for id product ' . (int) $value["id_product"].' has been set</info>'
+                        '<info>Forcing redirection for id product ' . (int) $value['id_product'] . ' has been set</info>'
                     ));
                 }
 
                 $output->writeln(sprintf(
-                    '<info>End forcing redirection disabled product type 404 to parent category : datetime : '.date('Y-m-d H:i:s').'</info>'
+                    '<info>End forcing redirection disabled product type 404 to parent category : datetime : ' . date('Y-m-d H:i:s') . '</info>'
                 ));
             }
 

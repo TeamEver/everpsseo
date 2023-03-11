@@ -129,7 +129,7 @@ class EverPsSeoShortcode extends ObjectModel
     {
         $cache_id = 'EverPsSeoShortcode::getEverSeoShortcode_'
         . (string) $shortcode
-        .'_'
+        . '_'
         . (int) $id_shop
         . '_'
         . (int) $id_lang;
@@ -138,7 +138,7 @@ class EverPsSeoShortcode extends ObjectModel
             $sql->select('*');
             $sql->from('ever_seo_shortcode');
             $sql->where(
-                'shortcode = '.pSQL($shortcode)
+                'shortcode = ' . pSQL($shortcode)
             );
             $sql->where(
                 'id_lang = ' . (int) $id_lang

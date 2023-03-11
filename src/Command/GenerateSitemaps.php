@@ -41,7 +41,7 @@ class GenerateSitemaps extends Command
         $this->setDescription('Generate sitemaps for each lang');
         $this->addArgument('action', InputArgument::OPTIONAL, sprintf('Action to execute (Allowed actions: %s).', implode(' / ', $this->allowedActions)));
         $this->addArgument('idshop id', InputArgument::OPTIONAL, 'Shop ID');
-        $this->logFile = dirname(__FILE__) . '/../../output/logs/log-seo-sitemaps-generation-'.date('Y-m-d').'.log';
+        $this->logFile = dirname(__FILE__) . '/../../output/logs/log-seo-sitemaps-generation-' . date('Y-m-d') . '.log';
         $this->module = \Module::getInstanceByName('everpsseo');;
     }
 
@@ -80,7 +80,7 @@ class GenerateSitemaps extends Command
         $context->shop = $shop;
         $context->cookie->id_shop = $shop->id;
         $output->writeln(sprintf(
-            '<info>Start sitemap generation : datetime : '.date('Y-m-d H:i:s').'</info>'
+            '<info>Start sitemap generation : datetime : ' . date('Y-m-d H:i:s') . '</info>'
         ));
 
         $this->module->everGenerateSitemaps(

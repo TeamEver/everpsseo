@@ -51,7 +51,7 @@ class EverpsseoEversitemapsModuleFrontController extends ModuleFrontController
 
         $everpsseo->cron = true;
         // Drop all sitemaps before regeneration
-        $indexes = glob(_PS_ROOT_DIR_.'/*');
+        $indexes = glob(_PS_ROOT_DIR_ . '/*');
         foreach ($indexes as $index) {
             $info = new SplFileInfo(basename($index));
             if (is_file($index) && $info->getExtension() == 'xml') {

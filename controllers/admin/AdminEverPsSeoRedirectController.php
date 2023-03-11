@@ -91,7 +91,7 @@ class AdminEverPsSeoRedirectController extends ModuleAdminController
     {
         parent::setMedia($isNewTheme);
 
-        $this->addCSS(_PS_MODULE_DIR_.'everpsseo/views/css/ever.css');
+        $this->addCSS(_PS_MODULE_DIR_ . 'everpsseo/views/css/ever.css');
     }
 
     public function l($string, $class = null, $addslashes = false, $htmlentities = true)
@@ -279,7 +279,7 @@ class AdminEverPsSeoRedirectController extends ModuleAdminController
                     if ((bool) Configuration::get('EVERHTACCESS_404') === true) {
                         $this->module->hookActionHtaccessCreate();
                     }
-                    Tools::redirectAdmin(self::$currentIndex.'&conf=4&token=' . $this->token);
+                    Tools::redirectAdmin(self::$currentIndex . '&conf=4&token=' . $this->token);
                 }
             }
         }
@@ -306,7 +306,7 @@ class AdminEverPsSeoRedirectController extends ModuleAdminController
                 if (isset($object->noZeroObject)) {
                     $this->errors[] = $this->l('You need at least one object.');
                 } else {
-                    $redirections = Tools::getValue($this->table.'Box');
+                    $redirections = Tools::getValue($this->table . 'Box');
                     if (is_array($redirections)) {
                         foreach ($redirections as $id_ever_seo_redirect) {
                             $notFound = new EverPsSeoRedirect(

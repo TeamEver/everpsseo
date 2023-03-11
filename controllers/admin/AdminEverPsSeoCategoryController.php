@@ -26,8 +26,8 @@ class AdminEverPsSeoCategoryController extends ModuleAdminController
         $this->identifier = 'id_ever_seo_category';
         $moduleConfUrl  = 'index.php?controller=AdminModules&configure=everpsseo&token=';
         $moduleConfUrl .= Tools::getAdminTokenLite('AdminModules');
-        $this->img_folder = _PS_MODULE_DIR_.'everpsseo/views/img/c/';
-        $this->img_url = Tools::getHttpHost(true) . __PS_BASE_URI__.'/modules/everpsseo/views/img/c/';
+        $this->img_folder = _PS_MODULE_DIR_ . 'everpsseo/views/img/c/';
+        $this->img_url = Tools::getHttpHost(true) . __PS_BASE_URI__ . '/modules/everpsseo/views/img/c/';
         $this->context->smarty->assign(array(
             'moduleConfUrl' => (string) $moduleConfUrl,
             'image_dir' => _PS_BASE_URL_ . '/modules/everpsseo/views/img/'
@@ -147,7 +147,7 @@ class AdminEverPsSeoCategoryController extends ModuleAdminController
                 (int) $this->context->language->id,
                 (int) $this->context->shop->id
             );
-            $editUrl  = 'index.php?controller=AdminCategories&id_category=' . (int) $category->id.'';
+            $editUrl  = 'index.php?controller=AdminCategories&id_category=' . (int) $category->id;
             $editUrl .= '&updatecategory&token='.Tools::getAdminTokenLite('AdminCategories');
             $objectGSearch = str_replace(' ', '+', $category->name);
 
@@ -201,7 +201,7 @@ class AdminEverPsSeoCategoryController extends ModuleAdminController
     {
         parent::setMedia($isNewTheme);
         $this->addjQueryPlugin('tagify', null, false);
-        $this->addCSS(_PS_MODULE_DIR_.'everpsseo/views/css/ever.css');
+        $this->addCSS(_PS_MODULE_DIR_ . 'everpsseo/views/css/ever.css');
     }
 
     public function l($string, $class = null, $addslashes = false, $htmlentities = true)
@@ -352,15 +352,15 @@ class AdminEverPsSeoCategoryController extends ModuleAdminController
             $seoCategory = new EverPsSeoCategory(
                 (int) Tools::getValue('id_ever_seo_category')
             );
-            if (file_exists($this->img_folder.$seoCategory->id_seo_category.'.jpg')) {
-                $defaultUrlImage = $this->img_url.$seoCategory->id_seo_category.'.jpg';
+            if (file_exists($this->img_folder.$seoCategory->id_seo_category . '.jpg')) {
+                $defaultUrlImage = $this->img_url.$seoCategory->id_seo_category . '.jpg';
             } else {
-                $defaultUrlImage = Tools::getHttpHost(true).'/img/'.Configuration::get(
+                $defaultUrlImage = Tools::getHttpHost(true) . '/img/' . Configuration::get(
                     'PS_LOGO'
                 );
             }
         } else {
-            $defaultUrlImage = Tools::getHttpHost(true).'/img/'.Configuration::get(
+            $defaultUrlImage = Tools::getHttpHost(true) . '/img/' . Configuration::get(
                 'PS_LOGO'
             );
         }
@@ -672,8 +672,8 @@ class AdminEverPsSeoCategoryController extends ModuleAdminController
                     && !empty($_FILES['social_media']['tmp_name'])
                 ) {
                     Configuration::set('PS_IMAGE_GENERATION_METHOD', 1);
-                    if (file_exists($this->img_folder . (int) $everCategory->id_seo_category.'.jpg')) {
-                        unlink($this->img_folder . (int) $everCategory->id_seo_category.'.jpg');
+                    if (file_exists($this->img_folder . (int) $everCategory->id_seo_category . '.jpg')) {
+                        unlink($this->img_folder . (int) $everCategory->id_seo_category . '.jpg');
                     }
                     if ($error = ImageManager::validateUpload($_FILES['social_media'])) {
                         $this->errors[] = $error;
@@ -683,7 +683,7 @@ class AdminEverPsSeoCategoryController extends ModuleAdminController
                         return false;
                     } elseif (!ImageManager::resize(
                         $tmp_name,
-                        $this->img_folder . (int) $everCategory->id_seo_category.'.jpg'
+                        $this->img_folder . (int) $everCategory->id_seo_category . '.jpg'
                     )) {
                         $this->errors[] = $this->l('An error occurred while attempting to upload the image.');
                     }
@@ -692,7 +692,7 @@ class AdminEverPsSeoCategoryController extends ModuleAdminController
                     }
                     $everCategory->social_img_url = $this->img_url
                     . (int) $everCategory->id_seo_category
-                    .'.jpg';
+                    . '.jpg';
                 }
                 if (!$everCategory->save()) {
                     $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
@@ -706,7 +706,7 @@ class AdminEverPsSeoCategoryController extends ModuleAdminController
 
     protected function processBulkIndex()
     {
-        foreach (Tools::getValue($this->table.'Box') as $idEverCategory) {
+        foreach (Tools::getValue($this->table . 'Box') as $idEverCategory) {
             $everCategory = new EverPsSeoCategory(
                 (int) $idEverCategory
             );
@@ -721,7 +721,7 @@ class AdminEverPsSeoCategoryController extends ModuleAdminController
 
     protected function processBulkFollow()
     {
-        foreach (Tools::getValue($this->table.'Box') as $idEverCategory) {
+        foreach (Tools::getValue($this->table . 'Box') as $idEverCategory) {
             $everCategory = new EverPsSeoCategory(
                 (int) $idEverCategory
             );
@@ -736,7 +736,7 @@ class AdminEverPsSeoCategoryController extends ModuleAdminController
 
     protected function processBulkSitemap()
     {
-        foreach (Tools::getValue($this->table.'Box') as $idEverCategory) {
+        foreach (Tools::getValue($this->table . 'Box') as $idEverCategory) {
             $everCategory = new EverPsSeoCategory(
                 (int) $idEverCategory
             );
@@ -751,7 +751,7 @@ class AdminEverPsSeoCategoryController extends ModuleAdminController
 
     protected function processBulkCopyMetaTitle()
     {
-        foreach (Tools::getValue($this->table.'Box') as $idEverCategory) {
+        foreach (Tools::getValue($this->table . 'Box') as $idEverCategory) {
             $everCategory = new EverPsSeoCategory(
                 (int) $idEverCategory
             );
@@ -763,7 +763,7 @@ class AdminEverPsSeoCategoryController extends ModuleAdminController
 
             $meta_title = Db::getInstance()->getValue(
                 'SELECT meta_title FROM `' . _DB_PREFIX_ . 'category_lang`
-                WHERE id_category = ' . (int) $everCategory->id_seo_category.'
+                WHERE id_category = ' . (int) $everCategory->id_seo_category . '
                 AND id_lang = ' . (int) $everCategory->id_seo_lang
             );
 
@@ -781,7 +781,7 @@ class AdminEverPsSeoCategoryController extends ModuleAdminController
 
     protected function processBulkCopyMetaDescription()
     {
-        foreach (Tools::getValue($this->table.'Box') as $idEverCategory) {
+        foreach (Tools::getValue($this->table . 'Box') as $idEverCategory) {
             $everCategory = new EverPsSeoCategory(
                 (int) $idEverCategory
             );
@@ -793,7 +793,7 @@ class AdminEverPsSeoCategoryController extends ModuleAdminController
 
             $meta_description = Db::getInstance()->getValue(
                 'SELECT meta_description FROM `' . _DB_PREFIX_ . 'category_lang`
-                WHERE id_category = ' . (int) $everCategory->id_seo_category.'
+                WHERE id_category = ' . (int) $everCategory->id_seo_category . '
                 AND id_lang = ' . (int) $everCategory->id_seo_lang
             );
 
@@ -811,7 +811,7 @@ class AdminEverPsSeoCategoryController extends ModuleAdminController
 
     protected function processBulkSetNameAsMetaTitle()
     {
-        foreach (Tools::getValue($this->table.'Box') as $idEverCategory) {
+        foreach (Tools::getValue($this->table . 'Box') as $idEverCategory) {
             $everCategory = new EverPsSeoCategory(
                 (int) $idEverCategory
             );
@@ -823,7 +823,7 @@ class AdminEverPsSeoCategoryController extends ModuleAdminController
 
             $name = Db::getInstance()->getValue(
                 'SELECT name FROM `' . _DB_PREFIX_ . 'category_lang`
-                WHERE id_category = ' . (int) $everCategory->id_seo_category.'
+                WHERE id_category = ' . (int) $everCategory->id_seo_category . '
                 AND id_lang = ' . (int) $everCategory->id_seo_lang
             );
 
@@ -841,7 +841,7 @@ class AdminEverPsSeoCategoryController extends ModuleAdminController
 
     protected function processBulkSetDescriptionAsMetaDescription()
     {
-        foreach (Tools::getValue($this->table.'Box') as $idEverCategory) {
+        foreach (Tools::getValue($this->table . 'Box') as $idEverCategory) {
             $everCategory = new EverPsSeoCategory(
                 (int) $idEverCategory
             );
@@ -856,7 +856,7 @@ class AdminEverPsSeoCategoryController extends ModuleAdminController
 
             $description = Db::getInstance()->getValue(
                 'SELECT description FROM `' . _DB_PREFIX_ . 'category_lang`
-                WHERE id_category = ' . (int) $everCategory->id_seo_category.'
+                WHERE id_category = ' . (int) $everCategory->id_seo_category . '
                 AND id_lang = ' . (int) $everCategory->id_seo_lang
             );
 
@@ -870,15 +870,15 @@ class AdminEverPsSeoCategoryController extends ModuleAdminController
                 160
             );
             $sql = 'UPDATE `' . _DB_PREFIX_ . 'category_lang`
-            SET meta_description = "'.pSQL($category->meta_description).'"
-            WHERE id_lang = ' . (int) $everCategory->id_seo_lang.'
-            AND id_shop = ' . (int) $this->context->shop->id.'
+            SET meta_description = "' . pSQL($category->meta_description) . '"
+            WHERE id_lang = ' . (int) $everCategory->id_seo_lang . '
+            AND id_shop = ' . (int) $this->context->shop->id . '
             AND id_category = ' . (int) $category->id;
 
             $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_category`
-            SET meta_description = "'.pSQL($description).'"
-            WHERE id_seo_lang = ' . (int) $everCategory->id_seo_lang.'
-            AND id_shop = ' . (int) $this->context->shop->id.'
+            SET meta_description = "' . pSQL($description) . '"
+            WHERE id_seo_lang = ' . (int) $everCategory->id_seo_lang . '
+            AND id_shop = ' . (int) $this->context->shop->id . '
             AND id_seo_category = ' . (int) $category->id;
             if (!Db::getInstance()->execute($sql) || !Db::getInstance()->execute($sql2)) {
                 $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
@@ -888,7 +888,7 @@ class AdminEverPsSeoCategoryController extends ModuleAdminController
 
     protected function processBulkTitleShortcodes()
     {
-        foreach (Tools::getValue($this->table.'Box') as $idEverCategory) {
+        foreach (Tools::getValue($this->table . 'Box') as $idEverCategory) {
             $everCategory = new EverPsSeoCategory(
                 (int) $idEverCategory
             );
@@ -914,15 +914,15 @@ class AdminEverPsSeoCategoryController extends ModuleAdminController
                 60
             );
             $sql = 'UPDATE `' . _DB_PREFIX_ . 'category_lang`
-            SET meta_title = "'.pSQL($category->meta_title).'"
-            WHERE id_lang = ' . (int) $everCategory->id_seo_lang.'
-            AND id_shop = ' . (int) $this->context->shop->id.'
+            SET meta_title = "' . pSQL($category->meta_title) . '"
+            WHERE id_lang = ' . (int) $everCategory->id_seo_lang . '
+            AND id_shop = ' . (int) $this->context->shop->id . '
             AND id_category = ' . (int) $category->id;
 
             $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_category`
-            SET meta_title = "'.pSQL($title).'"
-            WHERE id_seo_lang = ' . (int) $everCategory->id_seo_lang.'
-            AND id_shop = ' . (int) $this->context->shop->id.'
+            SET meta_title = "' . pSQL($title) . '"
+            WHERE id_seo_lang = ' . (int) $everCategory->id_seo_lang . '
+            AND id_shop = ' . (int) $this->context->shop->id . '
             AND id_seo_category = ' . (int) $category->id;
             if (!Db::getInstance()->execute($sql)) {
                 $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
@@ -934,7 +934,7 @@ class AdminEverPsSeoCategoryController extends ModuleAdminController
 
     protected function processBulkLinkRewrite()
     {
-        foreach (Tools::getValue($this->table.'Box') as $idEverCategory) {
+        foreach (Tools::getValue($this->table . 'Box') as $idEverCategory) {
             $everProduct = new EverPsSeoProduct(
                 (int) $idEverCategory
             );
@@ -950,21 +950,21 @@ class AdminEverPsSeoCategoryController extends ModuleAdminController
             $canonical = \Tools::link_rewrite($category->name);
 
             $sql = 'UPDATE `' . _DB_PREFIX_ . 'category_lang`
-            SET link_rewrite = "'.pSQL($linkRewrite).'"
-            WHERE id_lang = ' . (int) $everCategory->id_seo_lang.'
-            AND id_shop = ' . (int) $this->context->shop->id.'
+            SET link_rewrite = "' . pSQL($linkRewrite) . '"
+            WHERE id_lang = ' . (int) $everCategory->id_seo_lang . '
+            AND id_shop = ' . (int) $this->context->shop->id . '
             AND id_category = ' . (int) $product->id;
 
             $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_category`
-            SET link_rewrite = "'.pSQL($linkRewrite).'"
-            WHERE id_seo_lang = ' . (int) $everCategory->id_seo_lang.'
-            AND id_shop = ' . (int) $this->context->shop->id.'
+            SET link_rewrite = "' . pSQL($linkRewrite) . '"
+            WHERE id_seo_lang = ' . (int) $everCategory->id_seo_lang . '
+            AND id_shop = ' . (int) $this->context->shop->id . '
             AND id_seo_category = ' . (int) $product->id;
 
             $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_category`
-            SET canonical = "'.pSQL($canonical).'"
-            WHERE id_seo_lang = ' . (int) $everCategory->id_seo_lang.'
-            AND id_shop = ' . (int) $this->context->shop->id.'
+            SET canonical = "' . pSQL($canonical) . '"
+            WHERE id_seo_lang = ' . (int) $everCategory->id_seo_lang . '
+            AND id_shop = ' . (int) $this->context->shop->id . '
             AND id_seo_category = ' . (int) $product->id;
             if (!Db::getInstance()->execute($sql)) {
                 $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
@@ -976,7 +976,7 @@ class AdminEverPsSeoCategoryController extends ModuleAdminController
 
     protected function processBulkMetadescShortcodes()
     {
-        foreach (Tools::getValue($this->table.'Box') as $idEverCategory) {
+        foreach (Tools::getValue($this->table . 'Box') as $idEverCategory) {
             $everCategory = new EverPsSeoCategory(
                 (int) $idEverCategory
             );
@@ -1007,15 +1007,15 @@ class AdminEverPsSeoCategoryController extends ModuleAdminController
             );
 
             $sql = 'UPDATE `' . _DB_PREFIX_ . 'category_lang`
-            SET meta_description = "'.pSQL($category->meta_description).'"
-            WHERE id_lang = ' . (int) $everCategory->id_seo_lang.'
-            AND id_shop = ' . (int) $this->context->shop->id.'
+            SET meta_description = "' . pSQL($category->meta_description) . '"
+            WHERE id_lang = ' . (int) $everCategory->id_seo_lang . '
+            AND id_shop = ' . (int) $this->context->shop->id . '
             AND id_category = ' . (int) $category->id;
 
             $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_category`
-            SET meta_description = "'.pSQL($description).'"
-            WHERE id_seo_lang = ' . (int) $everCategory->id_seo_lang.'
-            AND id_shop = ' . (int) $this->context->shop->id.'
+            SET meta_description = "' . pSQL($description) . '"
+            WHERE id_seo_lang = ' . (int) $everCategory->id_seo_lang . '
+            AND id_shop = ' . (int) $this->context->shop->id . '
             AND id_seo_category = ' . (int) $category->id;
             if (!Db::getInstance()->execute($sql)) {
                 $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
@@ -1027,7 +1027,7 @@ class AdminEverPsSeoCategoryController extends ModuleAdminController
 
     protected function processBulkIndexNow()
     {
-        foreach (Tools::getValue($this->table.'Box') as $idEverCategory) {
+        foreach (Tools::getValue($this->table . 'Box') as $idEverCategory) {
             $everCategory = new EverPsSeoCategory(
                 (int) $idEverCategory
             );
@@ -1053,9 +1053,9 @@ class AdminEverPsSeoCategoryController extends ModuleAdminController
                 $url
             );
             $sql = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_category`
-            SET status_code = "' . (int) $httpCode.'"
-            WHERE id_seo_lang = ' . (int) $everCategory->id_seo_lang.'
-            AND id_shop = ' . (int) $this->context->shop->id.'
+            SET status_code = "' . (int) $httpCode . '"
+            WHERE id_seo_lang = ' . (int) $everCategory->id_seo_lang . '
+            AND id_shop = ' . (int) $this->context->shop->id . '
             AND id_seo_category = ' . (int) $category->id;
             if (!Db::getInstance()->execute($sql)) {
                 $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');

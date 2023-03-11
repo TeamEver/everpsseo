@@ -816,7 +816,7 @@ class EverPsSeoTools extends ObjectModel
             && Configuration::updateValue('EVERSEO_SITEMAP_QTY_ELEMENTS', 5000)
             && Configuration::updateValue(
                 'EVERSEO_SITEMAP_LANGS',
-                '["'.Configuration::get('PS_LANG_DEFAULT').'"]'
+                '["' . Configuration::get('PS_LANG_DEFAULT') . '"]'
             )
             && Configuration::updateValue('EVERSEO_CACHE', false)
             && Configuration::updateValue('EVERSEO_COMPRESS_HTML', false)

@@ -41,7 +41,7 @@ class GenerateObjectsContent extends Command
         $this->setDescription('Generate objects content (description, etc) for each lang');
         $this->addArgument('action', InputArgument::OPTIONAL, sprintf('Action to execute (Allowed actions: %s).', implode(' / ', $this->allowedActions)));
         $this->addArgument('idshop id', InputArgument::OPTIONAL, 'Shop ID');
-        $this->logFile = dirname(__FILE__) . '/../../output/logs/log-seo-content-generation-'.date('Y-m-d').'.log';
+        $this->logFile = dirname(__FILE__) . '/../../output/logs/log-seo-content-generation-' . date('Y-m-d') . '.log';
         $this->module = \Module::getInstanceByName('everpsseo');
     }
 
@@ -81,11 +81,11 @@ class GenerateObjectsContent extends Command
         $context->cookie->id_shop = $shop->id;
         
         $output->writeln(sprintf(
-            '<info>Start content spinning : datetime : '.date('Y-m-d H:i:s').'</info>'
+            '<info>Start content spinning : datetime : ' . date('Y-m-d H:i:s') . '</info>'
         ));
 
         $output->writeln(sprintf(
-            '<info>Start products content spinning : datetime : '.date('Y-m-d H:i:s').'</info>'
+            '<info>Start products content spinning : datetime : ' . date('Y-m-d H:i:s') . '</info>'
         ));
         $allowedLangs = $this->getAllowedShortcodesLangs(
             'EVERSEO_PGENERATOR_LANGS'
@@ -103,7 +103,7 @@ class GenerateObjectsContent extends Command
                 (int) $seo['id_seo_lang']
             );
             $output->writeln(sprintf(
-                '<info>Short description for id product ' . (int) $seo['id_seo_product'].' has been set</info>'
+                '<info>Short description for id product ' . (int) $seo['id_seo_product'] . ' has been set</info>'
             ));
             $this->autoSetContentDesc(
                 'id_seo_product',
@@ -112,15 +112,15 @@ class GenerateObjectsContent extends Command
                 (int) $seo['id_seo_lang']
             );
             $output->writeln(sprintf(
-                '<info>Description for id product ' . (int) $seo['id_seo_product'].' has been set</info>'
+                '<info>Description for id product ' . (int) $seo['id_seo_product'] . ' has been set</info>'
             ));
         }
         $output->writeln(sprintf(
-            '<info>End products content spinning : datetime : '.date('Y-m-d H:i:s').'</info>'
+            '<info>End products content spinning : datetime : ' . date('Y-m-d H:i:s') . '</info>'
         ));
 
         $output->writeln(sprintf(
-            '<info>Start categories content spinning : datetime : '.date('Y-m-d H:i:s').'</info>'
+            '<info>Start categories content spinning : datetime : ' . date('Y-m-d H:i:s') . '</info>'
         ));
         $seoArray = \EverPsSeoCategory::getAllSeoCategoriesIds(
             (int) $shop->id
@@ -137,16 +137,16 @@ class GenerateObjectsContent extends Command
                     (int) $seo['id_seo_lang']
                 );
                 $output->writeln(sprintf(
-                    '<info>Description for id category ' . (int) $seo['id_seo_category'].' has been set</info>'
+                    '<info>Description for id category ' . (int) $seo['id_seo_category'] . ' has been set</info>'
                 ));
             }
         }
         $output->writeln(sprintf(
-            '<info>End categories content spinning : datetime : '.date('Y-m-d H:i:s').'</info>'
+            '<info>End categories content spinning : datetime : ' . date('Y-m-d H:i:s') . '</info>'
         ));
 
         $output->writeln(sprintf(
-            '<info>Start manufacturers content spinning : datetime : '.date('Y-m-d H:i:s').'</info>'
+            '<info>Start manufacturers content spinning : datetime : ' . date('Y-m-d H:i:s') . '</info>'
         ));
         $seoArray = \EverPsSeoManufacturer::getAllSeoManufacturersIds(
             (int) $shop->id
@@ -165,11 +165,11 @@ class GenerateObjectsContent extends Command
             }
         }
         $output->writeln(sprintf(
-            '<info>End manufacturers content spinning : datetime : '.date('Y-m-d H:i:s').'</info>'
+            '<info>End manufacturers content spinning : datetime : ' . date('Y-m-d H:i:s') . '</info>'
         ));
 
         $output->writeln(sprintf(
-            '<info>Start suppliers content spinning : datetime : '.date('Y-m-d H:i:s').'</info>'
+            '<info>Start suppliers content spinning : datetime : ' . date('Y-m-d H:i:s') . '</info>'
         ));
         $seoArray = \EverPsSeoSupplier::getAllSeoSuppliersIds(
             (int) $shop->id
@@ -188,7 +188,7 @@ class GenerateObjectsContent extends Command
             }
         }
         $output->writeln(sprintf(
-            '<info>End suppliers content spinning : datetime : '.date('Y-m-d H:i:s').'</info>'
+            '<info>End suppliers content spinning : datetime : ' . date('Y-m-d H:i:s') . '</info>'
         ));
         
         $output->writeln(sprintf(
@@ -248,9 +248,9 @@ class GenerateObjectsContent extends Command
                 }
 
                 $sql_desc_short = 'UPDATE `' . _DB_PREFIX_ . 'product_lang`
-                    SET description_short = "'.pSQL($product->description_short, true).'"
-                    WHERE id_lang = ' . (int) $id_lang.'
-                    AND id_shop = ' . (int) $id_shop.'
+                    SET description_short = "' . pSQL($product->description_short, true) . '"
+                    WHERE id_lang = ' . (int) $id_lang . '
+                    AND id_shop = ' . (int) $id_shop . '
                     AND id_product = ' . (int) $id_element;
 
                 if (\Db::getInstance()->execute($sql_desc_short)) {
@@ -298,9 +298,9 @@ class GenerateObjectsContent extends Command
                     $meta_title = \Tools::substr($meta_title, 0, 128);
 
                     $sql_desc = 'UPDATE `' . _DB_PREFIX_ . 'product_lang`
-                        SET description = "'.pSQL($product->description, true).'"
-                        WHERE id_lang = ' . (int) $id_lang.'
-                        AND id_shop = ' . (int) $id_shop.'
+                        SET description = "' . pSQL($product->description, true) . '"
+                        WHERE id_lang = ' . (int) $id_lang . '
+                        AND id_shop = ' . (int) $id_shop . '
                         AND id_product = ' . (int) $id_element;
 
                     if (\Db::getInstance()->execute($sql_desc)) {
@@ -313,14 +313,14 @@ class GenerateObjectsContent extends Command
                         (int) $id_shop
                     );
                     if ((bool) \Configuration::get('EVERSEO_DELETE_PRODUCT_CONTENT') === false) {
-                        $obj->bottom_content = $obj->bottom_content.' ' . $description;
+                        $obj->bottom_content = $obj->bottom_content . ' ' . $description;
                     } else {
                         $obj->bottom_content = $description;
                     }
                     $sql_ever_desc = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_product`
-                        SET bottom_content = "'.pSQL($obj->bottom_content, true).'"
-                        WHERE id_seo_lang = ' . (int) $id_lang.'
-                        AND id_shop = ' . (int) $id_shop.'
+                        SET bottom_content = "' . pSQL($obj->bottom_content, true) . '"
+                        WHERE id_seo_lang = ' . (int) $id_lang . '
+                        AND id_shop = ' . (int) $id_shop . '
                         AND id_seo_product = ' . (int) $id_element;
 
                     if (\Db::getInstance()->execute($sql_ever_desc)) {
@@ -366,7 +366,7 @@ class GenerateObjectsContent extends Command
                         (int) $id_shop
                     );
                     if ((bool) \Configuration::get('EVERSEO_DELETE_CATEGORY_CONTENT') === false) {
-                        $obj->bottom_content = $obj->bottom_content.' ' . $description;
+                        $obj->bottom_content = $obj->bottom_content . ' ' . $description;
                     } else {
                         $obj->bottom_content = $description;
                     }
@@ -399,7 +399,7 @@ class GenerateObjectsContent extends Command
                         (int) $id_shop
                     );
                     if ((bool) \Configuration::get('EVERSEO_DELETE_MANUFACTURER_CONTENT') === false) {
-                        $obj->bottom_content = $obj->bottom_content.' ' . $description;
+                        $obj->bottom_content = $obj->bottom_content . ' ' . $description;
                     } else {
                         $obj->bottom_content = $description;
                     }
@@ -432,7 +432,7 @@ class GenerateObjectsContent extends Command
                         (int) $id_shop
                     );
                     if ((bool) \Configuration::get('EVERSEO_DELETE_SUPPLIER_CONTENT') === false) {
-                        $obj->bottom_content = $obj->bottom_content.' ' . $description;
+                        $obj->bottom_content = $obj->bottom_content . ' ' . $description;
                     } else {
                         $obj->bottom_content = $description;
                     }

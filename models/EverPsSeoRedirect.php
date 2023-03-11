@@ -352,7 +352,7 @@ class EverPsSeoRedirect extends ObjectModel
                 OR cl.meta_description LIKE "%' . pSQL($string, true) . '%"
                 OR cl.link_rewrite LIKE "%' . pSQL($string, true) . '%"
             )
-            ORDER BY cl.id_category '.pSQL($orderby);
+            ORDER BY cl.id_category ' . pSQL($orderby);
             $id_category = Db::getInstance()->getValue($sql);
             if ((int) $id_category) {
                 $link = new Link();
@@ -376,7 +376,7 @@ class EverPsSeoRedirect extends ObjectModel
             WHERE tc.id_shop = ' . (int) $id_shop . '
             AND tc.id_lang = ' . (int) $id_lang . '
             AND t.name LIKE "%' . pSQL($string, true) . '%"
-            ORDER BY t.id_tag '.pSQL($orderby);
+            ORDER BY t.id_tag ' . pSQL($orderby);
             $id_product = Db::getInstance()->getValue($sql);
             if ((int) $id_product) {
                 $link = new Link();

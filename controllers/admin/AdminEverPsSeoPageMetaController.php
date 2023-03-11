@@ -27,8 +27,8 @@ class AdminEverPsSeoPageMetaController extends ModuleAdminController
         $this->identifier = 'id_ever_seo_pagemeta';
         $moduleConfUrl  = 'index.php?controller=AdminModules&configure=everpsseo&token=';
         $moduleConfUrl .= Tools::getAdminTokenLite('AdminModules');
-        $this->img_folder = _PS_MODULE_DIR_.'everpsseo/views/img/meta/';
-        $this->img_url = Tools::getHttpHost(true) . __PS_BASE_URI__.'/modules/everpsseo/views/img/meta/';
+        $this->img_folder = _PS_MODULE_DIR_ . 'everpsseo/views/img/meta/';
+        $this->img_url = Tools::getHttpHost(true) . __PS_BASE_URI__ . '/modules/everpsseo/views/img/meta/';
         $this->context->smarty->assign(array(
             'moduleConfUrl' => (string) $moduleConfUrl,
             'image_dir' => _PS_BASE_URL_ . '/modules/everpsseo/views/img/'
@@ -142,7 +142,7 @@ class AdminEverPsSeoPageMetaController extends ModuleAdminController
                 (int) $this->context->language->id,
                 (int) $this->context->shop->id
             );
-            $editUrl  = 'index.php?controller=AdminMeta&id_meta=' . (int) $meta->id.'';
+            $editUrl  = 'index.php?controller=AdminMeta&id_meta=' . (int) $meta->id;
             $editUrl .= '&updatemeta&token='.Tools::getAdminTokenLite('AdminMeta');
             $objectGSearch = str_replace(' ', '+', $meta->page);
 
@@ -194,7 +194,7 @@ class AdminEverPsSeoPageMetaController extends ModuleAdminController
     {
         parent::setMedia($isNewTheme);
         $this->addjQueryPlugin('tagify', null, false);
-        $this->addCSS(_PS_MODULE_DIR_.'everpsseo/views/css/ever.css');
+        $this->addCSS(_PS_MODULE_DIR_ . 'everpsseo/views/css/ever.css');
     }
 
     public function l($string, $class = null, $addslashes = false, $htmlentities = true)
@@ -298,15 +298,15 @@ class AdminEverPsSeoPageMetaController extends ModuleAdminController
             $everPageMeta = new EverPsSeoPageMeta(
                 (int) Tools::getValue('id_ever_seo_pagemeta')
             );
-            if (file_exists($this->img_folder.$everPageMeta->id_seo_pagemeta.'.jpg')) {
-                $defaultUrlImage = $this->img_url.$everPageMeta->id_seo_pagemeta.'.jpg';
+            if (file_exists($this->img_folder.$everPageMeta->id_seo_pagemeta . '.jpg')) {
+                $defaultUrlImage = $this->img_url.$everPageMeta->id_seo_pagemeta. '.jpg';
             } else {
-                $defaultUrlImage = Tools::getHttpHost(true).'/img/'.Configuration::get(
+                $defaultUrlImage = Tools::getHttpHost(true) . '/img/' . Configuration::get(
                     'PS_LOGO'
                 );
             }
         } else {
-            $defaultUrlImage = Tools::getHttpHost(true).'/img/'.Configuration::get(
+            $defaultUrlImage = Tools::getHttpHost(true) . '/img/' . Configuration::get(
                 'PS_LOGO'
             );
         }
@@ -560,8 +560,8 @@ class AdminEverPsSeoPageMetaController extends ModuleAdminController
                     && !empty($_FILES['social_media']['tmp_name'])
                 ) {
                     Configuration::set('PS_IMAGE_GENERATION_METHOD', 1);
-                    if (file_exists($this->img_folder . (int) $everPageMeta->id_seo_pagemeta.'.jpg')) {
-                        unlink($this->img_folder . (int) $everPageMeta->id_seo_pagemeta.'.jpg');
+                    if (file_exists($this->img_folder . (int) $everPageMeta->id_seo_pagemeta . '.jpg')) {
+                        unlink($this->img_folder . (int) $everPageMeta->id_seo_pagemeta . '.jpg');
                     }
                     if ($error = ImageManager::validateUpload($_FILES['social_media'])) {
                         $this->errors[] = $error;
@@ -571,7 +571,7 @@ class AdminEverPsSeoPageMetaController extends ModuleAdminController
                         return false;
                     } elseif (!ImageManager::resize(
                         $tmp_name,
-                        $this->img_folder . (int) $everPageMeta->id_seo_pagemeta.'.jpg'
+                        $this->img_folder . (int) $everPageMeta->id_seo_pagemeta . '.jpg'
                     )) {
                         $this->errors[] = $this->l('An error occurred while attempting to upload the image.');
                     }
@@ -580,13 +580,13 @@ class AdminEverPsSeoPageMetaController extends ModuleAdminController
                     }
                     $everPageMeta->social_img_url = $this->img_url
                     . (int) $everPageMeta->id_seo_pagemeta
-                    .'.jpg';
+                    . '.jpg';
                 }
                 // Hook update triggered
                 if (!$everPageMeta->save() || !$meta->save()) {
                     $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
                 } else {
-                    Tools::redirectAdmin(self::$currentIndex.'&conf=4&token=' . $this->token);
+                    Tools::redirectAdmin(self::$currentIndex . '&conf=4&token=' . $this->token);
                 }
             }
         }
@@ -594,7 +594,7 @@ class AdminEverPsSeoPageMetaController extends ModuleAdminController
 
     protected function processBulkIndex()
     {
-        foreach (Tools::getValue($this->table.'Box') as $idEverPageMeta) {
+        foreach (Tools::getValue($this->table . 'Box') as $idEverPageMeta) {
             $everPageMeta = new EverPsSeoPageMeta(
                 (int) $idEverPageMeta
             );
@@ -609,7 +609,7 @@ class AdminEverPsSeoPageMetaController extends ModuleAdminController
 
     protected function processBulkFollow()
     {
-        foreach (Tools::getValue($this->table.'Box') as $idEverPageMeta) {
+        foreach (Tools::getValue($this->table . 'Box') as $idEverPageMeta) {
             $everPageMeta = new EverPsSeoPageMeta(
                 (int) $idEverPageMeta
             );
@@ -624,7 +624,7 @@ class AdminEverPsSeoPageMetaController extends ModuleAdminController
 
     protected function processBulkSitemap()
     {
-        foreach (Tools::getValue($this->table.'Box') as $idEverPageMeta) {
+        foreach (Tools::getValue($this->table . 'Box') as $idEverPageMeta) {
             $everPageMeta = new EverPsSeoPageMeta(
                 (int) $idEverPageMeta
             );
@@ -639,14 +639,14 @@ class AdminEverPsSeoPageMetaController extends ModuleAdminController
 
     protected function processBulkMetatitle()
     {
-        foreach (Tools::getValue($this->table.'Box') as $idEverPageMeta) {
+        foreach (Tools::getValue($this->table . 'Box') as $idEverPageMeta) {
             $everPageMeta = new EverPsSeoPageMeta(
                 (int) $idEverPageMeta
             );
 
             $title = Db::getInstance()->getValue(
                 'SELECT title FROM `' . _DB_PREFIX_ . 'meta_lang`
-                WHERE id_meta = ' . (int) $everPageMeta->id_seo_pagemeta.'
+                WHERE id_meta = ' . (int) $everPageMeta->id_seo_pagemeta . '
                 AND id_lang = ' . (int) $everPageMeta->id_seo_lang
             );
 
@@ -664,13 +664,13 @@ class AdminEverPsSeoPageMetaController extends ModuleAdminController
 
     protected function processBulkMetadescription()
     {
-        foreach (Tools::getValue($this->table.'Box') as $idEverPageMeta) {
+        foreach (Tools::getValue($this->table . 'Box') as $idEverPageMeta) {
             $everPageMeta = new EverPsSeoPageMeta(
                 (int) $idEverPageMeta
             );
             $description = Db::getInstance()->getValue(
                 'SELECT description FROM `' . _DB_PREFIX_ . 'meta_lang`
-                WHERE id_meta = ' . (int) $everPageMeta->id_seo_pagemeta.'
+                WHERE id_meta = ' . (int) $everPageMeta->id_seo_pagemeta . '
                 AND id_lang = ' . (int) $everPageMeta->id_seo_lang
             );
 
@@ -692,7 +692,7 @@ class AdminEverPsSeoPageMetaController extends ModuleAdminController
 
     protected function processBulkIndexNow()
     {
-        foreach (Tools::getValue($this->table.'Box') as $idEverPageMeta) {
+        foreach (Tools::getValue($this->table . 'Box') as $idEverPageMeta) {
             $seoMeta = new EverPsSeoPageMeta(
                 (int) $idEverPageMeta
             );
@@ -714,9 +714,9 @@ class AdminEverPsSeoPageMetaController extends ModuleAdminController
                 $url
             );
             $sql = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_pagemeta`
-            SET status_code = ' . (int) $httpCode.'
-            WHERE id_seo_lang = ' . (int) $seoMeta->id_seo_lang.'
-            AND id_shop = ' . (int) $this->context->shop->id.'
+            SET status_code = ' . (int) $httpCode . '
+            WHERE id_seo_lang = ' . (int) $seoMeta->id_seo_lang . '
+            AND id_shop = ' . (int) $this->context->shop->id . '
             AND id_ever_seo_pagemeta = ' . (int) $seoMeta->id;
             if (!Db::getInstance()->execute($sql)) {
                 $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');

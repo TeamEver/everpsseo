@@ -41,7 +41,7 @@ class IndexNow extends Command
         $this->setDescription('IndexNow non indexed URL');
         $this->addArgument('action', InputArgument::OPTIONAL, sprintf('Action to execute (Allowed actions: %s).', implode(' / ', $this->allowedActions)));
         $this->addArgument('idshop id', InputArgument::OPTIONAL, 'Shop ID');
-        $this->logFile = dirname(__FILE__) . '/../../output/logs/log-seo-index-now-'.date('Y-m-d').'.log';
+        $this->logFile = dirname(__FILE__) . '/../../output/logs/log-seo-index-now-' . date('Y-m-d') . '.log';
         $this->module = \Module::getInstanceByName('everpsseo');;
     }
 
@@ -80,7 +80,7 @@ class IndexNow extends Command
         $context->shop = $shop;
         $context->cookie->id_shop = $shop->id;
         $output->writeln(sprintf(
-            '<info>Start index now : datetime : '.date('Y-m-d H:i:s').'</info>'
+            '<info>Start index now : datetime : ' . date('Y-m-d H:i:s') . '</info>'
         ));
         // Check limit per day
         $dayCounter = (int) \Configuration::get('EVERSEO_INDEXNOW_DAY');

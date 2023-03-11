@@ -27,8 +27,8 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
         $this->identifier = 'id_ever_seo_cms';
         $moduleConfUrl  = 'index.php?controller=AdminModules&configure=everpsseo&token=';
         $moduleConfUrl .= Tools::getAdminTokenLite('AdminModules');
-        $this->img_folder = _PS_MODULE_DIR_.'everpsseo/views/img/cms/';
-        $this->img_url = Tools::getHttpHost(true) . __PS_BASE_URI__.'/modules/everpsseo/views/img/cms/';
+        $this->img_folder = _PS_MODULE_DIR_ . 'everpsseo/views/img/cms/';
+        $this->img_url = Tools::getHttpHost(true) . __PS_BASE_URI__ . '/modules/everpsseo/views/img/cms/';
         $this->context->smarty->assign(array(
             'moduleConfUrl' => (string) $moduleConfUrl,
             'image_dir' => _PS_BASE_URL_ . '/modules/everpsseo/views/img/'
@@ -126,7 +126,7 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
                 (int) $this->context->language->id,
                 (int) $this->context->shop->id
             );
-            $editUrl  = 'index.php?controller=AdminCMS&id_cms=' . (int) $cms->id.'';
+            $editUrl  = 'index.php?controller=AdminCMS&id_cms=' . (int) $cms->id;
             $editUrl .= '&updatecms&token='.Tools::getAdminTokenLite('AdminCMS');
             $objectGSearch = str_replace(' ', '+', $cms->meta_title);
 
@@ -178,7 +178,7 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
     {
         parent::setMedia($isNewTheme);
         $this->addjQueryPlugin('tagify', null, false);
-        $this->addCSS(_PS_MODULE_DIR_.'everpsseo/views/css/ever.css');
+        $this->addCSS(_PS_MODULE_DIR_ . 'everpsseo/views/css/ever.css');
     }
 
     public function l($string, $class = null, $addslashes = false, $htmlentities = true)
@@ -297,15 +297,15 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
             $seoCMS = new EverPsSeoCms(
                 (int) Tools::getValue('id_ever_seo_cms')
             );
-            if (file_exists($this->img_folder.$seoCMS->id_seo_cms.'.jpg')) {
-                $defaultUrlImage = $this->img_url.$seoCMS->id_seo_cms.'.jpg';
+            if (file_exists($this->img_folder.$seoCMS->id_seo_cms . '.jpg')) {
+                $defaultUrlImage = $this->img_url.$seoCMS->id_seo_cms. '.jpg';
             } else {
-                $defaultUrlImage = Tools::getHttpHost(true).'/img/'.Configuration::get(
+                $defaultUrlImage = Tools::getHttpHost(true) . '/img/' . Configuration::get(
                     'PS_LOGO'
                 );
             }
         } else {
-            $defaultUrlImage = Tools::getHttpHost(true).'/img/'.Configuration::get(
+            $defaultUrlImage = Tools::getHttpHost(true) . '/img/' . Configuration::get(
                 'PS_LOGO'
             );
         }
@@ -561,8 +561,8 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
                     && !empty($_FILES['social_media']['tmp_name'])
                 ) {
                     Configuration::set('PS_IMAGE_GENERATION_METHOD', 1);
-                    if (file_exists($this->img_folder . (int) $everCms->id_seo_cms.'.jpg')) {
-                        unlink($this->img_folder . (int) $everCms->id_seo_cms.'.jpg');
+                    if (file_exists($this->img_folder . (int) $everCms->id_seo_cms . '.jpg')) {
+                        unlink($this->img_folder . (int) $everCms->id_seo_cms . '.jpg');
                     }
                     if ($error = ImageManager::validateUpload($_FILES['social_media'])) {
                         $this->errors[] = $error;
@@ -572,7 +572,7 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
                         return false;
                     } elseif (!ImageManager::resize(
                         $tmp_name,
-                        $this->img_folder . (int) $everCms->id_seo_cms.'.jpg'
+                        $this->img_folder . (int) $everCms->id_seo_cms . '.jpg'
                     )) {
                         $this->errors[] = $this->l('An error occurred while attempting to upload the image.');
                     }
@@ -581,13 +581,13 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
                     }
                     $everCms->social_img_url = $this->img_url
                     . (int) $everCms->id_seo_cms
-                    .'.jpg';
+                    . '.jpg';
                 }
                 $everCms->save();
                 if (!$cms->save() || !$everCms->save()) {
                     $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');
                 } else {
-                    Tools::redirectAdmin(self::$currentIndex.'&conf=4&token=' . $this->token);
+                    Tools::redirectAdmin(self::$currentIndex . '&conf=4&token=' . $this->token);
                 }
             }
         }
@@ -600,7 +600,7 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
 
     protected function processBulkIndex()
     {
-        foreach (Tools::getValue($this->table.'Box') as $idEverCms) {
+        foreach (Tools::getValue($this->table . 'Box') as $idEverCms) {
             $everCms = new EverPsSeoCms(
                 (int) $idEverCms
             );
@@ -615,7 +615,7 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
 
     protected function processBulkFollow()
     {
-        foreach (Tools::getValue($this->table.'Box') as $idEverCms) {
+        foreach (Tools::getValue($this->table . 'Box') as $idEverCms) {
             $everCms = new EverPsSeoCms(
                 (int) $idEverCms
             );
@@ -630,7 +630,7 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
 
     protected function processBulkSitemap()
     {
-        foreach (Tools::getValue($this->table.'Box') as $idEverCms) {
+        foreach (Tools::getValue($this->table . 'Box') as $idEverCms) {
             $everCms = new EverPsSeoCms((int) $idEverCms);
 
             $everCms->allowed_sitemap = !$everCms->allowed_sitemap;
@@ -643,14 +643,14 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
 
     protected function processBulkCopyMetaTitle()
     {
-        foreach (Tools::getValue($this->table.'Box') as $idEverCms) {
+        foreach (Tools::getValue($this->table . 'Box') as $idEverCms) {
             $everCms = new EverPsSeoCms(
                 (int) $idEverCms
             );
 
             $meta_title = Db::getInstance()->getValue(
                 'SELECT meta_title FROM `' . _DB_PREFIX_ . 'cms_lang`
-                WHERE id_cms = ' . (int) $everCms->id_seo_cms.'
+                WHERE id_cms = ' . (int) $everCms->id_seo_cms . '
                 AND id_lang = ' . (int) $everCms->id_seo_lang
             );
 
@@ -668,7 +668,7 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
 
     protected function processBulkCopyMetaDescription()
     {
-        foreach (Tools::getValue($this->table.'Box') as $idEverCms) {
+        foreach (Tools::getValue($this->table . 'Box') as $idEverCms) {
             $everCms = new EverPsSeoCms(
                 (int) $idEverCms
             );
@@ -680,7 +680,7 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
 
             $meta_description = Db::getInstance()->getValue(
                 'SELECT meta_description FROM `' . _DB_PREFIX_ . 'cms_lang`
-                WHERE id_cms = ' . (int) $everCms->id_seo_cms.'
+                WHERE id_cms = ' . (int) $everCms->id_seo_cms . '
                 AND id_lang = ' . (int) $everCms->id_seo_lang
             );
 
@@ -698,7 +698,7 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
 
     protected function processBulkSetContentAsMetaDescription()
     {
-        foreach (Tools::getValue($this->table.'Box') as $idEverCms) {
+        foreach (Tools::getValue($this->table . 'Box') as $idEverCms) {
             $everCms = new EverPsSeoCms(
                 (int) $idEverCms
             );
@@ -710,7 +710,7 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
 
             $content = Db::getInstance()->getValue(
                 'SELECT content FROM `' . _DB_PREFIX_ . 'cms_lang`
-                WHERE id_cms = ' . (int) $everCms->id_seo_cms.'
+                WHERE id_cms = ' . (int) $everCms->id_seo_cms . '
                 AND id_lang = ' . (int) $everCms->id_seo_lang
             );
 
@@ -732,7 +732,7 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
 
     protected function processBulkIndexNow()
     {
-        foreach (Tools::getValue($this->table.'Box') as $idEverCms) {
+        foreach (Tools::getValue($this->table . 'Box') as $idEverCms) {
             $everCms = new EverPsSeoCms(
                 (int) $idEverCms
             );
@@ -758,9 +758,9 @@ class AdminEverPsSeoCmsController extends ModuleAdminController
                 $url
             );
             $sql = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_cms`
-            SET status_code = ' . (int) $httpCode.'
-            WHERE id_seo_lang = ' . (int) $everCms->id_seo_lang.'
-            AND id_shop = ' . (int) $this->context->shop->id.'
+            SET status_code = ' . (int) $httpCode . '
+            WHERE id_seo_lang = ' . (int) $everCms->id_seo_lang . '
+            AND id_shop = ' . (int) $this->context->shop->id . '
             AND id_ever_seo_cms = ' . (int) $cms->id;
             if (!Db::getInstance()->execute($sql)) {
                 $this->errors[] = $this->l('An error has occurred: Can\'t update the current object');

@@ -43,7 +43,7 @@ class AdminEverPsSeoConfigureController extends ModuleAdminController
     {
         parent::setMedia($isNewTheme);
 
-        $this->addCSS(_PS_MODULE_DIR_.'everpsseo/views/css/ever.css');
+        $this->addCSS(_PS_MODULE_DIR_ . 'everpsseo/views/css/ever.css');
     }
 
     public function l($string, $class = null, $addslashes = false, $htmlentities = true)
@@ -1184,22 +1184,22 @@ class AdminEverPsSeoConfigureController extends ModuleAdminController
         }
         $sql = [];
         // Set indexable
-        $sql[] = 'UPDATE '. _DB_PREFIX_ .pSQL((string) $seo_table).'
+        $sql[] = 'UPDATE '. _DB_PREFIX_ . pSQL((string) $seo_table) . '
         SET indexable = 1
-        WHERE '.pSQL((string) $seo_element).' IN
+        WHERE ' . pSQL($seo_element) . ' IN
         (
-            SELECT '.pSQL((string) $ps_element).'
-            FROM '. _DB_PREFIX_ .pSQL((string) $ps_table).'
-            WHERE '.pSQL((string) $where).'
+            SELECT ' . pSQL($ps_element) . '
+            FROM '. _DB_PREFIX_ . pSQL($ps_table) . '
+            WHERE ' . pSQL($where) . '
         )';
         // Set allowed_sitemap
-        $sql[] = 'UPDATE '. _DB_PREFIX_ .pSQL((string) $seo_table).'
+        $sql[] = 'UPDATE '. _DB_PREFIX_ .pSQL($seo_table) . '
         SET allowed_sitemap = 1
-        WHERE ' . $seo_element.' IN
+        WHERE ' . pSQL($seo_element) .' IN
         (
-            SELECT '.pSQL((string) $ps_element).'
-            FROM '. _DB_PREFIX_ .pSQL((string) $ps_table).'
-            WHERE '.pSQL((string) $where).'
+            SELECT ' . pSQL($ps_element) . '
+            FROM '. _DB_PREFIX_ . pSQL($ps_table) . '
+            WHERE ' . pSQL((string) $where) . '
         )';
         foreach ($sql as $s) {
             if (!Db::getInstance()->execute($s)) {

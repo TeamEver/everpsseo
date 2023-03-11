@@ -126,13 +126,13 @@ class EverPsSeoCms extends ObjectModel
     {
         $cache_id = 'EverPsSeoCms::getCmsNameBySeoId_'
         . (int) $id_seo_cms
-        .'_'
-        .$id_lang;
+        . '_'
+        . (int) $id_lang;
         if (!Cache::isStored($cache_id)) {
             $sql = 'SELECT meta_title
             FROM ' . _DB_PREFIX_ . 'cms_lang
             WHERE id_cms = ' . (int) $id_seo_cms.'
-            AND id_lang = ' . (int) $id_lang.'';
+            AND id_lang = ' . (int) $id_lang . '';
             $return = Db::getInstance()->getValue($sql);
             Cache::store($cache_id, $return);
             return $return;
