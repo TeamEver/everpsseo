@@ -28,103 +28,103 @@ class EverPsSeoProduct extends ObjectModel
     public $note;
     public $status_code;
 
-    public static $definition = array(
+    public static $definition = [
         'table' => 'ever_seo_product',
         'primary' => 'id_ever_seo_product',
         'multilang' => false,
-        'fields' => array(
-            'id_seo_product' => array(
+        'fields' => [
+            'id_seo_product' => [
                 'type' => self::TYPE_INT,
                 'lang' => false,
                 'validate' => 'isUnsignedInt',
-                'required' => true
-            ),
-            'id_shop' => array(
+                'required' => true,
+            ],
+            'id_shop' => [
                 'type' => self::TYPE_INT,
                 'lang' => false,
-                'validate' => 'isUnsignedInt'
-            ),
-            'id_seo_lang' => array(
+                'validate' => 'isUnsignedInt',
+            ],
+            'id_seo_lang' => [
                 'type' => self::TYPE_INT,
                 'lang' => false,
-                'validate' => 'isUnsignedInt'
-            ),
-            'meta_title' => array(
+                'validate' => 'isUnsignedInt',
+            ],
+            'meta_title' => [
                 'type' => self::TYPE_STRING,
                 'lang' => false,
-                'validate' => 'isString'
-            ),
-            'meta_description' => array(
+                'validate' => 'isString',
+            ],
+            'meta_description' => [
                 'type' => self::TYPE_STRING,
                 'lang' => false,
-                'validate' => 'isString'
-            ),
-            'social_title' => array(
+                'validate' => 'isString',
+            ],
+            'social_title' => [
                 'type' => self::TYPE_STRING,
                 'lang' => false,
-                'validate' => 'isString'
-            ),
-            'social_description' => array(
+                'validate' => 'isString',
+            ],
+            'social_description' => [
                 'type' => self::TYPE_STRING,
                 'lang' => false,
                 'validate' => 'isCleanHtml'
-            ),
-            'social_img_url' => array(
+            ],
+            'social_img_url' => [
                 'type' => self::TYPE_STRING,
                 'lang' => false,
-                'validate' => 'isUrl'
-            ),
-            'bottom_content' => array(
+                'validate' => 'isUrl',
+            ],
+            'bottom_content' => [
                 'type' => self::TYPE_HTML,
                 'lang' => false,
-                'validate' => 'isCleanHtml'
-            ),
-            'link_rewrite' => array(
+                'validate' => 'isCleanHtml',
+            ],
+            'link_rewrite' => [
                 'type' => self::TYPE_STRING,
                 'lang' => false,
-                'validate' => 'isLinkRewrite'
-            ),
-            'canonical' => array(
+                'validate' => 'isLinkRewrite',
+            ],
+            'canonical' => [
                 'type' => self::TYPE_STRING,
-                'validate' => 'isUrl'
-            ),
-            'keywords' => array(
+                'validate' => 'isUrl',
+            ],
+            'keywords' => [
                 'type' => self::TYPE_STRING,
                 'lang' => false,
-                'validate' => 'isString'
-            ),
-            'indexable' => array(
+                'validate' => 'isString',
+            ],
+            'indexable' => [
                 'type' => self::TYPE_INT,
                 'lang' => false,
-                'validate' => 'isBool'
-            ),
-            'follow' => array(
+                'validate' => 'isBool',
+            ],
+            'follow' => [
                 'type' => self::TYPE_INT,
                 'lang' => false,
-                'validate' => 'isBool'
-            ),
-            'allowed_sitemap' => array(
+                'validate' => 'isBool',
+            ],
+            'allowed_sitemap' => [
                 'type' => self::TYPE_INT,
                 'lang' => false,
-                'validate' => 'isBool'
-            ),
-            'count' => array(
+                'validate' => 'isBool',
+            ],
+            'count' => [
                 'type' => self::TYPE_INT,
                 'lang' => false,
-                'validate' => 'isUnsignedInt'
-            ),
-            'note' => array(
+                'validate' => 'isUnsignedInt',
+            ],
+            'note' => [
                 'type' => self::TYPE_INT,
                 'lang' => false,
-                'validate' => 'isUnsignedInt'
-            ),
-            'status_code' => array(
+                'validate' => 'isUnsignedInt',
+            ],
+            'status_code' => [
                 'type' => self::TYPE_INT,
                 'lang' => false,
-                'validate' => 'isUnsignedInt'
-            ),
-        )
-    );
+                'validate' => 'isUnsignedInt',
+            ],
+        ],
+    ];
 
     public static function getAllSeoProductsIds($id_shop, $allowedLangs = false)
     {
@@ -242,7 +242,7 @@ class EverPsSeoProduct extends ObjectModel
         $message = Configuration::getConfigInMultipleLangs(
             'EVERSEO_PRODUCT_TITLE_AUTO'
         );
-        $shortcodes = array(
+        $shortcodes = [
             '[product_title]' => $product->name ? $product->name : '',
             '[product_reference]' => $product->reference ? $product->reference : '',
             '[product_desc]' => $product->description ? $product->description : '',
@@ -259,16 +259,16 @@ class EverPsSeoProduct extends ObjectModel
             '[shop_name]' => (string) Configuration::get('PS_SHOP_NAME'),
             'NULL' => '', // Useful : remove empty strings in case of NULL
             'null' => '', // Useful : remove empty strings in case of null
-        );
+        ];
         foreach ($shortcodes as $key => $value) {
             $message[(int) $id_seo_lang] = str_replace(
                 (string) $key,
                 (string) $value,
                 (string) $message[(int) $id_seo_lang]
             );
-            $message[(int) $id_seo_lang] = Hook::exec('actionChangeSeoShortcodes', array(
-                'content' => $message[(int) $id_seo_lang]
-            ));
+            $message[(int) $id_seo_lang] = Hook::exec('actionChangeSeoShortcodes', [
+                'content' => $message[(int) $id_seo_lang],
+            ]);
         }
         if (!empty($message[(int) $id_seo_lang])) {
             return $message[(int) $id_seo_lang];
@@ -327,7 +327,7 @@ class EverPsSeoProduct extends ObjectModel
         $message = Configuration::getConfigInMultipleLangs(
             'EVERSEO_PRODUCT_METADESC_AUTO'
         );
-        $shortcodes = array(
+        $shortcodes = [
             '[product_title]' => $product->name ? $product->name : '',
             '[product_reference]' => $product->reference ? $product->reference : '',
             '[product_desc]' => $product->description ? $product->description : '',
@@ -343,16 +343,16 @@ class EverPsSeoProduct extends ObjectModel
             '[shop_name]' => (string) Configuration::get('PS_SHOP_NAME'),
             'NULL' => '', // Useful : remove empty strings in case of NULL
             'null' => '', // Useful : remove empty strings in case of null
-        );
+        ];
         foreach ($shortcodes as $key => $value) {
             $message[(int) $id_seo_lang] = str_replace(
                 (string) $key,
                 (string) $value,
                 (string) $message[(int) $id_seo_lang]
             );
-            $message[(int) $id_seo_lang] = Hook::exec('actionChangeSeoShortcodes', array(
-                'content' => $message[(int) $id_seo_lang]
-            ));
+            $message[(int) $id_seo_lang] = Hook::exec('actionChangeSeoShortcodes', [
+                'content' => $message[(int) $id_seo_lang],
+            ]);
         }
         if (!empty($message[(int) $id_seo_lang])) {
             return $message[(int) $id_seo_lang];
@@ -412,7 +412,7 @@ class EverPsSeoProduct extends ObjectModel
             'PRODUCT_DESC_GENERATE'
         );
 
-        $shortcodes = array(
+        $shortcodes = [
             '[product_title]' => $product->name ? $product->name : '',
             '[product_reference]' => $product->reference ? $product->reference : '',
             '[product_desc]' => $product->description ? $product->description : '',
@@ -426,16 +426,16 @@ class EverPsSeoProduct extends ObjectModel
             '[shop_name]' => (string) Configuration::get('PS_SHOP_NAME'),
             'NULL' => '', // Useful : remove empty strings in case of NULL
             'null' => '', // Useful : remove empty strings in case of null
-        );
+        ];
         foreach ($shortcodes as $key => $value) {
             $message[(int) $id_seo_lang] = str_replace(
                 (string) $key,
                 (string) $value,
                 (string) $message[(int) $id_seo_lang]
             );
-            $message[(int) $id_seo_lang] = Hook::exec('actionChangeSeoShortcodes', array(
-                'content' => $message[(int) $id_seo_lang]
-            ));
+            $message[(int) $id_seo_lang] = Hook::exec('actionChangeSeoShortcodes', [
+                'content' => $message[(int) $id_seo_lang],
+            ]);
         }
         if (!empty($message[(int) $id_seo_lang])) {
             return $message[(int) $id_seo_lang];
@@ -495,7 +495,7 @@ class EverPsSeoProduct extends ObjectModel
             'PRODUCT_SHORT_DESC_GENERATE'
         );
 
-        $shortcodes = array(
+        $shortcodes = [
             '[product_title]' => $product->name ? $product->name : '',
             '[product_reference]' => $product->reference ? $product->reference : '',
             '[product_desc]' => $product->description ? $product->description : '',
@@ -509,16 +509,16 @@ class EverPsSeoProduct extends ObjectModel
             '[shop_name]' => (string) Configuration::get('PS_SHOP_NAME'),
             'NULL' => '', // Useful : remove empty strings in case of NULL
             'null' => '', // Useful : remove empty strings in case of null
-        );
+        ];
         foreach ($shortcodes as $key => $value) {
             $message[(int) $id_seo_lang] = str_replace(
                 (string) $key,
                 (string) $value,
                 (string) $message[(int) $id_seo_lang]
             );
-            $message[(int) $id_seo_lang] = Hook::exec('actionChangeSeoShortcodes', array(
-                'content' => $message[(int) $id_seo_lang]
-            ));
+            $message[(int) $id_seo_lang] = Hook::exec('actionChangeSeoShortcodes', [
+                'content' => $message[(int) $id_seo_lang],
+            ]);
         }
         if (!empty($message[(int) $id_seo_lang])) {
             return $message[(int) $id_seo_lang];
@@ -578,7 +578,7 @@ class EverPsSeoProduct extends ObjectModel
             'PRODUCT_BOTTOM_GENERATE'
         );
 
-        $shortcodes = array(
+        $shortcodes = [
             '[product_title]' => $product->name ? $product->name : '',
             '[product_reference]' => $product->reference ? $product->reference : '',
             '[product_desc]' => $product->description ? $product->description : '',
@@ -592,17 +592,17 @@ class EverPsSeoProduct extends ObjectModel
             '[shop_name]' => (string) Configuration::get('PS_SHOP_NAME'),
             'NULL' => '', // Useful : remove empty strings in case of NULL
             'null' => '', // Useful : remove empty strings in case of null
-        );
+        ];
         foreach ($shortcodes as $key => $value) {
             $message[(int) $id_seo_lang] = str_replace(
                 (string) $key,
                 (string) $value,
                 (string) $message[(int) $id_seo_lang]
             );
-            $message[(int) $id_seo_lang] = Hook::exec('actionChangeSeoShortcodes', array(
+            $message[(int) $id_seo_lang] = Hook::exec('actionChangeSeoShortcodes', [
                 'content' => $message[(int) $id_seo_lang],
-                'ps_obj' => $product
-            ));
+                'ps_obj' => $product,
+            ]);
         }
         if (!empty($message[(int) $id_seo_lang])) {
             return $message[(int) $id_seo_lang];

@@ -61,7 +61,6 @@ class EverPsSeoTools extends ObjectModel
     public static function removeEmptyLines($string)
     {
         $string = preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', $string);
-        // $string = trim(preg_replace('/\r|\n/', ' ', $string));
         return strip_tags($string);
     }
 
@@ -83,7 +82,7 @@ class EverPsSeoTools extends ObjectModel
             '[start_shop_link]' => '<a href="'
             . Tools::getShopDomainSsl(true)
             . '" target="_blank">',
-            '[start_contact_link]' => '<a href="'.$contactLink.'" rel="nofollow" target="_blank">',
+            '[start_contact_link]' => '<a href="' . $contactLink . '" rel="nofollow" target="_blank">',
             '[end_shop_link]' => '</a>',
             '[end_contact_link]' => '</a>',
         ];
@@ -178,8 +177,7 @@ class EverPsSeoTools extends ObjectModel
                     break;
             }
 
-            $sql =
-                'SELECT meta_title,
+            $sql = 'SELECT meta_title,
                 meta_description,
                 social_title,
                 social_description,
@@ -192,15 +190,13 @@ class EverPsSeoTools extends ObjectModel
                     AND id_shop = ' . (int) $id_shop . '
                     AND id_seo_lang = ' . (int) $id_lang;
 
-            $updateCounter =
-                'UPDATE '.pSQL($table).'
+            $updateCounter = 'UPDATE ' . pSQL($table) . '
                 SET count = count + 1
                 WHERE ' . pSQL((string) $element) . ' = ' . (int) $id . '
                     AND id_shop = ' . (int) $id_shop . '
                     AND id_seo_lang = ' . (int) $id_lang;
 
             Db::getInstance()->execute($updateCounter);
-
             $return = Db::getInstance()->executeS($sql);
             Cache::store($cache_id, $return);
             return $return;
@@ -301,24 +297,22 @@ class EverPsSeoTools extends ObjectModel
     {
         $sql = [];
 
-        $sql[] = '
-            UPDATE ' . _DB_PREFIX_ . 'ever_seo_product
-                SET follow = (
-                    SELECT active
-                    FROM ' . _DB_PREFIX_ . 'product_shop
-                    WHERE ' . _DB_PREFIX_ . 'ever_seo_product.id_seo_product = ' . _DB_PREFIX_ . 'product_shop.id_product
-                    AND ' . _DB_PREFIX_ . 'ever_seo_product.id_shop = ' . _DB_PREFIX_ . 'product_shop.id_shop
-                );
-            ';
-        $sql[] = '
-            UPDATE ' . _DB_PREFIX_ . 'ever_seo_product
-                SET allowed_sitemap = (
-                    SELECT active
-                    FROM ' . _DB_PREFIX_ . 'product_shop
-                    WHERE ' . _DB_PREFIX_ . 'ever_seo_product.id_seo_product = ' . _DB_PREFIX_ . 'product_shop.id_product
-                    AND ' . _DB_PREFIX_ . 'ever_seo_product.id_shop = ' . _DB_PREFIX_ . 'product_shop.id_shop
-                );
-            ';
+        $sql[] = 'UPDATE ' . _DB_PREFIX_ . 'ever_seo_product
+            SET follow = (
+                SELECT active
+                FROM ' . _DB_PREFIX_ . 'product_shop
+                WHERE ' . _DB_PREFIX_ . 'ever_seo_product.id_seo_product = ' . _DB_PREFIX_ . 'product_shop.id_product
+                AND ' . _DB_PREFIX_ . 'ever_seo_product.id_shop = ' . _DB_PREFIX_ . 'product_shop.id_shop
+            );
+        ';
+        $sql[] = 'UPDATE ' . _DB_PREFIX_ . 'ever_seo_product
+            SET allowed_sitemap = (
+                SELECT active
+                FROM ' . _DB_PREFIX_ . 'product_shop
+                WHERE ' . _DB_PREFIX_ . 'ever_seo_product.id_seo_product = ' . _DB_PREFIX_ . 'product_shop.id_product
+                AND ' . _DB_PREFIX_ . 'ever_seo_product.id_shop = ' . _DB_PREFIX_ . 'product_shop.id_shop
+            );
+        ';
         foreach ($sql as $s) {
             if (!Db::getInstance()->execute($s)) {
                 return false;
@@ -355,7 +349,7 @@ class EverPsSeoTools extends ObjectModel
             if (Tools::getValue('fc') === 'module') {
                 return false;
             }
-            $template = _PS_MODULE_DIR_ . '/everpsseo/views/templates/hook/hreflangs/'.pSQL($controller).'.tpl';
+            $template = _PS_MODULE_DIR_ . '/everpsseo/views/templates/hook/hreflangs/' . pSQL($controller) . '.tpl';
             if (file_exists($template)) {
                 Context::getContext()->smarty->assign([
                     'xdefault' => (int) Configuration::get('PS_LANG_DEFAULT'),
@@ -695,7 +689,8 @@ class EverPsSeoTools extends ObjectModel
         return $key;
     }
 
-    public static function generateRandomString($length = 32) {
+    public static function generateRandomString($length = 32)
+    {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $charactersLength = strlen($characters);
         $randomString = '';
@@ -960,11 +955,12 @@ class EverPsSeoTools extends ObjectModel
         }
     }
 
-    public static function rsearch($folder, $regPattern) {
+    public static function rsearch($folder, $regPattern)
+    {
         $dir = new RecursiveDirectoryIterator($folder);
         $ite = new RecursiveIteratorIterator($dir);
         $files = new RegexIterator($ite, $regPattern, RegexIterator::GET_MATCH);
-        $fileList = array();
+        $fileList = [];
         foreach($files as $file) {
             $fileList = array_merge($fileList, $file);
         }

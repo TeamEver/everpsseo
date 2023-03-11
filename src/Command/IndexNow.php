@@ -72,7 +72,7 @@ class IndexNow extends Command
         } else {
             $shop = $context->shop;
             if (!\Validate::isLoadedObject($shop)) {
-                $shop = new \Shop((int)\Configuration::get('PS_SHOP_DEFAULT'));
+                $shop = new \Shop((int) \Configuration::get('PS_SHOP_DEFAULT'));
             }
         }
         //Important to setContext
@@ -83,7 +83,7 @@ class IndexNow extends Command
             '<info>Start index now : datetime : '.date('Y-m-d H:i:s').'</info>'
         ));
         // Check limit per day
-        $dayCounter = (int)\Configuration::get('EVERSEO_INDEXNOW_DAY');
+        $dayCounter = (int) \Configuration::get('EVERSEO_INDEXNOW_DAY');
         $dayOfWeek = date('N');
         if ($dayCounter <= 0) {
             \Configuration::updateValue('EVERSEO_INDEXNOW_DAY', (int) $dayOfWeek);
@@ -92,8 +92,8 @@ class IndexNow extends Command
         if ($dayCounter != $dayOfWeek) {
             \Configuration::updateValue('EVERSEO_INDEXNOW_DAY_COUNT', 0);
         }
-        $dailyCount = (int)\Configuration::get('EVERSEO_INDEXNOW_DAY_COUNT');
-        $maxLimit = (int)\Configuration::get('EVERSEO_INDEXNOW_LIMIT');
+        $dailyCount = (int) \Configuration::get('EVERSEO_INDEXNOW_DAY_COUNT');
+        $maxLimit = (int) \Configuration::get('EVERSEO_INDEXNOW_LIMIT');
         if ($maxLimit <= 0) {
             $maxLimit = 200;
             \Configuration::updateValue('EVERSEO_INDEXNOW_LIMIT', $maxLimit);
@@ -206,18 +206,18 @@ class IndexNow extends Command
         $sql->leftJoin(
             'product',
             'ps',
-            'ps.id_product = pl.id_product AND ps.id_shop_default = '.(int) $idShop
+            'ps.id_product = pl.id_product AND ps.id_shop_default = ' . (int) $idShop
         );
         $sql->leftJoin(
             'ever_seo_product',
             'esp',
-            'esp.id_seo_product = pl.id_product AND esp.id_shop = '.(int) $idShop
+            'esp.id_seo_product = pl.id_product AND esp.id_shop = ' . (int) $idShop
         );
         if ((int) $idLang > 0) {
-            $sql->where('pl.id_lang = '.(int) $idLang);
+            $sql->where('pl.id_lang = ' . (int) $idLang);
         }
         if ((int) $idCategory > 0) {
-            $sql->where('ps.id_category_default = '.(int) $idCategory);
+            $sql->where('ps.id_category_default = ' . (int) $idCategory);
         }
         if ((int) $limit > 0) {
             $sql->limit((int) $limit);
@@ -235,19 +235,19 @@ class IndexNow extends Command
         $sql->leftJoin(
             'category_shop',
             'ps',
-            'ps.id_category = pl.id_category AND ps.id_shop = '.(int) $idShop
+            'ps.id_category = pl.id_category AND ps.id_shop = ' . (int) $idShop
         );
         $sql->leftJoin(
             'ever_seo_category',
             'esc',
-            'esc.id_seo_category = pl.id_category AND esc.id_shop = '.(int) $idShop
+            'esc.id_seo_category = pl.id_category AND esc.id_shop = ' . (int) $idShop
         );
-        $sql->where('pl.id_shop = '.(int) $idShop);
+        $sql->where('pl.id_shop = ' . (int) $idShop);
         if ((int) $idLang > 0) {
-            $sql->where('pl.id_lang = '.(int) $idLang);
+            $sql->where('pl.id_lang = ' . (int) $idLang);
         }
         if ((int) $idCategory > 0) {
-            $sql->where('pl.id_category = '.(int) $idCategory);
+            $sql->where('pl.id_category = ' . (int) $idCategory);
         }
         $sql->where('esc.status_code = 0');
         $allCategoriesIds = \Db::getInstance()->executeS($sql);
@@ -262,19 +262,19 @@ class IndexNow extends Command
         $sql->leftJoin(
             'manufacturer_shop',
             'ms',
-            'ms.id_manufacturer = ml.id_manufacturer AND ms.id_shop = '.(int) $idShop
+            'ms.id_manufacturer = ml.id_manufacturer AND ms.id_shop = ' . (int) $idShop
         );
         $sql->leftJoin(
             'ever_seo_manufacturer',
             'esm',
-            'esm.id_seo_manufacturer = ml.id_manufacturer AND esm.id_shop = '.(int) $idShop
+            'esm.id_seo_manufacturer = ml.id_manufacturer AND esm.id_shop = ' . (int) $idShop
         );
-        $sql->where('ms.id_shop = '.(int) $idShop);
+        $sql->where('ms.id_shop = ' . (int) $idShop);
         if ((int) $idLang > 0) {
-            $sql->where('ml.id_lang = '.(int) $idLang);
+            $sql->where('ml.id_lang = ' . (int) $idLang);
         }
         if ((int) $idManufacturer > 0) {
-            $sql->where('pl.id_manufacturer = '.(int) $idManufacturer);
+            $sql->where('pl.id_manufacturer = ' . (int) $idManufacturer);
         }
         $sql->where('esm.status_code = 0');
         $allManufacturersIds = \Db::getInstance()->executeS($sql);
@@ -283,9 +283,9 @@ class IndexNow extends Command
 
     protected function logCommand($msg)
     {
-        $log  = 'Msg: '.$msg.PHP_EOL.
-                date('j.n.Y').PHP_EOL.
-                "-------------------------".PHP_EOL;
+        $log  = 'Msg: ' . $msg . PHP_EOL .
+                date('j.n.Y') . PHP_EOL .
+                '-------------------------' . PHP_EOL;
 
         //Save string to log, use FILE_APPEND to append.
         file_put_contents(

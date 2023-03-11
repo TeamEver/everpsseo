@@ -4020,6 +4020,86 @@ class Everpsseo extends Module
                         ],
                     ],
                     [
+                        'type' => 'switch',
+                        'label' => $this->l('Noindex PDF files'),
+                        'desc' => $this->l('Will add rule on your htaccess file to noindex PDF files'),
+                        'hint' => $this->l('Will noindex your PDF files'),
+                        'name' => 'EVERSEO_LOCK_PDF',
+                        'is_bool' => true,
+                        'values' => [
+                            [
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
+                    ],
+                    [
+                        'type' => 'switch',
+                        'label' => $this->l('Noindex XLSX files'),
+                        'desc' => $this->l('Will add rule on your htaccess file to noindex XLSX files'),
+                        'hint' => $this->l('Will noindex your XLSX files'),
+                        'name' => 'EVERSEO_LOCK_XLSX',
+                        'is_bool' => true,
+                        'values' => [
+                            [
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
+                    ],
+                    [
+                        'type' => 'switch',
+                        'label' => $this->l('Noindex CSV files'),
+                        'desc' => $this->l('Will add rule on your htaccess file to noindex CSV files'),
+                        'hint' => $this->l('Will noindex your CSV files'),
+                        'name' => 'EVERSEO_LOCK_CSV',
+                        'is_bool' => true,
+                        'values' => [
+                            [
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
+                    ],
+                    [
+                        'type' => 'switch',
+                        'label' => $this->l('Noindex WORD files'),
+                        'desc' => $this->l('Will add rule on your htaccess file to noindex WORD files'),
+                        'hint' => $this->l('Will noindex your WORD files'),
+                        'name' => 'EVERSEO_LOCK_WORD',
+                        'is_bool' => true,
+                        'values' => [
+                            [
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
+                    ],
+                    [
                         'type' => 'text',
                         'label' => $this->l('Google Captcha V3 Site Key'),
                         'desc' => $this->l('Will add Google Recaptcha V3'),
@@ -4824,11 +4904,23 @@ class Everpsseo extends Module
                     )
                 )
             ),
-            'EVERSEO_BLOCK_RIGHT_CLICK' => Configuration::get(
-                'EVERSEO_BLOCK_RIGHT_CLICK'
+            'EVERSEO_LOCK_PDF' => Configuration::get(
+                'EVERSEO_LOCK_PDF'
+            ),
+            'EVERSEO_LOCK_XLSX' => Configuration::get(
+                'EVERSEO_LOCK_XLSX'
+            ),
+            'EVERSEO_LOCK_CSV' => Configuration::get(
+                'EVERSEO_LOCK_CSV'
+            ),
+            'EVERSEO_LOCK_WORD' => Configuration::get(
+                'EVERSEO_LOCK_WORD'
             ),
             'EVERSEO_CLICKJACKING' => Configuration::get(
                 'EVERSEO_CLICKJACKING'
+            ),
+            'EVERSEO_BLOCK_RIGHT_CLICK' => Configuration::get(
+                'EVERSEO_BLOCK_RIGHT_CLICK'
             ),
             'EVERSEO_HOTLINKING' => Configuration::get(
                 'EVERSEO_HOTLINKING'
@@ -5908,7 +6000,7 @@ class Everpsseo extends Module
                     $item->setAttribute('rel', 'nofollow sponsored noopener');
                     $item->setAttribute('target', '_blank');
                     // Set custom data attr for debug
-                    $item->setAttribute('data-evercache', 'true');
+                    $item->setAttribute('data-everpsseo', 'true');
                 } else {
                     $default_attr = EverPsSeoTools::removeEmptyLines($item->nodeValue);
                     if (!$item->getAttribute('title') || empty($item->getAttribute('title'))) {
@@ -5917,7 +6009,15 @@ class Everpsseo extends Module
                             $default_attr
                         );
                         // Set custom data attr for debug
-                        $item->setAttribute('data-evercache', 'true');
+                        $item->setAttribute('data-everpsseo', 'true');
+                    }
+                    if (!$item->getAttribute('alt') || empty($item->getAttribute('alt'))) {
+                        $item->setAttribute(
+                            'alt',
+                            $default_attr
+                        );
+                        // Set custom data attr for debug
+                        $item->setAttribute('data-everpsseo', 'true');
                     }
                 }
             }
@@ -5934,7 +6034,7 @@ class Everpsseo extends Module
                     $headers = get_headers($src . '.webp');
                     if ((bool) stripos($headers[0], '200 OK') === true) {
                         $item->setAttribute('src', $src . '.webp');
-                        $item->setAttribute('data-evercache', 'true');
+                        $item->setAttribute('data-everpsseo', 'true');
                     }
                 }
             }
@@ -5962,7 +6062,7 @@ class Everpsseo extends Module
                             Configuration::get('PS_SHOP_NAME')
                         );
                     }
-                    $item->setAttribute('data-evercache', 'true');
+                    $item->setAttribute('data-everpsseo', 'true');
                 }
             }
             $titles = $dom->getElementsByTagName('a');
@@ -5980,7 +6080,7 @@ class Everpsseo extends Module
                         'title',
                         $default_attr
                     );
-                    $item->setAttribute('data-evercache', 'true');
+                    $item->setAttribute('data-everpsseo', 'true');
                 }
             }
             $txt = $dom->saveHTML();
@@ -6119,7 +6219,35 @@ class Everpsseo extends Module
                 }
             }
         }
-        if ((bool) Configuration::get('EVERSEO_CLICKJACKING')) {
+        if ((bool) Configuration::get('EVERSEO_LOCK_PDF') === true) {
+            $rules .= '#Noindex PDF
+<Files ~ "\.pdf$">
+  Header set X-Robots-Tag "noindex"
+</Files>
+'."\n\n";
+        }
+        if ((bool) Configuration::get('EVERSEO_LOCK_XLSX') === true) {
+            $rules .= '#Noindex XLSX
+<Files ~ "\.xslx$">
+  Header set X-Robots-Tag "noindex"
+</Files>
+'."\n\n";
+        }
+        if ((bool) Configuration::get('EVERSEO_LOCK_CSV') === true) {
+            $rules .= '#Noindex XLSX
+<Files ~ "\.csv$">
+  Header set X-Robots-Tag "noindex"
+</Files>
+'."\n\n";
+        }
+        if ((bool) Configuration::get('EVERSEO_LOCK_WORD') === true) {
+            $rules .= '#Noindex XLSX
+<Files ~ "\.word$">
+  Header set X-Robots-Tag "noindex"
+</Files>
+'."\n\n";
+        }
+        if ((bool) Configuration::get('EVERSEO_CLICKJACKING') === true) {
             $rules .= '<IfModule mod_headers.c>
 Header always append X-Frame-Options SAMEORIGIN
 </IfModule>'."\n\n";

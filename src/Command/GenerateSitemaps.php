@@ -72,7 +72,7 @@ class GenerateSitemaps extends Command
         } else {
             $shop = $context->shop;
             if (!\Validate::isLoadedObject($shop)) {
-                $shop = new \Shop((int)\Configuration::get('PS_SHOP_DEFAULT'));
+                $shop = new \Shop((int) \Configuration::get('PS_SHOP_DEFAULT'));
             }
         }
         //Important to setContext
@@ -98,9 +98,9 @@ class GenerateSitemaps extends Command
 
     protected function logCommand($msg)
     {
-        $log  = 'Msg: '.$msg.PHP_EOL.
-                date('j.n.Y').PHP_EOL.
-                "-------------------------".PHP_EOL;
+        $log  = 'Msg: ' . $msg . PHP_EOL .
+                date('j.n.Y') . PHP_EOL .
+                '-------------------------' . PHP_EOL;
 
         //Save string to log, use FILE_APPEND to append.
         file_put_contents(

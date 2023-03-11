@@ -33,36 +33,36 @@ class AdminEverPsSeoBacklinkController extends ModuleAdminController
             'image_dir' => _PS_BASE_URL_ . '/modules/everpsseo/views/img/'
         ));
 
-        $this->bulk_actions = array(
-            'delete' => array(
+        $this->bulk_actions = [
+            'delete' => [
                 'text' => $this->l('Delete selected'),
-                'confirm' => $this->l('Delete selected items?')
-            ),
-        );
+                'confirm' => $this->l('Delete selected items?'),
+            ],
+        ];
 
         $this->_where = 'AND a.id_shop ='.(int) $this->context->shop->id;
 
         $this->fields_list = array(
-            'id_ever_seo_backlink' => array(
+            'id_ever_seo_backlink' => [
                 'title' => $this->l('ID'),
                 'align' => 'left',
-                'width' => 'auto'
-            ),
-            'everfrom' => array(
+                'width' => 'auto',
+            ],
+            'everfrom' => [
                 'title' => $this->l('From'),
                 'align' => 'left',
-                'width' => 'auto'
-            ),
-            'everto' => array(
+                'width' => 'auto',
+            ],
+            'everto' => [
                 'title' => $this->l('To'),
                 'align' => 'left',
-                'width' => 'auto'
-            ),
-            'count' => array(
+                'width' => 'auto',
+            ],
+            'count' => [
                 'title' => $this->l('Count'),
                 'align' => 'left',
-                'width' => 'auto'
-            ),
+                'width' => 'auto',
+            ],
         );
 
         $this->colorOnBackground = true;
@@ -125,36 +125,36 @@ class AdminEverPsSeoBacklinkController extends ModuleAdminController
         }
 
         $this->fields_form = array(
-            'submit' => array(
+            'submit' => [
                 'name' => 'save',
                 'title' => $this->l('Save'),
                 'class' => 'button pull-right',
-            ),
-            'buttons' => array(
-                'save-and-stay' => array(
+            ],
+            'buttons' => [
+                'save-and-stay' => [
                     'title' => $this->l('Save and stay'),
                     'name' => 'submitAdd' . $this->table . 'AndStay',
                     'type' => 'submit',
                     'class' => 'btn btn-default pull-right',
-                    'icon' => 'process-icon-save'
-                ),
-            ),
-            'input' => array(
-                array(
+                    'icon' => 'process-icon-save',
+                ],
+            ],
+            'input' => [
+                [
                     'type' => 'text',
                     'label' => $this->l('From'),
                     'name' => 'everfrom',
                     'lang' => false,
                     'readonly' => true,
-                ),
-                array(
+                ],
+                [
                     'type' => 'text',
                     'label' => $this->l('To'),
                     'name' => 'everto',
                     'lang' => false,
                     'readonly' => true,
-                ),
-            )
+                ],
+            ],
         );
 
         return parent::renderForm();

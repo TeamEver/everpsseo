@@ -72,7 +72,7 @@ class GenerateObjectsContent extends Command
         } else {
             $shop = $context->shop;
             if (!\Validate::isLoadedObject($shop)) {
-                $shop = new \Shop((int)\Configuration::get('PS_SHOP_DEFAULT'));
+                $shop = new \Shop((int) \Configuration::get('PS_SHOP_DEFAULT'));
             }
         }
         //Important to setContext
@@ -103,7 +103,7 @@ class GenerateObjectsContent extends Command
                 (int) $seo['id_seo_lang']
             );
             $output->writeln(sprintf(
-                '<info>Short description for id product '.(int) $seo['id_seo_product'].' has been set</info>'
+                '<info>Short description for id product ' . (int) $seo['id_seo_product'].' has been set</info>'
             ));
             $this->autoSetContentDesc(
                 'id_seo_product',
@@ -112,7 +112,7 @@ class GenerateObjectsContent extends Command
                 (int) $seo['id_seo_lang']
             );
             $output->writeln(sprintf(
-                '<info>Description for id product '.(int) $seo['id_seo_product'].' has been set</info>'
+                '<info>Description for id product ' . (int) $seo['id_seo_product'].' has been set</info>'
             ));
         }
         $output->writeln(sprintf(
@@ -137,7 +137,7 @@ class GenerateObjectsContent extends Command
                     (int) $seo['id_seo_lang']
                 );
                 $output->writeln(sprintf(
-                    '<info>Description for id category '.(int) $seo['id_seo_category'].' has been set</info>'
+                    '<info>Description for id category ' . (int) $seo['id_seo_category'].' has been set</info>'
                 ));
             }
         }
@@ -215,7 +215,7 @@ class GenerateObjectsContent extends Command
             )
         );
         if (!$allowedLangs) {
-            $allowedLangs = [(int)\Configuration::get('PS_LANG_DEFAULT')];
+            $allowedLangs = [(int) \Configuration::get('PS_LANG_DEFAULT')];
         }
         return $allowedLangs;
     }
@@ -249,9 +249,9 @@ class GenerateObjectsContent extends Command
 
                 $sql_desc_short = 'UPDATE `' . _DB_PREFIX_ . 'product_lang`
                     SET description_short = "'.pSQL($product->description_short, true).'"
-                    WHERE id_lang = '.(int) $id_lang.'
-                    AND id_shop = '.(int) $id_shop.'
-                    AND id_product = '.(int) $id_element;
+                    WHERE id_lang = ' . (int) $id_lang.'
+                    AND id_shop = ' . (int) $id_shop.'
+                    AND id_product = ' . (int) $id_element;
 
                 if (\Db::getInstance()->execute($sql_desc_short)) {
                     return true;
@@ -264,7 +264,7 @@ class GenerateObjectsContent extends Command
     {
         switch ($object) {
             case 'id_seo_product':
-                if ((bool)\Configuration::get('EVERSEO_BOTTOM_PRODUCT_CONTENT') === false) {
+                if ((bool) \Configuration::get('EVERSEO_BOTTOM_PRODUCT_CONTENT') === false) {
                     $description = \EverPsSeoProduct::changeProductDescShortcodes(
                         (int) $id_element,
                         (int) $id_lang,
@@ -289,8 +289,8 @@ class GenerateObjectsContent extends Command
                 if (!in_array($product->id_category_default, $this->getAllowedGeneratorCategories(true))) {
                     return;
                 }
-                if ((bool)\Configuration::get('EVERSEO_BOTTOM_PRODUCT_CONTENT') === false) {
-                    if ((bool)\Configuration::get('EVERSEO_DELETE_PRODUCT_CONTENT') === true) {
+                if ((bool) \Configuration::get('EVERSEO_BOTTOM_PRODUCT_CONTENT') === false) {
+                    if ((bool) \Configuration::get('EVERSEO_DELETE_PRODUCT_CONTENT') === true) {
                         $product->description = $description;
                     } else {
                         $product->description .= $description;
@@ -299,9 +299,9 @@ class GenerateObjectsContent extends Command
 
                     $sql_desc = 'UPDATE `' . _DB_PREFIX_ . 'product_lang`
                         SET description = "'.pSQL($product->description, true).'"
-                        WHERE id_lang = '.(int) $id_lang.'
-                        AND id_shop = '.(int) $id_shop.'
-                        AND id_product = '.(int) $id_element;
+                        WHERE id_lang = ' . (int) $id_lang.'
+                        AND id_shop = ' . (int) $id_shop.'
+                        AND id_product = ' . (int) $id_element;
 
                     if (\Db::getInstance()->execute($sql_desc)) {
                         return true;
@@ -312,16 +312,16 @@ class GenerateObjectsContent extends Command
                         (int) $id_lang,
                         (int) $id_shop
                     );
-                    if ((bool)\Configuration::get('EVERSEO_DELETE_PRODUCT_CONTENT') === false) {
+                    if ((bool) \Configuration::get('EVERSEO_DELETE_PRODUCT_CONTENT') === false) {
                         $obj->bottom_content = $obj->bottom_content.' '.$description;
                     } else {
                         $obj->bottom_content = $description;
                     }
                     $sql_ever_desc = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_product`
                         SET bottom_content = "'.pSQL($obj->bottom_content, true).'"
-                        WHERE id_seo_lang = '.(int) $id_lang.'
-                        AND id_shop = '.(int) $id_shop.'
-                        AND id_seo_product = '.(int) $id_element;
+                        WHERE id_seo_lang = ' . (int) $id_lang.'
+                        AND id_shop = ' . (int) $id_shop.'
+                        AND id_seo_product = ' . (int) $id_element;
 
                     if (\Db::getInstance()->execute($sql_ever_desc)) {
                         return true;
@@ -347,8 +347,8 @@ class GenerateObjectsContent extends Command
                 if (!in_array($category->id, $this->getAllowedGeneratorCategories())) {
                     return;
                 }
-                if ((bool)\Configuration::get('EVERSEO_BOTTOM_CATEGORY_CONTENT') === false) {
-                    if ((bool)\Configuration::get('EVERSEO_DELETE_CATEGORY_CONTENT')) {
+                if ((bool) \Configuration::get('EVERSEO_BOTTOM_CATEGORY_CONTENT') === false) {
+                    if ((bool) \Configuration::get('EVERSEO_DELETE_CATEGORY_CONTENT')) {
                         $category->description = $description;
                     } else {
                         $category->description = $category->description.' '.$description;
@@ -365,7 +365,7 @@ class GenerateObjectsContent extends Command
                         (int) $id_lang,
                         (int) $id_shop
                     );
-                    if ((bool)\Configuration::get('EVERSEO_DELETE_CATEGORY_CONTENT') === false) {
+                    if ((bool) \Configuration::get('EVERSEO_DELETE_CATEGORY_CONTENT') === false) {
                         $obj->bottom_content = $obj->bottom_content.' '.$description;
                     } else {
                         $obj->bottom_content = $description;
@@ -387,7 +387,7 @@ class GenerateObjectsContent extends Command
                     (int) $id_element,
                     (int) $id_lang
                 );
-                if ((bool)\Configuration::get('EVERSEO_BOTTOM_MANUFACTURER_CONTENT') === false) {
+                if ((bool) \Configuration::get('EVERSEO_BOTTOM_MANUFACTURER_CONTENT') === false) {
                     $manufacturer->description = Tools::substr(pSQL($description), 0, 250);
                     if ($manufacturer->save()) {
                         return true;
@@ -398,7 +398,7 @@ class GenerateObjectsContent extends Command
                         (int) $id_lang,
                         (int) $id_shop
                     );
-                    if ((bool)\Configuration::get('EVERSEO_DELETE_MANUFACTURER_CONTENT') === false) {
+                    if ((bool) \Configuration::get('EVERSEO_DELETE_MANUFACTURER_CONTENT') === false) {
                         $obj->bottom_content = $obj->bottom_content.' '.$description;
                     } else {
                         $obj->bottom_content = $description;
@@ -420,7 +420,7 @@ class GenerateObjectsContent extends Command
                     (int) $id_element,
                     (int) $id_lang
                 );
-                if ((bool)\Configuration::get('EVERSEO_BOTTOM_SUPPLIER_CONTENT') === false) {
+                if ((bool) \Configuration::get('EVERSEO_BOTTOM_SUPPLIER_CONTENT') === false) {
                     $supplier->description = Tools::substr(pSQL($description), 0, 250);
                     if ($supplier->save()) {
                         return true;
@@ -431,7 +431,7 @@ class GenerateObjectsContent extends Command
                         (int) $id_lang,
                         (int) $id_shop
                     );
-                    if ((bool)\Configuration::get('EVERSEO_DELETE_SUPPLIER_CONTENT') === false) {
+                    if ((bool) \Configuration::get('EVERSEO_DELETE_SUPPLIER_CONTENT') === false) {
                         $obj->bottom_content = $obj->bottom_content.' '.$description;
                     } else {
                         $obj->bottom_content = $description;
@@ -465,9 +465,9 @@ class GenerateObjectsContent extends Command
 
     protected function logCommand($msg)
     {
-        $log  = 'Msg: '.$msg.PHP_EOL.
-                date('j.n.Y').PHP_EOL.
-                "-------------------------".PHP_EOL;
+        $log  = 'Msg: ' . $msg . PHP_EOL .
+                date('j.n.Y') . PHP_EOL .
+                '-------------------------' . PHP_EOL;
 
         //Save string to log, use FILE_APPEND to append.
         file_put_contents(

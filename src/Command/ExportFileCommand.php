@@ -81,7 +81,7 @@ class ExportFileCommand extends Command
         } else {
             $shop = $context->shop;
             if (!\Validate::isLoadedObject($shop)) {
-                $shop = new \Shop((int)\Configuration::get('PS_SHOP_DEFAULT'));
+                $shop = new \Shop((int) \Configuration::get('PS_SHOP_DEFAULT'));
                 $idShop = $shop->id;
             } else {
                 $output->writeln('<comment>Shop not found</comment>');
@@ -119,57 +119,57 @@ class ExportFileCommand extends Command
             $r = 2;
             foreach ($dataSet as $category) {
                 $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(1, $r, $category['id_category']);
-                $spreadsheet->getActiveSheet()->getStyle("A".$r)->getFont()->setBold(true);
-                $spreadsheet->getActiveSheet()->getStyle("A".$r)->getFont()->setName('Arial');
-                $spreadsheet->getActiveSheet()->getStyle("A".$r)->getFont()->setSize(9);
+                $spreadsheet->getActiveSheet()->getStyle("A" . $r)->getFont()->setBold(true);
+                $spreadsheet->getActiveSheet()->getStyle("A" . $r)->getFont()->setName('Arial');
+                $spreadsheet->getActiveSheet()->getStyle("A" . $r)->getFont()->setSize(9);
                 $spreadsheet->getActiveSheet()->getColumnDimension("A")->setAutoSize(true);
 
                 $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(2, $r, $category['id_shop']);
-                $spreadsheet->getActiveSheet()->getStyle("B".$r)->getFont()->setBold(true);
-                $spreadsheet->getActiveSheet()->getStyle("B".$r)->getFont()->setName('Arial');
-                $spreadsheet->getActiveSheet()->getStyle("B".$r)->getFont()->setSize(9);
+                $spreadsheet->getActiveSheet()->getStyle("B" . $r)->getFont()->setBold(true);
+                $spreadsheet->getActiveSheet()->getStyle("B" . $r)->getFont()->setName('Arial');
+                $spreadsheet->getActiveSheet()->getStyle("B" . $r)->getFont()->setSize(9);
                 $spreadsheet->getActiveSheet()->getColumnDimension("B")->setAutoSize(true);
 
                 $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(3, $r, $category['id_lang']);
-                $spreadsheet->getActiveSheet()->getStyle("C".$r)->getFont()->setBold(true);
-                $spreadsheet->getActiveSheet()->getStyle("C".$r)->getFont()->setName('Arial');
-                $spreadsheet->getActiveSheet()->getStyle("C".$r)->getFont()->setSize(9);
+                $spreadsheet->getActiveSheet()->getStyle("C" . $r)->getFont()->setBold(true);
+                $spreadsheet->getActiveSheet()->getStyle("C" . $r)->getFont()->setName('Arial');
+                $spreadsheet->getActiveSheet()->getStyle("C" . $r)->getFont()->setSize(9);
                 $spreadsheet->getActiveSheet()->getColumnDimension("C")->setAutoSize(true);
 
                 $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(4, $r, $category['name']);
-                $spreadsheet->getActiveSheet()->getStyle("D".$r)->getFont()->setBold(true);
-                $spreadsheet->getActiveSheet()->getStyle("D".$r)->getFont()->setName('Arial');
-                $spreadsheet->getActiveSheet()->getStyle("D".$r)->getFont()->setSize(9);
+                $spreadsheet->getActiveSheet()->getStyle("D" . $r)->getFont()->setBold(true);
+                $spreadsheet->getActiveSheet()->getStyle("D" . $r)->getFont()->setName('Arial');
+                $spreadsheet->getActiveSheet()->getStyle("D" . $r)->getFont()->setSize(9);
                 $spreadsheet->getActiveSheet()->getColumnDimension("D")->setAutoSize(true);
 
                 $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(5, $r, $category['description']);
-                $spreadsheet->getActiveSheet()->getStyle("E".$r)->getFont()->setBold(true);
-                $spreadsheet->getActiveSheet()->getStyle("E".$r)->getFont()->setName('Arial');
-                $spreadsheet->getActiveSheet()->getStyle("E".$r)->getFont()->setSize(9);
+                $spreadsheet->getActiveSheet()->getStyle("E" . $r)->getFont()->setBold(true);
+                $spreadsheet->getActiveSheet()->getStyle("E" . $r)->getFont()->setName('Arial');
+                $spreadsheet->getActiveSheet()->getStyle("E" . $r)->getFont()->setSize(9);
                 $spreadsheet->getActiveSheet()->getColumnDimension("E")->setAutoSize(true);
 
                 $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(6, $r, $category['bottom_content']);
-                $spreadsheet->getActiveSheet()->getStyle("F".$r)->getFont()->setBold(true);
-                $spreadsheet->getActiveSheet()->getStyle("F".$r)->getFont()->setName('Arial');
-                $spreadsheet->getActiveSheet()->getStyle("F".$r)->getFont()->setSize(9);
+                $spreadsheet->getActiveSheet()->getStyle("F" . $r)->getFont()->setBold(true);
+                $spreadsheet->getActiveSheet()->getStyle("F" . $r)->getFont()->setName('Arial');
+                $spreadsheet->getActiveSheet()->getStyle("F" . $r)->getFont()->setSize(9);
                 $spreadsheet->getActiveSheet()->getColumnDimension("F")->setAutoSize(true);
 
                 $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(7, $r, $category['meta_description']);
-                $spreadsheet->getActiveSheet()->getStyle("G".$r)->getFont()->setBold(true);
-                $spreadsheet->getActiveSheet()->getStyle("G".$r)->getFont()->setName('Arial');
-                $spreadsheet->getActiveSheet()->getStyle("G".$r)->getFont()->setSize(9);
+                $spreadsheet->getActiveSheet()->getStyle("G" . $r)->getFont()->setBold(true);
+                $spreadsheet->getActiveSheet()->getStyle("G" . $r)->getFont()->setName('Arial');
+                $spreadsheet->getActiveSheet()->getStyle("G" . $r)->getFont()->setSize(9);
                 $spreadsheet->getActiveSheet()->getColumnDimension("G")->setAutoSize(true);
 
                 $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(8, $r, $category['meta_title']);
-                $spreadsheet->getActiveSheet()->getStyle("H".$r)->getFont()->setBold(true);
-                $spreadsheet->getActiveSheet()->getStyle("H".$r)->getFont()->setName('Arial');
-                $spreadsheet->getActiveSheet()->getStyle("H".$r)->getFont()->setSize(9);
+                $spreadsheet->getActiveSheet()->getStyle("H" . $r)->getFont()->setBold(true);
+                $spreadsheet->getActiveSheet()->getStyle("H" . $r)->getFont()->setName('Arial');
+                $spreadsheet->getActiveSheet()->getStyle("H" . $r)->getFont()->setSize(9);
                 $spreadsheet->getActiveSheet()->getColumnDimension("H")->setAutoSize(true);
 
                 $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(9, $r, $category['link_rewrite']);
-                $spreadsheet->getActiveSheet()->getStyle("I".$r)->getFont()->setBold(true);
-                $spreadsheet->getActiveSheet()->getStyle("I".$r)->getFont()->setName('Arial');
-                $spreadsheet->getActiveSheet()->getStyle("I".$r)->getFont()->setSize(9);
+                $spreadsheet->getActiveSheet()->getStyle("I" . $r)->getFont()->setBold(true);
+                $spreadsheet->getActiveSheet()->getStyle("I" . $r)->getFont()->setName('Arial');
+                $spreadsheet->getActiveSheet()->getStyle("I" . $r)->getFont()->setSize(9);
                 $spreadsheet->getActiveSheet()->getColumnDimension("I")->setAutoSize(true);
 
                 $r++;
@@ -257,63 +257,63 @@ class ExportFileCommand extends Command
             $r = 2;
             foreach ($dataSet as $product) {
                 $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(1, $r, $product['id_product']);
-                $spreadsheet->getActiveSheet()->getStyle("A".$r)->getFont()->setBold(true);
-                $spreadsheet->getActiveSheet()->getStyle("A".$r)->getFont()->setName('Arial');
-                $spreadsheet->getActiveSheet()->getStyle("A".$r)->getFont()->setSize(9);
+                $spreadsheet->getActiveSheet()->getStyle("A" . $r)->getFont()->setBold(true);
+                $spreadsheet->getActiveSheet()->getStyle("A" . $r)->getFont()->setName('Arial');
+                $spreadsheet->getActiveSheet()->getStyle("A" . $r)->getFont()->setSize(9);
                 $spreadsheet->getActiveSheet()->getColumnDimension("A")->setAutoSize(true);
 
                 $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(2, $r, $product['id_shop']);
-                $spreadsheet->getActiveSheet()->getStyle("B".$r)->getFont()->setBold(true);
-                $spreadsheet->getActiveSheet()->getStyle("B".$r)->getFont()->setName('Arial');
-                $spreadsheet->getActiveSheet()->getStyle("B".$r)->getFont()->setSize(9);
+                $spreadsheet->getActiveSheet()->getStyle("B" . $r)->getFont()->setBold(true);
+                $spreadsheet->getActiveSheet()->getStyle("B" . $r)->getFont()->setName('Arial');
+                $spreadsheet->getActiveSheet()->getStyle("B" . $r)->getFont()->setSize(9);
                 $spreadsheet->getActiveSheet()->getColumnDimension("B")->setAutoSize(true);
 
                 $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(3, $r, $product['id_lang']);
-                $spreadsheet->getActiveSheet()->getStyle("C".$r)->getFont()->setBold(true);
-                $spreadsheet->getActiveSheet()->getStyle("C".$r)->getFont()->setName('Arial');
-                $spreadsheet->getActiveSheet()->getStyle("C".$r)->getFont()->setSize(9);
+                $spreadsheet->getActiveSheet()->getStyle("C" . $r)->getFont()->setBold(true);
+                $spreadsheet->getActiveSheet()->getStyle("C" . $r)->getFont()->setName('Arial');
+                $spreadsheet->getActiveSheet()->getStyle("C" . $r)->getFont()->setSize(9);
                 $spreadsheet->getActiveSheet()->getColumnDimension("C")->setAutoSize(true);
 
                 $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(4, $r, $product['reference']);
-                $spreadsheet->getActiveSheet()->getStyle("D".$r)->getFont()->setBold(true);
-                $spreadsheet->getActiveSheet()->getStyle("D".$r)->getFont()->setName('Arial');
-                $spreadsheet->getActiveSheet()->getStyle("D".$r)->getFont()->setSize(9);
+                $spreadsheet->getActiveSheet()->getStyle("D" . $r)->getFont()->setBold(true);
+                $spreadsheet->getActiveSheet()->getStyle("D" . $r)->getFont()->setName('Arial');
+                $spreadsheet->getActiveSheet()->getStyle("D" . $r)->getFont()->setSize(9);
                 $spreadsheet->getActiveSheet()->getColumnDimension("D")->setAutoSize(true);
 
                 $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(5, $r, $product['name']);
-                $spreadsheet->getActiveSheet()->getStyle("E".$r)->getFont()->setBold(true);
-                $spreadsheet->getActiveSheet()->getStyle("E".$r)->getFont()->setName('Arial');
-                $spreadsheet->getActiveSheet()->getStyle("E".$r)->getFont()->setSize(9);
+                $spreadsheet->getActiveSheet()->getStyle("E" . $r)->getFont()->setBold(true);
+                $spreadsheet->getActiveSheet()->getStyle("E" . $r)->getFont()->setName('Arial');
+                $spreadsheet->getActiveSheet()->getStyle("E" . $r)->getFont()->setSize(9);
                 $spreadsheet->getActiveSheet()->getColumnDimension("E")->setAutoSize(true);
 
                 $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(6, $r, $product['description_short']);
-                $spreadsheet->getActiveSheet()->getStyle("F".$r)->getFont()->setBold(true);
-                $spreadsheet->getActiveSheet()->getStyle("F".$r)->getFont()->setName('Arial');
-                $spreadsheet->getActiveSheet()->getStyle("F".$r)->getFont()->setSize(9);
+                $spreadsheet->getActiveSheet()->getStyle("F" . $r)->getFont()->setBold(true);
+                $spreadsheet->getActiveSheet()->getStyle("F" . $r)->getFont()->setName('Arial');
+                $spreadsheet->getActiveSheet()->getStyle("F" . $r)->getFont()->setSize(9);
                 $spreadsheet->getActiveSheet()->getColumnDimension("F")->setAutoSize(true);
 
                 $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(7, $r, $product['description']);
-                $spreadsheet->getActiveSheet()->getStyle("G".$r)->getFont()->setBold(true);
-                $spreadsheet->getActiveSheet()->getStyle("G".$r)->getFont()->setName('Arial');
-                $spreadsheet->getActiveSheet()->getStyle("G".$r)->getFont()->setSize(9);
+                $spreadsheet->getActiveSheet()->getStyle("G" . $r)->getFont()->setBold(true);
+                $spreadsheet->getActiveSheet()->getStyle("G" . $r)->getFont()->setName('Arial');
+                $spreadsheet->getActiveSheet()->getStyle("G" . $r)->getFont()->setSize(9);
                 $spreadsheet->getActiveSheet()->getColumnDimension("G")->setAutoSize(true);
 
                 $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(8, $r, $product['meta_description']);
-                $spreadsheet->getActiveSheet()->getStyle("H".$r)->getFont()->setBold(true);
-                $spreadsheet->getActiveSheet()->getStyle("H".$r)->getFont()->setName('Arial');
-                $spreadsheet->getActiveSheet()->getStyle("H".$r)->getFont()->setSize(9);
+                $spreadsheet->getActiveSheet()->getStyle("H" . $r)->getFont()->setBold(true);
+                $spreadsheet->getActiveSheet()->getStyle("H" . $r)->getFont()->setName('Arial');
+                $spreadsheet->getActiveSheet()->getStyle("H" . $r)->getFont()->setSize(9);
                 $spreadsheet->getActiveSheet()->getColumnDimension("H")->setAutoSize(true);
 
                 $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(9, $r, $product['meta_title']);
-                $spreadsheet->getActiveSheet()->getStyle("I".$r)->getFont()->setBold(true);
-                $spreadsheet->getActiveSheet()->getStyle("I".$r)->getFont()->setName('Arial');
-                $spreadsheet->getActiveSheet()->getStyle("I".$r)->getFont()->setSize(9);
+                $spreadsheet->getActiveSheet()->getStyle("I" . $r)->getFont()->setBold(true);
+                $spreadsheet->getActiveSheet()->getStyle("I" . $r)->getFont()->setName('Arial');
+                $spreadsheet->getActiveSheet()->getStyle("I" . $r)->getFont()->setSize(9);
                 $spreadsheet->getActiveSheet()->getColumnDimension("I")->setAutoSize(true);
 
                 $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(10, $r, $product['link_rewrite']);
-                $spreadsheet->getActiveSheet()->getStyle("J".$r)->getFont()->setBold(true);
-                $spreadsheet->getActiveSheet()->getStyle("J".$r)->getFont()->setName('Arial');
-                $spreadsheet->getActiveSheet()->getStyle("J".$r)->getFont()->setSize(9);
+                $spreadsheet->getActiveSheet()->getStyle("J" . $r)->getFont()->setBold(true);
+                $spreadsheet->getActiveSheet()->getStyle("J" . $r)->getFont()->setName('Arial');
+                $spreadsheet->getActiveSheet()->getStyle("J" . $r)->getFont()->setSize(9);
                 $spreadsheet->getActiveSheet()->getColumnDimension("J")->setAutoSize(true);
 
                 $r++;
@@ -400,27 +400,27 @@ class ExportFileCommand extends Command
             $r = 2;
             foreach ($dataSet as $feature) {
                 $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(1, $r, $feature['id_feature']);
-                $spreadsheet->getActiveSheet()->getStyle("A".$r)->getFont()->setBold(true);
-                $spreadsheet->getActiveSheet()->getStyle("A".$r)->getFont()->setName('Arial');
-                $spreadsheet->getActiveSheet()->getStyle("A".$r)->getFont()->setSize(9);
+                $spreadsheet->getActiveSheet()->getStyle("A" . $r)->getFont()->setBold(true);
+                $spreadsheet->getActiveSheet()->getStyle("A" . $r)->getFont()->setName('Arial');
+                $spreadsheet->getActiveSheet()->getStyle("A" . $r)->getFont()->setSize(9);
                 $spreadsheet->getActiveSheet()->getColumnDimension("A")->setAutoSize(true);
 
                 $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(2, $r, $feature['id_shop']);
-                $spreadsheet->getActiveSheet()->getStyle("B".$r)->getFont()->setBold(true);
-                $spreadsheet->getActiveSheet()->getStyle("B".$r)->getFont()->setName('Arial');
-                $spreadsheet->getActiveSheet()->getStyle("B".$r)->getFont()->setSize(9);
+                $spreadsheet->getActiveSheet()->getStyle("B" . $r)->getFont()->setBold(true);
+                $spreadsheet->getActiveSheet()->getStyle("B" . $r)->getFont()->setName('Arial');
+                $spreadsheet->getActiveSheet()->getStyle("B" . $r)->getFont()->setSize(9);
                 $spreadsheet->getActiveSheet()->getColumnDimension("B")->setAutoSize(true);
 
                 $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(3, $r, $feature['id_lang']);
-                $spreadsheet->getActiveSheet()->getStyle("C".$r)->getFont()->setBold(true);
-                $spreadsheet->getActiveSheet()->getStyle("C".$r)->getFont()->setName('Arial');
-                $spreadsheet->getActiveSheet()->getStyle("C".$r)->getFont()->setSize(9);
+                $spreadsheet->getActiveSheet()->getStyle("C" . $r)->getFont()->setBold(true);
+                $spreadsheet->getActiveSheet()->getStyle("C" . $r)->getFont()->setName('Arial');
+                $spreadsheet->getActiveSheet()->getStyle("C" . $r)->getFont()->setSize(9);
                 $spreadsheet->getActiveSheet()->getColumnDimension("C")->setAutoSize(true);
 
                 $spreadsheet->getActiveSheet()->setCellValueByColumnAndRow(4, $r, $feature['name']);
-                $spreadsheet->getActiveSheet()->getStyle("D".$r)->getFont()->setBold(true);
-                $spreadsheet->getActiveSheet()->getStyle("D".$r)->getFont()->setName('Arial');
-                $spreadsheet->getActiveSheet()->getStyle("D".$r)->getFont()->setSize(9);
+                $spreadsheet->getActiveSheet()->getStyle("D" . $r)->getFont()->setBold(true);
+                $spreadsheet->getActiveSheet()->getStyle("D" . $r)->getFont()->setName('Arial');
+                $spreadsheet->getActiveSheet()->getStyle("D" . $r)->getFont()->setSize(9);
                 $spreadsheet->getActiveSheet()->getColumnDimension("D")->setAutoSize(true);
 
                 $r++;
@@ -492,10 +492,10 @@ class ExportFileCommand extends Command
         $sql->leftJoin(
             'feature_shop',
             'fs',
-            'fs.id_feature = fl.id_feature AND fs.id_shop = '.(int) $idShop
+            'fs.id_feature = fl.id_feature AND fs.id_shop = ' . (int) $idShop
         );
         if ((int) $idLang > 0) {
-            $sql->where('fl.id_lang = '.(int) $idLang);
+            $sql->where('fl.id_lang = ' . (int) $idLang);
         }
         if ((int) $limit > 0) {
             $sql->limit((int) $limit);
@@ -510,7 +510,7 @@ class ExportFileCommand extends Command
         $sql->select('*');
         $sql->from('feature_value_lang', 'fvl');
         if ((int) $idLang > 0) {
-            $sql->where('fvl.id_lang = '.(int) $idLang);
+            $sql->where('fvl.id_lang = ' . (int) $idLang);
         }
         if ((int) $limit > 0) {
             $sql->limit((int) $limit);
@@ -527,18 +527,18 @@ class ExportFileCommand extends Command
         $sql->leftJoin(
             'product',
             'ps',
-            'ps.id_product = pl.id_product AND ps.id_shop_default = '.(int) $idShop
+            'ps.id_product = pl.id_product AND ps.id_shop_default = ' . (int) $idShop
         );
         $sql->leftJoin(
             'ever_seo_product',
             'esp',
-            'esp.id_seo_product = pl.id_product AND esp.id_shop = '.(int) $idShop
+            'esp.id_seo_product = pl.id_product AND esp.id_shop = ' . (int) $idShop
         );
         if ((int) $idLang > 0) {
-            $sql->where('pl.id_lang = '.(int) $idLang);
+            $sql->where('pl.id_lang = ' . (int) $idLang);
         }
         if ((int) $idCategory > 0) {
-            $sql->where('ps.id_category_default = '.(int) $idCategory);
+            $sql->where('ps.id_category_default = ' . (int) $idCategory);
         }
         if ((int) $limit > 0) {
             $sql->limit((int) $limit);
@@ -555,19 +555,19 @@ class ExportFileCommand extends Command
         $sql->leftJoin(
             'category_shop',
             'ps',
-            'ps.id_category = pl.id_category AND ps.id_shop = '.(int) $idShop
+            'ps.id_category = pl.id_category AND ps.id_shop = ' . (int) $idShop
         );
         $sql->leftJoin(
             'ever_seo_category',
             'esc',
-            'esc.id_seo_category = pl.id_category AND esc.id_shop = '.(int) $idShop
+            'esc.id_seo_category = pl.id_category AND esc.id_shop = ' . (int) $idShop
         );
-        $sql->where('pl.id_shop = '.(int) $idShop);
+        $sql->where('pl.id_shop = ' . (int) $idShop);
         if ((int) $idLang > 0) {
-            $sql->where('pl.id_lang = '.(int) $idLang);
+            $sql->where('pl.id_lang = ' . (int) $idLang);
         }
         if ((int) $idCategory > 0) {
-            $sql->where('pl.id_category = '.(int) $idCategory);
+            $sql->where('pl.id_category = ' . (int) $idCategory);
         }
         $allCategoriesIds = \Db::getInstance()->executeS($sql);
         return $allCategoriesIds;
@@ -575,9 +575,9 @@ class ExportFileCommand extends Command
 
     protected function logCommand($msg)
     {
-        $log  = 'Msg: '.$msg.PHP_EOL.
-                date('j.n.Y').PHP_EOL.
-                "-------------------------".PHP_EOL;
+        $log  = 'Msg: ' . $msg . PHP_EOL .
+                date('j.n.Y') . PHP_EOL .
+                '-------------------------' . PHP_EOL;
 
         //Save string to log, use FILE_APPEND to append.
         file_put_contents(

@@ -63,7 +63,7 @@ class ExecuteAction extends Command
         } else {
             $shop = $context->shop;
             if (!\Validate::isLoadedObject($shop)) {
-                $shop = new \Shop((int)\Configuration::get('PS_SHOP_DEFAULT'));
+                $shop = new \Shop((int) \Configuration::get('PS_SHOP_DEFAULT'));
             }
         }
         if (!in_array($action, $this->allowedActions)) {
@@ -80,6 +80,9 @@ class ExecuteAction extends Command
                 $output->writeln('<comment>You must have imagewebp extension enabled on your server</comment>');
                 return self::ABORTED;
             }
+            $output->writeln(sprintf(
+                '<info>Start creating webp images : datetime : '.date('Y-m-d H:i:s').'</info>'
+            ));
             \EverPsSeoImage::setMedias2Webp();
             \Hook::exec('actionHtaccessCreate');
             // \Tools::clearAllCache();
@@ -94,7 +97,7 @@ class ExecuteAction extends Command
             return self::SUCCESS;
         }
         if ($action === 'redirectDisabledProduct') {
-            if (!(bool)\Configuration::get('EVERSEO_FORCE_PRODUCT_REDIRECT')) {
+            if (!(bool) \Configuration::get('EVERSEO_FORCE_PRODUCT_REDIRECT')) {
                 $output->writeln('<comment>This action is disabled in module conf</comment>');
                 return self::ABORTED;
             }
@@ -106,10 +109,10 @@ class ExecuteAction extends Command
                     '<info>Start forcing redirection disabled product type 404 to parent category : datetime : '.date('Y-m-d H:i:s').'</info>'
                 ));
 
-                foreach ($products as $key => $value) {
+                foreach ($products as $value) {
                     \EverPsSeoProduct::inactiveRedirect($value["id_product"], $shop->id);
                     $output->writeln(sprintf(
-                        '<info>Forcing redirection for id product '.(int) $value["id_product"].' has been set</info>'
+                        '<info>Forcing redirection for id product ' . (int) $value["id_product"].' has been set</info>'
                     ));
                 }
 

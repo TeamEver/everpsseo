@@ -411,17 +411,17 @@ class ImportFileCommand extends ContainerAwareCommand
         ) {
             $sql[] = 'UPDATE `' . _DB_PREFIX_ . 'category_lang`
             SET name = "'.\Db::getInstance()->escape($line['name']).'"
-            WHERE id_lang = '.(int) $idLang.'
-            AND id_shop = '.(int) $idShop.'
-            AND id_category = '.(int) $category->id;
-            if ((bool)\Configuration::get('EVERSEO_REWRITE_LINKS') === true) {
+            WHERE id_lang = ' . (int) $idLang.'
+            AND id_shop = ' . (int) $idShop.'
+            AND id_category = ' . (int) $category->id;
+            if ((bool) \Configuration::get('EVERSEO_REWRITE_LINKS') === true) {
                 $sql[] = 'UPDATE `' . _DB_PREFIX_ . 'category_lang`
                 SET link_rewrite = "'.\Db::getInstance()->escape(
                     \Tools::link_rewrite($line['name'])
                 ).'"
-                WHERE id_lang = '.(int) $idLang.'
-                AND id_shop = '.(int) $idShop.'
-                AND id_category = '.(int) $category->id;
+                WHERE id_lang = ' . (int) $idLang.'
+                AND id_shop = ' . (int) $idShop.'
+                AND id_category = ' . (int) $category->id;
             }
         }
         if (isset($line['description'])
@@ -429,18 +429,18 @@ class ImportFileCommand extends ContainerAwareCommand
         ) {
             $sql[] = 'UPDATE `' . _DB_PREFIX_ . 'category_lang`
             SET description = "'.\Db::getInstance()->escape($line['description'], true).'"
-            WHERE id_lang = '.(int) $idLang.'
-            AND id_shop = '.(int) $idShop.'
-            AND id_category = '.(int) $category->id;
+            WHERE id_lang = ' . (int) $idLang.'
+            AND id_shop = ' . (int) $idShop.'
+            AND id_category = ' . (int) $category->id;
         }
         if (isset($line['meta_title'])
             && !empty($line['meta_title'])
         ) {
             $sql[] = 'UPDATE `' . _DB_PREFIX_ . 'category_lang`
             SET meta_title = "'.\Db::getInstance()->escape($line['meta_title']).'"
-            WHERE id_lang = '.(int) $idLang.'
-            AND id_shop = '.(int) $idShop.'
-            AND id_category = '.(int) $category->id;
+            WHERE id_lang = ' . (int) $idLang.'
+            AND id_shop = ' . (int) $idShop.'
+            AND id_category = ' . (int) $category->id;
             $seo_category->meta_title = \Db::getInstance()->escape($line['meta_title']);
             $seo_category->save();
         }
@@ -449,9 +449,9 @@ class ImportFileCommand extends ContainerAwareCommand
         ) {
             $sql[] = 'UPDATE `' . _DB_PREFIX_ . 'category_lang`
             SET meta_description = "'.\Db::getInstance()->escape($line['meta_description']).'"
-            WHERE id_lang = '.(int) $idLang.'
-            AND id_shop = '.(int) $idShop.'
-            AND id_category = '.(int) $category->id;
+            WHERE id_lang = ' . (int) $idLang.'
+            AND id_shop = ' . (int) $idShop.'
+            AND id_category = ' . (int) $category->id;
             $seo_category->meta_description = \Db::getInstance()->escape($line['meta_description']);
             $seo_category->save();
         }
@@ -461,9 +461,9 @@ class ImportFileCommand extends ContainerAwareCommand
             if (\Validate::isLinkRewrite($line['link_rewrite'])) {
                 $sql[] = 'UPDATE `' . _DB_PREFIX_ . 'category_lang`
                 SET link_rewrite = "'.\Db::getInstance()->escape($line['link_rewrite']).'"
-                WHERE id_lang = '.(int) $idLang.'
-                AND id_shop = '.(int) $idShop.'
-                AND id_category = '.(int) $category->id;
+                WHERE id_lang = ' . (int) $idLang.'
+                AND id_shop = ' . (int) $idShop.'
+                AND id_category = ' . (int) $category->id;
                 $seo_category->link_rewrite = \Db::getInstance()->escape($line['link_rewrite']);
                 $seo_category->save();
             } else {
@@ -529,7 +529,7 @@ class ImportFileCommand extends ContainerAwareCommand
                     $output->writeln(
                        '<error>Invalid product</error>'
                     );
-                    if ((bool)\Configuration::get('EVER_LOG_CMD') === true) {
+                    if ((bool) \Configuration::get('EVER_LOG_CMD') === true) {
                         $this->logCommand(
                             'invalid product on reference '.$line['reference']
                         );
@@ -551,7 +551,7 @@ class ImportFileCommand extends ContainerAwareCommand
                     $output->writeln(
                        '<error>Invalid product</error>'
                     );
-                    if ((bool)\Configuration::get('EVER_LOG_CMD') === true) {
+                    if ((bool) \Configuration::get('EVER_LOG_CMD') === true) {
                         $this->logCommand(
                             'invalid product on ID '.$line['id_product']
                         );
@@ -574,7 +574,7 @@ class ImportFileCommand extends ContainerAwareCommand
                     $output->writeln(
                        '<error>Invalid product</error>'
                     );
-                    if ((bool)\Configuration::get('EVER_LOG_CMD') === true) {
+                    if ((bool) \Configuration::get('EVER_LOG_CMD') === true) {
                         $this->logCommand(
                             'invalid product on reference '.$line['reference']
                         );
@@ -586,7 +586,7 @@ class ImportFileCommand extends ContainerAwareCommand
             $output->writeln(
                '<error>Invalid product</error>'
             );
-            if ((bool)\Configuration::get('EVER_LOG_CMD') === true) {
+            if ((bool) \Configuration::get('EVER_LOG_CMD') === true) {
                 $this->logCommand(
                     'invalid product'
                 );
@@ -604,17 +604,17 @@ class ImportFileCommand extends ContainerAwareCommand
         ) {
             $sql[] = 'UPDATE `' . _DB_PREFIX_ . 'product_lang`
             SET name = "'.\Db::getInstance()->escape($line['name']).'"
-            WHERE id_lang = '.(int) $idLang.'
-            AND id_shop = '.(int) $idShop.'
-            AND id_product = '.(int) $product->id;
-            if ((bool)\Configuration::get('EVERSEO_REWRITE_LINKS') === true) {
+            WHERE id_lang = ' . (int) $idLang.'
+            AND id_shop = ' . (int) $idShop.'
+            AND id_product = ' . (int) $product->id;
+            if ((bool) \Configuration::get('EVERSEO_REWRITE_LINKS') === true) {
                 $sql[] = 'UPDATE `' . _DB_PREFIX_ . 'product_lang`
                 SET link_rewrite = "'.\Db::getInstance()->escape(
                     \Tools::link_rewrite($line['name'])
                 ).'"
-                WHERE id_lang = '.(int) $idLang.'
-                AND id_shop = '.(int) $idShop.'
-                AND id_product = '.(int) $product->id;
+                WHERE id_lang = ' . (int) $idLang.'
+                AND id_shop = ' . (int) $idShop.'
+                AND id_product = ' . (int) $product->id;
             }
         }
         if (isset($line['description'])
@@ -622,27 +622,27 @@ class ImportFileCommand extends ContainerAwareCommand
         ) {
             $sql[] = 'UPDATE `' . _DB_PREFIX_ . 'product_lang`
             SET description = "'.\Db::getInstance()->escape($line['description'], true).'"
-            WHERE id_lang = '.(int) $idLang.'
-            AND id_shop = '.(int) $idShop.'
-            AND id_product = '.(int) $product->id;
+            WHERE id_lang = ' . (int) $idLang.'
+            AND id_shop = ' . (int) $idShop.'
+            AND id_product = ' . (int) $product->id;
         }
         if (isset($line['description_short'])
             && !empty($line['description_short'])
         ) {
             $sql[] = 'UPDATE `' . _DB_PREFIX_ . 'product_lang`
             SET description_short = "'.\Db::getInstance()->escape($line['description_short'], true).'"
-            WHERE id_lang = '.(int) $idLang.'
-            AND id_shop = '.(int) $idShop.'
-            AND id_product = '.(int) $product->id;
+            WHERE id_lang = ' . (int) $idLang.'
+            AND id_shop = ' . (int) $idShop.'
+            AND id_product = ' . (int) $product->id;
         }
         if (isset($line['meta_description'])
             && !empty($line['meta_description'])
         ) {
             $sql[] = 'UPDATE `' . _DB_PREFIX_ . 'product_lang`
             SET meta_description = "'.\Db::getInstance()->escape($line['meta_description']).'"
-            WHERE id_lang = '.(int) $idLang.'
-            AND id_shop = '.(int) $idShop.'
-            AND id_product = '.(int) $product->id;
+            WHERE id_lang = ' . (int) $idLang.'
+            AND id_shop = ' . (int) $idShop.'
+            AND id_product = ' . (int) $product->id;
             $seo_product->meta_description = \Db::getInstance()->escape($line['meta_description']);
             $seo_product->save();
         }
@@ -651,9 +651,9 @@ class ImportFileCommand extends ContainerAwareCommand
         ) {
             $sql[] = 'UPDATE `' . _DB_PREFIX_ . 'product_lang`
             SET meta_title = "'.\Db::getInstance()->escape($line['meta_title']).'"
-            WHERE id_lang = '.(int) $idLang.'
-            AND id_shop = '.(int) $idShop.'
-            AND id_product = '.(int) $product->id;
+            WHERE id_lang = ' . (int) $idLang.'
+            AND id_shop = ' . (int) $idShop.'
+            AND id_product = ' . (int) $product->id;
             $seo_product->meta_title = \Db::getInstance()->escape($line['meta_title']);
             $seo_product->save();
         }
@@ -663,16 +663,16 @@ class ImportFileCommand extends ContainerAwareCommand
             if (\Validate::isLinkRewrite($line['link_rewrite'])) {
                 $sql[] = 'UPDATE `' . _DB_PREFIX_ . 'product_lang`
                 SET link_rewrite = "'.\Db::getInstance()->escape($line['link_rewrite']).'"
-                WHERE id_lang = '.(int) $idLang.'
-                AND id_shop = '.(int) $idShop.'
-                AND id_product = '.(int) $product->id;
+                WHERE id_lang = ' . (int) $idLang.'
+                AND id_shop = ' . (int) $idShop.'
+                AND id_product = ' . (int) $product->id;
                 $seo_product->link_rewrite = \Db::getInstance()->escape($line['link_rewrite']);
                 $seo_product->save();
             } else {
                 $output->writeln(
                    '<error>Invalid link rewrite on product '.$line['id_product'].' object</error>'
                 );
-                if ((bool)\Configuration::get('EVER_LOG_CMD') === true) {
+                if ((bool) \Configuration::get('EVER_LOG_CMD') === true) {
                     $this->logCommand(
                         'Invalid link rewrite on product '.$line['id_product'].' object'
                     );
@@ -684,15 +684,15 @@ class ImportFileCommand extends ContainerAwareCommand
         ) {
             if (\Validate::isBool($line['index'])) {
                 $sql[] = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_product`
-                SET indexable = "'.(int) $line['index'].'"
-                WHERE id_seo_lang = '.(int) $idLang.'
-                AND id_shop = '.(int) $idShop.'
-                AND id_seo_product = '.(int) $product->id;
+                SET indexable = "' . (int) $line['index'].'"
+                WHERE id_seo_lang = ' . (int) $idLang.'
+                AND id_shop = ' . (int) $idShop.'
+                AND id_seo_product = ' . (int) $product->id;
             } else {
                 $output->writeln(
                    '<error>Invalid index on product '.$line['id_product'].' object</error>'
                 );
-                if ((bool)\Configuration::get('EVER_LOG_CMD') === true) {
+                if ((bool) \Configuration::get('EVER_LOG_CMD') === true) {
                     $this->logCommand(
                         'Invalid index on product '.$line['id_product'].' object'
                     );
@@ -704,15 +704,15 @@ class ImportFileCommand extends ContainerAwareCommand
         ) {
             if (\Validate::isBool($line['follow'])) {
                 $sql[] = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_product`
-                SET follow = "'.(int) $line['follow'].'"
-                WHERE id_seo_lang = '.(int) $idLang.'
-                AND id_shop = '.(int) $idShop.'
-                AND id_seo_product = '.(int) $product->id;
+                SET follow = "' . (int) $line['follow'].'"
+                WHERE id_seo_lang = ' . (int) $idLang.'
+                AND id_shop = ' . (int) $idShop.'
+                AND id_seo_product = ' . (int) $product->id;
             } else {
                 $output->writeln(
                    '<error>Invalid follow on product '.$line['id_product'].' object</error>'
                 );
-                if ((bool)\Configuration::get('EVER_LOG_CMD') === true) {
+                if ((bool) \Configuration::get('EVER_LOG_CMD') === true) {
                     $this->logCommand(
                         'Invalid follow on product '.$line['id_product'].' object'
                     );
@@ -725,14 +725,14 @@ class ImportFileCommand extends ContainerAwareCommand
             if (\Validate::isBool($line['allowed_sitemap'])) {
                 $sql[] = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_product`
                 SET allowed_sitemap = "'.\Db::getInstance()->escape($line['allowed_sitemap']).'"
-                WHERE id_seo_lang = '.(int) $idLang.'
-                AND id_shop = '.(int) $idShop.'
-                AND id_seo_product = '.(int) $product->id;
+                WHERE id_seo_lang = ' . (int) $idLang.'
+                AND id_shop = ' . (int) $idShop.'
+                AND id_seo_product = ' . (int) $product->id;
             } else {
                 $output->writeln(
                    '<error>Invalid allowed_sitemap on product '.$line['id_product'].' object</error>'
                 );
-                if ((bool)\Configuration::get('EVER_LOG_CMD') === true) {
+                if ((bool) \Configuration::get('EVER_LOG_CMD') === true) {
                     $this->logCommand(
                         'Invalid allowed_sitemap on product '.$line['id_product'].' object'
                     );
@@ -745,26 +745,26 @@ class ImportFileCommand extends ContainerAwareCommand
             $seo_product->bottom_content = \Db::getInstance()->escape($line['bottom_content'], true);
             $seo_product->save();
         }
-        if ((bool)\Configuration::get('EVERSEO_REWRITE_LINKS') === true) {
+        if ((bool) \Configuration::get('EVERSEO_REWRITE_LINKS') === true) {
             $linkRewrite = \Tools::link_rewrite($product->name);
             $canonical = \Tools::link_rewrite($product->name);
             $sql[] = 'UPDATE `' . _DB_PREFIX_ . 'product_lang`
             SET link_rewrite = "'.\Db::getInstance()->escape($linkRewrite).'"
-            WHERE id_lang = '.(int) $idLang.'
-            AND id_shop = '.(int) $idShop.'
-            AND id_product = '.(int) $product->id;
+            WHERE id_lang = ' . (int) $idLang.'
+            AND id_shop = ' . (int) $idShop.'
+            AND id_product = ' . (int) $product->id;
 
             $sql[] = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_product`
             SET link_rewrite = "'.\Db::getInstance()->escape($linkRewrite).'"
-            WHERE id_seo_lang = '.(int) $idLang.'
-            AND id_shop = '.(int) $idShop.'
-            AND id_seo_product = '.(int) $product->id;
+            WHERE id_seo_lang = ' . (int) $idLang.'
+            AND id_shop = ' . (int) $idShop.'
+            AND id_seo_product = ' . (int) $product->id;
 
             $sql[] = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_product`
             SET canonical = "'.\Db::getInstance()->escape($canonical).'"
-            WHERE id_seo_lang = '.(int) $idLang.'
-            AND id_shop = '.(int) $idShop.'
-            AND id_seo_product = '.(int) $product->id;
+            WHERE id_seo_lang = ' . (int) $idLang.'
+            AND id_shop = ' . (int) $idShop.'
+            AND id_seo_product = ' . (int) $product->id;
         }
         if (count($sql) > 0) {
             foreach ($sql as $q) {
@@ -775,9 +775,9 @@ class ImportFileCommand extends ContainerAwareCommand
 
     protected function logCommand($msg)
     {
-        $log  = 'Msg: '.$msg.PHP_EOL.
-                date('j.n.Y').PHP_EOL.
-                "-------------------------".PHP_EOL;
+        $log  = 'Msg: ' . $msg . PHP_EOL .
+                date('j.n.Y') . PHP_EOL .
+                '-------------------------' . PHP_EOL;
 
         //Save string to log, use FILE_APPEND to append.
         file_put_contents(
