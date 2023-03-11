@@ -72,11 +72,20 @@ class ExecuteAction extends Command
         }
 
         if ($action === 'createWebpImage') {
+            if ((bool) Configuration::get('EVERSEO_WEBP') === false) {
+                $output->writeln('<comment>Webp not allowed on module configuration</comment>');
+                return self::ABORTED;
+            }
             // Logo
-            $psLogo = _PS_IMG_DIR_ . \Configuration::get(
+            $psLogo = \Configuration::get(
                 'PS_LOGO'
             );
-            \EverPsSeoImage::webpConvert2($psLogo);
+            $psLogo = str_replace('.webp', '', $psLogo);
+            \EverPsSeoImage::webpConvert2(_PS_IMG_DIR_ . $psLogo);
+            \Configuration::updateValue(
+                'PS_LOGO',
+                $psLogo.'.webp'
+            );
             // Products images
             $allImages = \Image::getAllImages();
             $allowedFormats = [
@@ -94,6 +103,14 @@ class ExecuteAction extends Command
                     if (is_file($img) && in_array($info->getExtension(), $allowedFormats)) {
                         \EverPsSeoImage::webpConvert2($img);
                     }
+                }
+            }
+            // Default product images
+            $defaultProductImages = glob(_PS_PRODUCT_IMG_DIR_ . '*');
+            foreach ($defaultProductImages as $img) {
+                $info = new \SplFileInfo(basename($img));
+                if (is_file($img) && in_array($info->getExtension(), $allowedFormats)) {
+                    \EverPsSeoImage::webpConvert2($img);
                 }
             }
             // Categories images

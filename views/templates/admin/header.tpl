@@ -61,6 +61,7 @@
                 <li><code>php bin/console everpsseo:seo:import</code> {l s='update objects depending on XLSX file' mod='everpsseo'}</li>
                 <li><code>php bin/console everpsseo:seo:export categories</code> {l s='export SEO categories on XLSX file' mod='everpsseo'}</li>
                 <li><code>php bin/console everpsseo:seo:export products</code> {l s='export SEO products on XLSX file' mod='everpsseo'}</li>
+                <li><code>php bin/console everpsseo:seo:execute createWebpImage</code> {l s='create webp images' mod='everpsseo'}</li>
             </ul>
         </div>
         <div class="col-md-6 col-xs-12">

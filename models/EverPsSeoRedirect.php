@@ -10,6 +10,8 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
+require_once _PS_MODULE_DIR_ . 'everpsseo/models/EverPsSeoTools.php';
+
 class EverPsSeoRedirect extends ObjectModel
 {
     public $id_ever_seo_redirect;
