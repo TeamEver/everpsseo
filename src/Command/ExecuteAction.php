@@ -27,7 +27,8 @@ class ExecuteAction extends Command
 
     private $allowedActions = [
         'idshop',
-        'redirectDisabledProduct'
+        'redirectDisabledProduct',
+        'createWebpImage'
     ];
 
     public function __construct(KernelInterface $kernel)
@@ -49,29 +50,94 @@ class ExecuteAction extends Command
     {
         $action = $input->getArgument('action');
         $idShop = $input->getArgument('idshop id');
+        $context = (new ContextAdapter())->getContext();
+        $context->employee = new \Employee(1);
+        if ($idShop && $idShop >= 1) {
+            $shop = new \Shop(
+                (int) $idShop
+            );
+            if (!\Validate::isLoadedObject($shop)) {
+                $output->writeln('<comment>Shop not found</comment>');
+                return self::ABORTED;
+            }
+        } else {
+            $shop = $context->shop;
+            if (!\Validate::isLoadedObject($shop)) {
+                $shop = new \Shop((int)\Configuration::get('PS_SHOP_DEFAULT'));
+            }
+        }
         if (!in_array($action, $this->allowedActions)) {
             $output->writeln('<comment>Unkown action</comment>');
             return self::ABORTED;
         }
 
-        $context = (new ContextAdapter())->getContext();
-        $context->employee = new \Employee(1);
-
-        if ($action === 'redirectDisabledProduct') {
-            if ($idShop && $idShop >= 1) {
-                $shop = new \Shop(
-                    (int) $idShop
+        if ($action === 'createWebpImage') {
+            // Logo
+            $psLogo = _PS_IMG_DIR_ . \Configuration::get(
+                'PS_LOGO'
+            );
+            \EverPsSeoImage::webpConvert2($psLogo);
+            // Products images
+            $allImages = \Image::getAllImages();
+            $allowedFormats = [
+                'jpg',
+                'jpeg',
+                'png'
+            ];
+            foreach ($allImages as $img) {
+                $image = new \Image(
+                    (int) $img['id_image']
                 );
-                if (!\Validate::isLoadedObject($shop)) {
-                    $output->writeln('<comment>Shop not found</comment>');
-                    return self::ABORTED;
-                }
-            } else {
-                $shop = $context->shop;
-                if (!\Validate::isLoadedObject($shop)) {
-                    $shop = new \Shop((int)\Configuration::get('PS_SHOP_DEFAULT'));
+                $productImages = glob(_PS_PRODUCT_IMG_DIR_ . $image->getImgFolder() . '*');
+                foreach ($productImages as $img) {
+                    $info = new \SplFileInfo(basename($img));
+                    if (is_file($img) && in_array($info->getExtension(), $allowedFormats)) {
+                        \EverPsSeoImage::webpConvert2($img);
+                    }
                 }
             }
+            // Categories images
+            $categoryImages = glob(_PS_CAT_IMG_DIR_ . '*');
+            foreach ($categoryImages as $img) {
+                $info = new \SplFileInfo(basename($img));
+                if (is_file($img) && in_array($info->getExtension(), $allowedFormats)) {
+                    \EverPsSeoImage::webpConvert2($img);
+                }
+            }
+            // Manufacturer images
+            $manufacturerImages = glob(_PS_MANU_IMG_DIR_ . '*');
+            foreach ($manufacturerImages as $img) {
+                $info = new \SplFileInfo(basename($img));
+                if (is_file($img) && in_array($info->getExtension(), $allowedFormats)) {
+                    \EverPsSeoImage::webpConvert2($img);
+                }
+            }
+            // Supplier images
+            $supplierImages = glob(_PS_SUPP_IMG_DIR_ . '*');
+            foreach ($supplierImages as $img) {
+                $info = new \SplFileInfo(basename($img));
+                if (is_file($img) && in_array($info->getExtension(), $allowedFormats)) {
+                    \EverPsSeoImage::webpConvert2($img);
+                }
+            }
+            // Default images
+            $defaultImages = glob(_PS_IMG_DIR_ . '*');
+            foreach ($defaultImages as $img) {
+                $info = new \SplFileInfo(basename($img));
+                if (is_file($img) && in_array($info->getExtension(), $allowedFormats)) {
+                    \EverPsSeoImage::webpConvert2($img);
+                }
+            }
+            // CMS images
+            $cmsImages = glob(_PS_IMG_DIR_ . 'cms/*');
+            foreach ($cmsImages as $img) {
+                $info = new \SplFileInfo(basename($img));
+                if (is_file($img) && in_array($info->getExtension(), $allowedFormats)) {
+                    \EverPsSeoImage::webpConvert2($img);
+                }
+            }
+        }
+        if ($action === 'redirectDisabledProduct') {
 
             if (!(bool)\Configuration::get('EVERSEO_FORCE_PRODUCT_REDIRECT')) {
                 $output->writeln('<comment>This action is disabled in module conf</comment>');
