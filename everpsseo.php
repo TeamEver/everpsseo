@@ -51,7 +51,7 @@ class Everpsseo extends Module
     {
         $this->name = 'everpsseo';
         $this->tab = 'seo';
-        $this->version = '9.2.3';
+        $this->version = '9.3.1';
         $this->author = 'Team Ever';
         $this->need_instance = false;
         $this->module_key = '5ddabba8ec414cd5bd646fad24368472';
@@ -1275,6 +1275,26 @@ class Everpsseo extends Module
                         'desc' => $this->l('Do you want to use webp img files on your shop ?'),
                         'hint' => $this->l('First you will have to generate webp files using command lines'),
                         'name' => 'EVERSEO_WEBP',
+                        'is_bool' => true,
+                        'values' => [
+                            [
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Enabled'),
+                            ],
+                            [
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('Disabled'),
+                            ],
+                        ],
+                    ],
+                    [
+                        'type' => 'switch',
+                        'label' => $this->l('Use lazyload on "loading" attributes'),
+                        'desc' => $this->l('Do you want to use laazy load on your shop ?'),
+                        'hint' => $this->l('First you will have to add "loading" attribute to each element to lazy load'),
+                        'name' => 'EVERSEO_LAZY_LOAD',
                         'is_bool' => true,
                         'values' => [
                             [
@@ -5115,6 +5135,12 @@ class Everpsseo extends Module
                 && !Validate::isBool(Tools::getValue('EVERSEO_WEBP'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Use webp" is not valid');
+            }
+
+            if (Tools::getValue('EVERSEO_LAZY_LOAD')
+                && !Validate::isBool(Tools::getValue('EVERSEO_LAZY_LOAD'))
+            ) {
+                $this->postErrors[] = $this->l('Error : The field "Use lazyload" is not valid');
             }
         
             if (!function_exists('imagewebp') && (bool)Tools::getValue('EVERSEO_WEBP') === true) {

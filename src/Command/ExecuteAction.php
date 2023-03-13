@@ -83,11 +83,11 @@ class ExecuteAction extends Command
             $output->writeln(sprintf(
                 '<info>Start creating webp images : datetime : ' . date('Y-m-d H:i:s') . '</info>'
             ));
-            \EverPsSeoImage::setMedias2Webp();
+            \EverPsSeoImage::setMedias2Webp(true);
             \Hook::exec('actionHtaccessCreate');
             // \Tools::clearAllCache();
             $output->writeln(sprintf(
-                '<info>Execute ended</info>'
+                '<info>Execute ended : datetime : ' . date('Y-m-d H:i:s') . '</info>'
             ));
 
             $output->writeln(
@@ -122,7 +122,7 @@ class ExecuteAction extends Command
             }
 
             $output->writeln(sprintf(
-                '<info>Execute ended</info>'
+                '<info>Execute ended : datetime : ' . date('Y-m-d H:i:s') . '</info>'
             ));
 
             $output->writeln(

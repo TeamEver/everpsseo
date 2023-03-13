@@ -235,10 +235,30 @@ class EverPsSeoImage extends ObjectModel
         return false;
     }
 
-    public static function setMedias2Webp()
+    public static function setMedias2Webp($forceAll = false)
     {
         if ((bool) Configuration::get('EVERSEO_WEBP') === false) {
             return false;
+        }
+        // Check all content on all shop ?
+        if ((bool)$forceAll === true) {
+            // all content : jpg
+            $allContentImages = EverPsSeoTools::rsearch(_PS_ROOT_DIR_, '/.*jpg/');
+            foreach ($allContentImages as $img) {
+                $info = new SplFileInfo(basename($img));
+                self::webpConvert2($img);
+            }
+            // all content : jpeg
+            $allContentImages = EverPsSeoTools::rsearch(_PS_ROOT_DIR_, '/.*jpeg/');
+            foreach ($allContentImages as $img) {
+                self::webpConvert2($img);
+            }
+            // all content : png
+            $allContentImages = EverPsSeoTools::rsearch(_PS_ROOT_DIR_, '/.*png/');
+            foreach ($allContentImages as $img) {
+                self::webpConvert2($img);
+            }
+            return;
         }
         $allowedFormats = [
             'jpg',
