@@ -51,7 +51,7 @@ class Everpsseo extends Module
     {
         $this->name = 'everpsseo';
         $this->tab = 'seo';
-        $this->version = '9.3.1';
+        $this->version = '9.3.2';
         $this->author = 'Team Ever';
         $this->need_instance = false;
         $this->module_key = '5ddabba8ec414cd5bd646fad24368472';
@@ -982,7 +982,6 @@ class Everpsseo extends Module
                 'name' => 'monthly',
             ],
             [
-            
                 'id_frequency' => 'yearly',
                 'name' => 'yearly',
             ],
@@ -1310,6 +1309,15 @@ class Everpsseo extends Module
                         ],
                     ],
                     [
+                        'type' => 'text',
+                        'label' => $this->l('Lazy load exceptions'),
+                        'desc' => $this->l('You can enter here the HTML classes which will not be lazy loaded by the module'),
+                        'hint' => $this->l('For example : "#carousel img, #slider img"'),
+                        'name' => 'EVERSEO_LAZY_LOAD_EXCEPTIONS',
+                        'lang' => false,
+                        'required' => false,
+                    ],
+                    [
                         'type' => 'switch',
                         'label' => $this->l('Defer all scripts'),
                         'desc' => $this->l('If enabled, all scripts will have defer attribute'),
@@ -1469,7 +1477,7 @@ class Everpsseo extends Module
                             ],
                         ],
                     ),
-                    array(
+                    [
                         'type' => 'text',
                         'label' => $this->l('Max element quantities in sitemaps'),
                         'desc' => $this->l('Reduce this value to set lighter sitemaps'),
@@ -1477,7 +1485,7 @@ class Everpsseo extends Module
                         'name' => 'EVERSEO_SITEMAP_QTY_ELEMENTS',
                         'lang' => false,
                         'required' => true,
-                    ),
+                    ],
                     array(
                         'type' => 'select',
                         'label' =>  $this->l('Allowed languages in sitemap'),
@@ -3903,9 +3911,9 @@ class Everpsseo extends Module
                 ],
                 'input' => array([
                         'type' => 'select',
-                        'label' => 'Selected languages',
-                        'desc' => 'Choose allowed langs for bulk actions',
-                        'hint' => 'This will bulk actions on your whole shop',
+                        'label' => $this->l('Selected languages'),
+                        'desc' => $this->l('Choose allowed langs for bulk actions'),
+                        'hint' => $this->l('This will bulk actions on your whole shop'),
                         'name' => 'EVERSEO_BULK_LANGS[]',
                         'class' => 'chosen',
                         'identifier' => 'name',
@@ -4978,6 +4986,9 @@ class Everpsseo extends Module
             'EVERSEO_LAZY_LOAD' => Configuration::get(
                 'EVERSEO_LAZY_LOAD'
             ),
+            'EVERSEO_LAZY_LOAD_EXCEPTIONS' => Configuration::get(
+                'EVERSEO_LAZY_LOAD_EXCEPTIONS'
+            ),
             'EVERSEO_DELETE_CATEGORY_CONTENT' => Configuration::get(
                 'EVERSEO_DELETE_CATEGORY_CONTENT'
             )
@@ -5987,6 +5998,35 @@ class Everpsseo extends Module
 
 #################### END CONFIG FORM ####################
 #################### START ACTION HOOKS ####################
+
+    public function hookActionProductUpdateFromMatriceAfter($params)
+    {
+        $product = $params['product'];
+        if (!Validate::isLoadedObject($product)) {
+            return;
+        }
+
+        if ((bool) Configuration::get('EVERSEO_WEBP') === true) {
+            $allowedFormats = [
+                'jpg',
+                'jpeg',
+                'png'
+            ];
+            $images = EverPsSeoImage::getAllProductImages($product->id);
+            foreach ($images as $i) {
+                $image = new Image(
+                    (int) $i['id_image']
+                );
+                $productImages = glob(_PS_PRODUCT_IMG_DIR_ . $image->getImgFolder() . '*');
+                foreach ($productImages as $img) {
+                    $info = new SplFileInfo(basename($img));
+                    if (is_file($img) && in_array($info->getExtension(), $allowedFormats)) {
+                        EverPsSeoImage::webpConvert2($img);
+                    }
+                }
+            }
+        }
+    }
 
     public function hookActionOutputHTMLBefore($params)
     {
@@ -7155,7 +7195,6 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
                 $sql = 'UPDATE `' . _DB_PREFIX_ . 'manufacturer_lang`
                 SET meta_title = "' . pSQL($meta_title) . '"
                 WHERE id_lang = ' . (int) $id_lang . '
-                AND id_shop = ' . (int) $id_shop . '
                 AND id_manufacturer = ' . (int) $id_element;
 
                 $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_manufacturer`
@@ -7181,7 +7220,6 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
                 $sql = 'UPDATE `' . _DB_PREFIX_ . 'supplier_lang`
                 SET meta_title = "' . pSQL($meta_title) . '"
                 WHERE id_lang = ' . (int) $id_lang . '
-                AND id_shop = ' . (int) $id_shop . '
                 AND id_supplier = ' . (int) $id_element;
 
                 $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_supplier`
@@ -7308,7 +7346,6 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
                 $sql = 'UPDATE `' . _DB_PREFIX_ . 'manufacturer_lang`
                 SET meta_description = "' . pSQL($meta_description) . '"
                 WHERE id_lang = ' . (int) $id_lang . '
-                AND id_shop = ' . (int) $id_shop . '
                 AND id_manufacturer = ' . (int) $id_element;
 
                 $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_manufacturer`
@@ -7334,7 +7371,6 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
                 $sql = 'UPDATE `' . _DB_PREFIX_ . 'supplier_lang`
                 SET meta_description = "' . pSQL($meta_description) . '"
                 WHERE id_lang = ' . (int) $id_lang . '
-                AND id_shop = ' . (int) $id_shop . '
                 AND id_supplier = ' . (int) $id_element;
 
                 $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_supplier`
@@ -7901,7 +7937,12 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
         }
         // Lazy load
         if ((bool) Configuration::get('EVERSEO_LAZY_LOAD')) {
-            $this->context->controller->addJs($this->_path . 'views/js/jquery.lazyload.min.js');
+            $lazyExceptions = Configuration::get('EVERSEO_LAZY_LOAD_EXCEPTIONS');
+            if ($lazyExceptions) {
+                Media::addJsDef(array(
+                    'everlazy_exceptions' => Configuration::get('EVERSEO_LAZY_LOAD_EXCEPTIONS')
+                ));
+            }
             $this->context->controller->addJs($this->_path . 'views/js/unveil.min.js');
             $this->context->controller->addJs($this->_path . 'views/js/lazyload.js');
         }
@@ -7971,11 +8012,15 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$
                 $coverId = Product::getCover(
                     (int) $product->id
                 );
-                $defaultImage = $link->getImageLink(
-                    $product->link_rewrite,
-                    (int) $product->id . '-' . (int) $coverId['id_image'],
-                    $this->imageType
-                );
+                if ($coverId) {
+                    $defaultImage = $link->getImageLink(
+                        $product->link_rewrite,
+                        (int) $product->id . '-' . (int) $coverId['id_image'],
+                        $this->imageType
+                    );
+                } else {
+                    $defaultImage = false;
+                }
                 if (!$defaultImage) {
                     $defaultImage = _PS_IMG_ . Configuration::get('PS_LOGO');
                 }

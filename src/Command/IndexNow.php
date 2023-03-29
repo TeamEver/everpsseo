@@ -9,6 +9,9 @@
 
 namespace Everpsseo\Seo\Command;
 
+use Configuration;
+use Employee;
+use Db;
 use PrestaShop\PrestaShop\Adapter\LegacyContext as ContextAdapter;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -79,6 +82,14 @@ class IndexNow extends Command
         \Shop::setContext($shop::CONTEXT_SHOP, $shop->id);
         $context->shop = $shop;
         $context->cookie->id_shop = $shop->id;
+        $idEmployee =  Db::getInstance()->getValue('
+            SELECT `id_employee`
+            FROM `' . _DB_PREFIX_ . 'employee`'
+        );
+        $context->employee = new \Employee($idEmployee);
+        $context->currency = new \Currency(
+            (int) Configuration::get('PS_CURRENCY_DEFAULT')
+        );
         $output->writeln(sprintf(
             '<info>Start index now : datetime : ' . date('Y-m-d H:i:s') . '</info>'
         ));

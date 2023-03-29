@@ -245,6 +245,11 @@ class EverPsSeoProduct extends ObjectModel
         $message = Configuration::getConfigInMultipleLangs(
             'EVERSEO_PRODUCT_TITLE_AUTO'
         );
+        if (!$message) {
+            foreach (Language::getLanguages(false) as $lang) {
+                $message[(int) $lang['id_lang']] = '';
+            }
+        }
         $shortcodes = [
             '[product_title]' => $product->name ? $product->name : '',
             '[product_reference]' => $product->reference ? $product->reference : '',
@@ -330,6 +335,11 @@ class EverPsSeoProduct extends ObjectModel
         $message = Configuration::getConfigInMultipleLangs(
             'EVERSEO_PRODUCT_METADESC_AUTO'
         );
+        if (!$message) {
+            foreach (Language::getLanguages(false) as $lang) {
+                $message[(int) $lang['id_lang']] = '';
+            }
+        }
         $shortcodes = [
             '[product_title]' => $product->name ? $product->name : '',
             '[product_reference]' => $product->reference ? $product->reference : '',

@@ -417,4 +417,25 @@ class EverPsSeoImage extends ObjectModel
             }
         }
     }
+
+    /**
+     * Return Images.
+     * @param int id product
+     * @return array Images
+     */
+    public static function getAllProductImages($idProduct)
+    {
+        $cacheId = 'EverPsSeoImage::getAllProductImages_'
+        . (int) $idProduct;
+        if (!Cache::isStored($cacheId)) {
+            $sql = new DbQuery();
+            $sql->select('id_image');
+            $sql->from('image');
+            $sql->where('id_product = ' . (int) $idProduct);
+            $return = Db::getInstance()->executeS($sql);
+            Cache::store($cacheId, $return);
+            return $return;
+        }
+        return Cache::retrieve($cacheId);
+    }
 }

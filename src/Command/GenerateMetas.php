@@ -9,6 +9,9 @@
 
 namespace Everpsseo\Seo\Command;
 
+use Configuration;
+use Employee;
+use Db;
 use PrestaShop\PrestaShop\Adapter\LegacyContext as ContextAdapter;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -75,10 +78,19 @@ class GenerateMetas extends Command
                 $shop = new \Shop((int) \Configuration::get('PS_SHOP_DEFAULT'));
             }
         }
+
         //Important to setContext
         \Shop::setContext($shop::CONTEXT_SHOP, $shop->id);
         $context->shop = $shop;
         $context->cookie->id_shop = $shop->id;
+        $idEmployee =  Db::getInstance()->getValue('
+            SELECT `id_employee`
+            FROM `' . _DB_PREFIX_ . 'employee`'
+        );
+        $context->employee = new \Employee($idEmployee);
+        $context->currency = new \Currency(
+            (int) Configuration::get('PS_CURRENCY_DEFAULT')
+        );
         $rewriteLinks = (bool) \Configuration::get('EVERSEO_REWRITE_LINKS');
         $output->writeln(sprintf(
             '<info>Seo metas generation start : datetime : ' . date('Y-m-d H:i:s') . '</info>'
@@ -201,7 +213,7 @@ class GenerateMetas extends Command
         $output->writeln(sprintf(
             '<info>Start suppliers metas : datetime : ' . date('Y-m-d H:i:s') . '</info>'
         ));
-        $seoArray = \EverPsSeoCms::getAllSeoCmsIds(
+        $seoArray = \EverPsSeoSupplier::getAllSeoSuppliersIds(
             (int) $shop->id
         );
         $allowedLangs = $this->getAllowedShortcodesLangs(
@@ -236,7 +248,7 @@ class GenerateMetas extends Command
         $output->writeln(sprintf(
             '<info>Start manufacturers metas : datetime : ' . date('Y-m-d H:i:s') . '</info>'
         ));
-        $seoArray = \EverPsSeoCms::getAllSeoCmsIds(
+        $seoArray = \EverPsSeoManufacturer::getAllSeoManufacturersIds(
             (int) $shop->id
         );
         $allowedLangs = $this->getAllowedShortcodesLangs(
@@ -271,7 +283,7 @@ class GenerateMetas extends Command
         $output->writeln(sprintf(
             '<info>Start categories metas : datetime : ' . date('Y-m-d H:i:s') . '</info>'
         ));
-        $seoArray = \EverPsSeoCms::getAllSeoCmsIds(
+        $seoArray = \EverPsSeoCategory::getAllSeoCategoriesIds(
             (int) $shop->id
         );
         $allowedLangs = $this->getAllowedShortcodesLangs(
@@ -432,12 +444,11 @@ class GenerateMetas extends Command
                     (int) $id_lang,
                     (int) $id_shop
                 );
-                $meta_title = \Tools::substr(\Db::getInstance()->escape($meta_title), 0, 128);
+                $meta_title = \Tools::substr($meta_title, 0, 128);
 
                 $sql = 'UPDATE `' . _DB_PREFIX_ . 'manufacturer_lang`
                 SET meta_title = "'.\Db::getInstance()->escape($meta_title) . '"
                 WHERE id_lang = ' . (int) $id_lang . '
-                AND id_shop = ' . (int) $id_shop . '
                 AND id_manufacturer = ' . (int) $id_element;
 
                 $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_manufacturer`
@@ -463,7 +474,6 @@ class GenerateMetas extends Command
                 $sql = 'UPDATE `' . _DB_PREFIX_ . 'supplier_lang`
                 SET meta_title = "'.\Db::getInstance()->escape($meta_title) . '"
                 WHERE id_lang = ' . (int) $id_lang . '
-                AND id_shop = ' . (int) $id_shop . '
                 AND id_supplier = ' . (int) $id_element;
 
                 $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_supplier`
@@ -489,7 +499,7 @@ class GenerateMetas extends Command
                     (int) $id_lang,
                     (int) $id_shop
                 );
-                $pageMeta->title = \Tools::substr(\Db::getInstance()->escape($meta_title), 0, 128);
+                $pageMeta->title = \Tools::substr($meta_title, 0, 128);
                 // TODO : use SQL query
                 // if ($pageMeta->save()) {
                 //     return true;
@@ -590,7 +600,6 @@ class GenerateMetas extends Command
                 $sql = 'UPDATE `' . _DB_PREFIX_ . 'manufacturer_lang`
                 SET meta_description = "'.\Db::getInstance()->escape($meta_description) . '"
                 WHERE id_lang = ' . (int) $id_lang . '
-                AND id_shop = ' . (int) $id_shop . '
                 AND id_manufacturer = ' . (int) $id_element;
 
                 $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_manufacturer`
@@ -611,12 +620,11 @@ class GenerateMetas extends Command
                     (int) $id_lang,
                     (int) $id_shop
                 );
-                $meta_description = \Tools::substr(\Db::getInstance()->escape($meta_description), 0, 250);
+                $meta_description = \Tools::substr($meta_description, 0, 250);
 
                 $sql = 'UPDATE `' . _DB_PREFIX_ . 'supplier_lang`
                 SET meta_description = "'.\Db::getInstance()->escape($meta_description) . '"
                 WHERE id_lang = ' . (int) $id_lang . '
-                AND id_shop = ' . (int) $id_shop . '
                 AND id_supplier = ' . (int) $id_element;
 
                 $sql2 = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_supplier`
@@ -642,7 +650,7 @@ class GenerateMetas extends Command
                     (int) $id_lang,
                     (int) $id_shop
                 );
-                $pageMeta->meta_description = \Tools::substr(\Db::getInstance()->escape($meta_description), 0, 250);
+                $pageMeta->meta_description = \Tools::substr($meta_description, 0, 250);
                 // TODO : use SQL query
                 // if ($pageMeta->save()) {
                 //     return true;

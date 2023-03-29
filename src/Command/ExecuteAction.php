@@ -110,7 +110,7 @@ class ExecuteAction extends Command
                 ));
 
                 foreach ($products as $value) {
-                    \EverPsSeoProduct::inactiveRedirect($value["id_product"], $shop->id);
+                    \EverPsSeoProduct::inactiveRedirect($value['id_product'], $shop->id);
                     $output->writeln(sprintf(
                         '<info>Forcing redirection for id product ' . (int) $value['id_product'] . ' has been set</info>'
                     ));

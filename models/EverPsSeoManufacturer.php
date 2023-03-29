@@ -187,6 +187,11 @@ class EverPsSeoManufacturer extends ObjectModel
         $message = Configuration::getConfigInMultipleLangs(
             'EVERSEO_MANUFACTURER_TITLE_AUTO'
         );
+        if (!$message) {
+            foreach (Language::getLanguages(false) as $lang) {
+                $message[(int) $lang['id_lang']] = '';
+            }
+        }
         $shortcodes = [
             '[manufacturer_title]' => $manufacturer->name ? $manufacturer->name : '',
             '[manufacturer_desc]' => $manufacturer->description ? $manufacturer->description : '',
@@ -222,6 +227,11 @@ class EverPsSeoManufacturer extends ObjectModel
         $message = Configuration::getConfigInMultipleLangs(
             'EVERSEO_MANUFACTURER_METADESC_AUTO'
         );
+        if (!$message) {
+            foreach (Language::getLanguages(false) as $lang) {
+                $message[(int) $lang['id_lang']] = '';
+            }
+        }
         $shortcodes = [
             '[manufacturer_title]' => $manufacturer->name ? $manufacturer->name : '',
             '[manufacturer_desc]' => $manufacturer->description ? $manufacturer->description : '',
