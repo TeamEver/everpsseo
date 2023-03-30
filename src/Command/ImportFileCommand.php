@@ -212,7 +212,9 @@ class ImportFileCommand extends ContainerAwareCommand
             $output->writeln(
                '<error>Missing id_shop column</error>'
             );
-            return;
+            $id_shop = 1;
+        } else {
+            $id_shop = $line['id_shop'];
         }
         if (!isset($line['code'])
             || empty($line['code'])
@@ -232,13 +234,13 @@ class ImportFileCommand extends ContainerAwareCommand
         }
         $redirectExits = \EverPsSeoRedirect::ifRedirectExists(
             \Db::getInstance()->escape($line['not_found']),
-            (int) $line['id_shop']
+            (int) $id_shop
         );
         if (\Validate::isUrl($redirectExits)) {
             \Db::getInstance()->update(
                 'ever_seo_redirect',
                 [
-                    'id_shop' => (int) $line['id_shop'],
+                    'id_shop' => (int) $id_shop,
                     'redirection' => \Db::getInstance()->escape($line['redirection']),
                     'code' => (int) $line['code'],
                     'active' => (int) $line['active'],
@@ -249,7 +251,7 @@ class ImportFileCommand extends ContainerAwareCommand
             \Db::getInstance()->insert(
                 'ever_seo_redirect',
                 [
-                    'id_shop' => (int) $line['id_shop'],
+                    'id_shop' => (int) $id_shop,
                     'not_found' => \Db::getInstance()->escape($line['not_found']),
                     'redirection' => \Db::getInstance()->escape($line['redirection']),
                     'code' => (int) $line['code'],
@@ -387,10 +389,11 @@ class ImportFileCommand extends ContainerAwareCommand
             $output->writeln(
                '<error>Missing id_shop column</error>'
             );
-            return;
+            $idShop = 1;
+        } else {
+            $idShop = (int) $line['id_shop'];
         }
         $idLang = (int) $line['id_lang'];
-        $idShop = (int) $line['id_shop'];
         $category = new \Category(
             (int) $line['id_category'],
             (int) $idLang,
@@ -399,7 +402,7 @@ class ImportFileCommand extends ContainerAwareCommand
         if (!\Validate::isLoadedObject($category)) {
             return;
         }
-        $idCategory = preg_replace('/[^0-9]/', '', $line['id_category']);
+        $idCategory = $line['id_category'];
         $seo_category = \EverPsSeoCategory::getSeoCategory(
             (int) $idCategory,
             (int) $idShop,
@@ -478,6 +481,32 @@ class ImportFileCommand extends ContainerAwareCommand
             $seo_category->bottom_content = \Db::getInstance()->escape($line['bottom_content'], true);
             $seo_category->save();
         }
+        if ((bool) \Configuration::get('EVERSEO_REWRITE_LINKS') === true) {
+            $linkRewrite = \Tools::link_rewrite($category->name);
+            $canonical = \Tools::link_rewrite($category->name);
+            $sql[] = 'UPDATE `' . _DB_PREFIX_ . 'category_lang`
+            SET link_rewrite = "'.\Db::getInstance()->escape($linkRewrite) . '"
+            WHERE id_lang = ' . (int) $idLang.'
+            AND id_shop = ' . (int) $idShop.'
+            AND id_category = ' . (int) $category->id;
+
+            $sql[] = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_category`
+            SET link_rewrite = "'.\Db::getInstance()->escape($linkRewrite) . '"
+            WHERE id_seo_lang = ' . (int) $idLang.'
+            AND id_shop = ' . (int) $idShop.'
+            AND id_seo_category = ' . (int) $category->id;
+
+            $sql[] = 'UPDATE `' . _DB_PREFIX_ . 'ever_seo_category`
+            SET canonical = "'.\Db::getInstance()->escape($canonical) . '"
+            WHERE id_seo_lang = ' . (int) $idLang.'
+            AND id_shop = ' . (int) $idShop.'
+            AND id_seo_category = ' . (int) $category->id;
+        }
+        if (count($sql) > 0) {
+            foreach ($sql as $q) {
+                \Db::getInstance()->execute($q);
+            }
+        }
         if (count($sql) > 0) {
             foreach ($sql as $q) {
                 \Db::getInstance()->execute($q);
@@ -498,13 +527,11 @@ class ImportFileCommand extends ContainerAwareCommand
         if (!isset($line['id_shop'])
             || empty($line['id_shop'])
         ) {
-            $output->writeln(
-               '<error>Missing id_shop column</error>'
-            );
-            return;
+            $idShop = 1;
+        } else {
+            $idShop = (int) $line['id_shop'];
         }
         $idLang = (int) $line['id_lang'];
-        $idShop = (int) $line['id_shop'];
         if (!isset($line['id_product'])
             || empty($line['id_product'])
         ) {
@@ -540,7 +567,7 @@ class ImportFileCommand extends ContainerAwareCommand
             if (isset($line['id_product'])
                 && !empty($line['id_product'])
             ) {
-                $idProduct = preg_replace('/[^0-9]/', '', $line['id_product']);
+                $idProduct = $line['id_product'];
                 $product = new \Product(
                     (int) $idProduct,
                     false,
