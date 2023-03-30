@@ -6037,6 +6037,7 @@ class Everpsseo extends Module
             (int) $this->context->shop->id
         );
         $txt = $params['html'];
+        $txt = mb_convert_encoding($txt, 'HTML-ENTITIES', 'UTF-8');
         // Replace all shortcodes, everywhere
         if ((bool) $this->context->customer->isLogged()) {
             $txt = EverPsSeoTools::changeFrontShortcodes(
@@ -6284,6 +6285,7 @@ class Everpsseo extends Module
                 }
             }
         }
+        $rules .= 'RewriteRule ^(.*).git(.*)$ https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley [L,R=301]' . "\n\n";
         if ((bool) Configuration::get('EVERSEO_LOCK_PDF') === true) {
             $rules .= '#Noindex PDF
 <Files ~ "\.pdf$">

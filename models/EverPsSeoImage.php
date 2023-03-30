@@ -170,12 +170,9 @@ class EverPsSeoImage extends ObjectModel
         if (!file_exists($file)) {
             return false;
         }
-        $file_content = @file_get_contents($file);
-
-        if ($file_content !== false) {
+        try {
             $file_type = exif_imagetype($file);
-        } else {
-            // erreur de lecture de fichier
+        } catch (Exception $e) {
             return;
         }
         //https://www.php.net/manual/en/function.exif-imagetype.php
