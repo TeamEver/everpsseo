@@ -6,8 +6,8 @@
 * @link https://www.team-ever.com
 *}
 {if isset($smarty.get.id_category) && $smarty.get.id_category}
-<link rel="alternate" hreflang="x-default" href="{$link->getCategoryLink($smarty.get.id_category, null, null, null, null )|escape:'htmlall':'UTF-8'}" />
+<link rel="alternate" hreflang="x-default" href="{$link->getCategoryLink($smarty.get.id_category, null, $xdefault, null, null )|escape:'htmlall':'UTF-8'}" />
 {foreach $everpshreflang as $everlang}
-<link rel="alternate" hreflang="{$everlang.locale|escape:'htmlall':'UTF-8'}" href="{$link->getCategoryLink($smarty.get.id_category, null, $everlang.id_lang,null,null )|escape:'htmlall':'UTF-8'}" />
+<link rel="alternate" hreflang="{$everlang.ico_code|escape:'htmlall':'UTF-8'}" href="{$link->getCategoryLink($smarty.get.id_category, null, $everlang.id_lang,null,null )|escape:'htmlall':'UTF-8'}" />
 {/foreach}
 {/if}
