@@ -1340,6 +1340,7 @@ $_MODULE['<{everpsseo}prestashop>header_e25fac41d6704ca51c169d638c91b7eb'] = 'Me
 $_MODULE['<{everpsseo}prestashop>header_caa49d3feca0e218a65f70f8eab853da'] = 'Exporte les données SEO des catégories dans un fichier Excel';
 $_MODULE['<{everpsseo}prestashop>header_71a8065918f9893a693c511ef98bb7c4'] = 'Exporte les données SEO des produits dans un fichier Excel';
 $_MODULE['<{everpsseo}prestashop>header_d30ca165d92197f4d1bbdd62ad5c5549'] = 'Créera les images au format Webp';
+$_MODULE['<{everpsseo}prestashop>header_0c73fa07f933264d58b7b3f7e344233b'] = 'Créera des redirections sur les produits désactivés';
 $_MODULE['<{everpsseo}prestashop>header_9e8bf333ea97226f396479122dcd9f00'] = 'Voir tous les sitemaps';
 $_MODULE['<{everpsseo}prestashop>header_4a13413fb0b096f74c4ea23638e149ae'] = 'Voir tous les index de sitemaps';
 $_MODULE['<{everpsseo}prestashop>header_3845393d539c3e382f95143b027e00dd'] = 'N\'oubliez pas de paramétrer cette tâche cron pour maintenir à jour vos sitemaps';

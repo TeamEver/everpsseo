@@ -51,7 +51,7 @@ class Everpsseo extends Module
     {
         $this->name = 'everpsseo';
         $this->tab = 'seo';
-        $this->version = '9.3.2';
+        $this->version = '9.3.3';
         $this->author = 'Team Ever';
         $this->need_instance = false;
         $this->module_key = '5ddabba8ec414cd5bd646fad24368472';
@@ -106,7 +106,20 @@ class Everpsseo extends Module
             } else {
                 $canonical = true;
             }
+            // test if example files exist
+            if (file_exists($this->_path . 'modules/everpsseo/output/categories.xlsx')) {
+                $categoriesFileExample = $this->siteUrl . 'modules/everpsseo/output/categories.xlsx';
+            } else {
+                $categoriesFileExample = false;
+            }
+            if (file_exists($this->_path . 'modules/everpsseo/output/products.xlsx')) {
+                $productsFileExample = $this->siteUrl . 'modules/everpsseo/output/products.xlsx';
+            } else {
+                $productsFileExample = false;
+            }
             $this->context->smarty->assign([
+                'categoriesFileExample' => $categoriesFileExample,
+                'productsFileExample' => $productsFileExample,
                 'image_dir' => $this->_path . 'views/img',
                 'input_dir' => $this->siteUrl . 'modules/everpsseo/output/',
                 'everpsseo_cron' => $sitemaps_cron_url,
@@ -5637,10 +5650,10 @@ class Everpsseo extends Module
                 'PS_LOGO'
             );
             $psLogo = str_replace('.webp', '', $psLogo);
-            \Configuration::updateValue(
-                'PS_LOGO',
-                $psLogo
-            );
+            // \Configuration::updateValue(
+            //     'PS_LOGO',
+            //     $psLogo
+            // );
             Hook::exec('actionHtaccessCreate');
         }
         // Save configuration
@@ -6037,7 +6050,6 @@ class Everpsseo extends Module
             (int) $this->context->shop->id
         );
         $txt = $params['html'];
-        $txt = mb_convert_encoding($txt, 'HTML-ENTITIES', 'UTF-8');
         // Replace all shortcodes, everywhere
         if ((bool) $this->context->customer->isLogged()) {
             $txt = EverPsSeoTools::changeFrontShortcodes(
@@ -6048,108 +6060,6 @@ class Everpsseo extends Module
             $txt = EverPsSeoTools::changeFrontShortcodes(
                 $txt
             );
-        }
-        // Load HTML
-        $dom = new DOMDocument();
-        $dom->encoding = 'utf-8';
-        libxml_use_internal_errors(true);
-        $dom->loadHTML(utf8_decode($txt));
-        $dom->preserveWhiteSpace = false;
-        $dom->formatOutput = true;
-        // Set external links target blank and nofollow, add missing title attr
-        if ((bool) Configuration::get('EVERSEO_EXTERNAL_NOFOLLOW') === true) {
-            $anchors = $dom->getElementsByTagName('a');
-            foreach ($anchors as $item) {
-                $href = $item->getAttribute('href');
-                if (strpos($href, $shop_url) === false
-                    && EverPsSeoTools::isAbsolutePath($href)
-                ) {
-                    $item->setAttribute('rel', 'nofollow sponsored noopener');
-                    $item->setAttribute('target', '_blank');
-                    // Set custom data attr for debug
-                    $item->setAttribute('data-everpsseo', 'true');
-                } else {
-                    $default_attr = EverPsSeoTools::removeEmptyLines($item->nodeValue);
-                    if (!$item->getAttribute('title') || empty($item->getAttribute('title'))) {
-                        $item->setAttribute(
-                            'title',
-                            $default_attr
-                        );
-                        // Set custom data attr for debug
-                        $item->setAttribute('data-everpsseo', 'true');
-                    }
-                    if (!$item->getAttribute('alt') || empty($item->getAttribute('alt'))) {
-                        $item->setAttribute(
-                            'alt',
-                            $default_attr
-                        );
-                        // Set custom data attr for debug
-                        $item->setAttribute('data-everpsseo', 'true');
-                    }
-                }
-            }
-            $txt = $dom->saveHTML();
-        }
-        // webp format
-        if ((bool) Configuration::get('EVERSEO_WEBP') === true) {
-            $images = $dom->getElementsByTagName('img');
-            foreach ($images as $item) {
-                $src = $item->getAttribute('src');
-                if ((bool)strpos($src, 'webp') === false
-                    && (bool)strpos($src, $shop_url) === true
-                ) {
-                    $headers = get_headers($src . '.webp');
-                    if ((bool) stripos($headers[0], '200 OK') === true) {
-                        $item->setAttribute('src', $src . '.webp');
-                        $item->setAttribute('data-everpsseo', 'true');
-                    }
-                }
-            }
-            $txt = $dom->saveHTML();
-        }
-        // Set missing alt and title
-        if ((bool) Configuration::get('EVERSEO_ADD_ALT')) {
-            $images = $dom->getElementsByTagName('img');
-            foreach ($images as $item) {
-                if (!$item->getAttribute('alt') || empty($item->getAttribute('alt'))) {
-                    $item->setAttribute(
-                        'alt',
-                        Configuration::get('PS_SHOP_NAME')
-                    );
-                }
-                if (!$item->getAttribute('title') || empty($item->getAttribute('title'))) {
-                    if ($item->getAttribute('alt')) {
-                        $item->setAttribute(
-                            'title',
-                            $item->getAttribute('alt')
-                        );
-                    } else {
-                        $item->setAttribute(
-                            'title',
-                            Configuration::get('PS_SHOP_NAME')
-                        );
-                    }
-                    $item->setAttribute('data-everpsseo', 'true');
-                }
-            }
-            $titles = $dom->getElementsByTagName('a');
-            foreach ($titles as $item) {
-                $default_attr = EverPsSeoTools::removeEmptyLines($item->textContent);
-                if (!$item->getAttribute('alt') || empty($item->getAttribute('alt'))) {
-                    $item->setAttribute(
-                        'alt',
-                        $default_attr
-                    );
-                }
-                if (!$item->getAttribute('title') || empty($item->getAttribute('title'))) {
-                    $item->setAttribute(
-                        'title',
-                        $default_attr
-                    );
-                    $item->setAttribute('data-everpsseo', 'true');
-                }
-            }
-            $txt = $dom->saveHTML();
         }
         // Move all scripts to footer
         if ((bool) Configuration::get('EVERSEO_BOTTOM_SCRIPTS') && isset($txt)) {
@@ -6169,8 +6079,8 @@ class Everpsseo extends Module
                 $txt
             );
             $txt = str_replace(
-                '<script>',
-                '<script type="text/javascript" defer>',
+                '<script src="',
+                '<script defer src="',
                 $txt
             );
         }
@@ -6186,6 +6096,31 @@ class Everpsseo extends Module
                 ],
                 $txt
             );
+        }
+        if ((bool) Configuration::get('EVERSEO_WEBP') === true) {
+            preg_match_all('/<img[^>]+?(?:src|data-src)=["\'](?P<src>.+?)["\'][^>]*?>/i', $txt, $matches);
+            $image_urls = $matches['src'];
+
+            foreach ($image_urls as $src) {
+                $extension = pathinfo($src, PATHINFO_EXTENSION);
+
+                if ($extension != 'webp' && $extension != 'svg' && $extension != 'gif') {
+                    // Remplacer l'extension de l'image par .webp
+                    $webp_url = preg_replace('/\.[^.]+$/', '.webp', $src);
+
+                    // Remplacer l'URL d'image par l'URL en format webp
+                    if (strpos($webp_url, Tools::getHttpHost(true) . __PS_BASE_URI__) !== 0) {
+                        $webp_url_rel = str_replace(Tools::getHttpHost(true) . __PS_BASE_URI__, '', $webp_url);
+                    } else {
+                        $webp_url_rel = $webp_url;
+                    }
+                    if (strpos($webp_url, 'http://') !== 0 && strpos($webp_url, 'https://') !== 0) {
+                        $webp_url = 'https://' . $webp_url;
+                    }
+
+                    $txt = str_replace($src, $webp_url_rel, $txt);
+                }
+            }
         }
         $txt = '<!-- optimized by Ever SEO -->'
         . trim($txt)
@@ -6258,7 +6193,7 @@ class Everpsseo extends Module
 
     public function hookActionHtaccessCreate()
     {
-        $baseDomain = str_replace('www.', '', Tools::getHttpHost());
+        $baseDomain = Tools::getHttpHost();
         $rules = Configuration::get('EVERHTACCESS'). "\n\n";
         $prepend_rules = Configuration::get('EVERHTACCESS_PREPEND'). "\n\n";
         if ((bool) Configuration::get('EVERHTACCESS_404') === true) {
@@ -6285,7 +6220,6 @@ class Everpsseo extends Module
                 }
             }
         }
-        $rules .= 'RewriteRule ^(.*).git(.*)$ https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley [L,R=301]' . "\n\n";
         if ((bool) Configuration::get('EVERSEO_LOCK_PDF') === true) {
             $rules .= '#Noindex PDF
 <Files ~ "\.pdf$">
@@ -6385,23 +6319,23 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]' . "\n\n";
         if ((bool) Configuration::get('EVERSEO_WEBP') === true) {
             $rules .= '# Images
 RewriteCond %{HTTP_HOST} ^' . $baseDomain . '$
-RewriteRule ^([0-9])(\-[_a-zA-Z0-9-]*)?(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/p/$1/$1$2$3.jpg.webp [L]
+RewriteRule ^([0-9])(\-[_a-zA-Z0-9-]*)?(-[0-9]+)?/.+\.webp$ %{ENV:REWRITEBASE}img/p/$1/$1$2$3.webp [L]
 RewriteCond %{HTTP_HOST} ^' . $baseDomain . '$
-RewriteRule ^([0-9])([0-9])(\-[_a-zA-Z0-9-]*)?(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/p/$1/$2/$1$2$3$4.jpg.webp [L]
+RewriteRule ^([0-9])([0-9])(\-[_a-zA-Z0-9-]*)?(-[0-9]+)?/.+\.webp$ %{ENV:REWRITEBASE}img/p/$1/$2/$1$2$3$4.webp [L]
 RewriteCond %{HTTP_HOST} ^' . $baseDomain . '$
-RewriteRule ^([0-9])([0-9])([0-9])(\-[_a-zA-Z0-9-]*)?(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/p/$1/$2/$3/$1$2$3$4$5.jpg.webp [L]
+RewriteRule ^([0-9])([0-9])([0-9])(\-[_a-zA-Z0-9-]*)?(-[0-9]+)?/.+\.webp$ %{ENV:REWRITEBASE}img/p/$1/$2/$3/$1$2$3$4$5.webp [L]
 RewriteCond %{HTTP_HOST} ^' . $baseDomain . '$
-RewriteRule ^([0-9])([0-9])([0-9])([0-9])(\-[_a-zA-Z0-9-]*)?(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/p/$1/$2/$3/$4/$1$2$3$4$5$6.jpg.webp [L]
+RewriteRule ^([0-9])([0-9])([0-9])([0-9])(\-[_a-zA-Z0-9-]*)?(-[0-9]+)?/.+\.webp$ %{ENV:REWRITEBASE}img/p/$1/$2/$3/$4/$1$2$3$4$5$6.webp [L]
 RewriteCond %{HTTP_HOST} ^' . $baseDomain . '$
-RewriteRule ^([0-9])([0-9])([0-9])([0-9])([0-9])(\-[_a-zA-Z0-9-]*)?(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/p/$1/$2/$3/$4/$5/$1$2$3$4$5$6$7.jpg.webp [L]
+RewriteRule ^([0-9])([0-9])([0-9])([0-9])([0-9])(\-[_a-zA-Z0-9-]*)?(-[0-9]+)?/.+\.webp$ %{ENV:REWRITEBASE}img/p/$1/$2/$3/$4/$5/$1$2$3$4$5$6$7.webp [L]
 RewriteCond %{HTTP_HOST} ^' . $baseDomain . '$
-RewriteRule ^([0-9])([0-9])([0-9])([0-9])([0-9])([0-9])(\-[_a-zA-Z0-9-]*)?(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/p/$1/$2/$3/$4/$5/$6/$1$2$3$4$5$6$7$8.jpg.webp [L]
+RewriteRule ^([0-9])([0-9])([0-9])([0-9])([0-9])([0-9])(\-[_a-zA-Z0-9-]*)?(-[0-9]+)?/.+\.webp$ %{ENV:REWRITEBASE}img/p/$1/$2/$3/$4/$5/$6/$1$2$3$4$5$6$7$8.webp [L]
 RewriteCond %{HTTP_HOST} ^' . $baseDomain . '$
-RewriteRule ^([0-9])([0-9])([0-9])([0-9])([0-9])([0-9])([0-9])(\-[_a-zA-Z0-9-]*)?(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/p/$1/$2/$3/$4/$5/$6/$7/$1$2$3$4$5$6$7$8$9.jpg.webp [L]
+RewriteRule ^([0-9])([0-9])([0-9])([0-9])([0-9])([0-9])([0-9])(\-[_a-zA-Z0-9-]*)?(-[0-9]+)?/.+\.webp$ %{ENV:REWRITEBASE}img/p/$1/$2/$3/$4/$5/$6/$7/$1$2$3$4$5$6$7$8$9.webp [L]
 RewriteCond %{HTTP_HOST} ^' . $baseDomain . '$
-RewriteRule ^c/([0-9]+)(\-[\.*_a-zA-Z0-9-]*)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$2$3.jpg.webp [L]
+RewriteRule ^c/([0-9]+)(\-[\.*_a-zA-Z0-9-]*)(-[0-9]+)?/.+\.webp$ %{ENV:REWRITEBASE}img/c/$1$2$3.webp [L]
 RewriteCond %{HTTP_HOST} ^' . $baseDomain . '$
-RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.jpg.webp$ %{ENV:REWRITEBASE}img/c/$1$2.jpg.webp [L]' . "\n\n";
+RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.webp$ %{ENV:REWRITEBASE}img/c/$1$2.webp [L]' . "\n\n";
         }
         $path = _PS_ROOT_DIR_ . '/.htaccess';
         $specific_before = $specific_after = '';

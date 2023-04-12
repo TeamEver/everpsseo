@@ -62,6 +62,7 @@
                 <li><code>php bin/console everpsseo:seo:export categories</code> {l s='export SEO categories on XLSX file' mod='everpsseo'}</li>
                 <li><code>php bin/console everpsseo:seo:export products</code> {l s='export SEO products on XLSX file' mod='everpsseo'}</li>
                 <li><code>php bin/console everpsseo:seo:execute createWebpImage</code> {l s='create webp images' mod='everpsseo'}</li>
+                <li><code>php bin/console everpsseo:seo:execute redirectDisabledProduct</code> {l s='create redirections on disabled products' mod='everpsseo'}</li>
             </ul>
         </div>
         <div class="col-md-6 col-xs-12">
@@ -102,15 +103,20 @@
             <h4>{l s='If you are using Store Commander, please set this cron to enable detecting new elements' mod='everpsseo'}</h4>
             <p>{$everpsseo_objects|escape:'htmlall':'UTF-8'}</p>
             <a href="{$everpsseo_objects|escape:'htmlall':'UTF-8'}" target="_blank" class="btn btn-default">{l s='Check and update elements now !' mod='everpsseo'}</a>
-            <h4>{l s='XLSX files examples' mod='everpsseo'}</h4>
+            {if (isset($categoriesFileExample) && categoriesFileExample) || (isset($productsFileExample) && $productsFileExample)}
             <ul>
-                <li>
-                    {l s='Categories update file example :' mod='everpsseo'} <a href="{$input_dir|escape:'htmlall':'UTF-8'}categories.xlsx" target="_blank">{l s='Download' mod='everpsseo'}</a>
-                </li>
-                <li>
-                    {l s='Products update file example :' mod='everpsseo'} <a href="{$input_dir|escape:'htmlall':'UTF-8'}products.xlsx" target="_blank">{l s='Download' mod='everpsseo'}</a>
-                </li>
+                {if isset($categoriesFileExample) && $categoriesFileExample}
+                    <li>
+                        {l s='Categories update file example :' mod='everpsseo'} <a href="{$input_dir|escape:'htmlall':'UTF-8'}categories.xlsx" target="_blank">{l s='Download' mod='everpsseo'}</a>
+                    </li>
+                {/if}
+                {if isset($productsFileExample) && $productsFileExample}
+                    <li>
+                        {l s='Products update file example :' mod='everpsseo'} <a href="{$input_dir|escape:'htmlall':'UTF-8'}products.xlsx" target="_blank">{l s='Download' mod='everpsseo'}</a>
+                    </li>
+                {/if}
             </ul>
+            {/if}
         </div>
     </div>
 </div>

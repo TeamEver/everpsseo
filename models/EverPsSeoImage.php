@@ -171,10 +171,11 @@ class EverPsSeoImage extends ObjectModel
             return false;
         }
         try {
-            $file_type = exif_imagetype($file);
+           $file_type = exif_imagetype($file);
         } catch (Exception $e) {
-            return;
+            return false;
         }
+
         //https://www.php.net/manual/en/function.exif-imagetype.php
         //exif_imagetype($file);
         // 1    IMAGETYPE_GIF
@@ -183,7 +184,17 @@ class EverPsSeoImage extends ObjectModel
         // 6    IMAGETYPE_BMP
         // 15   IMAGETYPE_WBMP
         // 16   IMAGETYPE_XBM
-        $output_file =  $file . '.webp';
+        $allowedFormats = [
+            'jpg',
+            'jpeg',
+            'png'
+        ];
+        $extension = pathinfo($file, PATHINFO_EXTENSION); // obtenir l'extension du fichier
+        if (!in_array($extension, $allowedFormats)) {
+            return false;
+        }
+        $filename = pathinfo($file, PATHINFO_FILENAME); // obtenir le nom de fichier sans extension
+        $output_file = dirname($file) . '/' . $filename . '.webp'; // chemin complet de sortie avec extension .webp
         if (file_exists($output_file)) {
             return $output_file;
         }
@@ -275,10 +286,10 @@ class EverPsSeoImage extends ObjectModel
         );
         $psLogo = str_replace('.webp', '', $psLogo);
         self::webpConvert2(_PS_IMG_DIR_ . $psLogo);
-        Configuration::updateValue(
-            'PS_LOGO',
-            $psLogo . '.webp'
-        );
+        // Configuration::updateValue(
+        //     'PS_LOGO',
+        //     $psLogo . '.webp'
+        // );
         // Products images
         $allImages = Image::getAllImages();
         foreach ($allImages as $img) {

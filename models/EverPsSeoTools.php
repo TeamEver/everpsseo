@@ -970,4 +970,27 @@ class EverPsSeoTools extends ObjectModel
         }
         return $fileList;
     }
+
+    public static function cleanHtmlForPrestashop($string)
+    {
+        // Supprimer les balises HTML non autorisées
+        $string = strip_tags($string, '<b><i><u><strong><em><p><br><ul><ol><li><a><img><div><span>');
+
+        // Supprimer les attributs non autorisés dans les balises autorisées
+        $string = preg_replace('/<(b|i|u|strong|em|p|br|ul|ol|li|a|img|div|span)\s+(?!class|id|style)[^>]*>/i', '<$1>', $string);
+
+        // Nettoyer les attributs "style" des balises autorisées
+        $string = preg_replace('/<(b|i|u|strong|em|p|br|ul|ol|li|a|img|div|span)\s+style="[^"]*"[^>]*>/i', '<$1>', $string);
+
+        // Convertir les attributs "style" en style CSS
+        $string = preg_replace('/<(b|i|u|strong|em|p|br|ul|ol|li|a|img|div|span)\s+style="([^"]*)"([^>]*?)>/i', '<$1 style="$2"$3>', $string);
+
+        // Retirer les caractères spéciaux HTML
+        $string = htmlspecialchars_decode($string);
+
+        // Retirer les espaces en début et fin de chaîne
+        $string = trim($string);
+
+        return $string;
+    }
 }

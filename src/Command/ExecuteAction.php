@@ -17,6 +17,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
+use Everpsseo\Seo\Service\ImportFile;
 
 class ExecuteAction extends Command
 {
@@ -28,7 +29,9 @@ class ExecuteAction extends Command
     private $allowedActions = [
         'idshop',
         'redirectDisabledProduct',
-        'createWebpImage'
+        'createWebpImage',
+        'updateStock',
+        'myCustomCommand'
     ];
 
     public function __construct(KernelInterface $kernel)
@@ -42,6 +45,7 @@ class ExecuteAction extends Command
         $this->setDescription('Execute action');
         $this->addArgument('action', InputArgument::REQUIRED, sprintf('Action to execute (Allowed actions: %s).', implode(' / ', $this->allowedActions)));
         $this->addArgument('idshop id', InputArgument::OPTIONAL, 'Shop ID');
+        $this->filenameStock = dirname(__FILE__) . '/../../input/stock.xlsx';
         $this->logFile = dirname(__FILE__) . '/../../output/logs/log-seo-execute-action-' . date('Y-m-d') . '.log';
         $this->module = \Module::getInstanceByName('everpsseo');;
     }
@@ -70,7 +74,15 @@ class ExecuteAction extends Command
             $output->writeln('<comment>Unkown action</comment>');
             return self::ABORTED;
         }
-
+        if ($action === 'myCustomCommand') {
+            $webp_files = glob(_PS_ROOT_DIR_ . '/*.webp');
+            foreach ($webp_files as $webp_file) {
+                // Supprimer chaque fichier webp
+                if (is_file($webp_file)) {
+                    unlink($webp_file);
+                }
+            }
+        }
         if ($action === 'createWebpImage') {
             if ((bool) \Configuration::get('EVERSEO_WEBP') === false) {
                 $output->writeln('<comment>Webp not allowed on module configuration</comment>');
@@ -85,7 +97,7 @@ class ExecuteAction extends Command
             ));
             \EverPsSeoImage::setMedias2Webp(true);
             \Hook::exec('actionHtaccessCreate');
-            // \Tools::clearAllCache();
+            \Tools::clearAllCache();
             $output->writeln(sprintf(
                 '<info>Execute ended : datetime : ' . date('Y-m-d H:i:s') . '</info>'
             ));
@@ -95,6 +107,79 @@ class ExecuteAction extends Command
             );
 
             return self::SUCCESS;
+        }
+        if ($action === 'updateStock') {
+            // Parse txt file categories
+            if (file_exists($this->filenameStock)) {
+                $file = new ImportFile($this->filenameStock);
+                $lines = $file->getLines();
+                $headers = $file->getHeaders();
+                $output->writeln(sprintf(
+                    '<info>Start SEO stock update : datetime : ' . date('Y-m-d H:i:s') . '. Lines total : '.count($lines).'</info>'
+                ));
+                foreach ($lines as $line) {
+                    if (!isset($line['reference']) || empty($line['reference'])) {
+                        $output->writeln('<comment>Missing reference</comment>');
+                        continue;
+                    }
+                    $reference = $line['reference'];
+                    if (!isset($line['stock'])) {
+                        $output->writeln('<comment>Missing stock</comment>');
+                        continue;
+                    }
+                    $stock = $line['stock'];
+                    $id_product = 0;
+                    $id_product_attribute = 0;
+
+                    $product = new \Product();
+                    $id = $product->getIdByReference($reference);
+                    if ($id) {
+                        $id_product = $id;
+                    } else {
+                        $query = new \DbQuery();
+                        $query->select('pa.`id_product`, pa.`id_product_attribute`');
+                        $query->from('product_attribute', 'pa');
+                        $query->where('pa.`reference` = \'' . pSQL($reference) . '\'');
+
+                        $result = \Db::getInstance()->getRow($query);
+
+                        $id_product = isset($result['id_product']) ? (int) $result['id_product'] : 0;
+                        $id_product_attribute = isset($result['id_product_attribute']) ? (int) $result['id_product_attribute'] : 0;
+                    }
+                    if ((int) $id_product <= 0) {
+                        $output->writeln('<comment>Reference ' . $reference . ' not found</comment>');
+                        $this->logCommand(
+                            '<comment>Reference ' . $reference . ' not found</comment>'
+                        );
+                        continue;
+                    }
+                    \StockAvailable::updateQuantity(
+                        $id_product,
+                        $id_product_attribute,
+                        $stock
+                    );
+                    $output->writeln('<comment>Stock updated on ' . $reference . '. Qty : ' . $stock . ' - ID product : ' . $id_product . ' - ID product attribute : ' . $id_product_attribute . '</comment>');
+                    $this->logCommand(
+                        '<comment>Stock updated on ' . $reference . '. Qty : ' . $stock . '</comment>'
+                    );
+                }
+                $output->writeln(
+                    $this->getRandomFunnyComment($output)
+                );
+                $output->writeln(sprintf(
+                    '<comment>Seo products files updated. Clearing cache</comment>'
+                ));
+                // unlink($this->filenameStock);
+                // \Tools::clearAllCache();
+                $output->writeln(sprintf(
+                    '<comment>Cache cleared</comment>'
+                ));
+            } else {
+                $output->writeln(sprintf(
+                    '<info>Seo products file does not exists</info>'
+                ));
+            }
+            die('so we are here');
         }
         if ($action === 'redirectDisabledProduct') {
             if (!(bool) \Configuration::get('EVERSEO_FORCE_PRODUCT_REDIRECT')) {
