@@ -6137,6 +6137,65 @@ class Everpsseo extends Module
                 $txt
             );
         }
+        if ((bool) Configuration::get('EVERSEO_ADD_TITLE') === true) {
+            $txt = preg_replace_callback(
+                '/<a(?![^>]*\btitle=["\'])(.*?)>(.*?)<\/a>/i',
+                function($matches) use ($defaultValue) {
+                    $attributes = $matches[1];
+                    $linkText = trim(preg_replace('/\s+/', ' ', $matches[2]));
+                    if (preg_match('/<img.*>/', $matches[0])) {
+                        $attributes .= ' title="' . htmlspecialchars($defaultValue, ENT_QUOTES) . '"';
+                    } elseif (!preg_match('/\btitle=["\']/', $attributes)) {
+                        $altValue = htmlspecialchars(strip_tags($linkText) . ' | ' . Configuration::get('PS_SHOP_NAME'), ENT_QUOTES);
+                        $attributes .= ' title="' . trim($altValue) . '"';
+                    }
+                    return '<a' . $attributes . ' data-everseo="1">' . $matches[2] . '</a>';
+                },
+                $txt
+            );
+        }
+
+        if ((bool) Configuration::get('EVERSEO_ADD_ALT') === true) {
+            $txt = preg_replace_callback(
+                '/<img(?:\s+[^>]*)?>/i',
+                function($matches) use ($defaultValue) {
+                    $imgTag = $matches[0];
+                    $altValue = '';
+                    preg_match('/\balt\s*=\s*(["\'])(.*?)\1/i', $imgTag, $altMatches);
+                    if (!empty($altMatches[2])) {
+                        $altValue = ' alt="' . htmlspecialchars($altMatches[2], ENT_QUOTES) . '"';
+                        $imgTag = preg_replace('/\balt\s*=\s*(["\'])(.*?)\1/i', $altValue, $imgTag);
+                    } else {
+                        $altValue = ' alt="' . htmlspecialchars($defaultValue, ENT_QUOTES) . '" title="' . htmlspecialchars($defaultValue, ENT_QUOTES) . '"';
+                        $imgTag = str_replace('<img', '<img' . $altValue . ' data-everseo="1"', $imgTag);
+                    }
+                    return $imgTag;
+                },
+                $txt
+            );
+        }
+
+        if ((bool) Configuration::get('EVERSEO_EXTERNAL_NOFOLLOW') === true) {
+            // Utilisation de DOMDocument pour modifier tous les liens dans la variable $txt
+            $doc = new \DOMDocument();
+            @$doc->loadHTML(mb_convert_encoding($txt, 'HTML-ENTITIES', 'UTF-8'), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+            $links = $doc->getElementsByTagName('a');
+            foreach ($links as $link) {
+                $href = $link->getAttribute('href');
+                // Vérifier si l'URL pointe vers un autre domaine
+                if ($href && (strpos($href, 'http://') === 0 || strpos($href, 'https://') === 0)) {
+                    $parts = parse_url($href);
+                    if ($parts && isset($parts['host']) && $parts['host'] !== Tools::getHttpHost(false, true)) {
+                        // Ajouter les attributs rel="nofollow" et target="_blank" à la balise <a>
+                        $link->setAttribute('rel', 'nofollow');
+                        $link->setAttribute('target', '_blank');
+                        $link->setAttribute('data-everseo', '1');
+                    }
+                }
+            }
+            // Récupérer le contenu HTML modifié à partir de DOMDocument
+            $txt = $doc->saveHTML();
+        }
         if ((bool) Configuration::get('EVERSEO_WEBP') === true) {
             preg_match_all('/<img[^>]+?(?:src|data-src)=["\'](?P<src>.+?)["\'][^>]*?>/i', $txt, $matches);
             $image_urls = $matches['src'];
@@ -6162,62 +6221,6 @@ class Everpsseo extends Module
                 }
             }
         }
-        if ((bool) Configuration::get('EVERSEO_ADD_ALT') === true) {
-            // Créer un objet DOMDocument
-            $dom = new DOMDocument();
-            // Charger le HTML dans l'objet DOMDocument
-            $dom->loadHTML($txt, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-            // Récupérer toutes les balises <img> du document
-            $images = $dom->getElementsByTagName('img');
-            // Parcourir toutes les balises <img>
-            foreach ($images as $image) {
-                $alt = $image->getAttribute('alt');
-                $title = $image->getAttribute('title');
-                if (empty($alt)) {
-                    // Si l'attribut "alt" existe mais n'a pas de valeur, utiliser $defaultValue
-                    $image->setAttribute('alt', htmlspecialchars($defaultValue, ENT_QUOTES));
-                    // Vérifier si la balise <img> a déjà l'attribut data-everseo ou la classe nocache
-                    if (!$image->hasAttribute('data-everseo') && !preg_match('/\bnocache\b/i', $image->getAttribute('class'))) {
-                        // Ajouter l'attribut data-everseo à la balise <img>
-                        $image->setAttribute('data-everseo', '1');
-                    }
-                }
-                if (empty($title)) {
-                    // Si l'attribut "alt" existe mais n'a pas de valeur, utiliser $defaultValue
-                    $image->setAttribute('title', htmlspecialchars($defaultValue, ENT_QUOTES));
-                    // Vérifier si la balise <img> a déjà l'attribut data-everseo ou la classe nocache
-                    if (!$image->hasAttribute('data-everseo') && !preg_match('/\bnocache\b/i', $image->getAttribute('class'))) {
-                        // Ajouter l'attribut data-everseo à la balise <img>
-                        $image->setAttribute('data-everseo', '1');
-                    }
-                }
-            }
-            // Convertir le document DOM en HTML
-            $txt = $dom->saveHTML();
-        }
-        if ((bool) Configuration::get('EVERSEO_ADD_TITLE') === true) {
-            // Utilisation de DOMDocument pour modifier tous les liens dans la variable $txt
-            $doc = new \DOMDocument();
-            @$doc->loadHTML(mb_convert_encoding($txt, 'HTML-ENTITIES', 'UTF-8'), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-            $links = $doc->getElementsByTagName('a');
-            foreach ($links as $link) {
-                // Vérifier si l'attribut "title" existe et a une valeur
-                if (!$link->hasAttribute('title') || $link->getAttribute('title') === '') {
-                    // Si l'attribut "title" n'existe pas ou est vide, ajouter l'attribut avec la valeur $defaultValue ou le texte du lien si celui-ci n'est pas une image
-                    if (preg_match('/<img.*>/', $link->nodeValue)) {
-                        $link->setAttribute('title', $defaultValue);
-                        $link->setAttribute('data-everseo', '1');
-                    } else {
-                        $altValue = htmlspecialchars(trim($link->nodeValue) . ' | ' . Configuration::get('PS_SHOP_NAME'), ENT_QUOTES);
-                        $link->setAttribute('title', trim($altValue));
-                        $link->setAttribute('data-everseo', '1');
-                    }
-                }
-            }
-            // Récupérer le contenu HTML modifié à partir de DOMDocument
-            $txt = $doc->saveHTML();
-        }
-
         $txt = '<!-- optimized by Ever SEO -->'
         . trim($txt)
         . '<!-- optimized by Ever SEO -->';
