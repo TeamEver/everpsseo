@@ -5,7 +5,7 @@
 * @license   Tous droits réservés / Le droit d'auteur s'applique (All rights reserved / French copyright law applies)
 * @link https://www.team-ever.com
 *}
-{if $controller == 'product'}
+{if isset($controller) && $controller == 'product'}
     <div class="everrsnippets everseo ever-{$controller|escape:'htmlall':'UTF-8'}" style="display:none;">
         <div itemscope itemtype="http://schema.org/Product">
             <span itemprop="name">{$productName|escape:'htmlall':'UTF-8'}</span>

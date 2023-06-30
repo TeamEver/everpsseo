@@ -138,7 +138,7 @@
       gtag('event', 'page_view', {
         'send_to': '{/literal}{$adwords|escape:'htmlall':'UTF-8'}{literal}',
         'user_id': {/literal}{if isset($ever_customer) && $ever_customer}{$ever_customer->id|escape:'htmlall':'UTF-8'}{else}false{/if}{literal},
-        'value': {/literal}{$product.price|escape:'htmlall':'UTF-8'}{literal},
+        'value': '{/literal}{$product.price|escape:'htmlall':'UTF-8'}{literal}',
         'items': [{
           'id': {/literal}{$product.id|escape:'htmlall':'UTF-8'}{literal},
           'google_business_vertical': 'retail'

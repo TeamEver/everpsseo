@@ -1196,6 +1196,15 @@ class Everpsseo extends Module
                     ],
                     [
                         'type' => 'text',
+                        'label' => $this->l('Adwords add to cart label code'),
+                        'desc' => $this->l('Adwords add to cart label code'),
+                        'hint' => $this->l('Please only add to cart label code'),
+                        'required' => false,
+                        'name' => 'EVERSEO_ADWORDS_CART_LABEL',
+                        'lang' => false,
+                    ],
+                    [
+                        'type' => 'text',
                         'label' => $this->l('Adwords event snippet code'),
                         'desc' => $this->l('Adwords meta value for order confirmation'),
                         'hint' => $this->l('Please only set meta value'),
@@ -4643,6 +4652,9 @@ class Everpsseo extends Module
             'EVERSEO_ADWORDS' => Configuration::get(
                 'EVERSEO_ADWORDS'
             ),
+            'EVERSEO_ADWORDS_CART_LABEL' => Configuration::get(
+                'EVERSEO_ADWORDS_CART_LABEL'
+            ),
             'EVERSEO_ADWORDS_SENDTO' => Configuration::get(
                 'EVERSEO_ADWORDS_SENDTO'
             ),
@@ -5228,6 +5240,12 @@ class Everpsseo extends Module
                 || !Validate::isGenericName(Tools::getValue('EVERSEO_ADWORDS'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Adwords tracking code" is not valid');
+            }
+
+            if (!Tools::getIsset('EVERSEO_ADWORDS_CART_LABEL')
+                || !Validate::isGenericName(Tools::getValue('EVERSEO_ADWORDS_CART_LABEL'))
+            ) {
+                $this->postErrors[] = $this->l('Error : The field "Adwords add to cart label" is not valid');
             }
 
             if (!Tools::getIsset('EVERSEO_ADWORDS_SENDTO')
@@ -7960,13 +7978,13 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.webp$ %{ENV:REWRITEBASE}img/c/$1$2.we
         } else {
             $customer = false;
         }
-        // Do not cache if updatedTransaction is set, else page will be reloaded every time
-        if ((bool) Configuration::get('EVERSEO_CACHE') === true
-            && !Tools::getValue('updatedTransaction')
-        ) {
-            $this->context->controller->addJs($this->_path . 'views/js/evercache.js');
+        if (Configuration::get('EVERSEO_ADWORDS_CART_LABEL')) {
+            Media::addJsDef(array(
+                'adwords_add_to_cart' => Configuration::get('EVERSEO_ADWORDS_CART_LABEL'),
+                'ever_currency_sign' => $this->context->currency->iso_code
+            ));
+            $this->context->controller->addJs($this->_path . 'views/js/ads.js');
         }
-        // Right click block on FO
         if ((bool) Configuration::get('EVERSEO_BLOCK_RIGHT_CLICK') === true) {
             $this->context->controller->addJs($this->_path . 'views/js/rightclick.js');
         }
@@ -8578,6 +8596,9 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.webp$ %{ENV:REWRITEBASE}img/c/$1$2.we
             ),
             'adwordsopart' => Configuration::get(
                 'EVERSEO_ADWORDS_OPART'
+            ),
+            'adwords_add_to_cart' => Configuration::get(
+                'EVERSEO_ADWORDS_CART_LABEL'
             ),
             'richsnippet' => Configuration::get(
                 'EVERSEO_RSNIPPETS'
