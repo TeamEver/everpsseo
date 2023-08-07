@@ -232,7 +232,7 @@ class Everpsseo extends Module
             && $this->registerHook('displayReassurance')
             && $this->registerHook('displayOrderConfirmation')
             && $this->registerHook('displayContentWrapperBottom')
-            && $this->registerHook('actionOutputHTMLBefore');;
+            && $this->registerHook('actionOutputHTMLBefore');
     }
 
     public function uninstall()
