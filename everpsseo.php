@@ -5100,73 +5100,73 @@ class Everpsseo extends Module
                 $this->posterrors[] = $this->l('error : [Supplier link] is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_PRODUCT')
+            if (!Tools::getValue('EVERSEO_PRODUCT')
                 || !Validate::isBool(Tools::getValue('EVERSEO_PRODUCT'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Redirect to products" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_CATEGORY')
+            if (!Tools::getValue('EVERSEO_CATEGORY')
                 || !Validate::isBool(Tools::getValue('EVERSEO_CATEGORY'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Redirect to categories" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_TAGS')
+            if (!Tools::getValue('EVERSEO_TAGS')
                 || !Validate::isBool(Tools::getValue('EVERSEO_TAGS'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Redirect using tags" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_PRIORITY')
+            if (!Tools::getValue('EVERSEO_PRIORITY')
                 || !Validate::isInt(Tools::getValue('EVERSEO_PRIORITY'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Redirect priorities" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_REDIRECT')
+            if (!Tools::getValue('EVERSEO_REDIRECT')
                 || !Validate::isInt(Tools::getValue('EVERSEO_REDIRECT'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Use 301 redirect" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_NOT_FOUND')
+            if (!Tools::getValue('EVERSEO_NOT_FOUND')
                 || !Validate::isBool(Tools::getValue('EVERSEO_NOT_FOUND'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "What if is not found" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_FORCE_PRODUCT_REDIRECT')
+            if (!Tools::getValue('EVERSEO_FORCE_PRODUCT_REDIRECT')
                 || !Validate::isBool(Tools::getValue('EVERSEO_FORCE_PRODUCT_REDIRECT'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "forcing redrect product" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_ORDER_BY')
+            if (!Tools::getValue('EVERSEO_ORDER_BY')
                 || !Validate::isBool(Tools::getValue('EVERSEO_ORDER_BY'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Filter results by" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_CUSTOM_404')
+            if (!Tools::getValue('EVERSEO_CUSTOM_404')
                 || !Validate::isBool(Tools::getValue('EVERSEO_CUSTOM_404'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Custom 404" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_404_SEARCH')
+            if (!Tools::getValue('EVERSEO_404_SEARCH')
                 || !Validate::isBool(Tools::getValue('EVERSEO_404_SEARCH'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Search bar on 404" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_QUALITY_LEVEL')
+            if (!Tools::getValue('EVERSEO_QUALITY_LEVEL')
                 || !Validate::isInt(Tools::getValue('EVERSEO_QUALITY_LEVEL'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Ever Quality level" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_KNOWLEDGE')
+            if (!Tools::getValue('EVERSEO_KNOWLEDGE')
                 || !Validate::isString(Tools::getValue('EVERSEO_KNOWLEDGE'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "knowledgegraph" is not valid');
@@ -5178,7 +5178,7 @@ class Everpsseo extends Module
                 $this->postErrors[] = $this->l('Error : The field "Index now day limit" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_ANALYTICS')
+            if (!Tools::getValue('EVERSEO_ANALYTICS')
                 || !Validate::isGenericName(Tools::getValue('EVERSEO_ANALYTICS'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Analytics tracking code" is not valid');
@@ -5218,42 +5218,42 @@ class Everpsseo extends Module
                 $this->postErrors[] = $this->l('Error : The field "SEO maintenance URL" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_SEARCHCONSOLE')
+            if (!Tools::getValue('EVERSEO_SEARCHCONSOLE')
                 || !Validate::isGenericName(Tools::getValue('EVERSEO_SEARCHCONSOLE'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Search console" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_GTAG')
+            if (!Tools::getValue('EVERSEO_GTAG')
                 || !Validate::isGenericName(Tools::getValue('EVERSEO_GTAG'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Google GTM code" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_FBPIXEL')
+            if (!Tools::getValue('EVERSEO_FBPIXEL')
                 || !Validate::isGenericName(Tools::getValue('EVERSEO_FBPIXEL'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Facebook pixel" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_ADWORDS')
+            if (!Tools::getValue('EVERSEO_ADWORDS')
                 || !Validate::isGenericName(Tools::getValue('EVERSEO_ADWORDS'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Adwords tracking code" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_ADWORDS_CART_LABEL')
+            if (!Tools::getValue('EVERSEO_ADWORDS_CART_LABEL')
                 || !Validate::isGenericName(Tools::getValue('EVERSEO_ADWORDS_CART_LABEL'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Adwords add to cart label" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_ADWORDS_SENDTO')
+            if (!Tools::getValue('EVERSEO_ADWORDS_SENDTO')
                 || !Validate::isGenericName(Tools::getValue('EVERSEO_ADWORDS_SENDTO'))) {
                 $this->postErrors[] = $this->l('Error : The field "Adwords event snippet code" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_ADWORDS_CONTACT')
+            if (!Tools::getValue('EVERSEO_ADWORDS_CONTACT')
                 || !Validate::isGenericName(Tools::getValue('EVERSEO_ADWORDS_CONTACT'))) {
                 $this->postErrors[] = $this->l('Error : The field "Adwords contact event snippet code" is not valid');
             }
@@ -5263,43 +5263,43 @@ class Everpsseo extends Module
                 $this->postErrors[] = $this->l('Error : The field "Adwords Opart event snippet code" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_USE_OPENGRAPH')
+            if (!Tools::getValue('EVERSEO_USE_OPENGRAPH')
                 || !Validate::isBool(Tools::getValue('EVERSEO_USE_OPENGRAPH'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Add Facebook Open Graph metas" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_USE_TWITTER')
+            if (!Tools::getValue('EVERSEO_USE_TWITTER')
                 || !Validate::isBool(Tools::getValue('EVERSEO_USE_TWITTER'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Add twitter metas" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_TWITTER_NAME')
+            if (!Tools::getValue('EVERSEO_TWITTER_NAME')
                 || !Validate::isGenericName(Tools::getValue('EVERSEO_TWITTER_NAME'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Twitter account" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_CANONICAL')
+            if (!Tools::getValue('EVERSEO_CANONICAL')
                 || !Validate::isBool(Tools::getValue('EVERSEO_CANONICAL'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Canonical URL" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_HREF_LANG')
+            if (!Tools::getValue('EVERSEO_HREF_LANG')
                 || !Validate::isBool(Tools::getValue('EVERSEO_HREF_LANG'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Add hreflangs" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_RSNIPPETS')
+            if (!Tools::getValue('EVERSEO_RSNIPPETS')
                 || !Validate::isBool(Tools::getValue('EVERSEO_RSNIPPETS'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Google Rich Snippets" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_SITEMAP_QTY_ELEMENTS')
+            if (!Tools::getValue('EVERSEO_SITEMAP_QTY_ELEMENTS')
                 || !Validate::isInt(Tools::getValue('EVERSEO_SITEMAP_QTY_ELEMENTS'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Sitemap number" is not valid');
@@ -5317,211 +5317,211 @@ class Everpsseo extends Module
                 $this->posterrors[] = $this->l('error : [Sitemap langs] is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_SITEMAP_CATEGORY')
+            if (!Tools::getValue('EVERSEO_SITEMAP_CATEGORY')
                 || !Validate::isBool(Tools::getValue('EVERSEO_SITEMAP_CATEGORY'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Active" for Category Sitemap is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_SITEMAP_CATEGORY_FREQUENCY')
+            if (!Tools::getValue('EVERSEO_SITEMAP_CATEGORY_FREQUENCY')
                 || !Validate::isGenericName(Tools::getValue('EVERSEO_SITEMAP_CATEGORY_FREQUENCY'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Categories frequency on sitemap" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_SITEMAP_CATEGORY_PRIORITY')
+            if (!Tools::getValue('EVERSEO_SITEMAP_CATEGORY_PRIORITY')
                 || !Validate::isFloat(Tools::getValue('EVERSEO_SITEMAP_CATEGORY_PRIORITY'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Categories priority on sitemap" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_SITEMAP_PRODUCT')
+            if (!Tools::getValue('EVERSEO_SITEMAP_PRODUCT')
                 || !Validate::isBool(Tools::getValue('EVERSEO_SITEMAP_PRODUCT'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Active" for Product Sitemap is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_SITEMAP_PRODUCT_FREQUENCY')
+            if (!Tools::getValue('EVERSEO_SITEMAP_PRODUCT_FREQUENCY')
                 || !Validate::isGenericName(Tools::getValue('EVERSEO_SITEMAP_PRODUCT_FREQUENCY'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Products frequency on sitemap" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_SITEMAP_PRODUCT_PRIORITY')
+            if (!Tools::getValue('EVERSEO_SITEMAP_PRODUCT_PRIORITY')
                 || !Validate::isFloat(Tools::getValue('EVERSEO_SITEMAP_PRODUCT_PRIORITY'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Products priority on sitemap" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_SITEMAP_IMAGE')
+            if (!Tools::getValue('EVERSEO_SITEMAP_IMAGE')
                 || !Validate::isBool(Tools::getValue('EVERSEO_SITEMAP_IMAGE'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Active" for Image Sitemap is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_SITEMAP_IMAGE_FREQUENCY')
+            if (!Tools::getValue('EVERSEO_SITEMAP_IMAGE_FREQUENCY')
                 || !Validate::isGenericName(Tools::getValue('EVERSEO_SITEMAP_IMAGE_FREQUENCY'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Images frequency on sitemap" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_SITEMAP_IMAGE_PRIORITY')
+            if (!Tools::getValue('EVERSEO_SITEMAP_IMAGE_PRIORITY')
                 || !Validate::isFloat(Tools::getValue('EVERSEO_SITEMAP_IMAGE_PRIORITY'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Images priority on sitemap" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_SITEMAP_CMS')
+            if (!Tools::getValue('EVERSEO_SITEMAP_CMS')
                 || !Validate::isBool(Tools::getValue('EVERSEO_SITEMAP_CMS'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Active" for CMS Sitemap is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_SITEMAP_CMS_FREQUENCY')
+            if (!Tools::getValue('EVERSEO_SITEMAP_CMS_FREQUENCY')
                 || !Validate::isGenericName(Tools::getValue('EVERSEO_SITEMAP_CMS_FREQUENCY'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Cms frequency on sitemap" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_SITEMAP_CMS_PRIORITY')
+            if (!Tools::getValue('EVERSEO_SITEMAP_CMS_PRIORITY')
                 || !Validate::isFloat(Tools::getValue('EVERSEO_SITEMAP_CMS_PRIORITY'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Cms priority on sitemap" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_SITEMAP_PAGE_META')
+            if (!Tools::getValue('EVERSEO_SITEMAP_PAGE_META')
                 || !Validate::isBool(Tools::getValue('EVERSEO_SITEMAP_PAGE_META'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Active" for Page Meta Sitemap is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_SITEMAP_PAGE_META_FREQUENCY')
+            if (!Tools::getValue('EVERSEO_SITEMAP_PAGE_META_FREQUENCY')
                 || !Validate::isGenericName(Tools::getValue('EVERSEO_SITEMAP_PAGE_META_FREQUENCY'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Page Meta frequency on sitemap" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_SITEMAP_PAGE_META_PRIORITY')
+            if (!Tools::getValue('EVERSEO_SITEMAP_PAGE_META_PRIORITY')
                 || !Validate::isFloat(Tools::getValue('EVERSEO_SITEMAP_PAGE_META_PRIORITY'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Page Meta priority on sitemap" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_SITEMAP_MANUFACTURER')
+            if (!Tools::getValue('EVERSEO_SITEMAP_MANUFACTURER')
                 || !Validate::isBool(Tools::getValue('EVERSEO_SITEMAP_MANUFACTURER'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Active" for Manufacturer Sitemap is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_SITEMAP_MANUFACTURER_FREQUENCY')
+            if (!Tools::getValue('EVERSEO_SITEMAP_MANUFACTURER_FREQUENCY')
                 || !Validate::isGenericName(Tools::getValue('EVERSEO_SITEMAP_MANUFACTURER_FREQUENCY'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Manufacturers frequency on sitemap" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_SITEMAP_MANUFACTURER_PRIORITY')
+            if (!Tools::getValue('EVERSEO_SITEMAP_MANUFACTURER_PRIORITY')
                 || !Validate::isFloat(Tools::getValue('EVERSEO_SITEMAP_MANUFACTURER_PRIORITY'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Manufacturers priority on sitemap" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_SITEMAP_SUPPLIER')
+            if (!Tools::getValue('EVERSEO_SITEMAP_SUPPLIER')
                 || !Validate::isBool(Tools::getValue('EVERSEO_SITEMAP_SUPPLIER'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Active" for Supplier Sitemap is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_SITEMAP_SUPPLIER_FREQUENCY')
+            if (!Tools::getValue('EVERSEO_SITEMAP_SUPPLIER_FREQUENCY')
                 || !Validate::isGenericName(Tools::getValue('EVERSEO_SITEMAP_SUPPLIER_FREQUENCY'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Suppliers frequency on sitemap" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_SITEMAP_SUPPLIER_PRIORITY')
+            if (!Tools::getValue('EVERSEO_SITEMAP_SUPPLIER_PRIORITY')
                 || !Validate::isFloat(Tools::getValue('EVERSEO_SITEMAP_SUPPLIER_PRIORITY'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Suppliers priority on sitemap" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_INDEX_CATEGORY')
+            if (!Tools::getValue('EVERSEO_INDEX_CATEGORY')
                 || !Validate::isBool(Tools::getValue('EVERSEO_INDEX_CATEGORY'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Index categories" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_INDEX_PRODUCT')
+            if (!Tools::getValue('EVERSEO_INDEX_PRODUCT')
                 || !Validate::isBool(Tools::getValue('EVERSEO_INDEX_PRODUCT'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Index products" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_INDEX_CMS')
+            if (!Tools::getValue('EVERSEO_INDEX_CMS')
                 || !Validate::isBool(Tools::getValue('EVERSEO_INDEX_CMS'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Index CMS" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_INDEX_PAGE_META')
+            if (!Tools::getValue('EVERSEO_INDEX_PAGE_META')
                 || !Validate::isBool(Tools::getValue('EVERSEO_INDEX_PAGE_META'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Index page meta" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_INDEX_MANUFACTURER')
+            if (!Tools::getValue('EVERSEO_INDEX_MANUFACTURER')
                 || !Validate::isBool(Tools::getValue('EVERSEO_INDEX_MANUFACTURER'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Index Manufacturers" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_INDEX_SUPPLIER')
+            if (!Tools::getValue('EVERSEO_INDEX_SUPPLIER')
                 || !Validate::isBool(Tools::getValue('EVERSEO_INDEX_SUPPLIER'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Index suppliers" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_INDEX_ARGS')
+            if (!Tools::getValue('EVERSEO_INDEX_ARGS')
                 || !Validate::isBool(Tools::getValue('EVERSEO_INDEX_ARGS'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Index on pages with args" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_FOLLOW_CATEGORY')
+            if (!Tools::getValue('EVERSEO_FOLLOW_CATEGORY')
                 || !Validate::isBool(Tools::getValue('EVERSEO_FOLLOW_CATEGORY'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Follow categories" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_FOLLOW_PRODUCT')
+            if (!Tools::getValue('EVERSEO_FOLLOW_PRODUCT')
                 || !Validate::isBool(Tools::getValue('EVERSEO_FOLLOW_PRODUCT'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Follow products" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_FOLLOW_CMS')
+            if (!Tools::getValue('EVERSEO_FOLLOW_CMS')
                 || !Validate::isBool(Tools::getValue('EVERSEO_FOLLOW_CMS'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Follow CMS" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_FOLLOW_PAGE_META')
+            if (!Tools::getValue('EVERSEO_FOLLOW_PAGE_META')
                 || !Validate::isBool(Tools::getValue('EVERSEO_FOLLOW_PAGE_META'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Follow page meta" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_FOLLOW_MANUFACTURER')
+            if (!Tools::getValue('EVERSEO_FOLLOW_MANUFACTURER')
                 || !Validate::isBool(Tools::getValue('EVERSEO_FOLLOW_MANUFACTURER'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Follow manufacturers" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_FOLLOW_SUPPLIER')
+            if (!Tools::getValue('EVERSEO_FOLLOW_SUPPLIER')
                 || !Validate::isBool(Tools::getValue('EVERSEO_FOLLOW_SUPPLIER'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Follow suppliers" is not valid');
             }
 
-            if (!Tools::getIsset('EVERSEO_FOLLOW_ARGS')
+            if (!Tools::getValue('EVERSEO_FOLLOW_ARGS')
                 || !Validate::isBool(Tools::getValue('EVERSEO_FOLLOW_ARGS'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Follow on pages with args" is not valid');
