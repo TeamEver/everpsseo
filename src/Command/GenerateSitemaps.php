@@ -29,7 +29,13 @@ class GenerateSitemaps extends Command
     const ABORTED = 3;
 
     private $allowedActions = [
-        'idshop',
+        'pages',
+        'products',
+        'categories',
+        'manufacturers',
+        'suppliers',
+        'cms',
+        'images',
         'getrandomcomment'
     ];
 
@@ -44,6 +50,7 @@ class GenerateSitemaps extends Command
         $this->setDescription('Generate sitemaps for each lang');
         $this->addArgument('action', InputArgument::OPTIONAL, sprintf('Action to execute (Allowed actions: %s).', implode(' / ', $this->allowedActions)));
         $this->addArgument('idshop id', InputArgument::OPTIONAL, 'Shop ID');
+        $this->addArgument('idlang id', InputArgument::OPTIONAL, 'Language ID');
         $this->logFile = dirname(__FILE__) . '/../../output/logs/log-seo-sitemaps-generation-' . date('Y-m-d') . '.log';
         $this->module = \Module::getInstanceByName('everpsseo');;
     }
@@ -52,6 +59,7 @@ class GenerateSitemaps extends Command
     {
         $action = $input->getArgument('action');
         $idShop = $input->getArgument('idshop id');
+        $idLang = $input->getArgument('idlang id');
         if (!in_array($action, $this->allowedActions)) {
             $output->writeln('<comment>Unkown action</comment>');
             return self::ABORTED;
@@ -64,19 +72,12 @@ class GenerateSitemaps extends Command
         }
         $context = (new ContextAdapter())->getContext();
         $context->employee = new \Employee(1);
-        if ($action === 'idshop') {
-            $shop = new \Shop(
-                (int) $idShop
-            );
-            if (!\Validate::isLoadedObject($shop)) {
-                $output->writeln('<comment>Shop not found</comment>');
-                return self::ABORTED;
-            }
-        } else {
-            $shop = $context->shop;
-            if (!\Validate::isLoadedObject($shop)) {
-                $shop = new \Shop((int) \Configuration::get('PS_SHOP_DEFAULT'));
-            }
+        $shop = new \Shop(
+            (int) $idShop
+        );
+        if (!\Validate::isLoadedObject($shop)) {
+            $output->writeln('<comment>Shop not found</comment>');
+            return self::ABORTED;
         }
         //Important to setContext
         \Shop::setContext($shop::CONTEXT_SHOP, $shop->id);
@@ -93,11 +94,48 @@ class GenerateSitemaps extends Command
         $output->writeln(sprintf(
             '<info>Start sitemap generation : datetime : ' . date('Y-m-d H:i:s') . '</info>'
         ));
-
-        $this->module->everGenerateSitemaps(
-            (int) $shop->id
-        );
-
+        if ($action == 'products') {
+            $output->writeln(sprintf(
+                '<info>Products sitemaps asked for lang '. (int) $idLang . ' and shop ' . (int) $idShop . '</info>'
+            ));
+            $this->module->processSitemapProduct((int) $idShop, (int) $idLang);
+        }
+        if ($action == 'images') {
+            $output->writeln(sprintf(
+                '<info>Images sitemaps asked for lang '. (int) $idLang . ' and shop ' . (int) $idShop . '</info>'
+            ));
+            $this->module->processSitemapImage((int) $idShop, (int) $idLang);
+        }
+        if ($action == 'categories') {
+            $output->writeln(sprintf(
+                '<info>Categories sitemaps asked for lang '. (int) $idLang . ' and shop ' . (int) $idShop . '</info>'
+            ));
+            $this->module->processSitemapCategory((int) $idShop, (int) $idLang);
+        }
+        if ($action == 'manufacturers') {
+            $output->writeln(sprintf(
+                '<info>Manufacturers sitemaps asked for lang '. (int) $idLang . ' and shop ' . (int) $idShop . '</info>'
+            ));
+            $this->module->processSitemapManufacturer((int) $idShop, (int) $idLang);
+        }
+        if ($action == 'suppliers') {
+            $output->writeln(sprintf(
+                '<info>Suppliers sitemaps asked for lang '. (int) $idLang . ' and shop ' . (int) $idShop . '</info>'
+            ));
+            $this->module->processSitemapSupplier((int) $idShop, (int) $idLang);
+        }
+        if ($action == 'cms') {
+            $output->writeln(sprintf(
+                '<info>CMS sitemaps asked for lang '. (int) $idLang . ' and shop ' . (int) $idShop . '</info>'
+            ));
+            $this->module->processSitemapCms((int) $idShop, (int) $idLang);
+        }
+        if ($action == 'pages') {
+            $output->writeln(sprintf(
+                '<info>Pages sitemaps asked for lang '. (int) $idLang . ' and shop ' . (int) $idShop . '</info>'
+            ));
+            $this->module->processSitemapPageMeta((int) $idShop, (int) $idLang);
+        }
         $output->writeln(sprintf(
             '<info>Generation ended</info>'
         ));

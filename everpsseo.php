@@ -8875,7 +8875,7 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.webp$ %{ENV:REWRITEBASE}img/c/$1$2.we
 
 #################### END DISPLAY HOOKS ####################
 #################### START SITEMAPS ####################
-    protected function processSitemapProduct($id_shop, $id_lang)
+    public function processSitemapProduct($id_shop, $id_lang)
     {
         if (!Configuration::get('EVERSEO_SITEMAP_PRODUCT')) {
             return false;
@@ -8937,7 +8937,7 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.webp$ %{ENV:REWRITEBASE}img/c/$1$2.we
     /**
      * Process image sitemap creation
      */
-    protected function processSitemapImage($id_shop, $id_lang)
+    public function processSitemapImage($id_shop, $id_lang)
     {
         set_time_limit(0);
         if (!Configuration::get('EVERSEO_SITEMAP_IMAGE')) {
@@ -9005,7 +9005,7 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.webp$ %{ENV:REWRITEBASE}img/c/$1$2.we
         }
     }
 
-    protected function processSitemapCategory($id_shop, $id_lang)
+    public function processSitemapCategory($id_shop, $id_lang)
     {
         if (!Configuration::get('EVERSEO_SITEMAP_CATEGORY')) {
             return false;
@@ -9064,7 +9064,7 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.webp$ %{ENV:REWRITEBASE}img/c/$1$2.we
         }
     }
 
-    protected function processSitemapPageMeta($id_shop, $id_lang)
+    public function processSitemapPageMeta($id_shop, $id_lang)
     {
         if (!Configuration::get('EVERSEO_SITEMAP_PAGE_META')) {
             return false;
@@ -9139,7 +9139,7 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.webp$ %{ENV:REWRITEBASE}img/c/$1$2.we
         }
     }
 
-    protected function processSitemapManufacturer($id_shop, $id_lang)
+    public function processSitemapManufacturer($id_shop, $id_lang)
     {
         set_time_limit(0);
         if (!Configuration::get('EVERSEO_SITEMAP_MANUFACTURER')) {
@@ -9192,7 +9192,7 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.webp$ %{ENV:REWRITEBASE}img/c/$1$2.we
         }
     }
 
-    protected function processSitemapSupplier($id_shop, $id_lang)
+    public function processSitemapSupplier($id_shop, $id_lang)
     {
         if (!Configuration::get('EVERSEO_SITEMAP_SUPPLIER')) {
             return false;
@@ -9244,7 +9244,7 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.webp$ %{ENV:REWRITEBASE}img/c/$1$2.we
         }
     }
 
-    protected function processSitemapCms($id_shop, $id_lang)
+    public function processSitemapCms($id_shop, $id_lang)
     {
         if (!Configuration::get('EVERSEO_SITEMAP_CMS')) {
             return false;
