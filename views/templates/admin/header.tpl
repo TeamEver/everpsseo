@@ -57,7 +57,13 @@
             <ul>
                 <li><code>php bin/console everpsseo:seo:metas idshop 1</code> {l s='generate all metas for id shop 1, depending on module settings' mod='everpsseo'}</li>
                 <li><code>php bin/console everpsseo:seo:content idshop 1</code> {l s='generate all content (products, categories, suppliers, manufacturers) for id shop 1, depending on module settings' mod='everpsseo'}</li>
-                <li><code>php bin/console everpsseo:seo:sitemaps idshop 1</code> {l s='generate all sitemaps and ping search engines for id shop 1, depending on module settings' mod='everpsseo'}</li>
+                <li><code>php bin/console everpsseo:seo:sitemaps products 1 1</code> {l s='generate products sitemaps for id shop 1 and lang 1, depending on module settings' mod='everpsseo'}</li>
+                <li><code>php bin/console everpsseo:seo:sitemaps images 1 1</code> {l s='generate product images sitemaps for id shop 1 and lang 1, depending on module settings' mod='everpsseo'}</li>
+                <li><code>php bin/console everpsseo:seo:sitemaps categories 1 1</code> {l s='generate categories sitemaps for id shop 1 and lang 1, depending on module settings' mod='everpsseo'}</li>
+                <li><code>php bin/console everpsseo:seo:sitemaps manufacturers 1 1</code> {l s='generate manufacturers sitemaps for id shop 1 and lang 1, depending on module settings' mod='everpsseo'}</li>
+                <li><code>php bin/console everpsseo:seo:sitemaps suppliers 1 1</code> {l s='generate suppliers sitemaps for id shop 1 and lang 1, depending on module settings' mod='everpsseo'}</li>
+                <li><code>php bin/console everpsseo:seo:sitemaps pages 1 1</code> {l s='generate pages sitemaps for id shop 1 and lang 1, depending on module settings' mod='everpsseo'}</li>
+                <li><code>php bin/console everpsseo:seo:sitemaps cms 1 1</code> {l s='generate cms sitemaps for id shop 1 and lang 1, depending on module settings' mod='everpsseo'}</li>
                 <li><code>php bin/console everpsseo:seo:import</code> {l s='update objects depending on XLSX file' mod='everpsseo'}</li>
                 <li><code>php bin/console everpsseo:seo:export categories</code> {l s='export SEO categories on XLSX file' mod='everpsseo'}</li>
                 <li><code>php bin/console everpsseo:seo:export products</code> {l s='export SEO products on XLSX file' mod='everpsseo'}</li>
