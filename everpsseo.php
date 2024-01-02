@@ -8491,7 +8491,7 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.webp$ %{ENV:REWRITEBASE}img/c/$1$2.we
             ]);
         }
 
-        if ((bool)EverPsSeoTools::pageHasBannedArgs() === true) {
+        if ((bool) EverPsSeoTools::pageHasBannedArgs() === true) {
             $index = 'noindex';
         }
         $page = $this->context->controller->getTemplateVarPage();
