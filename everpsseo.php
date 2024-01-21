@@ -51,7 +51,7 @@ class Everpsseo extends Module
     {
         $this->name = 'everpsseo';
         $this->tab = 'seo';
-        $this->version = '9.3.4';
+        $this->version = '9.3.5';
         $this->author = 'Team Ever';
         $this->need_instance = false;
         $this->module_key = '5ddabba8ec414cd5bd646fad24368472';
@@ -855,35 +855,12 @@ class Everpsseo extends Module
     {
         $employees = Employee::getEmployees();
         // Allowed products categories for products content generator
-        $pg_cat = json_decode(
-            Configuration::get(
-                'EVERSEO_PGENERATOR_CATEGORIES'
-            )
+        $categories = Category::getAllCategoriesName(
+            (int)$this->context->language->id
         );
-        if (!is_array($pg_cat)) {
-            $pg_cat = [$pg_cat];
+        foreach ($categories as &$cat) {
+            $cat['name'] = $cat['id_category'] . ' - ' . $cat['name'];
         }
-        $pg_tree = [
-            'selected_categories' => $pg_cat,
-            'use_search' => true,
-            'use_checkbox' => true,
-            'id' => 'id_pcategory_tree',
-        ];
-        // Allowed categories for categories content generator
-        $cg_cat = json_decode(
-            Configuration::get(
-                'EVERSEO_CGENERATOR_CATEGORIES'
-            )
-        );
-        if (!is_array($cg_cat)) {
-            $cg_cat = [$cg_cat];
-        }
-        $cg_tree = [
-            'selected_categories' => $cg_cat,
-            'use_search' => true,
-            'use_checkbox' => true,
-            'id' => 'id_ccategory_tree',
-        ];
 
         $orderby = [
             [
@@ -1112,7 +1089,7 @@ class Everpsseo extends Module
                         'name' => 'EVERSEO_THEME_COLOR',
                         'lang' => false,
                     ],
-                    array(
+                    [
                         'type' => 'switch',
                         'label' => $this->l('Redirect all users except registered IP'),
                         'desc' => $this->l('Will redirect all users based on maintenance IP'),
@@ -1131,7 +1108,7 @@ class Everpsseo extends Module
                                 'label' => $this->l('Disabled'),
                             ],
                         ],
-                    ),
+                    ],
                     [
                         'type' => 'text',
                         'label' => $this->l('Redirect users to this URL if SEO maintenance is ON'),
@@ -1250,7 +1227,7 @@ class Everpsseo extends Module
                             ],
                         ],
                     ],
-                    array(
+                    [
                         'type' => 'switch',
                         'label' => $this->l('Add twitter metas'),
                         'desc' => $this->l('Do you have Twitter account ?'),
@@ -1269,8 +1246,8 @@ class Everpsseo extends Module
                                 'label' => $this->l('Disabled'),
                             ],
                         ],
-                    ),
-                    array(
+                    ],
+                    [
                         'type' => 'text',
                         'label' => $this->l('Twitter account'),
                         'desc' => $this->l('Add your @, no spaces'),
@@ -1278,8 +1255,8 @@ class Everpsseo extends Module
                         'required' => true,
                         'name' => 'EVERSEO_TWITTER_NAME',
                         'lang' => false,
-                    ),
-                    array(
+                    ],
+                    [
                         'type' => 'file',
                         'label' => $this->l('Default image'),
                         'desc' => $this->l('For sharing pages and products'),
@@ -1289,7 +1266,7 @@ class Everpsseo extends Module
                         'image' => $defaultImage,
                         'desc' => sprintf($this->l('
                             maximum image size: %s.'), ini_get('upload_max_filesize')),
-                    ),
+                    ],
                     [
                         'type' => 'switch',
                         'label' => $this->l('Use webp'),
@@ -1459,7 +1436,7 @@ class Everpsseo extends Module
                             ],
                         ],
                     ],
-                    array(
+                    [
                         'type' => 'switch',
                         'label' => $this->l('Use rich snippets'),
                         'desc' => $this->l('Will add prices on search console'),
@@ -1478,8 +1455,8 @@ class Everpsseo extends Module
                                 'label' => $this->l('Disabled'),
                             ],
                         ],
-                    ),
-                    array(
+                    ],
+                    [
                         'type' => 'switch',
                         'label' => $this->l('Add canonical URL'),
                         'desc' => $this->l('Only if your theme does not support it'),
@@ -1498,8 +1475,8 @@ class Everpsseo extends Module
                                 'label' => $this->l('Disabled'),
                             ],
                         ],
-                    ),
-                    array(
+                    ],
+                    [
                         'type' => 'switch',
                         'label' => $this->l('Add hreflangs'),
                         'desc' => $this->l('Is your site multilingual ?'),
@@ -1518,7 +1495,7 @@ class Everpsseo extends Module
                                 'label' => $this->l('Disabled'),
                             ],
                         ],
-                    ),
+                    ],
                     [
                         'type' => 'text',
                         'label' => $this->l('Max element quantities in sitemaps'),
@@ -1528,7 +1505,7 @@ class Everpsseo extends Module
                         'lang' => false,
                         'required' => true,
                     ],
-                    array(
+                    [
                         'type' => 'select',
                         'label' =>  $this->l('Allowed languages in sitemap'),
                         'desc' =>  $this->l('Choose allowed langs for sitemaps'),
@@ -1538,13 +1515,13 @@ class Everpsseo extends Module
                         'identifier' => 'name',
                         'multiple' => true,
                         'required' => true,
-                        'options' => array(
+                        'options' => [
                             'query' => Language::getLanguages(false),
                             'id' => 'id_lang',
                             'name' => 'name',
-                        ),
-                    ),
-                    array(
+                        ],
+                    ],
+                    [
                         'type' => 'switch',
                         'label' => $this->l('Regenerate link rewrite ?'),
                         'desc' => $this->l('Will regenerate link rewrite for products & categories for allowed languages'),
@@ -1563,8 +1540,8 @@ class Everpsseo extends Module
                                 'label' => $this->l('Disabled'),
                             ],
                         ],
-                    ),
-                    array(
+                    ],
+                    [
                         'type' => 'switch',
                         'label' => $this->l('Create logs files on commands ?'),
                         'desc' => $this->l('Will create logs files on commands errors'),
@@ -1583,7 +1560,7 @@ class Everpsseo extends Module
                                 'label' => $this->l('Disabled'),
                             ],
                         ],
-                    ),
+                    ],
                 ),
                 'submit' => [
                     'title' => $this->l('Save'),
@@ -1594,30 +1571,30 @@ class Everpsseo extends Module
         // XLSX files import
         $form_fields[] = array(
             'form' => array(
-                'legend' => array(
+                'legend' => [
                     'title' => $this->l('Upload redirection update file'),
                     'icon' => 'icon-download',
-                ),
+                ],
                 'input' => array(
-                    array(
+                    [
                         'type' => 'file',
                         'label' => $this->l('Upload redirection file'),
                         'desc' => $this->l('Will upload redirection file and wait until update cron is triggered'),
                         'hint' => $this->l('For SEO updates only'),
                         'name' => 'redirection_file',
                         'display_image' => false,
-                        'required' => false
-                    ),
+                        'required' => false,
+                    ],
                 ),
-                'buttons' => array(
-                    'import' => array(
+                'buttons' => [
+                    'import' => [
                         'name' => 'submitUploadRedirectionFile',
                         'type' => 'submit',
                         'class' => 'btn btn-default pull-right',
                         'icon' => 'process-icon-download',
-                        'title' => $this->l('Upload file')
-                    ),
-                ),
+                        'title' => $this->l('Upload file'),
+                    ],
+                ],
             )
         );
         $form_fields[] = array(
@@ -2707,12 +2684,20 @@ class Everpsseo extends Module
                         ),
                     ),
                     array(
-                        'type' => 'categories',
-                        'name' => 'EVERSEO_PGENERATOR_CATEGORIES',
+                        'type' => 'select',
+                        'name' => 'EVERSEO_PGENERATOR_CATEGORIES[]',
                         'label' => $this->l('Category'),
                         'required' => false,
-                        'hint' => 'Only selected categories will have this bottom content',
-                        'tree' => $pg_tree,
+                        'hint' => 'Only selected categories will be allowed for content generation',
+                        'class' => 'chosen',
+                        'identifier' => 'name',
+                        'multiple' => true,
+                        'required' => true,
+                        'options' => array(
+                            'query' => $categories,
+                            'id' => 'id_category',
+                            'name' => 'name',
+                        ),
                     ),
                     array(
                         'type' => 'textarea',
@@ -2850,12 +2835,20 @@ class Everpsseo extends Module
                         ),
                     ),
                     array(
-                        'type' => 'categories',
-                        'name' => 'EVERSEO_CGENERATOR_CATEGORIES',
+                        'type' => 'select',
+                        'name' => 'EVERSEO_CGENERATOR_CATEGORIES[]',
                         'label' => $this->l('Category'),
                         'required' => false,
                         'hint' => 'Only selected categories will be allowed for content generation',
-                        'tree' => $cg_tree,
+                        'class' => 'chosen',
+                        'identifier' => 'name',
+                        'multiple' => true,
+                        'required' => true,
+                        'options' => array(
+                            'query' => $categories,
+                            'id' => 'id_category',
+                            'name' => 'name',
+                        ),
                     ),
                     array(
                         'type' => 'textarea',
@@ -4848,60 +4841,60 @@ class Everpsseo extends Module
             'EVERSEO_DELETE_ATTRIBUTE_GROUP' => Configuration::get(
                 'EVERSEO_DELETE_ATTRIBUTE_GROUP'
             ),
-            'EVERSEO_404_TOP' => Configuration::getConfigInMultipleLangs('EVERSEO_404_TOP'),
-            'EVERSEO_404_BOTTOM' => Configuration::getConfigInMultipleLangs('EVERSEO_404_BOTTOM'),
+            'EVERSEO_404_TOP' => static::getConfigInMultipleLangs('EVERSEO_404_TOP'),
+            'EVERSEO_404_BOTTOM' => static::getConfigInMultipleLangs('EVERSEO_404_BOTTOM'),
             // Content generator
-            'CATEGORY_DESC_GENERATE' => Configuration::getConfigInMultipleLangs('CATEGORY_DESC_GENERATE'),
+            'CATEGORY_DESC_GENERATE' => static::getConfigInMultipleLangs('CATEGORY_DESC_GENERATE'),
             // Pagemeta meta desc
-            'EVERSEO_PAGEMETA_METADESC_AUTO' => Configuration::getConfigInMultipleLangs(
+            'EVERSEO_PAGEMETA_METADESC_AUTO' => static::getConfigInMultipleLangs(
                 'EVERSEO_PAGEMETA_METADESC_AUTO'
             ),
             // Pagemeta title
-            'EVERSEO_PAGEMETA_TITLE_AUTO' => Configuration::getConfigInMultipleLangs(
+            'EVERSEO_PAGEMETA_TITLE_AUTO' => static::getConfigInMultipleLangs(
                 'EVERSEO_PAGEMETA_TITLE_AUTO'
             ),
             // CMS meta desc
-            'EVERSEO_CMS_METADESC_AUTO' => Configuration::getConfigInMultipleLangs(
+            'EVERSEO_CMS_METADESC_AUTO' => static::getConfigInMultipleLangs(
                 'EVERSEO_CMS_METADESC_AUTO'
             ),
             // CMS title
-            'EVERSEO_CMS_TITLE_AUTO' => Configuration::getConfigInMultipleLangs(
+            'EVERSEO_CMS_TITLE_AUTO' => static::getConfigInMultipleLangs(
                 'EVERSEO_CMS_TITLE_AUTO'
             ),
             // Supplier meta desc
-            'EVERSEO_SUPPLIER_METADESC_AUTO' => Configuration::getConfigInMultipleLangs(
+            'EVERSEO_SUPPLIER_METADESC_AUTO' => static::getConfigInMultipleLangs(
                 'EVERSEO_SUPPLIER_METADESC_AUTO'
             ),
             // Supplier title
-            'EVERSEO_SUPPLIER_TITLE_AUTO' => Configuration::getConfigInMultipleLangs(
+            'EVERSEO_SUPPLIER_TITLE_AUTO' => static::getConfigInMultipleLangs(
                 'EVERSEO_SUPPLIER_TITLE_AUTO'
             ),
             // Manufacturer meta desc
-            'EVERSEO_MANUFACTURER_METADESC_AUTO' => Configuration::getConfigInMultipleLangs(
+            'EVERSEO_MANUFACTURER_METADESC_AUTO' => static::getConfigInMultipleLangs(
                 'EVERSEO_MANUFACTURER_METADESC_AUTO'
             ),
             // Manufacturer title
-            'EVERSEO_MANUFACTURER_TITLE_AUTO' => Configuration::getConfigInMultipleLangs(
+            'EVERSEO_MANUFACTURER_TITLE_AUTO' => static::getConfigInMultipleLangs(
                 'EVERSEO_MANUFACTURER_TITLE_AUTO'
             ),
             // Category meta desc
-            'EVERSEO_CATEGORY_METADESC_AUTO' => Configuration::getConfigInMultipleLangs(
+            'EVERSEO_CATEGORY_METADESC_AUTO' => static::getConfigInMultipleLangs(
                 'EVERSEO_CATEGORY_METADESC_AUTO'
             ),
             // Category title
-            'EVERSEO_CATEGORY_TITLE_AUTO' => Configuration::getConfigInMultipleLangs(
+            'EVERSEO_CATEGORY_TITLE_AUTO' => static::getConfigInMultipleLangs(
                 'EVERSEO_CATEGORY_TITLE_AUTO'
             ),
             // Image alt
-            'EVERSEO_IMAGE_ALT_AUTO' => Configuration::getConfigInMultipleLangs(
+            'EVERSEO_IMAGE_ALT_AUTO' => static::getConfigInMultipleLangs(
                 'EVERSEO_IMAGE_ALT_AUTO'
             ),
             // Product meta desc
-            'EVERSEO_PRODUCT_METADESC_AUTO' => Configuration::getConfigInMultipleLangs(
+            'EVERSEO_PRODUCT_METADESC_AUTO' => static::getConfigInMultipleLangs(
                 'EVERSEO_PRODUCT_METADESC_AUTO'
             ),
             // Product title
-            'EVERSEO_PRODUCT_TITLE_AUTO' => Configuration::getConfigInMultipleLangs(
+            'EVERSEO_PRODUCT_TITLE_AUTO' => static::getConfigInMultipleLangs(
                 'EVERSEO_PRODUCT_TITLE_AUTO'
             ),
             // Generator langs
@@ -4913,7 +4906,7 @@ class Everpsseo extends Module
                     )
                 )
             ),
-            'EVERSEO_CGENERATOR_CATEGORIES' => Tools::getValue(
+            'EVERSEO_CGENERATOR_CATEGORIES[]' => Tools::getValue(
                 'EVERSEO_CGENERATOR_CATEGORIES',
                 json_decode(
                     Configuration::get(
@@ -4921,9 +4914,9 @@ class Everpsseo extends Module
                     )
                 )
             ),
-            'PRODUCT_SHORT_DESC_GENERATE' => Configuration::getConfigInMultipleLangs('PRODUCT_SHORT_DESC_GENERATE'),
-            'PRODUCT_DESC_GENERATE' => Configuration::getConfigInMultipleLangs('PRODUCT_DESC_GENERATE'),
-            'PRODUCT_BOTTOM_GENERATE' => Configuration::getConfigInMultipleLangs('PRODUCT_BOTTOM_GENERATE'),
+            'PRODUCT_SHORT_DESC_GENERATE' => static::getConfigInMultipleLangs('PRODUCT_SHORT_DESC_GENERATE'),
+            'PRODUCT_DESC_GENERATE' => static::getConfigInMultipleLangs('PRODUCT_DESC_GENERATE'),
+            'PRODUCT_BOTTOM_GENERATE' => static::getConfigInMultipleLangs('PRODUCT_BOTTOM_GENERATE'),
             'EVERSEO_DELETE_PRODUCT_CONTENT' => Configuration::get(
                 'EVERSEO_DELETE_PRODUCT_CONTENT'
             ),
@@ -4938,7 +4931,7 @@ class Everpsseo extends Module
                     )
                 )
             ),
-            'EVERSEO_PGENERATOR_CATEGORIES' => Tools::getValue(
+            'EVERSEO_PGENERATOR_CATEGORIES[]' => Tools::getValue(
                 'EVERSEO_PGENERATOR_CATEGORIES',
                 json_decode(
                     Configuration::get(
@@ -4946,8 +4939,8 @@ class Everpsseo extends Module
                     )
                 )
             ),
-            'MANUFACTURER_DESC_GENERATE' => Configuration::getConfigInMultipleLangs('MANUFACTURER_DESC_GENERATE'),
-            'SUPPLIER_DESC_GENERATE' => Configuration::getConfigInMultipleLangs('SUPPLIER_DESC_GENERATE'),
+            'MANUFACTURER_DESC_GENERATE' => static::getConfigInMultipleLangs('MANUFACTURER_DESC_GENERATE'),
+            'SUPPLIER_DESC_GENERATE' => static::getConfigInMultipleLangs('SUPPLIER_DESC_GENERATE'),
             'EVERSEO_DELETE_MANUFACTURER_CONTENT' => Configuration::get(
                 'EVERSEO_DELETE_MANUFACTURER_CONTENT'
             ),
@@ -5548,6 +5541,7 @@ class Everpsseo extends Module
             if (Tools::getValue('EVERSEO_CGENERATOR_CATEGORIES')
                 && !Validate::isArrayWithIds(Tools::getValue('EVERSEO_CGENERATOR_CATEGORIES'))
             ) {
+                die(var_dump(Tools::getValue('EVERSEO_CGENERATOR_CATEGORIES')));
                 $this->postErrors[] = $this->l('Error: allowed categories is not valid');
             }
 
@@ -5838,6 +5832,18 @@ class Everpsseo extends Module
                 Configuration::updateValue(
                     'EVERSEO_BULK_LANGS',
                     json_encode(Tools::getValue('EVERSEO_BULK_LANGS')),
+                    true
+                );
+            } elseif ($key == 'EVERSEO_PGENERATOR_CATEGORIES[]') {
+                Configuration::updateValue(
+                    'EVERSEO_PGENERATOR_CATEGORIES',
+                    json_encode(Tools::getValue('EVERSEO_PGENERATOR_CATEGORIES')),
+                    true
+                );
+            } elseif ($key == 'EVERSEO_CGENERATOR_CATEGORIES[]') {
+                Configuration::updateValue(
+                    'EVERSEO_CGENERATOR_CATEGORIES',
+                    json_encode(Tools::getValue('EVERSEO_CGENERATOR_CATEGORIES')),
                     true
                 );
             } elseif ($key == 'EVERSEO_404_TOP') {
@@ -10152,4 +10158,22 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.webp$ %{ENV:REWRITEBASE}img/c/$1$2.we
         }
     }
 #################### END GETTERS ####################
+    /**
+     * Get a single configuration value (in multiple languages).
+     *
+     * @param string $key Configuration Key
+     * @param int $idShopGroup Shop Group ID
+     * @param int $idShop Shop ID
+     *
+     * @return array Values in multiple languages
+     */
+    public static function getConfigInMultipleLangs($key, $idShopGroup = null, $idShop = null)
+    {
+        $resultsArray = [];
+        foreach (Language::getIDs() as $idLang) {
+            $resultsArray[$idLang] = Configuration::get($key, $idLang, $idShopGroup, $idShop);
+        }
+
+        return $resultsArray;
+    }
 }
