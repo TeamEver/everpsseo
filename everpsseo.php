@@ -1898,26 +1898,6 @@ class Everpsseo extends Module
                     ],
                     [
                         'type' => 'switch',
-                        'label' => $this->l('Use webp'),
-                        'desc' => $this->l('Do you want to use webp img files on your shop ?'),
-                        'hint' => $this->l('First you will have to generate webp files using command lines'),
-                        'name' => 'EVERSEO_WEBP',
-                        'is_bool' => true,
-                        'values' => [
-                            [
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Enabled'),
-                            ],
-                            [
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l('Disabled'),
-                            ],
-                        ],
-                    ],
-                    [
-                        'type' => 'switch',
                         'label' => $this->l('Use lazyload on "loading" attributes'),
                         'desc' => $this->l('Do you want to use laazy load on your shop ?'),
                         'hint' => $this->l('First you will have to add "loading" attribute to each element to lazy load'),
@@ -5229,9 +5209,6 @@ class Everpsseo extends Module
             'EVERSEO_THEME_COLOR' => Configuration::get(
                 'EVERSEO_THEME_COLOR'
             ),
-            'EVERSEO_WEBP' => Configuration::get(
-                'EVERSEO_WEBP'
-            ),
             'EVERSEO_BOTTOM_SCRIPTS' => Configuration::get(
                 'EVERSEO_BOTTOM_SCRIPTS'
             ),
@@ -5812,22 +5789,12 @@ class Everpsseo extends Module
                 $this->postErrors[] = $this->l('Error : The field "Theme color" is not valid');
             }
 
-            if (Tools::getValue('EVERSEO_WEBP')
-                && !Validate::isBool(Tools::getValue('EVERSEO_WEBP'))
-            ) {
-                $this->postErrors[] = $this->l('Error : The field "Use webp" is not valid');
-            }
-
             if (Tools::getValue('EVERSEO_LAZY_LOAD')
                 && !Validate::isBool(Tools::getValue('EVERSEO_LAZY_LOAD'))
             ) {
                 $this->postErrors[] = $this->l('Error : The field "Use lazyload" is not valid');
             }
         
-            if (!function_exists('imagewebp') && (bool)Tools::getValue('EVERSEO_WEBP') === true) {
-                $this->postErrors[] = $this->l('Error : You must have imagewebp extension enabled on your server');
-            }
-
             if (Tools::getValue('EVERSEO_MAINTENANCE')
                 && !Validate::isBool(Tools::getValue('EVERSEO_MAINTENANCE'))
             ) {
@@ -6308,18 +6275,6 @@ class Everpsseo extends Module
      */
     protected function postProcess()
     {
-        if ((bool) Tools::getValue('EVERSEO_WEBP') === false) {
-            // Logo
-            $psLogo = \Configuration::get(
-                'PS_LOGO'
-            );
-            $psLogo = str_replace('.webp', '', $psLogo);
-            // \Configuration::updateValue(
-            //     'PS_LOGO',
-            //     $psLogo
-            // );
-            Hook::exec('actionHtaccessCreate');
-        }
         // Save configuration
         $form_values = $this->getConfigFormValues();
         $everseo_404_top = [];
@@ -6688,35 +6643,6 @@ class Everpsseo extends Module
 #################### END CONFIG FORM ####################
 #################### START ACTION HOOKS ####################
 
-    public function hookActionProductUpdateFromMatriceAfter($params)
-    {
-        $product = $params['product'];
-        if (!Validate::isLoadedObject($product)) {
-            return;
-        }
-
-        if ((bool) Configuration::get('EVERSEO_WEBP') === true) {
-            $allowedFormats = [
-                'jpg',
-                'jpeg',
-                'png'
-            ];
-            $images = EverPsSeoImage::getAllProductImages($product->id);
-            foreach ($images as $i) {
-                $image = new Image(
-                    (int) $i['id_image']
-                );
-                $productImages = glob(_PS_PRODUCT_IMG_DIR_ . $image->getImgFolder() . '*');
-                foreach ($productImages as $img) {
-                    $info = new SplFileInfo(basename($img));
-                    if (is_file($img) && in_array($info->getExtension(), $allowedFormats)) {
-                        EverPsSeoImage::webpConvert2($img);
-                    }
-                }
-            }
-        }
-    }
-
     public function hookActionOutputHTMLBefore($params)
     {
         $shop_url = Configuration::get(
@@ -6848,31 +6774,6 @@ class Everpsseo extends Module
             }
             // Récupérer le contenu HTML modifié à partir de DOMDocument
             $txt = $doc->saveHTML();
-        }
-        if ((bool) Configuration::get('EVERSEO_WEBP') === true) {
-            preg_match_all('/<img[^>]+?(?:src|data-src)=["\'](?P<src>.+?)["\'][^>]*?>/i', $txt, $matches);
-            $image_urls = $matches['src'];
-
-            foreach ($image_urls as $src) {
-                $extension = pathinfo($src, PATHINFO_EXTENSION);
-
-                if ($extension != 'webp' && $extension != 'svg' && $extension != 'gif') {
-                    // Remplacer l'extension de l'image par .webp
-                    $webp_url = preg_replace('/\.[^.]+$/', '.webp', $src);
-
-                    // Remplacer l'URL d'image par l'URL en format webp
-                    if (strpos($webp_url, Tools::getHttpHost(true) . __PS_BASE_URI__) !== 0) {
-                        $webp_url_rel = str_replace(Tools::getHttpHost(true) . __PS_BASE_URI__, '', $webp_url);
-                    } else {
-                        $webp_url_rel = $webp_url;
-                    }
-                    if (strpos($webp_url, 'http://') !== 0 && strpos($webp_url, 'https://') !== 0) {
-                        $webp_url = 'https://' . $webp_url;
-                    }
-
-                    $txt = str_replace($src, $webp_url_rel, $txt);
-                }
-            }
         }
         $txt = '<!-- optimized by Ever SEO -->'
         . trim($txt)
@@ -7067,27 +6968,6 @@ RewriteRule \.(jpg|jpeg|png|gif)$ - [F,NC]' . "\n\n";
   ExpiresByType application/x-shockwave-flash "access plus 2592000 seconds"
 </IfModule>
 # END Expire headers' . "\n\n";
-        }
-        if ((bool) Configuration::get('EVERSEO_WEBP') === true) {
-            $rules .= '# Images
-RewriteCond %{HTTP_HOST} ^' . $baseDomain . '$
-RewriteRule ^([0-9])(\-[_a-zA-Z0-9-]*)?(-[0-9]+)?/.+\.webp$ %{ENV:REWRITEBASE}img/p/$1/$1$2$3.webp [L]
-RewriteCond %{HTTP_HOST} ^' . $baseDomain . '$
-RewriteRule ^([0-9])([0-9])(\-[_a-zA-Z0-9-]*)?(-[0-9]+)?/.+\.webp$ %{ENV:REWRITEBASE}img/p/$1/$2/$1$2$3$4.webp [L]
-RewriteCond %{HTTP_HOST} ^' . $baseDomain . '$
-RewriteRule ^([0-9])([0-9])([0-9])(\-[_a-zA-Z0-9-]*)?(-[0-9]+)?/.+\.webp$ %{ENV:REWRITEBASE}img/p/$1/$2/$3/$1$2$3$4$5.webp [L]
-RewriteCond %{HTTP_HOST} ^' . $baseDomain . '$
-RewriteRule ^([0-9])([0-9])([0-9])([0-9])(\-[_a-zA-Z0-9-]*)?(-[0-9]+)?/.+\.webp$ %{ENV:REWRITEBASE}img/p/$1/$2/$3/$4/$1$2$3$4$5$6.webp [L]
-RewriteCond %{HTTP_HOST} ^' . $baseDomain . '$
-RewriteRule ^([0-9])([0-9])([0-9])([0-9])([0-9])(\-[_a-zA-Z0-9-]*)?(-[0-9]+)?/.+\.webp$ %{ENV:REWRITEBASE}img/p/$1/$2/$3/$4/$5/$1$2$3$4$5$6$7.webp [L]
-RewriteCond %{HTTP_HOST} ^' . $baseDomain . '$
-RewriteRule ^([0-9])([0-9])([0-9])([0-9])([0-9])([0-9])(\-[_a-zA-Z0-9-]*)?(-[0-9]+)?/.+\.webp$ %{ENV:REWRITEBASE}img/p/$1/$2/$3/$4/$5/$6/$1$2$3$4$5$6$7$8.webp [L]
-RewriteCond %{HTTP_HOST} ^' . $baseDomain . '$
-RewriteRule ^([0-9])([0-9])([0-9])([0-9])([0-9])([0-9])([0-9])(\-[_a-zA-Z0-9-]*)?(-[0-9]+)?/.+\.webp$ %{ENV:REWRITEBASE}img/p/$1/$2/$3/$4/$5/$6/$7/$1$2$3$4$5$6$7$8$9.webp [L]
-RewriteCond %{HTTP_HOST} ^' . $baseDomain . '$
-RewriteRule ^c/([0-9]+)(\-[\.*_a-zA-Z0-9-]*)(-[0-9]+)?/.+\.webp$ %{ENV:REWRITEBASE}img/c/$1$2$3.webp [L]
-RewriteCond %{HTTP_HOST} ^' . $baseDomain . '$
-RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.webp$ %{ENV:REWRITEBASE}img/c/$1$2.webp [L]' . "\n\n";
         }
         $path = _PS_ROOT_DIR_ . '/.htaccess';
         $specific_before = $specific_after = '';
@@ -7291,20 +7171,6 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.webp$ %{ENV:REWRITEBASE}img/c/$1$2.we
         }
         $image = $params['object'];
 
-        if ((bool) Configuration::get('EVERSEO_WEBP') === true) {
-            $allowedFormats = [
-                'jpg',
-                'jpeg',
-                'png'
-            ];
-            $productImages = glob(_PS_PRODUCT_IMG_DIR_ . $image->getImgFolder() . '*');
-            foreach ($productImages as $img) {
-                $info = new SplFileInfo(basename($img));
-                if (is_file($img) && in_array($info->getExtension(), $allowedFormats)) {
-                    EverPsSeoImage::webpConvert2($img);
-                }
-            }
-        }
         foreach (Language::getLanguages(false) as $lang) {
             $seoImage = EverPsSeoImage::getSeoImage(
                 (int) $image->id,
@@ -7416,13 +7282,6 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.webp$ %{ENV:REWRITEBASE}img/c/$1$2.we
             return;
         }
         $image = $params['object'];
-        $productImages = glob(_PS_PRODUCT_IMG_DIR_ . $image->getImgFolder() . '*');
-        foreach ($productImages as $img) {
-            $info = new SplFileInfo(basename($img));
-            if (is_file($img) && $info->getExtension() == 'webp') {
-                unlink($img);
-            }
-        }
         $this->deleteElementFromTable(
             'ever_seo_image',
             'id_seo_img',
@@ -7474,20 +7333,7 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.webp$ %{ENV:REWRITEBASE}img/c/$1$2.we
                 (int) $lang['id_lang'],
                 (int) $this->context->shop->id
             );
-            EverPsSeoTools::updateDatabaseMediasToWebP(
-                'product',
-                $product->id,
-                $product->description,
-                (int) $lang['id_lang'],
-                'description'
-            );
-            EverPsSeoTools::updateDatabaseMediasToWebP(
-                'product',
-                $product->id,
-                $product->description_short,
-                (int) $lang['id_lang'],
-                'description_short'
-            );
+
             $seo_product->id_seo_product = (int) $params['object']->id;
             $seo_product->id_shop = (int) $this->context->shop->id;
             $seo_product->id_seo_lang = (int) $lang['id_lang'];
@@ -7544,12 +7390,6 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.webp$ %{ENV:REWRITEBASE}img/c/$1$2.we
                 (int) $lang['id_lang'],
                 (int) $this->context->shop->id
             );
-            EverPsSeoTools::updateDatabaseMediasToWebP(
-                'category',
-                $category->id,
-                $category->description,
-                (int) $lang['id_lang']
-            );
             $seoCategory->id_seo_category = (int) $params['object']->id;
             $seoCategory->id_shop = (int) $this->context->shop->id;
             $seoCategory->id_seo_lang = (int) $lang['id_lang'];
@@ -7566,20 +7406,6 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.webp$ %{ENV:REWRITEBASE}img/c/$1$2.we
             return;
         }
         $image = $params['object'];
-        $allowedFormats = [
-            'jpg',
-            'jpeg',
-            'png'
-        ];
-        if ((bool) Configuration::get('EVERSEO_WEBP') === true) {
-            $productImages = glob(_PS_PRODUCT_IMG_DIR_ . $image->getImgFolder() . '*');
-            foreach ($productImages as $img) {
-                $info = new SplFileInfo(basename($img));
-                if (is_file($img) && in_array($info->getExtension(), $allowedFormats)) {
-                    EverPsSeoImage::webpConvert2($img);
-                }
-            }
-        }
         foreach (Language::getLanguages(false) as $lang) {
             $seoImage = EverPsSeoImage::getSeoImage(
                 (int) $image->id,
@@ -7630,12 +7456,6 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.webp$ %{ENV:REWRITEBASE}img/c/$1$2.we
             $cms = new CMS(
                 (int) $params['object']->id,
                 (int) $this->context->shop->id,
-                (int) $lang['id_lang']
-            );
-            EverPsSeoTools::updateDatabaseMediasToWebP(
-                'cms',
-                $cms->id,
-                $cms->content,
                 (int) $lang['id_lang']
             );
             $seoCms->id_seo_cms = (int) $params['object']->id;
@@ -7697,12 +7517,6 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.webp$ %{ENV:REWRITEBASE}img/c/$1$2.we
                 (int) $params['object']->id,
                 (int) $lang['id_lang']
             );
-            EverPsSeoTools::updateDatabaseMediasToWebP(
-                'manufacturer',
-                $manufacturer->id,
-                $manufacturer->description,
-                (int) $lang['id_lang']
-            );
             $seoManufacturer->id_seo_manufacturer = (int) $params['object']->id;
             $seoManufacturer->id_shop = (int) $this->context->shop->id;
             $seoManufacturer->id_seo_lang = (int) $lang['id_lang'];
@@ -7729,12 +7543,6 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.webp$ %{ENV:REWRITEBASE}img/c/$1$2.we
             }
             $supplier = new Supplier(
                 (int) $params['object']->id,
-                (int) $lang['id_lang']
-            );
-            EverPsSeoTools::updateDatabaseMediasToWebP(
-                'supplier',
-                $supplier->id,
-                $supplier->description,
                 (int) $lang['id_lang']
             );
             $seoSupplier->id_seo_supplier = (int) $params['object']->id;
