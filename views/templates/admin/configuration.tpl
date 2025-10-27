@@ -107,7 +107,7 @@
                 if (target) {
                     if (typeof target.scrollIntoView === 'function') {
                         try {
-                            target.scrollIntoView({behavior: 'smooth', block: 'start'});
+                            target.scrollIntoView({ldelim}behavior: 'smooth', block: 'start'{rdelim});
                         } catch (e) {
                             target.scrollIntoView(true);
                         }
