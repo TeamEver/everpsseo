@@ -823,6 +823,14 @@ class Everpsseo extends Module
         $formStructure = $this->getConfigForm();
         $navigation = $this->buildConfigurationNavigation($formStructure);
         $quickActions = $this->buildQuickActions($navigation);
+        $overview = $this->buildConfigurationOverview(
+            (int) $this->context->shop->id,
+            (int) $this->context->language->id
+        );
+
+        $this->context->smarty->assign([
+            'ever_configuration_overview' => $overview,
+        ]);
 
         $this->context->smarty->assign([
             'ever_header' => $this->context->smarty->fetch(
@@ -1075,6 +1083,359 @@ class Everpsseo extends Module
         return array_values(array_filter($quickActions, function ($action) {
             return !empty($action['links']);
         }));
+    }
+
+    protected function buildConfigurationOverview($idShop, $idLang)
+    {
+        $link = $this->context->link;
+        $everToken = Tools::substr(Tools::encrypt('everpsseo/cron'), 0, 10);
+
+        $sitemapCronUrl = $link->getModuleLink(
+            $this->name,
+            'eversitemaps',
+            [
+                'token' => $everToken,
+                'id_shop' => (int) $idShop,
+            ],
+            true
+        );
+
+        $objectsCronUrl = $link->getModuleLink(
+            $this->name,
+            'everobjects',
+            [
+                'token' => $everToken,
+                'id_shop' => (int) $idShop,
+            ],
+            true
+        );
+
+        $fullConfigurationUrl = $link->getAdminLink(
+            'AdminModules',
+            true,
+            [],
+            [
+                'configure' => $this->name,
+                'tab_module' => $this->tab,
+                'module_name' => $this->name,
+            ]
+        );
+
+        $legacyConfigureUrl = $link->getAdminLink('AdminEverPsSeoConfigure');
+
+        $coverageCards = [
+            $this->formatCoverageCard(
+                $this->l('Product SEO coverage'),
+                $this->countDistinctRows(
+                    'ever_seo_product',
+                    'id_seo_product',
+                    'id_shop = ' . (int) $idShop
+                ),
+                $this->countDistinctRows(
+                    'product_shop',
+                    'id_product',
+                    'id_shop = ' . (int) $idShop
+                ),
+                'icon-shopping-cart',
+                $this->l('Products with tailored Ever SEO metadata.')
+            ),
+            $this->formatCoverageCard(
+                $this->l('Category SEO coverage'),
+                $this->countDistinctRows(
+                    'ever_seo_category',
+                    'id_seo_category',
+                    'id_shop = ' . (int) $idShop
+                ),
+                $this->countDistinctRows(
+                    'category_shop',
+                    'id_category',
+                    'id_shop = ' . (int) $idShop
+                ),
+                'icon-folder-open',
+                $this->l('Categories with optimised meta tags.')
+            ),
+            $this->formatCoverageCard(
+                $this->l('CMS SEO coverage'),
+                $this->countDistinctRows(
+                    'ever_seo_cms',
+                    'id_seo_cms',
+                    'id_shop = ' . (int) $idShop
+                ),
+                $this->countDistinctRows(
+                    'cms_shop',
+                    'id_cms',
+                    'id_shop = ' . (int) $idShop
+                ),
+                'icon-file-text',
+                $this->l('CMS pages enriched with module generated metas.')
+            ),
+            $this->formatCoverageCard(
+                $this->l('Page meta coverage'),
+                $this->countDistinctRows(
+                    'ever_seo_pagemeta',
+                    'id_seo_pagemeta',
+                    'id_shop = ' . (int) $idShop
+                ),
+                $this->countDistinctRows(
+                    'meta_lang',
+                    'id_meta',
+                    'id_shop = ' . (int) $idShop
+                ),
+                'icon-copy',
+                $this->l('Meta pages monitored by Ever SEO.')
+            ),
+            $this->formatCoverageCard(
+                $this->l('Brand SEO coverage'),
+                $this->countDistinctRows(
+                    'ever_seo_manufacturer',
+                    'id_seo_manufacturer',
+                    'id_shop = ' . (int) $idShop
+                ),
+                $this->countDistinctRows(
+                    'manufacturer_shop',
+                    'id_manufacturer',
+                    'id_shop = ' . (int) $idShop
+                ),
+                'icon-certificate',
+                $this->l('Manufacturers with customised content.')
+            ),
+            $this->formatCoverageCard(
+                $this->l('Supplier SEO coverage'),
+                $this->countDistinctRows(
+                    'ever_seo_supplier',
+                    'id_seo_supplier',
+                    'id_shop = ' . (int) $idShop
+                ),
+                $this->countDistinctRows(
+                    'supplier_shop',
+                    'id_supplier',
+                    'id_shop = ' . (int) $idShop
+                ),
+                'icon-truck',
+                $this->l('Suppliers included in SEO automation.')
+            ),
+        ];
+
+        $coverageCards = array_values(array_filter($coverageCards));
+
+        $redirectsActive = $this->countRows(
+            'ever_seo_redirect',
+            'id_ever_seo_redirect',
+            'id_shop = ' . (int) $idShop . ' AND active = 1'
+        );
+
+        $backlinksTracked = $this->countRows(
+            'ever_seo_backlink',
+            'id_ever_seo_backlink',
+            'id_shop = ' . (int) $idShop
+        );
+
+        $coverageCards[] = $this->formatStatCard(
+            'icon-random',
+            $this->l('Active 404 redirects'),
+            (string) $redirectsActive,
+            $this->l('Automatic rules currently mitigating not found errors.')
+        );
+
+        $coverageCards[] = $this->formatStatCard(
+            'icon-link',
+            $this->l('Tracked backlinks'),
+            (string) $backlinksTracked,
+            $this->l('External sources monitored by Ever SEO.')
+        );
+
+        $statusChips = [];
+        $statusChips[] = [
+            'label' => $this->l('Friendly URLs'),
+            'state' => Configuration::get('PS_REWRITING_SETTINGS') ? 'success' : 'warning',
+            'message' => Configuration::get('PS_REWRITING_SETTINGS')
+                ? $this->l('Enabled')
+                : $this->l('Activate friendly URLs to unlock advanced redirects.'),
+        ];
+        $statusChips[] = [
+            'label' => $this->l('SSL encryption'),
+            'state' => Configuration::get('PS_SSL_ENABLED') ? 'success' : 'warning',
+            'message' => Configuration::get('PS_SSL_ENABLED')
+                ? $this->l('Secured')
+                : $this->l('Switch your shop to HTTPS to protect SEO signals.'),
+        ];
+        $statusChips[] = [
+            'label' => $this->l('Canonical redirection'),
+            'state' => Configuration::get('PS_CANONICAL_REDIRECT') ? 'warning' : 'success',
+            'message' => Configuration::get('PS_CANONICAL_REDIRECT')
+                ? $this->l('Managed by PrestaShop')
+                : $this->l('Handled by Ever SEO'),
+        ];
+
+        $activityPanels = $this->buildActivityPanels($idLang);
+
+        return [
+            'hero' => [
+                'version' => $this->version,
+                'title' => $this->l('Ever SEO control centre'),
+                'subtitle' => $this->l('Keep an eye on optimisation coverage, automation health and direct access to your favourite tools.'),
+                'actions' => [
+                    [
+                        'label' => $this->l('Generate sitemaps now'),
+                        'href' => $sitemapCronUrl,
+                        'type' => 'primary',
+                        'target' => '_blank',
+                    ],
+                    [
+                        'label' => $this->l('Sync detected objects'),
+                        'href' => $objectsCronUrl,
+                        'type' => 'outline',
+                        'target' => '_blank',
+                    ],
+                ],
+                'secondary_actions' => array_filter([
+                    [
+                        'label' => $this->l('Open module settings'),
+                        'href' => $fullConfigurationUrl,
+                    ],
+                    $legacyConfigureUrl ? [
+                        'label' => $this->l('Legacy onboarding checklist'),
+                        'href' => $legacyConfigureUrl,
+                        'target' => '_blank',
+                    ] : null,
+                ]),
+            ],
+            'status_chips' => $statusChips,
+            'stats_cards' => $coverageCards,
+            'activity' => $activityPanels,
+        ];
+    }
+
+    protected function countDistinctRows($table, $field, $where = null)
+    {
+        $query = new DbQuery();
+        $query->select('COUNT(DISTINCT ' . bqSQL($field) . ')');
+        $query->from(bqSQL($table));
+
+        if ($where) {
+            $query->where($where);
+        }
+
+        return (int) Db::getInstance()->getValue($query);
+    }
+
+    protected function countRows($table, $field, $where = null)
+    {
+        $query = new DbQuery();
+        $query->select('COUNT(' . bqSQL($field) . ')');
+        $query->from(bqSQL($table));
+
+        if ($where) {
+            $query->where($where);
+        }
+
+        return (int) Db::getInstance()->getValue($query);
+    }
+
+    protected function formatCoverageCard($label, $optimized, $total, $icon, $description)
+    {
+        if ($total <= 0) {
+            return $this->formatStatCard(
+                $icon,
+                $label,
+                $this->l('No data yet'),
+                $this->l('Start generating content to see coverage insights.')
+            );
+        }
+
+        $percentage = $optimized > 0 ? ($optimized / $total) * 100 : 0;
+        $percentage = max(0, min(100, $percentage));
+
+        return [
+            'icon' => $icon,
+            'label' => $label,
+            'value' => Tools::ps_round($percentage, 1) . '%',
+            'description' => sprintf(
+                $this->l('%1$s of %2$s items benefit from Ever SEO metadata.'),
+                (int) $optimized,
+                (int) $total
+            ),
+            'progress' => [
+                'percent' => Tools::ps_round($percentage, 1),
+            ],
+        ];
+    }
+
+    protected function formatStatCard($icon, $label, $value, $description)
+    {
+        return [
+            'icon' => $icon,
+            'label' => $label,
+            'value' => $value,
+            'description' => $description,
+        ];
+    }
+
+    protected function buildActivityPanels($idLang)
+    {
+        $panels = [];
+
+        $products = EverPsSeoStats::getBestViewedProducts();
+        if (!empty($products)) {
+            $panels[] = [
+                'icon' => 'icon-eye-open',
+                'title' => $this->l('Top viewed products'),
+                'items' => array_map(function ($product) {
+                    return [
+                        'label' => $product->name,
+                        'value' => (int) $product->count,
+                        'url' => $product->url,
+                    ];
+                }, $products),
+            ];
+        }
+
+        $categories = EverPsSeoStats::getBestViewedCategories();
+        if (!empty($categories)) {
+            $panels[] = [
+                'icon' => 'icon-tags',
+                'title' => $this->l('Popular categories'),
+                'items' => array_map(function ($category) {
+                    return [
+                        'label' => $category->name,
+                        'value' => (int) $category->count,
+                        'url' => $category->url,
+                    ];
+                }, $categories),
+            ];
+        }
+
+        $redirects = EverPsSeoStats::getBestViewed404();
+        if (!empty($redirects)) {
+            $panels[] = [
+                'icon' => 'icon-warning-sign',
+                'title' => $this->l('Most requested 404 URLs'),
+                'items' => array_map(function ($redirect) {
+                    return [
+                        'label' => Tools::substr($redirect->not_found, 0, 60),
+                        'value' => (int) $redirect->count,
+                        'url' => $redirect->redirection,
+                    ];
+                }, $redirects),
+            ];
+        }
+
+        $backlinks = EverPsSeoStats::getBestViewedReferals();
+        if (!empty($backlinks)) {
+            $panels[] = [
+                'icon' => 'icon-external-link',
+                'title' => $this->l('Top referral domains'),
+                'items' => array_map(function ($backlink) {
+                    return [
+                        'label' => Tools::substr($backlink->everfrom, 0, 60),
+                        'value' => (int) $backlink->count,
+                        'url' => $backlink->everfrom,
+                    ];
+                }, $backlinks),
+            ];
+        }
+
+        return $panels;
     }
 
     protected function filterExistingAnchors(array $navigationIndex, array $titles)

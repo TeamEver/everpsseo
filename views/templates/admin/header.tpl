@@ -1,128 +1,161 @@
 {*
-* Project : everpsseo
-* @author Team EVER
-* @copyright Team EVER
-* @license   Tous droits réservés / Le droit d'auteur s'applique (All rights reserved / French copyright law applies)
-* @link https://www.team-ever.com
-*}
-<div class="panel everheader">
-    <div class="panel-heading">
-        <i class="icon icon-smile"></i> {l s='Ever SEO' mod='everpsseo'}
-    </div>
-    <div class="panel-body">
-        <div class="col-md-6">
-            <a href="#everbottom" id="evertop">
-               <img id="everlogo" src="{$image_dir|escape:'htmlall':'UTF-8'}/ever.png" style="max-width: 120px;">
-            </a>
-            <strong>{l s='Welcome to Ever SEO !' mod='everpsseo'}</strong><br />{l s='Please configure your this form to set redirections for 404 pages' mod='everpsseo'}<br />
-            <p>
-                <strong>{l s='Click on our logo to go direct to bottom' mod='everpsseo'}</strong>
-            </p>
-            {if isset($ever_seo_version) && $ever_seo_version}
-            <p>
-                {l s='Ever SEO version' mod='everpsseo'} {$ever_seo_version|escape:'htmlall':'UTF-8'}
-            </p>
-            {/if}
-            {if isset($moduleConfUrl) && $moduleConfUrl}
-            <p>
-                <a href="{$moduleConfUrl|escape:'htmlall':'UTF-8'}" target="_blank" class="btn btn-success">{l s='Direct link to module configuration' mod='everpsseo'}</a>
-            </p>
-            {/if}
-            {if isset($seo_configure) && $seo_configure}
-            <p>
-                <a href="{$seo_configure|escape:'htmlall':'UTF-8'}" target="_blank" class="btn btn-default">{l s='First module configuration' mod='everpsseo'}</a>
-            </p>
-            {/if}
-            {if isset($rewrite_enabled) && $rewrite_enabled === 0}
-            <p class="alert alert-warning">
-                {l s='Please enable rewriting rules on SEO admin page' mod='everpsseo'}
-            </p>
-            {/if}
-            {if isset($ssl_enabled) && $ssl_enabled === 0}
-            <p class="alert alert-warning">
-                {l s='Please enable SSL rules on your shop' mod='everpsseo'}
-            </p>
-            {/if}
-            {if isset($canonical) && $canonical === 0}
-            <p class="alert alert-warning">
-                {l s='Please set canonical URL to 301 on SEO admin page' mod='everpsseo'}
-            </p>
-            {/if}
-            {if isset($redirects_enabled) && $redirects_enabled === 0}
-            <p class="alert alert-warning">
-                {l s='Auto redirect 404 is not enabled on your shop, please check module settings on 404 tab' mod='everpsseo'}
-            </p>
-            {/if}
-            <h4>{l s='PHP console commands' mod='everpsseo'}</h4>
-            <ul>
-                <li><code>php bin/console everpsseo:seo:metas idshop 1</code> {l s='generate all metas for id shop 1, depending on module settings' mod='everpsseo'}</li>
-                <li><code>php bin/console everpsseo:seo:content idshop 1</code> {l s='generate all content (products, categories, suppliers, manufacturers) for id shop 1, depending on module settings' mod='everpsseo'}</li>
-                <li><code>php bin/console everpsseo:seo:sitemaps products 1 1</code> {l s='generate products sitemaps for id shop 1 and lang 1, depending on module settings' mod='everpsseo'}</li>
-                <li><code>php bin/console everpsseo:seo:sitemaps images 1 1</code> {l s='generate product images sitemaps for id shop 1 and lang 1, depending on module settings' mod='everpsseo'}</li>
-                <li><code>php bin/console everpsseo:seo:sitemaps categories 1 1</code> {l s='generate categories sitemaps for id shop 1 and lang 1, depending on module settings' mod='everpsseo'}</li>
-                <li><code>php bin/console everpsseo:seo:sitemaps manufacturers 1 1</code> {l s='generate manufacturers sitemaps for id shop 1 and lang 1, depending on module settings' mod='everpsseo'}</li>
-                <li><code>php bin/console everpsseo:seo:sitemaps suppliers 1 1</code> {l s='generate suppliers sitemaps for id shop 1 and lang 1, depending on module settings' mod='everpsseo'}</li>
-                <li><code>php bin/console everpsseo:seo:sitemaps pages 1 1</code> {l s='generate pages sitemaps for id shop 1 and lang 1, depending on module settings' mod='everpsseo'}</li>
-                <li><code>php bin/console everpsseo:seo:sitemaps cms 1 1</code> {l s='generate cms sitemaps for id shop 1 and lang 1, depending on module settings' mod='everpsseo'}</li>
-                <li><code>php bin/console everpsseo:seo:import</code> {l s='update objects depending on XLSX file' mod='everpsseo'}</li>
-                <li><code>php bin/console everpsseo:seo:export categories</code> {l s='export SEO categories on XLSX file' mod='everpsseo'}</li>
-                <li><code>php bin/console everpsseo:seo:export products</code> {l s='export SEO products on XLSX file' mod='everpsseo'}</li>
-                <li><code>php bin/console everpsseo:seo:execute createWebpImage</code> {l s='create webp images' mod='everpsseo'}</li>
-                <li><code>php bin/console everpsseo:seo:execute redirectDisabledProduct</code> {l s='create redirections on disabled products' mod='everpsseo'}</li>
-            </ul>
-        </div>
-        <div class="col-md-6 col-xs-12">
-            {if $sitemaps}
-                <div class="dropdown">
-                  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    {l s='See all sitemaps' mod='everpsseo'}
-                  </button>
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    {foreach from=$sitemaps item=sitemap}
-                        {if $sitemap != '.' && $sitemap != '..' && $sitemap != 'index.php' && $sitemap != 'indexes'}
-                        <p><a class="dropdown-item" href="{$sitemap|escape:'htmlall':'UTF-8'}" target="_blank">{$sitemap|escape:'htmlall':'UTF-8'}</a></p>
-                        {/if}
+ * Project : everpsseo
+ * Redesigned configuration header with dashboard insights
+ *}
+<div class="everpsseo-dashboard" id="evertop">
+    <section class="everpsseo-hero">
+        <div class="everpsseo-hero__main">
+            <div class="everpsseo-hero__brand">
+                <img src="{$image_dir|escape:'htmlall':'UTF-8'}/ever.png" alt="{l s='Ever SEO logo' mod='everpsseo'}" class="everpsseo-hero__logo" />
+                <div class="everpsseo-hero__text">
+                    <span class="everpsseo-badge">{l s='Version' mod='everpsseo'} {$ever_configuration_overview.hero.version|escape:'htmlall':'UTF-8'}</span>
+                    <h2 class="everpsseo-hero__title">{$ever_configuration_overview.hero.title|escape:'htmlall':'UTF-8'}</h2>
+                    <p class="everpsseo-hero__subtitle">{$ever_configuration_overview.hero.subtitle|escape:'htmlall':'UTF-8'}</p>
+                </div>
+            </div>
+            {if isset($ever_configuration_overview.hero.actions) && $ever_configuration_overview.hero.actions}
+                <div class="everpsseo-hero__actions">
+                    {foreach from=$ever_configuration_overview.hero.actions item=action}
+                        <a href="{$action.href|escape:'htmlall':'UTF-8'}" class="everpsseo-btn everpsseo-btn--{if isset($action.type)}{$action.type|escape:'htmlall':'UTF-8'}{else}primary{/if}"{if isset($action.target)} target="{$action.target|escape:'htmlall':'UTF-8'}" rel="noopener"{/if}>
+                            <i class="icon-play"></i>
+                            {$action.label|escape:'htmlall':'UTF-8'}
+                        </a>
                     {/foreach}
-                  </div>
                 </div>
             {/if}
-            {if $indexes}
-                <div class="dropdown">
-                  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    {l s='See all indexes' mod='everpsseo'}
-                  </button>
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    {foreach from=$indexes item=indexe}
-                        {if $indexe != '.' && $indexe != '..' && $indexe != 'index.php'}
-                        <p><a class="dropdown-item" href="{$indexe|escape:'htmlall':'UTF-8'}" target="_blank">{$indexe|escape:'htmlall':'UTF-8'}</a></p>
-                        {/if}
+            {if isset($ever_configuration_overview.hero.secondary_actions) && $ever_configuration_overview.hero.secondary_actions}
+                <div class="everpsseo-hero__links">
+                    {foreach from=$ever_configuration_overview.hero.secondary_actions item=link}
+                        <a href="{$link.href|escape:'htmlall':'UTF-8'}" class="everpsseo-link"{if isset($link.target)} target="{$link.target|escape:'htmlall':'UTF-8'}" rel="noopener"{/if}>
+                            {$link.label|escape:'htmlall':'UTF-8'}
+                        </a>
                     {/foreach}
-                  </div>
                 </div>
             {/if}
-            <h4>{l s='Please set this cron to update your sitemaps' mod='everpsseo'}</h4>
-            <p>{$everpsseo_cron|escape:'htmlall':'UTF-8'}</p>
-            <a href="{$everpsseo_cron|escape:'htmlall':'UTF-8'}" target="_blank" class="btn btn-default">{l s='Update sitemaps now !' mod='everpsseo'}</a>
-            <a href="https://search.google.com/search-console/users?resource_id={$searchconsole|escape:'htmlall':'UTF-8'}" target="_blank" class="btn btn-default">{l s='Go to Google Search Console' mod='everpsseo'}</a>
-            <a href="https://analytics.google.com/analytics/web/" target="_blank" class="btn btn-default">{l s='Go to Google Analytics' mod='everpsseo'}</a>
-            <a href="https://www.bing.com/webmaster/home/dashboard" target="_blank" class="btn btn-default">{l s='Go to Bing Webmaster Tools' mod='everpsseo'}</a>
-            <h4>{l s='If you are using Store Commander, please set this cron to enable detecting new elements' mod='everpsseo'}</h4>
-            <p>{$everpsseo_objects|escape:'htmlall':'UTF-8'}</p>
-            <a href="{$everpsseo_objects|escape:'htmlall':'UTF-8'}" target="_blank" class="btn btn-default">{l s='Check and update elements now !' mod='everpsseo'}</a>
-            {if (isset($categoriesFileExample) && categoriesFileExample) || (isset($productsFileExample) && $productsFileExample)}
-            <ul>
-                {if isset($categoriesFileExample) && $categoriesFileExample}
-                    <li>
-                        {l s='Categories update file example :' mod='everpsseo'} <a href="{$input_dir|escape:'htmlall':'UTF-8'}categories.xlsx" target="_blank">{l s='Download' mod='everpsseo'}</a>
-                    </li>
-                {/if}
-                {if isset($productsFileExample) && $productsFileExample}
-                    <li>
-                        {l s='Products update file example :' mod='everpsseo'} <a href="{$input_dir|escape:'htmlall':'UTF-8'}products.xlsx" target="_blank">{l s='Download' mod='everpsseo'}</a>
-                    </li>
-                {/if}
-            </ul>
-            {/if}
         </div>
-    </div>
+        {if isset($ever_configuration_overview.status_chips) && $ever_configuration_overview.status_chips}
+            <aside class="everpsseo-hero__status">
+                <h3 class="everpsseo-section-title">{l s='Environment status' mod='everpsseo'}</h3>
+                <ul class="everpsseo-status-list">
+                    {foreach from=$ever_configuration_overview.status_chips item=chip}
+                        <li class="everpsseo-chip everpsseo-chip--{$chip.state|escape:'htmlall':'UTF-8'}">
+                            <span class="everpsseo-chip__dot"></span>
+                            <div class="everpsseo-chip__content">
+                                <span class="everpsseo-chip__label">{$chip.label|escape:'htmlall':'UTF-8'}</span>
+                                <small class="everpsseo-chip__message">{$chip.message|escape:'htmlall':'UTF-8'}</small>
+                            </div>
+                        </li>
+                    {/foreach}
+                </ul>
+            </aside>
+        {/if}
+    </section>
+    {if isset($ever_configuration_overview.stats_cards) && $ever_configuration_overview.stats_cards}
+        <section class="everpsseo-stats">
+            <h3 class="everpsseo-section-title">{l s='SEO coverage & activity' mod='everpsseo'}</h3>
+            <div class="everpsseo-stats-grid">
+                {foreach from=$ever_configuration_overview.stats_cards item=card}
+                    <article class="everpsseo-stat-card">
+                        <header class="everpsseo-stat-card__header">
+                            <span class="everpsseo-stat-card__icon"><i class="{$card.icon|escape:'htmlall':'UTF-8'}"></i></span>
+                            <div class="everpsseo-stat-card__meta">
+                                <span class="everpsseo-stat-card__label">{$card.label|escape:'htmlall':'UTF-8'}</span>
+                                <span class="everpsseo-stat-card__value">{$card.value|escape:'htmlall':'UTF-8'}</span>
+                            </div>
+                        </header>
+                        {if isset($card.progress)}
+                            <div class="everpsseo-progress" role="presentation">
+                                <span class="everpsseo-progress__bar" style="width: {$card.progress.percent|escape:'htmlall':'UTF-8'}%"></span>
+                            </div>
+                        {/if}
+                        <p class="everpsseo-stat-card__description">
+                            {$card.description|escape:'htmlall':'UTF-8'}
+                        </p>
+                    </article>
+                {/foreach}
+            </div>
+        </section>
+    {/if}
+    {if isset($ever_configuration_overview.activity) && $ever_configuration_overview.activity}
+        <section class="everpsseo-activity">
+            <h3 class="everpsseo-section-title">{l s='Live insights' mod='everpsseo'}</h3>
+            <div class="everpsseo-activity-grid">
+                {foreach from=$ever_configuration_overview.activity item=panel}
+                    <article class="everpsseo-activity-card">
+                        <header class="everpsseo-activity-card__header">
+                            <span class="everpsseo-activity-card__icon"><i class="{$panel.icon|escape:'htmlall':'UTF-8'}"></i></span>
+                            <h4 class="everpsseo-activity-card__title">{$panel.title|escape:'htmlall':'UTF-8'}</h4>
+                        </header>
+                        <ol class="everpsseo-activity-card__list">
+                            {foreach from=$panel.items item=item}
+                                <li class="everpsseo-activity-card__item">
+                                    {if isset($item.url) && $item.url}
+                                        <a href="{$item.url|escape:'htmlall':'UTF-8'}" target="_blank" rel="noopener" class="everpsseo-activity-card__link">
+                                            {$item.label|escape:'htmlall':'UTF-8'}
+                                        </a>
+                                    {else}
+                                        <span class="everpsseo-activity-card__link">{$item.label|escape:'htmlall':'UTF-8'}</span>
+                                    {/if}
+                                    <span class="everpsseo-activity-card__badge">{$item.value|escape:'htmlall':'UTF-8'}</span>
+                                </li>
+                            {/foreach}
+                        </ol>
+                    </article>
+                {/foreach}
+            </div>
+        </section>
+    {/if}
+    <section class="everpsseo-resources">
+        <div class="everpsseo-resources__content">
+            <div class="everpsseo-resources__branding">
+                <img src="{$image_dir|escape:'htmlall':'UTF-8'}/ever.png" alt="{l s='Ever SEO logo' mod='everpsseo'}" class="everpsseo-resources__logo" />
+                <div>
+                    <h3>{l s='Automation resources' mod='everpsseo'}</h3>
+                    <p>{l s='Launch cron jobs, download templates and access your analytics dashboards instantly.' mod='everpsseo'}</p>
+                </div>
+            </div>
+            <div class="everpsseo-resources__actions">
+                <div class="everpsseo-resources__group">
+                    <span class="everpsseo-resources__label">{l s='Cron shortcuts' mod='everpsseo'}</span>
+                    <a href="{$everpsseo_cron|escape:'htmlall':'UTF-8'}" target="_blank" rel="noopener" class="everpsseo-link">{l s='Generate sitemaps' mod='everpsseo'}</a>
+                    <a href="{$everpsseo_objects|escape:'htmlall':'UTF-8'}" target="_blank" rel="noopener" class="everpsseo-link">{l s='Refresh SEO objects' mod='everpsseo'}</a>
+                </div>
+                <div class="everpsseo-resources__group">
+                    <span class="everpsseo-resources__label">{l s='Sample files' mod='everpsseo'}</span>
+                    {if isset($categoriesFileExample) && $categoriesFileExample}
+                        <a href="{$categoriesFileExample|escape:'htmlall':'UTF-8'}" target="_blank" rel="noopener" class="everpsseo-link">{l s='Categories template' mod='everpsseo'}</a>
+                    {/if}
+                    {if isset($productsFileExample) && $productsFileExample}
+                        <a href="{$productsFileExample|escape:'htmlall':'UTF-8'}" target="_blank" rel="noopener" class="everpsseo-link">{l s='Products template' mod='everpsseo'}</a>
+                    {/if}
+                </div>
+                {if isset($sitemaps) && $sitemaps}
+                    <div class="everpsseo-resources__group">
+                        <span class="everpsseo-resources__label">{l s='Sitemaps' mod='everpsseo'}</span>
+                        {foreach from=$sitemaps item=sitemap}
+                            {if $sitemap != '.' && $sitemap != '..' && $sitemap != 'index.php' && $sitemap != 'indexes'}
+                                <a href="{$sitemap|escape:'htmlall':'UTF-8'}" target="_blank" rel="noopener" class="everpsseo-link">{$sitemap|escape:'htmlall':'UTF-8'}</a>
+                            {/if}
+                        {/foreach}
+                    </div>
+                {/if}
+                {if isset($indexes) && $indexes}
+                    <div class="everpsseo-resources__group">
+                        <span class="everpsseo-resources__label">{l s='Sitemap indexes' mod='everpsseo'}</span>
+                        {foreach from=$indexes item=indexe}
+                            {if $indexe != '.' && $indexe != '..' && $indexe != 'index.php'}
+                                <a href="{$indexe|escape:'htmlall':'UTF-8'}" target="_blank" rel="noopener" class="everpsseo-link">{$indexe|escape:'htmlall':'UTF-8'}</a>
+                            {/if}
+                        {/foreach}
+                    </div>
+                {/if}
+                <div class="everpsseo-resources__group">
+                    <span class="everpsseo-resources__label">{l s='Analytics hubs' mod='everpsseo'}</span>
+                    <a href="https://search.google.com/search-console/users?resource_id={$searchconsole|escape:'htmlall':'UTF-8'}" target="_blank" rel="noopener" class="everpsseo-link">{l s='Google Search Console' mod='everpsseo'}</a>
+                    <a href="https://analytics.google.com/analytics/web/" target="_blank" rel="noopener" class="everpsseo-link">{l s='Google Analytics' mod='everpsseo'}</a>
+                    <a href="https://www.bing.com/webmaster/home/dashboard" target="_blank" rel="noopener" class="everpsseo-link">{l s='Bing Webmaster Tools' mod='everpsseo'}</a>
+                </div>
+            </div>
+        </div>
+    </section>
 </div>

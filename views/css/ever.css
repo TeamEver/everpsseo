@@ -336,3 +336,531 @@
         grid-template-columns: 1fr;
     }
 }
+
+.everpsseo-dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    margin-bottom: 32px;
+}
+
+.everpsseo-hero {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    border-radius: 18px;
+    padding: 32px;
+    background: linear-gradient(135deg, rgba(235, 110, 31, 0.12), rgba(235, 110, 31, 0.05));
+    border: 1px solid rgba(235, 110, 31, 0.12);
+}
+
+.everpsseo-hero__main {
+    flex: 1 1 420px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.everpsseo-hero__brand {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.everpsseo-hero__logo {
+    width: 86px;
+    height: 86px;
+    border-radius: 18px;
+    box-shadow: 0 18px 32px rgba(235, 110, 31, 0.18);
+    padding: 8px;
+    background: #fff;
+}
+
+.everpsseo-hero__text {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.everpsseo-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: rgba(235, 110, 31, 0.18);
+    color: #a65118;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+}
+
+.everpsseo-hero__title {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #2c190b;
+}
+
+.everpsseo-hero__subtitle {
+    margin: 0;
+    max-width: 640px;
+    color: #5d3b23;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.everpsseo-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.everpsseo-hero__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.everpsseo-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 999px;
+    font-weight: 600;
+    padding: 10px 20px;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.everpsseo-btn i {
+    font-size: 0.875rem;
+}
+
+.everpsseo-btn--primary {
+    background: #eb6e1f;
+    color: #fff !important;
+    box-shadow: 0 16px 24px rgba(235, 110, 31, 0.22);
+}
+
+.everpsseo-btn--outline {
+    border: 1px solid #eb6e1f;
+    color: #eb6e1f;
+    background: #fff;
+}
+
+.everpsseo-btn--ghost {
+    border: 1px dashed rgba(235, 110, 31, 0.45);
+    color: #a65118;
+    background: rgba(235, 110, 31, 0.08);
+}
+
+.everpsseo-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 32px rgba(235, 110, 31, 0.15);
+}
+
+.everpsseo-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #eb6e1f;
+    font-weight: 600;
+    text-decoration: none;
+    position: relative;
+}
+
+.everpsseo-link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 100%;
+    height: 2px;
+    background: rgba(235, 110, 31, 0.35);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.2s ease;
+}
+
+.everpsseo-link:hover::after {
+    transform: scaleX(1);
+}
+
+.everpsseo-hero__status {
+    flex: 1 1 240px;
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid rgba(235, 110, 31, 0.12);
+    box-shadow: 0 14px 30px rgba(235, 110, 31, 0.14);
+}
+
+.everpsseo-section-title {
+    margin: 0 0 16px;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 700;
+    color: #a65118;
+}
+
+.everpsseo-status-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.everpsseo-chip {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-radius: 12px;
+    padding: 12px 14px;
+    border: 1px solid rgba(235, 110, 31, 0.12);
+    background: rgba(255, 255, 255, 0.85);
+}
+
+.everpsseo-chip__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: currentColor;
+    flex-shrink: 0;
+}
+
+.everpsseo-chip__content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.everpsseo-chip__label {
+    font-weight: 600;
+    color: #2c190b;
+}
+
+.everpsseo-chip__message {
+    color: #6f4a2c;
+}
+
+.everpsseo-chip--success {
+    color: #2b8a3e;
+    border-color: rgba(43, 138, 62, 0.25);
+}
+
+.everpsseo-chip--warning {
+    color: #d98324;
+    border-color: rgba(217, 131, 36, 0.25);
+}
+
+.everpsseo-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.everpsseo-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 18px;
+}
+
+.everpsseo-stat-card {
+    border-radius: 14px;
+    border: 1px solid rgba(235, 110, 31, 0.12);
+    background: #fff;
+    padding: 18px;
+    box-shadow: 0 16px 28px rgba(235, 110, 31, 0.12);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    height: 100%;
+}
+
+.everpsseo-stat-card__header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.everpsseo-stat-card__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+    background: rgba(235, 110, 31, 0.14);
+    color: #eb6e1f;
+    font-size: 1rem;
+}
+
+.everpsseo-stat-card__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.everpsseo-stat-card__label {
+    font-weight: 600;
+    color: #2c190b;
+}
+
+.everpsseo-stat-card__value {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #a65118;
+}
+
+.everpsseo-progress {
+    position: relative;
+    width: 100%;
+    height: 6px;
+    background: rgba(235, 110, 31, 0.12);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.everpsseo-progress__bar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    background: #eb6e1f;
+    border-radius: inherit;
+}
+
+.everpsseo-stat-card__description {
+    margin: 0;
+    color: #6f4a2c;
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+.everpsseo-activity {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.everpsseo-activity-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+}
+
+.everpsseo-activity-card {
+    background: #fff;
+    border-radius: 14px;
+    border: 1px solid rgba(235, 110, 31, 0.12);
+    padding: 18px;
+    box-shadow: 0 14px 28px rgba(235, 110, 31, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.everpsseo-activity-card__header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.everpsseo-activity-card__icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: rgba(235, 110, 31, 0.14);
+    color: #eb6e1f;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.everpsseo-activity-card__title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #2c190b;
+}
+
+.everpsseo-activity-card__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.everpsseo-activity-card__item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.everpsseo-activity-card__link {
+    color: #eb6e1f;
+    font-weight: 600;
+    text-decoration: none;
+    flex: 1 1 auto;
+}
+
+.everpsseo-activity-card__badge {
+    background: rgba(235, 110, 31, 0.12);
+    color: #a65118;
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-weight: 600;
+    font-size: 0.8125rem;
+    flex-shrink: 0;
+}
+
+.everpsseo-resources {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid rgba(235, 110, 31, 0.12);
+    box-shadow: 0 18px 32px rgba(235, 110, 31, 0.12);
+}
+
+.everpsseo-resources__content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    padding: 24px;
+}
+
+.everpsseo-resources__branding {
+    flex: 1 1 260px;
+    display: flex;
+    gap: 18px;
+    align-items: center;
+}
+
+.everpsseo-resources__logo {
+    width: 72px;
+    height: 72px;
+    border-radius: 16px;
+    background: rgba(235, 110, 31, 0.1);
+    padding: 10px;
+}
+
+.everpsseo-resources__branding h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #2c190b;
+}
+
+.everpsseo-resources__branding p {
+    margin: 4px 0 0;
+    color: #6f4a2c;
+}
+
+.everpsseo-resources__actions {
+    flex: 2 1 320px;
+    display: grid;
+    gap: 18px;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.everpsseo-resources__group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.everpsseo-resources__label {
+    font-weight: 700;
+    color: #2c190b;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+}
+
+.everpsseo-footer {
+    margin-top: 40px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, rgba(235, 110, 31, 0.18), rgba(235, 110, 31, 0.08));
+    border: 1px solid rgba(235, 110, 31, 0.14);
+}
+
+.everpsseo-footer__content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    padding: 24px 32px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.everpsseo-footer__brand {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex: 1 1 320px;
+}
+
+.everpsseo-footer__logo {
+    width: 72px;
+    height: 72px;
+    border-radius: 16px;
+    background: #fff;
+    padding: 10px;
+    box-shadow: 0 16px 30px rgba(235, 110, 31, 0.18);
+}
+
+.everpsseo-footer__brand h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #2c190b;
+}
+
+.everpsseo-footer__brand p {
+    margin: 6px 0 0;
+    color: #5d3b23;
+}
+
+.everpsseo-footer__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+@media (max-width: 991px) {
+    .everpsseo-hero {
+        padding: 24px;
+    }
+
+    .everpsseo-hero__logo {
+        width: 72px;
+        height: 72px;
+    }
+
+    .everpsseo-resources__actions {
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    }
+}
+
+@media (max-width: 575px) {
+    .everpsseo-hero__brand {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .everpsseo-footer__content {
+        padding: 20px;
+    }
+
+    .everpsseo-footer__actions {
+        justify-content: flex-start;
+    }
+}
