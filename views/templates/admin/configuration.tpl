@@ -43,7 +43,7 @@
                                 <ul class="everpsseo-card__links">
                                     {foreach $action.links as $link}
                                         <li data-ever-keywords="{$link.label|escape:'htmlall':'UTF-8'}">
-                                            <a href="#{$link.anchor|escape:'htmlall':'UTF-8'}" class="everpsseo-anchor" data-ever-anchor="{$link.anchor|escape:'htmlall':'UTF-8'}">
+                                            <a href="#{$link.anchor|escape:'htmlall':'UTF-8'}-heading" class="everpsseo-anchor" data-ever-anchor="{$link.anchor|escape:'htmlall':'UTF-8'}">
                                                 {$link.label|escape:'htmlall':'UTF-8'}
                                             </a>
                                         </li>
@@ -63,7 +63,7 @@
                     <ul class="everpsseo-card__links everpsseo-nav">
                         {foreach $nav_sections as $section}
                             <li data-ever-keywords="{$section.title|escape:'htmlall':'UTF-8'}">
-                                <a href="#{$section.anchor|escape:'htmlall':'UTF-8'}" class="everpsseo-anchor" data-ever-anchor="{$section.anchor|escape:'htmlall':'UTF-8'}">
+                                <a href="#{$section.anchor|escape:'htmlall':'UTF-8'}-heading" class="everpsseo-anchor" data-ever-anchor="{$section.anchor|escape:'htmlall':'UTF-8'}">
                                     {$section.title|escape:'htmlall':'UTF-8'}
                                 </a>
                             </li>
