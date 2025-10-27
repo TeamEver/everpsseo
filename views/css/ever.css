@@ -91,15 +91,21 @@
     padding-bottom: 2%;
     margin-bottom: 2%;
 }
+
 .everpsseo-config-wrapper {
     display: block;
     gap: 24px;
+    background: #fdfbf6;
+    border: 1px solid rgba(235, 110, 31, 0.12);
+    border-radius: 16px;
+    padding: 24px;
 }
 
 .everpsseo-config-grid {
     display: flex;
     flex-wrap: wrap;
     gap: 24px;
+    align-items: flex-start;
 }
 
 .everpsseo-config-sidebar {
@@ -108,6 +114,60 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
+}
+
+.everpsseo-sidebar-block {
+    background: #fff7ec;
+    border: 1px solid rgba(235, 110, 31, 0.15);
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+.everpsseo-sidebar-block--search {
+    position: sticky;
+    top: 24px;
+    z-index: 2;
+}
+
+.everpsseo-sidebar-label {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    color: #a65118;
+}
+
+.everpsseo-sidebar-label i {
+    color: inherit;
+}
+
+.everpsseo-sidebar-search {
+    width: 100%;
+    border-radius: 999px;
+    border: 1px solid rgba(235, 110, 31, 0.35);
+    padding: 8px 16px;
+    font-size: 0.9375rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.everpsseo-sidebar-search:focus {
+    outline: none;
+    border-color: #eb6e1f;
+    box-shadow: 0 0 0 3px rgba(235, 110, 31, 0.15);
+}
+
+.everpsseo-sidebar-hint {
+    font-size: 0.75rem;
+    color: #7c552e;
+    margin-top: 8px;
+    margin-bottom: 0;
+    line-height: 1.4;
+}
+
+.everpsseo-is-hidden {
+    display: none !important;
 }
 
 .everpsseo-config-content {
@@ -126,13 +186,13 @@
     border: 1px solid #eb6e1f33;
     border-radius: 8px;
     padding: 16px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 2px 12px rgba(220, 140, 60, 0.12);
     transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .everpsseo-card:hover {
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
-    transform: translateY(-2px);
+    box-shadow: 0 18px 32px rgba(220, 140, 60, 0.16);
+    transform: translateY(-3px);
 }
 
 .everpsseo-card__header {
@@ -166,6 +226,15 @@
     color: #555;
 }
 
+.everpsseo-card__links li {
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+}
+
+.everpsseo-card__links li:hover {
+    background: rgba(235, 110, 31, 0.07);
+}
+
 .everpsseo-card__links {
     list-style: none;
     padding: 0;
@@ -179,6 +248,7 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
+    padding: 6px 4px;
     color: #eb6e1f;
     text-decoration: none;
     font-weight: 600;
@@ -203,12 +273,40 @@
     border-radius: 10px;
     overflow: hidden;
     border-color: #eb6e1f33;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+    background: #fff;
+}
+
+.everpsseo-form-container .card {
+    margin-bottom: 24px;
+    border-radius: 12px;
+    border: 1px solid rgba(235, 110, 31, 0.2);
+    box-shadow: 0 8px 18px rgba(220, 140, 60, 0.15);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+    background: #fff;
 }
 
 .everpsseo-form-container .panel-heading {
     background: linear-gradient(135deg, #faeab8, #ffe5d0);
     color: #1e1e1e;
     font-weight: 600;
+}
+
+.everpsseo-form-container .card-header {
+    background: linear-gradient(135deg, #faeab8, #ffe5d0);
+    color: #1e1e1e;
+    font-weight: 600;
+    border-bottom: none;
+}
+
+.everpsseo-form-container .panel:hover {
+    box-shadow: 0 12px 24px rgba(220, 140, 60, 0.16);
+    transform: translateY(-2px);
+}
+
+.everpsseo-form-container .card:hover {
+    box-shadow: 0 16px 28px rgba(220, 140, 60, 0.18);
+    transform: translateY(-2px);
 }
 
 .everpsseo-form-container .panel-heading i {
@@ -237,12 +335,21 @@
         max-width: 100%;
     }
 
+    .everpsseo-sidebar-block--search {
+        position: relative;
+        top: auto;
+    }
+
     .everpsseo-card-collection {
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     }
 }
 
 @media (max-width: 767px) {
+    .everpsseo-config-wrapper {
+        padding: 16px;
+    }
+
     .everpsseo-config-grid {
         flex-direction: column;
     }
