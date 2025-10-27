@@ -806,27 +806,43 @@ class Everpsseo extends Module
             }
         }
 
-        // Display errors
+        $errorHtml = '';
         if (count($this->postErrors)) {
             foreach ($this->postErrors as $error) {
-                $this->html .= $this->displayError($error);
+                $errorHtml .= $this->displayError($error);
             }
         }
 
-        // Display confirmations
+        $successHtml = '';
         if (count($this->postSuccess)) {
             foreach ($this->postSuccess as $success) {
-                $this->html .= $this->displayConfirmation($success);
+                $successHtml .= $this->displayConfirmation($success);
             }
         }
 
+        $formStructure = $this->getConfigForm();
+        $navigation = $this->buildConfigurationNavigation($formStructure);
+        $quickActions = $this->buildQuickActions($navigation);
+
+        $this->context->smarty->assign([
+            'ever_header' => $this->context->smarty->fetch(
+                $this->local_path . 'views/templates/admin/header.tpl'
+            ),
+            'ever_footer' => $this->context->smarty->fetch(
+                $this->local_path . 'views/templates/admin/footer.tpl'
+            ),
+            'ever_form' => $this->renderForm(),
+            'ever_errors' => $errorHtml,
+            'ever_success' => $successHtml,
+            'quick_actions' => $quickActions,
+            'nav_sections' => $navigation,
+            'nav_sections_json' => Tools::jsonEncode($navigation),
+        ]);
+
         $this->html .= $this->context->smarty->fetch(
-            $this->local_path . 'views/templates/admin/header.tpl'
+            $this->local_path . 'views/templates/admin/configuration.tpl'
         );
-        $this->html .= $this->renderForm();
-        $this->html .= $this->context->smarty->fetch(
-            $this->local_path . 'views/templates/admin/footer.tpl'
-        );
+
         return $this->html;
     }
 
@@ -849,6 +865,163 @@ class Everpsseo extends Module
             'id_language' => (int) $this->context->language->id,
         ];
         return $helper->generateForm($this->getConfigForm());
+    }
+
+    protected function buildConfigurationNavigation(array $formStructure)
+    {
+        $navigation = [];
+        $existingAnchors = [];
+
+        foreach ($formStructure as $form) {
+            if (empty($form['form']['legend']['title'])) {
+                continue;
+            }
+
+            $title = $form['form']['legend']['title'];
+            $anchor = $this->buildAnchorFromTitle($title, $existingAnchors);
+
+            if (!$anchor) {
+                continue;
+            }
+
+            $existingAnchors[] = $anchor;
+            $navigation[] = [
+                'title' => $title,
+                'anchor' => $anchor,
+            ];
+        }
+
+        return $navigation;
+    }
+
+    protected function buildQuickActions(array $navigation)
+    {
+        if (empty($navigation)) {
+            return [];
+        }
+
+        $navigationIndex = [];
+        foreach ($navigation as $section) {
+            $navigationIndex[$section['title']] = $section['anchor'];
+        }
+
+        $quickActions = [];
+
+        $quickActions[] = [
+            'icon' => 'icon-cogs',
+            'title' => $this->l('General configuration'),
+            'description' => $this->l('Adjust the core behaviour of the module in a single glance.'),
+            'links' => $this->filterExistingAnchors($navigationIndex, [
+                $this->l('Global SEO settings'),
+                $this->l('Search settings'),
+                $this->l('Robots.txt'),
+                $this->l('Internal linking'),
+                $this->l('Header custom tags'),
+                $this->l('Default author and publisher'),
+            ]),
+        ];
+
+        $quickActions[] = [
+            'icon' => 'icon-rocket',
+            'title' => $this->l('Automation shortcuts'),
+            'description' => $this->l('Jump straight to automation sections to configure templates and launch updates.'),
+            'links' => $this->filterExistingAnchors($navigationIndex, [
+                $this->l('Product meta automation'),
+                $this->l('Category meta automation'),
+                $this->l('Manufacturer meta automation'),
+                $this->l('Supplier meta automation'),
+                $this->l('Cms meta automation'),
+                $this->l('Page meta meta automation'),
+            ]),
+        ];
+
+        $quickActions[] = [
+            'icon' => 'icon-pencil',
+            'title' => $this->l('Content generation'),
+            'description' => $this->l('Find every generator to enrich your catalog descriptions in a few clicks.'),
+            'links' => $this->filterExistingAnchors($navigationIndex, [
+                $this->l('Product content generator'),
+                $this->l('Category content generator'),
+                $this->l('Manufacturer content generator'),
+                $this->l('Supplier content generator'),
+            ]),
+        ];
+
+        $quickActions[] = [
+            'icon' => 'icon-sitemap',
+            'title' => $this->l('Sitemaps & indexing'),
+            'description' => $this->l('Quick access to every sitemap generation and indexation option.'),
+            'links' => $this->filterExistingAnchors($navigationIndex, [
+                $this->l('Categories sitemaps'),
+                $this->l('Products sitemaps'),
+                $this->l('Images sitemaps'),
+                $this->l('Cms sitemaps'),
+                $this->l('Page Meta sitemaps'),
+                $this->l('Manufacturer sitemaps'),
+                $this->l('Suppliers sitemaps'),
+                $this->l('Default indexability'),
+                $this->l('Default follow'),
+            ]),
+        ];
+
+        $quickActions[] = [
+            'icon' => 'icon-wrench',
+            'title' => $this->l('Maintenance & tools'),
+            'description' => $this->l('Launch clean-up tasks and language wide updates without scrolling forever.'),
+            'links' => $this->filterExistingAnchors($navigationIndex, [
+                $this->l('Useful buttons :-)'),
+                $this->l('Bulk per language'),
+                $this->l('Security options'),
+                $this->l('Custom htaccess rules'),
+                $this->l('Google Translate widget'),
+            ]),
+        ];
+
+        return array_values(array_filter($quickActions, function ($action) {
+            return !empty($action['links']);
+        }));
+    }
+
+    protected function filterExistingAnchors(array $navigationIndex, array $titles)
+    {
+        $links = [];
+        foreach ($titles as $title) {
+            if (!isset($navigationIndex[$title])) {
+                continue;
+            }
+            $links[] = [
+                'label' => $title,
+                'anchor' => $navigationIndex[$title],
+            ];
+        }
+
+        return $links;
+    }
+
+    protected function buildAnchorFromTitle($title, array $existingAnchors)
+    {
+        if (!$title) {
+            return false;
+        }
+
+        $slug = Tools::str2url($title);
+
+        if (!$slug) {
+            $slug = preg_replace('/[^a-z0-9]+/i', '-', Tools::strtolower($title));
+        }
+
+        $slug = trim($slug, '-');
+        if (!$slug) {
+            return false;
+        }
+
+        $anchor = 'everpsseo-' . $slug;
+        $suffix = 1;
+        while (in_array($anchor, $existingAnchors)) {
+            $anchor = 'everpsseo-' . $slug . '-' . $suffix++;
+        }
+
+        return $anchor;
     }
 
     protected function getConfigForm()
