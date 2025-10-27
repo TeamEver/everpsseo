@@ -82,11 +82,7 @@ function everpsseoInitConfigurationNavigation() {
             return;
         }
         if (typeof target.scrollIntoView === 'function') {
-            try {
-                target.scrollIntoView({behavior: 'smooth', block: 'start'});
-            } catch (e) {
-                target.scrollIntoView(true);
-            }
+            target.scrollIntoView(true);
         } else if (target.offsetTop !== undefined) {
             window.scrollTo(0, target.offsetTop);
         }
