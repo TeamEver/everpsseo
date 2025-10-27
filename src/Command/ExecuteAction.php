@@ -29,9 +29,7 @@ class ExecuteAction extends Command
     private $allowedActions = [
         'idshop',
         'redirectDisabledProduct',
-        'createWebpImage',
-        'updateStock',
-        'myCustomCommand'
+        'updateStock'
     ];
 
     public function __construct(KernelInterface $kernel)
@@ -73,40 +71,6 @@ class ExecuteAction extends Command
         if (!in_array($action, $this->allowedActions)) {
             $output->writeln('<comment>Unkown action</comment>');
             return self::ABORTED;
-        }
-        if ($action === 'myCustomCommand') {
-            $webp_files = glob(_PS_ROOT_DIR_ . '/*.webp');
-            foreach ($webp_files as $webp_file) {
-                // Supprimer chaque fichier webp
-                if (is_file($webp_file)) {
-                    unlink($webp_file);
-                }
-            }
-        }
-        if ($action === 'createWebpImage') {
-            if ((bool) \Configuration::get('EVERSEO_WEBP') === false) {
-                $output->writeln('<comment>Webp not allowed on module configuration</comment>');
-                return self::ABORTED;
-            }
-            if (!function_exists('imagewebp')) {
-                $output->writeln('<comment>You must have imagewebp extension enabled on your server</comment>');
-                return self::ABORTED;
-            }
-            $output->writeln(sprintf(
-                '<info>Start creating webp images : datetime : ' . date('Y-m-d H:i:s') . '</info>'
-            ));
-            \EverPsSeoImage::setMedias2Webp(true);
-            \Hook::exec('actionHtaccessCreate');
-            \Tools::clearAllCache();
-            $output->writeln(sprintf(
-                '<info>Execute ended : datetime : ' . date('Y-m-d H:i:s') . '</info>'
-            ));
-
-            $output->writeln(
-                $this->getRandomFunnyComment($output)
-            );
-
-            return self::SUCCESS;
         }
         if ($action === 'updateStock') {
             // Parse txt file categories
