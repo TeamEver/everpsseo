@@ -173,7 +173,7 @@
                     return;
                 }
                 event.preventDefault();
-                scrollToAnchor(anchor);
+                scrollToAnchor(anchor, false);
             });
         });
 
