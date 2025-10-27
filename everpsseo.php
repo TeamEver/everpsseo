@@ -831,7 +831,7 @@ class Everpsseo extends Module
             'ever_footer' => $this->context->smarty->fetch(
                 $this->local_path . 'views/templates/admin/footer.tpl'
             ),
-            'ever_form' => $this->renderForm(),
+            'ever_form' => $this->renderForm($formStructure, $navigation),
             'ever_errors' => $errorHtml,
             'ever_success' => $successHtml,
             'quick_actions' => $quickActions,
@@ -846,7 +846,7 @@ class Everpsseo extends Module
         return $this->html;
     }
 
-    protected function renderForm()
+    protected function renderForm(array $formStructure, array $navigation)
     {
         $helper = new HelperForm();
 
@@ -864,7 +864,102 @@ class Everpsseo extends Module
             'languages' => $this->context->controller->getLanguages(),
             'id_language' => (int) $this->context->language->id,
         ];
-        return $helper->generateForm($this->getConfigForm());
+        $formHtml = $helper->generateForm($formStructure);
+
+        return $this->injectNavigationAnchors($formHtml, $navigation);
+    }
+
+    protected function injectNavigationAnchors($formHtml, array $navigation)
+    {
+        if (empty($formHtml) || empty($navigation) || !class_exists('DOMDocument')) {
+            return $formHtml;
+        }
+
+        $normalizedAnchors = [];
+        foreach ($navigation as $section) {
+            if (empty($section['title']) || empty($section['anchor'])) {
+                continue;
+            }
+            $normalizedTitle = Tools::strtolower(
+                trim(preg_replace('/\s+/', ' ', html_entity_decode($section['title'], ENT_QUOTES, 'UTF-8')))
+            );
+            if (!$normalizedTitle) {
+                continue;
+            }
+            $normalizedAnchors[$normalizedTitle] = $section['anchor'];
+        }
+
+        if (empty($normalizedAnchors)) {
+            return $formHtml;
+        }
+
+        $document = new DOMDocument();
+        $internalErrors = libxml_use_internal_errors(true);
+
+        $loaded = $document->loadHTML('<?xml encoding="utf-8" ?>' . $formHtml);
+        if (!$loaded) {
+            libxml_clear_errors();
+            libxml_use_internal_errors($internalErrors);
+            return $formHtml;
+        }
+
+        $xpath = new DOMXPath($document);
+        $headingNodes = $xpath->query(
+            '//*[contains(concat(" ", normalize-space(@class), " "), " panel-heading ") '
+            . 'or contains(concat(" ", normalize-space(@class), " "), " card-header ")]'
+        );
+
+        if (!$headingNodes || !$headingNodes->length) {
+            libxml_clear_errors();
+            libxml_use_internal_errors($internalErrors);
+            return $formHtml;
+        }
+
+        foreach ($headingNodes as $headingNode) {
+            $rawText = $headingNode->textContent;
+            $normalizedHeading = Tools::strtolower(trim(preg_replace('/\s+/', ' ', $rawText)));
+
+            if (!$normalizedHeading || !isset($normalizedAnchors[$normalizedHeading])) {
+                continue;
+            }
+
+            $anchor = $normalizedAnchors[$normalizedHeading];
+
+            $panelNode = $headingNode;
+            while ($panelNode && $panelNode instanceof DOMNode) {
+                if ($panelNode instanceof DOMElement) {
+                    $classAttribute = $panelNode->getAttribute('class');
+                    if (false !== strpos($classAttribute, 'panel') || false !== strpos($classAttribute, 'card')) {
+                        break;
+                    }
+                }
+                $panelNode = $panelNode->parentNode;
+            }
+
+            if ($panelNode instanceof DOMElement) {
+                $panelNode->setAttribute('data-ever-anchor', $anchor);
+                if (!$panelNode->getAttribute('id')) {
+                    $panelNode->setAttribute('id', $anchor);
+                }
+            }
+
+            if ($headingNode instanceof DOMElement) {
+                $headingNode->setAttribute('id', $anchor . '-heading');
+            }
+        }
+
+        $body = $document->getElementsByTagName('body')->item(0);
+        $output = '';
+        if ($body) {
+            foreach ($body->childNodes as $child) {
+                $output .= $document->saveHTML($child);
+            }
+        }
+
+        libxml_clear_errors();
+        libxml_use_internal_errors($internalErrors);
+
+        return $output ?: $formHtml;
     }
 
     protected function buildConfigurationNavigation(array $formStructure)
