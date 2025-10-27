@@ -12,18 +12,15 @@
     border: 1px solid #eb6e1f9e;
 }
 .adminmodules #dropdownMenuButton{
-    background-color: transparent;
     float: left;
 }
 .adminmodules .bootstrap .btn.btn-default:hover,
 .adminmodules .bootstrap .btn.btn-default:hover i,
 .adminmodules .bootstrap .pagination>.active>a{
-    background-color: #faeab8c9;
     color:#1e1e1e;
     border:1px solid #1e1e1e;
 }
 .adminmodules .bootstrap .table thead>tr.filter>th{
-    background-color: #faeab842;
 }
 .adminmodules .bootstrap .table thead>tr>th{
     color: #eb6e1f9e;
@@ -35,19 +32,15 @@
     /*padding-top: 80px;*/
 }
 .ever-danger{
-    background-color: red!important;
     color:#FFF!important;
 }
 .ever-alert{
-    background-color: orange!important;
     color:#FFF!important;
 }
 .ever-warning{
-    background-color: yellow!important;
     color:#FFF!important;
 }
 .ever-success{
-    background-color: green!important;
     color:#FFF!important;
 }
 .adminmodules .row .panel-heading{
@@ -55,7 +48,6 @@
 }
 .adminmodules .row .panel-heading:hover{
     color:#FFF!important;
-    background-color: #eb6e1f9e;
 }
 .mi-icon-team-ever {
     content: url(../img/logo.png);
@@ -95,7 +87,6 @@
 .everpsseo-config-wrapper {
     display: block;
     gap: 24px;
-    background: #fdfbf6;
     border: 1px solid rgba(235, 110, 31, 0.12);
     border-radius: 16px;
     padding: 24px;
@@ -117,7 +108,6 @@
 }
 
 .everpsseo-sidebar-block {
-    background: #fff7ec;
     border: 1px solid rgba(235, 110, 31, 0.15);
     border-radius: 12px;
     padding: 16px;
@@ -182,7 +172,6 @@
 }
 
 .everpsseo-card {
-    background: #fff;
     border: 1px solid #eb6e1f33;
     border-radius: 8px;
     padding: 16px;
@@ -209,7 +198,6 @@
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    background: #faeab8;
     color: #eb6e1f;
     font-size: 16px;
 }
@@ -228,11 +216,6 @@
 
 .everpsseo-card__links li {
     border-radius: 6px;
-    transition: background-color 0.2s ease;
-}
-
-.everpsseo-card__links li:hover {
-    background: rgba(235, 110, 31, 0.07);
 }
 
 .everpsseo-card__links {
@@ -256,7 +239,6 @@
 
 .everpsseo-card__links a::before {
     content: '\f105';
-    font-family: 'FontAwesome';
 }
 
 .everpsseo-card__links a:hover {
@@ -274,7 +256,6 @@
     overflow: hidden;
     border-color: #eb6e1f33;
     transition: box-shadow 0.2s ease, transform 0.2s ease;
-    background: #fff;
 }
 
 .everpsseo-form-container .card {
@@ -283,17 +264,14 @@
     border: 1px solid rgba(235, 110, 31, 0.2);
     box-shadow: 0 8px 18px rgba(220, 140, 60, 0.15);
     transition: box-shadow 0.2s ease, transform 0.2s ease;
-    background: #fff;
 }
 
 .everpsseo-form-container .panel-heading {
-    background: linear-gradient(135deg, #faeab8, #ffe5d0);
     color: #1e1e1e;
     font-weight: 600;
 }
 
 .everpsseo-form-container .card-header {
-    background: linear-gradient(135deg, #faeab8, #ffe5d0);
     color: #1e1e1e;
     font-weight: 600;
     border-bottom: none;
