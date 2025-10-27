@@ -6,10 +6,32 @@
     {$ever_header nofilter}
     <div class="everpsseo-config-grid">
         <aside class="everpsseo-config-sidebar">
+            <div class="everpsseo-sidebar-block everpsseo-sidebar-block--search">
+                <label class="everpsseo-sidebar-label" for="everpsseo-nav-search">
+                    <i class="icon-search"></i>
+                    {l s='Quick search' mod='everpsseo'}
+                </label>
+                <input
+                    type="search"
+                    id="everpsseo-nav-search"
+                    class="everpsseo-sidebar-search"
+                    placeholder="{l s='Find a configuration section…' mod='everpsseo'}"
+                    autocomplete="off"
+                />
+                <p class="everpsseo-sidebar-hint">
+                    {l s='Filter the shortcuts and navigation to jump directly to the right panel.' mod='everpsseo'}
+                </p>
+            </div>
             {if !empty($quick_actions)}
                 <div class="everpsseo-card-collection">
                     {foreach $quick_actions as $action}
-                        <article class="everpsseo-card">
+                        {assign var=cardKeywords value=$action.title|cat:' '|cat:$action.description}
+                        {if !empty($action.links)}
+                            {foreach $action.links as $link}
+                                {assign var=cardKeywords value=$cardKeywords|cat:' '|cat:$link.label}
+                            {/foreach}
+                        {/if}
+                        <article class="everpsseo-card" data-ever-keywords="{$cardKeywords|escape:'htmlall':'UTF-8'}">
                             <header class="everpsseo-card__header">
                                 <span class="everpsseo-card__icon"><i class="{$action.icon|escape:'htmlall':'UTF-8'}"></i></span>
                                 <h3 class="everpsseo-card__title">{$action.title|escape:'htmlall':'UTF-8'}</h3>
@@ -20,8 +42,8 @@
                             {if !empty($action.links)}
                                 <ul class="everpsseo-card__links">
                                     {foreach $action.links as $link}
-                                        <li>
-                                            <a href="#" class="everpsseo-anchor" data-ever-anchor="{$link.anchor|escape:'htmlall':'UTF-8'}">
+                                        <li data-ever-keywords="{$link.label|escape:'htmlall':'UTF-8'}">
+                                            <a href="#{$link.anchor|escape:'htmlall':'UTF-8'}" class="everpsseo-anchor" data-ever-anchor="{$link.anchor|escape:'htmlall':'UTF-8'}">
                                                 {$link.label|escape:'htmlall':'UTF-8'}
                                             </a>
                                         </li>
@@ -40,8 +62,8 @@
                     </header>
                     <ul class="everpsseo-card__links everpsseo-nav">
                         {foreach $nav_sections as $section}
-                            <li>
-                                <a href="#" class="everpsseo-anchor" data-ever-anchor="{$section.anchor|escape:'htmlall':'UTF-8'}">
+                            <li data-ever-keywords="{$section.title|escape:'htmlall':'UTF-8'}">
+                                <a href="#{$section.anchor|escape:'htmlall':'UTF-8'}" class="everpsseo-anchor" data-ever-anchor="{$section.anchor|escape:'htmlall':'UTF-8'}">
                                     {$section.title|escape:'htmlall':'UTF-8'}
                                 </a>
                             </li>
@@ -69,11 +91,11 @@
         }
         var navMap = {$nav_sections_json nofilter};
         if (!Array.isArray(navMap)) {
-            return;
+            navMap = [];
         }
-        var panelElements = container.querySelectorAll('.everpsseo-form-container .panel');
+        var panelElements = container.querySelectorAll('.everpsseo-form-container .panel, .everpsseo-form-container .card');
         Array.prototype.forEach.call(panelElements, function (panel) {
-            var heading = panel.querySelector('.panel-heading');
+            var heading = panel.querySelector('.panel-heading, .card-header');
             if (!heading) {
                 return;
             }
@@ -95,30 +117,89 @@
             }
             heading.setAttribute('id', matched.anchor + '-heading');
         });
+        function findTarget(anchor) {
+            if (!anchor) {
+                return null;
+            }
+            var selectorTarget = container.querySelector('[data-ever-anchor="' + anchor + '"]');
+            if (selectorTarget) {
+                return selectorTarget;
+            }
+            return document.getElementById(anchor);
+        }
+
+        function highlightTarget(target) {
+            if (!target) {
+                return;
+            }
+            target.classList.add('everpsseo-panel-highlight');
+            setTimeout(function () {
+                target.classList.remove('everpsseo-panel-highlight');
+            }, 2000);
+        }
+
+        function scrollToAnchor(anchor, updateHash) {
+            if (typeof updateHash === 'undefined') {
+                updateHash = true;
+            }
+            var target = findTarget(anchor);
+            if (!target) {
+                return;
+            }
+            if (typeof target.scrollIntoView === 'function') {
+                try {
+                    target.scrollIntoView({ldelim}behavior: 'smooth', block: 'start'{rdelim});
+                } catch (e) {
+                    target.scrollIntoView(true);
+                }
+            } else if (target.offsetTop !== undefined) {
+                window.scrollTo(0, target.offsetTop);
+            }
+            highlightTarget(target);
+            if (updateHash) {
+                if (history.replaceState) {
+                    history.replaceState(null, '', '#' + anchor);
+                } else {
+                    window.location.hash = anchor;
+                }
+            }
+        }
+
         var anchorLinks = container.querySelectorAll('.everpsseo-anchor');
         Array.prototype.forEach.call(anchorLinks, function (link) {
             link.addEventListener('click', function (event) {
-                event.preventDefault();
                 var anchor = this.getAttribute('data-ever-anchor');
                 if (!anchor) {
                     return;
                 }
-                var target = container.querySelector('[data-ever-anchor="' + anchor + '"]');
-                if (target) {
-                    if (typeof target.scrollIntoView === 'function') {
-                        try {
-                            target.scrollIntoView({ldelim}behavior: 'smooth', block: 'start'{rdelim});
-                        } catch (e) {
-                            target.scrollIntoView(true);
-                        }
-                    }
-                    target.classList.add('everpsseo-panel-highlight');
-                    setTimeout(function () {
-                        target.classList.remove('everpsseo-panel-highlight');
-                    }, 2000);
-                }
+                event.preventDefault();
+                scrollToAnchor(anchor);
             });
         });
+
+        if (window.location.hash) {
+            scrollToAnchor(window.location.hash.replace(/^#/, ''), false);
+        }
+
+        var searchInput = document.getElementById('everpsseo-nav-search');
+        if (searchInput) {
+            var searchableCollections = container.querySelectorAll('[data-ever-keywords]');
+            searchInput.addEventListener('input', function () {
+                var query = (this.value || '').toLowerCase();
+                Array.prototype.forEach.call(searchableCollections, function (element) {
+                    var keywords = (element.getAttribute('data-ever-keywords') || '').toLowerCase();
+                    if (!query) {
+                        element.classList.remove('everpsseo-is-hidden');
+                        return;
+                    }
+                    if (keywords.indexOf(query) !== -1) {
+                        element.classList.remove('everpsseo-is-hidden');
+                    } else {
+                        element.classList.add('everpsseo-is-hidden');
+                    }
+                });
+            });
+        }
     })();
 </script>
 {/if}
