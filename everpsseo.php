@@ -9522,7 +9522,7 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.webp$ %{ENV:REWRITEBASE}img/c/$1$2.we
             Tools::getHttpHost(true) . __PS_BASE_URI__
         );
         $sitemap->setPath(_PS_ROOT_DIR_ . '/');
-        $sitemap->setFilename('product_shop_' . (int) $id_shop . '_lang_' . $iso_lang);
+        $sitemap->setFilename(EverPsSeoSitemap::FILE_PREFIX . 'product_shop_' . (int) $id_shop . '_lang_' . $iso_lang);
 
         $sql =
             'SELECT id_seo_product FROM ' . _DB_PREFIX_ . 'ever_seo_product esp
@@ -9585,7 +9585,7 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.webp$ %{ENV:REWRITEBASE}img/c/$1$2.we
             Tools::getHttpHost(true) . __PS_BASE_URI__
         );
         $sitemap->setPath(_PS_ROOT_DIR_ . '/');
-        $sitemap->setFilename('img_shop_' . (int) $id_shop . '_lang_' . $iso_lang);
+        $sitemap->setFilename(EverPsSeoSitemap::FILE_PREFIX . 'img_shop_' . (int) $id_shop . '_lang_' . $iso_lang);
 
         $sql =
             'SELECT * FROM ' . _DB_PREFIX_ . 'ever_seo_image esi
@@ -9652,7 +9652,7 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.webp$ %{ENV:REWRITEBASE}img/c/$1$2.we
             Tools::getHttpHost(true) . __PS_BASE_URI__
         );
         $sitemap->setPath(_PS_ROOT_DIR_ . '/');
-        $sitemap->setFilename('category_shop_' . (int) $id_shop . '_lang_' . $iso_lang);
+        $sitemap->setFilename(EverPsSeoSitemap::FILE_PREFIX . 'category_shop_' . (int) $id_shop . '_lang_' . $iso_lang);
 
         $sql =
             'SELECT * FROM ' . _DB_PREFIX_ . 'ever_seo_category esc
@@ -9710,7 +9710,7 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.webp$ %{ENV:REWRITEBASE}img/c/$1$2.we
             Tools::getHttpHost(true) . __PS_BASE_URI__
         );
         $sitemap->setPath(_PS_ROOT_DIR_ . '/');
-        $sitemap->setFilename('pagemeta_shop_' . (int) $id_shop . '_lang_' . $iso_lang);
+        $sitemap->setFilename(EverPsSeoSitemap::FILE_PREFIX . 'pagemeta_shop_' . (int) $id_shop . '_lang_' . $iso_lang);
 
         $sql =
             'SELECT * FROM ' . _DB_PREFIX_ . 'ever_seo_pagemeta
@@ -9787,7 +9787,7 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.webp$ %{ENV:REWRITEBASE}img/c/$1$2.we
             Tools::getHttpHost(true) . __PS_BASE_URI__
         );
         $sitemap->setPath(_PS_ROOT_DIR_ . '/');
-        $sitemap->setFilename('manufacturer_shop_' . (int) $id_shop . '_lang_' . $iso_lang);
+        $sitemap->setFilename(EverPsSeoSitemap::FILE_PREFIX . 'manufacturer_shop_' . (int) $id_shop . '_lang_' . $iso_lang);
 
         $sql =
             'SELECT * FROM ' . _DB_PREFIX_ . 'ever_seo_manufacturer
@@ -9839,7 +9839,7 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.webp$ %{ENV:REWRITEBASE}img/c/$1$2.we
             Tools::getHttpHost(true) . __PS_BASE_URI__
         );
         $sitemap->setPath(_PS_ROOT_DIR_ . '/');
-        $sitemap->setFilename('supplier_shop_' . (int) $id_shop . '_lang_' . $iso_lang);
+        $sitemap->setFilename(EverPsSeoSitemap::FILE_PREFIX . 'supplier_shop_' . (int) $id_shop . '_lang_' . $iso_lang);
 
         $sql =
             'SELECT * FROM ' . _DB_PREFIX_ . 'ever_seo_supplier
@@ -9891,7 +9891,7 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.webp$ %{ENV:REWRITEBASE}img/c/$1$2.we
             Tools::getHttpHost(true) . __PS_BASE_URI__
         );
         $sitemap->setPath(_PS_ROOT_DIR_ . '/');
-        $sitemap->setFilename('cms_shop_' . (int) $id_shop . '_lang_' . $iso_lang);
+        $sitemap->setFilename(EverPsSeoSitemap::FILE_PREFIX . 'cms_shop_' . (int) $id_shop . '_lang_' . $iso_lang);
 
         $sql =
             'SELECT * FROM ' . _DB_PREFIX_ . 'ever_seo_cms
@@ -9935,49 +9935,133 @@ RewriteRule ^c/([a-zA-Z_-]+)(-[0-9]+)?/.+\.webp$ %{ENV:REWRITEBASE}img/c/$1$2.we
         }
     }
 
+    protected function getStoredSitemapFiles()
+    {
+        $stored = Configuration::get('EVERPSSEO_SITEMAP_FILES');
+        if (!$stored) {
+            return [];
+        }
+        $files = json_decode($stored, true);
+        if (!is_array($files)) {
+            return [];
+        }
+
+        return array_filter(array_map('strval', $files));
+    }
+
+    protected function saveSitemapFiles(array $files)
+    {
+        $files = array_values(array_unique(array_filter($files)));
+        Configuration::updateValue('EVERPSSEO_SITEMAP_FILES', json_encode($files));
+    }
+
+    protected function isEverpsseoSitemap($file)
+    {
+        if (!$file) {
+            return false;
+        }
+        if (strpos($file, _PS_ROOT_DIR_) !== 0) {
+            return false;
+        }
+
+        return strpos(basename($file), EverPsSeoSitemap::FILE_PREFIX) === 0;
+    }
+
+    protected function cleanupSitemapFiles(array $files)
+    {
+        foreach ($files as $file) {
+            if (!$this->isEverpsseoSitemap($file)) {
+                continue;
+            }
+            if (is_file($file)) {
+                @unlink($file);
+            }
+        }
+    }
+
+    public function removeExistingSitemaps()
+    {
+        $existing = $this->getStoredSitemapFiles();
+        if (!$existing) {
+            $existing = glob(_PS_ROOT_DIR_ . '/' . EverPsSeoSitemap::FILE_PREFIX . '*.xml') ?: [];
+        }
+        $this->cleanupSitemapFiles($existing);
+        $this->saveSitemapFiles([]);
+    }
+
     public function everGenerateSitemaps($id_shop = null)
     {
         if (!$id_shop) {
             $id_shop = (int) $this->context->shop->id;
         }
+        $this->removeExistingSitemaps();
         $languages = Language::getIDs(true);
+        $generatedFiles = [];
 
         foreach ($languages as $id_lang) {
             $allowedLangs = $this->getAllowedSitemapLangs();
             if (in_array((int) $id_lang, $allowedLangs)) {
-                $this->processSitemapProduct((int) $id_shop, (int) $id_lang);
-                $this->processSitemapImage((int) $id_shop, (int) $id_lang);
-                $this->processSitemapCategory((int) $id_shop, (int) $id_lang);
-                $this->processSitemapManufacturer((int) $id_shop, (int) $id_lang);
-                $this->processSitemapSupplier((int) $id_shop, (int) $id_lang);
-                $this->processSitemapCms((int) $id_shop, (int) $id_lang);
-                $this->processSitemapPageMeta((int) $id_shop, (int) $id_lang);
-                $this->pingbots();
+                $processes = [
+                    $this->processSitemapProduct((int) $id_shop, (int) $id_lang),
+                    $this->processSitemapImage((int) $id_shop, (int) $id_lang),
+                    $this->processSitemapCategory((int) $id_shop, (int) $id_lang),
+                    $this->processSitemapManufacturer((int) $id_shop, (int) $id_lang),
+                    $this->processSitemapSupplier((int) $id_shop, (int) $id_lang),
+                    $this->processSitemapCms((int) $id_shop, (int) $id_lang),
+                    $this->processSitemapPageMeta((int) $id_shop, (int) $id_lang),
+                ];
+
+                foreach ($processes as $files) {
+                    if (is_array($files) && !empty($files)) {
+                        $generatedFiles = array_merge($generatedFiles, $files);
+                    }
+                }
             }
+        }
+
+        $generatedFiles = array_values(array_unique(array_filter($generatedFiles, function ($file) {
+            return $this->isEverpsseoSitemap($file) && is_file($file);
+        })));
+
+        $this->saveSitemapFiles($generatedFiles);
+
+        if (!empty($generatedFiles)) {
+            $this->pingbots($generatedFiles);
         }
     }
 
-    public function pingbots()
+    public function pingbots(array $sitemapFiles = [])
     {
         $siteUrl = Tools::getHttpHost(true) . __PS_BASE_URI__;
         $pingbots = [];
         $pingbots[] = 'https://google.com/ping?sitemap=';
         $pingbots[] = 'https://www.bing.com/webmaster/ping.aspx?siteMap=';
-        $indexes = glob(_PS_ROOT_DIR_ . '/*');
-        foreach ($indexes as $index) {
-            $info = new SplFileInfo(basename($index));
-            if (is_file($index) && $info->getExtension() == 'xml') {
-                foreach ($pingbots as $ping) {
-                    $ch = curl_init();
-                    curl_setopt(
-                        $ch,
-                        CURLOPT_URL,
-                        $ping.$siteUrl.basename($index)
-                    );
-                    curl_setopt($ch, CURLOPT_HEADER, 0);
-                    curl_exec($ch);
-                    curl_close($ch);
+        if (empty($sitemapFiles)) {
+            $sitemapFiles = $this->getStoredSitemapFiles();
+            if (empty($sitemapFiles)) {
+                $sitemapFiles = glob(_PS_ROOT_DIR_ . '/' . EverPsSeoSitemap::FILE_PREFIX . '*.xml') ?: [];
+            }
+        }
+
+        $sitemapFiles = array_values(array_unique($sitemapFiles));
+
+        foreach ($sitemapFiles as $file) {
+            if (!$this->isEverpsseoSitemap($file) || !is_file($file)) {
+                continue;
+            }
+            foreach ($pingbots as $ping) {
+                $ch = curl_init();
+                if (!$ch) {
+                    continue;
                 }
+                curl_setopt(
+                    $ch,
+                    CURLOPT_URL,
+                    $ping . $siteUrl . basename($file)
+                );
+                curl_setopt($ch, CURLOPT_HEADER, 0);
+                curl_exec($ch);
+                curl_close($ch);
             }
         }
         return true;
