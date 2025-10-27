@@ -50,14 +50,7 @@ class EverpsseoEversitemapsModuleFrontController extends ModuleFrontController
             ? (int) Tools::getValue('id_shop') : (int) Configuration::get('PS_SHOP_DEFAULT');
 
         $everpsseo->cron = true;
-        // Drop all sitemaps before regeneration
-        $indexes = glob(_PS_ROOT_DIR_ . '/*');
-        foreach ($indexes as $index) {
-            $info = new SplFileInfo(basename($index));
-            if (is_file($index) && $info->getExtension() == 'xml') {
-                unlink($index);
-            }
-        }
+        $everpsseo->removeExistingSitemaps();
 
         $everpsseo->everGenerateSitemaps((int) $id_shop);
         echo 'Sitemaps fully generated. Please submit Search Console if not already set 🙂';

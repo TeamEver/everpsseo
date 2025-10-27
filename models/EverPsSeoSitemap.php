@@ -18,12 +18,14 @@ class EverPsSeoSitemap extends ObjectModel
     private $filename = 'sitemap';
     private $current_item = 0;
     private $current_sitemap = 0;
+    private $generatedFiles = [];
 
     const EXT = '.xml';
     const SCHEMA = 'http://www.sitemaps.org/schemas/sitemap/0.9';
     const DEFAULT_PRIORITY = 0.5;
     const SEPERATOR = '-';
     const INDEX_SUFFIX = 'index';
+    const FILE_PREFIX = 'sitemap-everpsseo-';
 
     public function __construct($domain)
     {
@@ -154,29 +156,50 @@ class EverPsSeoSitemap extends ObjectModel
     }
 
     /**
+     * Stores generated file path
+     *
+     * @param string $path
+     */
+    private function addGeneratedFile($path)
+    {
+        if ($path && !in_array($path, $this->generatedFiles)) {
+            $this->generatedFiles[] = $path;
+        }
+    }
+
+    /**
+     * Returns list of generated files
+     *
+     * @return array
+     */
+    public function getGeneratedFiles()
+    {
+        return $this->generatedFiles;
+    }
+
+    /**
      * Prepares sitemap XML document
      *
      */
     private function startSitemap()
     {
         $this->setWriter(new \XMLWriter());
+        $filePath = '';
         if ($this->getCurrentSitemap()) {
-            $this->getWriter()->openURI(
-                $this->getPath()
+            $filePath = $this->getPath()
                 . $this->getFilename()
                 . self::SEPERATOR
                 . $this->getCurrentSitemap()
-                . self::EXT
-            );
+                . self::EXT;
         } else {
-            $this->getWriter()->openURI(
-                $this->getPath() . $this->getFilename() . self::EXT
-            );
+            $filePath = $this->getPath() . $this->getFilename() . self::EXT;
         }
+        $this->getWriter()->openURI($filePath);
         $this->getWriter()->startDocument('1.0', 'UTF-8');
         $this->getWriter()->setIndent(true);
         $this->getWriter()->startElement('urlset');
         $this->getWriter()->writeAttribute('xmlns', self::SCHEMA);
+        $this->addGeneratedFile($filePath);
     }
 
     /**
@@ -254,13 +277,12 @@ class EverPsSeoSitemap extends ObjectModel
     {
         $this->endSitemap();
         $indexwriter = new \XMLWriter();
-        $indexwriter->openURI(
-            $this->getPath()
+        $indexPath = $this->getPath()
             . $this->getFilename()
             . self::SEPERATOR
             . self::INDEX_SUFFIX
-            . self::EXT
-        );
+            . self::EXT;
+        $indexwriter->openURI($indexPath);
         $indexwriter->startDocument('1.0', 'UTF-8');
         $indexwriter->setIndent(true);
         $indexwriter->startElement('sitemapindex');
@@ -279,18 +301,18 @@ class EverPsSeoSitemap extends ObjectModel
         }
         $indexwriter->endElement();
         $indexwriter->endDocument();
+        $this->addGeneratedFile($indexPath);
+
+        return $this->getGeneratedFiles();
     }
 
     public static function getSitemapIndexes()
     {
         $siteUrl = Tools::getHttpHost(true) . __PS_BASE_URI__;
         $indexes = [];
-        $sitemap_indexes_dir = glob(_PS_ROOT_DIR_ . '/*');
-        foreach ($sitemap_indexes_dir as $index) {
-            if (is_file($index)
-                && pathinfo($index, PATHINFO_EXTENSION) == 'xml'
-                && strpos(basename($index), 'index')
-            ) {
+        $pattern = _PS_ROOT_DIR_ . '/' . self::FILE_PREFIX . '*' . self::INDEX_SUFFIX . self::EXT;
+        foreach (glob($pattern) ?: [] as $index) {
+            if (is_file($index)) {
                 $indexes[] = $siteUrl . basename($index);
             }
         }
@@ -301,11 +323,11 @@ class EverPsSeoSitemap extends ObjectModel
     {
         $siteUrl = Tools::getHttpHost(true) . __PS_BASE_URI__;
         $sitemaps = [];
-        $sitemap_dir = glob(_PS_ROOT_DIR_ . '/*');
-        foreach ($sitemap_dir as $sitemap) {
+        $pattern = _PS_ROOT_DIR_ . '/' . self::FILE_PREFIX . '*' . self::EXT;
+        foreach (glob($pattern) ?: [] as $sitemap) {
             if (is_file($sitemap)
                 && pathinfo($sitemap, PATHINFO_EXTENSION) == 'xml'
-                && !strpos(basename($sitemap), 'index')
+                && strpos(basename($sitemap), self::INDEX_SUFFIX) === false
             ) {
                 $sitemaps[] = $siteUrl . basename($sitemap);
             }
