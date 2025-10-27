@@ -836,7 +836,7 @@ class Everpsseo extends Module
             'ever_success' => $successHtml,
             'quick_actions' => $quickActions,
             'nav_sections' => $navigation,
-            'nav_sections_json' => Tools::jsonEncode($navigation),
+            'nav_sections_json' => json_encode($navigation),
         ]);
 
         $this->html .= $this->context->smarty->fetch(
